@@ -1,5 +1,7 @@
 # 幸福存摺
 
+零時小學校提案，小草書屋的幸福存摺。
+
 > 小草書屋的幸福存摺運作
 > - Step 1 孩子們在書屋執行所有任務即可獲得相對應的「金額」
 > - Step 2 每周進行一次統計
@@ -14,3 +16,20 @@
 - [系統設計](https://g0v.hackmd.io/3PktZ7w-Rkua5SS8k38uUA)
 
 ## GetStarted
+
+```bash
+npm install -g expo-cli @aws-amplify/cli
+amplify configure
+npm i
+expo start
+```
+
+## AWS
+
+region: `ap-southeast-1` Asia Pacific (Singapore)
+
+Please contact John for AWS credentials.
+
+### Social
+
+https://docs.amplify.aws/lib/auth/social/q/platform/js#setup-frontend

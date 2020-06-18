@@ -1,0 +1,26 @@
+{
+	"auth": {
+		"piggybankofhappinessf3906d74": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
+	"api": {
+		"piggybankofhappiness": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"additionalAuthenticationProviders": [],
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authpiggybankofhappinessf3906d74"
+						}
+					}
+				}
+			}
+		}
+	}
+}
