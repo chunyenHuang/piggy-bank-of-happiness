@@ -17,6 +17,12 @@ const tables = [{
   sortKey: 'name',
   source: 'organization_tasks.csv',
   dataFunc: (item) => item,
+}, {
+  name: 'OrganizationUser',
+  partitionKey: 'organizationId',
+  sortKey: 'username',
+  source: 'organization_users.csv',
+  dataFunc: (item) => item,
 }];
 
 (async () => {
@@ -32,7 +38,6 @@ const tables = [{
       }
 
       const data = (await csvtojson({ checkType: true }).fromFile(path.join(__dirname, 'source', source))).map(dataFunc);
-      console.log(data);
       await writeData(HASH, ENV, name, data);
     });
   } catch (e) {

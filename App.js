@@ -1,7 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 // amplify
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -15,26 +16,41 @@ import Colors from './constants/Colors';
 import authenticatorConfig from './authenticator.config';
 import amplifyTheme from './constants/Amplify.theme';
 import amplifyConfig from './amplify.config';
+import paperTheme from './constants/Paper.theme';
+
+import UserScreen from './screens/UserScreen';
 
 Amplify.configure(amplifyConfig);
 Analytics.disable();
 
 const setupUser = async () => {
+  console.log('setup user');
   const user = await Auth.currentAuthenticatedUser();
-  console.log(user);
-  // await AsyncStorage.setItem('userData', JSON.stringify(userData));
+  // console.log(user);
+  // user is not assigned to organization yet
+  if (!user.attributes['custom:organizationId']) {
+    return;
+  }
+
+  await AsyncStorage.setItem('organizationId', user.attributes['custom:organizationId']);
+  await AsyncStorage.setItem('organizationName', user.attributes['custom:organizationName']);
+  await AsyncStorage.setItem('name', user.attributes['name']);
+  await AsyncStorage.setItem('email', user.attributes['email']);
+  await AsyncStorage.setItem('username', user.username);
+  await AsyncStorage.setItem('group', (user.signInUserSession.accessToken.payload['cognito:groups'][0] || 'N/A'));
+  // console.log(await AsyncStorage.getAllKeys());
 };
 
 const Stack = createStackNavigator();
 
 function App({ authState, onStateChange }) {
-  console.log(authState);
+  console.log('App: authState: ', authState);
   const authListener = ({ payload: { event, data } }) => {
     console.log('auth event', event);
 
     switch (event) {
     case 'signIn':
-      // setUser(data);
+      // setupUser();
       break;
     case 'signIn_failure':
       global.logger.warn(data);
@@ -68,14 +84,17 @@ function App({ authState, onStateChange }) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <PaperProvider theme={paperTheme}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+          <NavigationContainer linking={LinkingConfiguration}>
+            <Stack.Navigator>
+              <Stack.Screen name="Root" component={BottomTabNavigator} />
+              <Stack.Screen name="User" component={UserScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      </PaperProvider>
     );
   }
 }
@@ -87,7 +106,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default (props) => {
-  const AppComponent = withAuthenticator(App, authenticatorConfig, undefined, undefined, amplifyTheme);
-  return <AppComponent {...props} />;
-};
+export default withAuthenticator(App, authenticatorConfig, undefined, undefined, amplifyTheme);
+
+// export default (props) => {
+//   const AppComponent = withAuthenticator(App, authenticatorConfig, undefined, undefined, amplifyTheme);
+//   return <AppComponent {...props} />;
+// };

@@ -84,7 +84,8 @@ export default function CustomSignIn({ authState, onStateChange }) {
     try {
       const user = await Auth.signIn(username, password);
       setUser(user);
-      console.log(user);
+
+      // console.log(user);
 
       if (user.challengeName === 'SMS_MFA' ||
         user.challengeName === 'SOFTWARE_TOKEN_MFA') {
@@ -110,7 +111,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
         // More info please check the Enabling MFA part
         Auth.setupTOTP(user);
       } else {
-        // The user directly signs in
+        goto('signedIn');
       }
     } catch (err) {
       if (err.code === 'UserNotConfirmedException') {
@@ -219,6 +220,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
               returnKeyType={'next'}
               onSubmitEditing={()=> secondTextInput.focus()}
             />
+            {!requestNewPassword &&
             <TextInput
               label='密碼'
               ref={(input) => secondTextInput = input}
@@ -232,7 +234,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
               autoCapitalize={'none'}
               returnKeyType={'send'}
               onSubmitEditing={submit}
-            />
+            />}
             {requestNewPassword &&
             <TextInput
               label='New Password'
@@ -278,11 +280,11 @@ export default function CustomSignIn({ authState, onStateChange }) {
           </Button> */}
             <Divider style={styles.divider} />
 
-            <Button
+            {/* <Button
               style={{ ...styles.button, marginTop: 5 }}
               onPress={()=>goto('signUp')}>
               註冊
-            </Button>
+            </Button> */}
           </View>
           {/* <Footer/> */}
         </View>

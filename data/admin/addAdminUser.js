@@ -141,6 +141,8 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ region: AWS_REGION });
       name: inputParams.name,
       role: inputParams.role,
       isActive: 1,
+      currentPoints: 0,
+      earnedPoints: 0,
     };
     await writeData(HASH, ENV, 'OrganizationUser', [orgUserData]);
   } catch (e) {

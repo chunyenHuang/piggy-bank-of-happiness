@@ -46,6 +46,66 @@ export const deleteOrganization = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationTask = /* GraphQL */ `
+  mutation CreateOrganizationTask(
+    $input: CreateOrganizationTaskInput!
+    $condition: ModelOrganizationTaskConditionInput
+  ) {
+    createOrganizationTask(input: $input, condition: $condition) {
+      organizationId
+      name
+      isActive
+      programName
+      description
+      point
+      pointMin
+      pointMax
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateOrganizationTask = /* GraphQL */ `
+  mutation UpdateOrganizationTask(
+    $input: UpdateOrganizationTaskInput!
+    $condition: ModelOrganizationTaskConditionInput
+  ) {
+    updateOrganizationTask(input: $input, condition: $condition) {
+      organizationId
+      name
+      isActive
+      programName
+      description
+      point
+      pointMin
+      pointMax
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteOrganizationTask = /* GraphQL */ `
+  mutation DeleteOrganizationTask(
+    $input: DeleteOrganizationTaskInput!
+    $condition: ModelOrganizationTaskConditionInput
+  ) {
+    deleteOrganizationTask(input: $input, condition: $condition) {
+      organizationId
+      name
+      isActive
+      programName
+      description
+      point
+      pointMin
+      pointMax
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createOrganizationTransaction = /* GraphQL */ `
   mutation CreateOrganizationTransaction(
     $input: CreateOrganizationTransactionInput!
@@ -207,6 +267,7 @@ export const createOrganizationUser = /* GraphQL */ `
           status
           note
           transactionId
+          points
           createdAt
           updatedAt
         }
@@ -261,6 +322,7 @@ export const updateOrganizationUser = /* GraphQL */ `
           status
           note
           transactionId
+          points
           createdAt
           updatedAt
         }
@@ -315,6 +377,7 @@ export const deleteOrganizationUser = /* GraphQL */ `
           status
           note
           transactionId
+          points
           createdAt
           updatedAt
         }
@@ -350,6 +413,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
       status
       note
       transactionId
+      points
       createdAt
       updatedAt
       user {
@@ -398,6 +462,19 @@ export const createOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
+      }
+      task {
+        organizationId
+        name
+        isActive
+        programName
+        description
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
       }
     }
   }
@@ -415,6 +492,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
       status
       note
       transactionId
+      points
       createdAt
       updatedAt
       user {
@@ -463,6 +541,19 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
+      }
+      task {
+        organizationId
+        name
+        isActive
+        programName
+        description
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
       }
     }
   }
@@ -480,6 +571,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
       status
       note
       transactionId
+      points
       createdAt
       updatedAt
       user {
@@ -528,6 +620,19 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
+      }
+      task {
+        organizationId
+        name
+        isActive
+        programName
+        description
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
       }
     }
   }

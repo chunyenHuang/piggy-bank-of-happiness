@@ -32,6 +32,57 @@ export const listOrganizations = /* GraphQL */ `
     }
   }
 `;
+export const getOrganizationTask = /* GraphQL */ `
+  query GetOrganizationTask($organizationId: ID!, $name: String!) {
+    getOrganizationTask(organizationId: $organizationId, name: $name) {
+      organizationId
+      name
+      isActive
+      programName
+      description
+      point
+      pointMin
+      pointMax
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrganizationTasks = /* GraphQL */ `
+  query ListOrganizationTasks(
+    $organizationId: ID
+    $name: ModelStringKeyConditionInput
+    $filter: ModelOrganizationTaskFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOrganizationTasks(
+      organizationId: $organizationId
+      name: $name
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        organizationId
+        name
+        isActive
+        programName
+        description
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganizationTransaction = /* GraphQL */ `
   query GetOrganizationTransaction($organizationId: ID!, $id: ID!) {
     getOrganizationTransaction(organizationId: $organizationId, id: $id) {
@@ -144,6 +195,7 @@ export const getOrganizationUser = /* GraphQL */ `
           status
           note
           transactionId
+          points
           createdAt
           updatedAt
         }
@@ -222,6 +274,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
       status
       note
       transactionId
+      points
       createdAt
       updatedAt
       user {
@@ -271,6 +324,19 @@ export const getOrganizationUserTask = /* GraphQL */ `
           updatedAt
         }
       }
+      task {
+        organizationId
+        name
+        isActive
+        programName
+        description
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -299,6 +365,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
         status
         note
         transactionId
+        points
         createdAt
         updatedAt
         user {
@@ -319,6 +386,19 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           points
           type
           note
+          createdBy
+          createdAt
+          updatedAt
+        }
+        task {
+          organizationId
+          name
+          isActive
+          programName
+          description
+          point
+          pointMin
+          pointMax
           createdBy
           createdAt
           updatedAt
@@ -439,6 +519,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
         status
         note
         transactionId
+        points
         createdAt
         updatedAt
         user {
@@ -459,6 +540,19 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           points
           type
           note
+          createdBy
+          createdAt
+          updatedAt
+        }
+        task {
+          organizationId
+          name
+          isActive
+          programName
+          description
+          point
+          pointMin
+          pointMax
           createdBy
           createdAt
           updatedAt
@@ -493,6 +587,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
         status
         note
         transactionId
+        points
         createdAt
         updatedAt
         user {
@@ -513,6 +608,19 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           points
           type
           note
+          createdBy
+          createdAt
+          updatedAt
+        }
+        task {
+          organizationId
+          name
+          isActive
+          programName
+          description
+          point
+          pointMin
+          pointMax
           createdBy
           createdAt
           updatedAt

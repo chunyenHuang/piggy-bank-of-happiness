@@ -1,12 +1,37 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, AsyncStorage } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Text } from 'react-native-elements';
 
 import SignOutButton from '../components/auth/SignOutButton';
+import Colors from '../constants/Colors';
 
 export default function SettingsScreen() {
+  const [data, setData] = useState({});
+  useEffect(() => {
+    (async () => {
+      const data = {
+        姓名: await AsyncStorage.getItem('name'),
+        帳號: await AsyncStorage.getItem('username'),
+        電子信箱: await AsyncStorage.getItem('email'),
+        權限: await AsyncStorage.getItem('group'),
+      };
+      setData(data);
+    })();
+  }, []);
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      {Object.keys(data).map((key)=>(
+        <View key={key}>
+          <Text style={styles.header}>
+            {key}
+          </Text>
+          <Text style={styles.text}>
+            {data[key]}
+          </Text>
+        </View>
+      ))}
+      <View style={{ height: 32 }}></View>
       <SignOutButton />
     </ScrollView>
   );
@@ -18,6 +43,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
   contentContainer: {
-    paddingTop: 15,
+    padding: 8,
+  },
+  header: {
+    color: Colors.light,
+    padding: 8,
+    paddingLeft: 16,
+  },
+  text: {
+    color: Colors.dark,
+    padding: 8,
+    paddingRight: 16,
+    textAlign: 'right',
   },
 });

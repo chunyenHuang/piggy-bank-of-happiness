@@ -16,6 +16,7 @@ type OrganizationUserTask
   status: TaskStatusType!
   note: String!
   transactionId: ID!
+  points: Int!
   # deadline: AWSDateTime
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!

@@ -1,6 +1,6 @@
 projects:
   piggybankofhappiness:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/piggybankofhappiness/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:

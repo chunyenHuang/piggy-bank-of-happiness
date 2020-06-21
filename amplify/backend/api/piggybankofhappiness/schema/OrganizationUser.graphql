@@ -13,8 +13,8 @@ type OrganizationUser
   name: String!
   role: RoleType!
   isActive: Int!
-  currentPoints: Int
-  earnedPoints: Int
+  currentPoints: Int!
+  earnedPoints: Int!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   # relationship

@@ -1,22 +1,12 @@
-import { Alert } from 'react-native';
+// import Amplify from 'aws-amplify';
+import { Logger } from 'aws-amplify';
 
-global.logger = {
-  debug(...args) { __DEV__ ? console.log('[DEBUG]', ...args) : '' },
-  info(...args) { __DEV__ ? console.log('[INFO]', ...args) : '' },
-  warn(...args) { __DEV__ ? console.warn('[WARNING]', ...args) : '' },
-  error(content) {
-    console.error('[ERROR]', content);
-    let errMsg;
-    if (content.errors && content.errors.length > 0) {
-      errMsg = content.errors[0].message;
-    } else
-    if (typeof content === 'string') {
-      errMsg = content;
-    }
+// Amplify.Logger.LOG_LEVEL = 'INFO';
 
-    Alert.alert('Error', `${errMsg}`, [{ text: 'ok' }])
-  }
-}
+const logLevel = __DEV__ ? 'DEBUG' : 'ERROR';
+const logger = new Logger('pboh', logLevel);
+
+global.logger = logger;
 
 // Disable warning message
-console.disableYellowBox = true;
+console.disableYellowBox = true; /* eslint-disable-line no-console */

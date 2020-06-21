@@ -1,3 +1,9 @@
 # Deployment
 
 ## Expo
+
+```bash
+npm install -g expo-cli
+
+expo login
+```

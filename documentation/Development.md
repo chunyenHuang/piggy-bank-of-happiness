@@ -34,6 +34,9 @@ export NODE_PATH=./node_modules
 
 # compile
 amplify api gql-compile
+
+# mock
+amplify mock api
 ```
 
 Change `@key`
@@ -43,3 +46,7 @@ Change `@key`
 ## Social Login
 
 https://docs.amplify.aws/lib/auth/social/q/platform/js#setup-frontend
+
+## Icons
+
+https://infinitered.github.io/ionicons-version-3-search/
