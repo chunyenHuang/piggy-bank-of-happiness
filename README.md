@@ -17,19 +17,5 @@
 
 ## GetStarted
 
-```bash
-npm install -g expo-cli @aws-amplify/cli
-amplify configure
-npm i
-expo start
-```
-
-## AWS
-
-region: `ap-southeast-1` Asia Pacific (Singapore)
-
-Please contact John for AWS credentials.
-
-### Social
-
-https://docs.amplify.aws/lib/auth/social/q/platform/js#setup-frontend
+- [Development](./documentation/Development.md)
+- [Deployment](./documentation/Deployment.md)

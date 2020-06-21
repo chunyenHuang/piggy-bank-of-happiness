@@ -1,11 +1,1 @@
-{
-    "AppSyncApiName": "piggybankofhappiness",
-    "DynamoDBBillingMode": "PAY_PER_REQUEST",
-    "DynamoDBEnableServerSideEncryption": "false",
-    "AuthCognitoUserPoolId": {
-        "Fn::GetAtt": [
-            "authpiggybankofhappinessf3906d74",
-            "Outputs.UserPoolId"
-        ]
-    }
-}
+{}

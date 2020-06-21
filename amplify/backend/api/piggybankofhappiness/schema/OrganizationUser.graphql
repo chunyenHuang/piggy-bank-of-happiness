@@ -1,0 +1,25 @@
+# To avoid querying cognito admin api
+type OrganizationUser
+  @model
+  @key(fields: ["organizationId","username"])
+  @auth(rules: [
+    {allow: owner, ownerField: "username", operations: [read]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  username: String!
+  name: String!
+  role: RoleType!
+  isActive: Int!
+  currentPoints: Int
+  earnedPoints: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  # relationship
+  organization: Organization @connection(fields:["organizationId"])
+  tasks: [OrganizationUserTask] @connection(keyName: "byUserByOrganization", fields: ["username", "organizationId"])
+  transactions: [OrganizationTransaction] @connection(keyName: "byUserByOrganization", fields: ["username", "organizationId"])
+}
+

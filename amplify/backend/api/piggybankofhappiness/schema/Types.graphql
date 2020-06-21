@@ -1,0 +1,20 @@
+# Types
+enum TransactionType { 
+  credits # increment points
+  remove # remove points
+  combine # merge from other account
+  reward # use for reward
+}
+
+enum RoleType {
+  Admin
+  Manager
+  User
+}
+
+enum TaskStatusType {
+  Pending
+  In progress
+  Completed
+  Failed
+}

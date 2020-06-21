@@ -8,6 +8,7 @@
     "no-console": ["error", { "allow": ["log", "warn", "error"] }],
     "object-curly-spacing": ["error", "always"],
     "react/display-name": 0,
+    "react/prop-types": ["warn"],
     "require-jsdoc": 0,
     "camelcase": 0
   },
