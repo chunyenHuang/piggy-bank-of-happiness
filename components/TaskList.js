@@ -56,7 +56,7 @@ export default function TaskList({ mode = 'edit', onSelect }) {
               // chevron
               badge={{
                 // status: 'success',
-                value: task.pointMin !== task.pointMax ? `${task.pointMin}-${task.pointMax}` : task.point,
+                value: (task.pointMin !== task.pointMax ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point/100),
                 textStyle: styles.badgeText,
                 badgeStyle: styles.badge,
               }}

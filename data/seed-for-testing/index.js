@@ -23,6 +23,18 @@ const tables = [{
   sortKey: 'username',
   source: 'organization_users.csv',
   dataFunc: (item) => item,
+}, {
+  name: 'OrganizationTask',
+  partitionKey: 'organizationId',
+  sortKey: 'name',
+}, {
+  name: 'OrganizationTransaction',
+  partitionKey: 'organizationId',
+  sortKey: 'id',
+}, {
+  name: 'OrganizationUserTask',
+  partitionKey: 'organizationId',
+  sortKey: 'id',
 }];
 
 (async () => {
@@ -37,8 +49,10 @@ const tables = [{
         await purgeTable(HASH, ENV, name, partitionKey, sortKey);
       }
 
-      const data = (await csvtojson({ checkType: true }).fromFile(path.join(__dirname, 'source', source))).map(dataFunc);
-      await writeData(HASH, ENV, name, data);
+      if (source) {
+        const data = (await csvtojson({ checkType: true }).fromFile(path.join(__dirname, 'source', source))).map(dataFunc);
+        await writeData(HASH, ENV, name, data);
+      }
     });
   } catch (e) {
     console.log(e);

@@ -1,4 +1,4 @@
-const primary = '#299437';
+const primary = '#2189DC'; // '#299437';
 const accent = '#f8aa5d';
 const raised = '#f05a5a';
 const focused = '#2189DC';
@@ -11,6 +11,7 @@ export default {
   primary,
   accent,
   raised,
+  focused,
 
   // text
   primaryText: dark,

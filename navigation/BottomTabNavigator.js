@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import UserListScreen from '../screens/UserListScreen';
 import TaskListScreen from '../screens/TaskListScreen';
+import UserTransactionListScreen from '../screens/UserTransactionListScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -14,7 +15,8 @@ const defaultMenu = [
   {
     name: 'Home',
     component: HomeScreen,
-    title: '幸福存摺 @ {{organizationName}}',
+    // title: '幸福存摺 @ {{organizationName}}',
+    title: '幸福存摺',
     options: {
       title: '首頁',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
@@ -31,6 +33,16 @@ const defaultMenu = [
     },
     groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers'],
   },
+  // {
+  //   name: 'UserTransactionList',
+  //   component: UserTransactionListScreen,
+  //   title: '我的存摺',
+  //   options: {
+  //     title: '存摺',
+  //     tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+  //   },
+  //   groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'N/A'],
+  // },
   {
     name: 'TaskList',
     component: TaskListScreen,

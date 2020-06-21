@@ -5,6 +5,7 @@ import Modal from 'react-native-modal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
+import { Hub } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { createOrganizationUserTask, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
@@ -14,9 +15,13 @@ import Colors from '../constants/Colors';
 export default function AddTaskToUser({ user, onUpdate }) {
   const [visible, setVisible] = useState(false);
 
+  const buttonTitle = '新增';
+  const color = Colors.focused;
+
   const handleSelect = async (task) => {
-    console.log(user, task);
     setVisible(false);
+    Hub.dispatch('app', { event: 'loading' });
+
     const { organizationId, username } = user;
 
     // pull the latest user record
@@ -73,6 +78,8 @@ export default function AddTaskToUser({ user, onUpdate }) {
       request(updateOrganizationUser, { input: updatedUser }),
     ]);
 
+    Hub.dispatch('app', { event: 'loading-complete' });
+
     onUpdate && onUpdate();
   };
 
@@ -84,13 +91,13 @@ export default function AddTaskToUser({ user, onUpdate }) {
             name="md-add-circle"
             // size={15}
             type='ionicon'
-            color={Colors.primary}
+            color={color}
             containerStyle={{ paddingRight: 10 }}
           />
         }
         type="clear"
-        title="任務"
-        titleStyle={{ color: Colors.primary }}
+        title={buttonTitle}
+        titleStyle={{ color }}
         onPress={()=>setVisible(true)}
       />
 
@@ -98,8 +105,9 @@ export default function AddTaskToUser({ user, onUpdate }) {
         isVisible={visible}
         hardwareAccelerated
         onBackdropPress={()=>setVisible(false)}
+        style={styles.modal}
       >
-        <ScrollView style={styles.modal}>
+        <ScrollView style={styles.modalContainer}>
           {/* TODO: Multiple select */}
           <TaskList
             mode="select"
@@ -113,6 +121,11 @@ export default function AddTaskToUser({ user, onUpdate }) {
 
 const styles = StyleSheet.create({
   modal: {
+    flex: 1,
+    margin: 0,
+    marginTop: 80,
+  },
+  modalContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },

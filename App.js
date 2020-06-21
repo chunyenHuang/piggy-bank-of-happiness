@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage, ActivityIndicator } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 // amplify
 import Amplify, { Auth, Hub } from 'aws-amplify';
@@ -44,7 +44,8 @@ const setupUser = async () => {
 const Stack = createStackNavigator();
 
 function App({ authState, onStateChange }) {
-  console.log('App: authState: ', authState);
+  const [spinner, setSpinner] = useState(false);
+
   const authListener = ({ payload: { event, data } }) => {
     console.log('auth event', event);
 
@@ -64,9 +65,22 @@ function App({ authState, onStateChange }) {
     }
   };
 
+  const appListener = ({ payload: { event, data } }) => {
+    global.logger.debug('Hub: app', event);
+    switch (event) {
+    case 'loading':
+      setSpinner(true);
+      break;
+    case 'loading-complete':
+      setSpinner(false);
+      break;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       Hub.listen('auth', authListener);
+      Hub.listen('app', appListener);
       await Promise.all([
         setupUser(),
       ]);
@@ -75,6 +89,7 @@ function App({ authState, onStateChange }) {
     return () => {
       console.log('unmount app.js');
       Hub.remove('auth', authListener);
+      Hub.remove('app', appListener);
     };
   }, []);
 
@@ -93,6 +108,12 @@ function App({ authState, onStateChange }) {
               <Stack.Screen name="User" component={UserScreen} />
             </Stack.Navigator>
           </NavigationContainer>
+          <ActivityIndicator
+            style={styles.activityIndicator}
+            color={Colors.primary}
+            size={'small'}
+            animating={spinner}
+          />
         </View>
       </PaperProvider>
     );
@@ -103,6 +124,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.primary,
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 35,
+    right: 20,
+    zIndex: 9999999,
   },
 });
 

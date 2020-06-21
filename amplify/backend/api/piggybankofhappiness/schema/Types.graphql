@@ -1,7 +1,9 @@
 # Types
 enum TransactionType { 
-  credits # increment points
-  remove # remove points
+  credits # increment points from tasks
+  withdraw
+  adjustment
+  cancel
   combine # merge from other account
   reward # use for reward
 }

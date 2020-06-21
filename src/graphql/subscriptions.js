@@ -94,6 +94,7 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      refTransactionId
       points
       type
       note
@@ -134,6 +135,7 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      refTransactionId
       points
       type
       note
@@ -174,6 +176,7 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      refTransactionId
       points
       type
       note
@@ -248,6 +251,7 @@ export const onCreateOrganizationUser = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -300,6 +304,7 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -352,6 +357,7 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -406,6 +412,7 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -482,6 +489,7 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -558,6 +566,7 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note

@@ -14,6 +14,7 @@ type OrganizationTransaction
   id: ID!
   username: String!
   # rewardId: ID!
+  refTransactionId: ID
   points: Int!
   type: TransactionType!
   note: String

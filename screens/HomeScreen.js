@@ -8,7 +8,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text h4 style={styles.paragraph}>
+        <Text style={styles.paragraph}>
           目標對象：全台灣的非營利事業組織兒少陪伴單位
         </Text>
         <Text style={styles.paragraph}>

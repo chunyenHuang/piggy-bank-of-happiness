@@ -89,6 +89,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      refTransactionId
       points
       type
       note
@@ -144,6 +145,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -206,6 +208,7 @@ export const getOrganizationUser = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -306,6 +309,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -383,6 +387,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -429,6 +434,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -472,6 +478,7 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
         organizationId
         id
         username
+        refTransactionId
         points
         type
         note
@@ -537,6 +544,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note
@@ -605,6 +613,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           organizationId
           id
           username
+          refTransactionId
           points
           type
           note

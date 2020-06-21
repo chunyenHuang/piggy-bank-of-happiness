@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { ListItem, Text } from 'react-native-elements';
-import moment from 'moment';
+import React from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { Text } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
 import { sortBy } from '../src/utils/sorting';
+import TransactionListItem from './TransactionListItem';
 
-export default function UserTransactionList({ transactions = [] }) {
+const deviceHeight = Platform.OS === 'ios' ?
+  Dimensions.get('window').height :
+  require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
+
+export default function UserTransactionList({ transactions = [], onUpdate }) {
   return (
     <View style={styles.container}>
-      <Text h4 h4Style={styles.header}>近期交易紀錄</Text>
-      {transactions.sort(sortBy('updatedAt', true)).map((tx) => (
-        <ListItem
-          key={tx.id}
-          title={`${moment(tx.updatedAt).format('MM/DD/YYYY hh:mm ')} ${tx.note} `}
-          bottomDivider
-          badge={{
-            // status: tx.type === 'credits'? 'success':'default',
-            value: tx.points,
-            textStyle: styles.badgeText,
-            badgeStyle: styles.badge,
-          }}
+      {/* <Text h4 h4Style={styles.header}>交易紀錄</Text> */}
+      {transactions.sort(sortBy('updatedAt', true)).map((tx, index) => (
+        <TransactionListItem
+          key={index}
+          transaction={tx}
+          onUpdate={onUpdate}
         />
       ))}
     </View>
@@ -36,17 +34,20 @@ const styles = StyleSheet.create({
     color: Colors.light,
   },
   subtitle: {
-    fontSize: 10,
     color: Colors.light,
     marginTop: 5,
   },
-  badgeText: {
-    color: '#ffffff',
-    fontSize: 16,
-    lineHeight: 16,
+  rightTitle: {
+    fontSize: 20,
   },
-  badge: {
-    height: 25,
-    padding: 5,
+  modal: {
+    flex: 1,
+    margin: 0,
+    marginTop: deviceHeight / 2,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 32,
   },
 });
