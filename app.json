@@ -25,7 +25,7 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "buildNumber": "6",
+            "buildNumber": "7",
             "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
             "infoPlist": {}
         },
