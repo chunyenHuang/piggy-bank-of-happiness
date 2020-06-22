@@ -12,7 +12,7 @@ const deviceHeight = Platform.OS === 'ios' ?
   Dimensions.get('window').height :
   require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
 
-export default function UserTransactionList({ user = {} }) {
+export default function UserTransactionList({ user = {}, onUpdate }) {
   const [transactions, setTransactions] = useState([]);
 
   const load = async () => {
@@ -40,7 +40,10 @@ export default function UserTransactionList({ user = {} }) {
         <TransactionListItem
           key={index}
           transaction={tx}
-          onUpdate={()=>load()}
+          onUpdate={()=>{
+            load();
+            onUpdate();
+          }}
         />
       ))}
     </View>
