@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Dimensions, AsyncStorage, Alert } from 'react-native';
 import { ListItem, Text, Input } from 'react-native-elements';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import { Button } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { v1 as uuidv1 } from 'uuid';
 
 import Colors from '../constants/Colors';
@@ -16,14 +16,12 @@ const deviceHeight = Platform.OS === 'ios' ?
   Dimensions.get('window').height :
   require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
 
-export default function TransactionListItem({ transaction, onUpdate }) {
-  const color = getTypeColor(transaction.type);
-  const amount = currency(transaction.points);
-  const date = moment(transaction.updatedAt).format('MM/DD/YYYY hh:mm');
+export default function TransactionListItem({ transaction: inData, onUpdate }) {
+  const [transaction, setTransaction] = useState(undefined);
 
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [note, setNote] = useState(transaction.note);
+  const [note, setNote] = useState('');
 
   const cancel = async ({ points, id, organizationId, username, note }) => {
     setIsLoading(true);
@@ -46,12 +44,19 @@ export default function TransactionListItem({ transaction, onUpdate }) {
     const transaction = {
       organizationId,
       id: uuidv1(),
+      refTransactionId: id,
       username,
       points: -points,
       type: 'cancel',
       note: `取消 ${note}`,
-      createdBy: await AsyncStorage.getItem('username'),
+      createdBy: await AsyncStorage.getItem('app:username'),
       createdAt: now,
+      updatedAt: now,
+    };
+    const updatedTransaction = {
+      organizationId,
+      id,
+      isCancelled: 1,
       updatedAt: now,
     };
     const updatedUser = {
@@ -63,11 +68,13 @@ export default function TransactionListItem({ transaction, onUpdate }) {
     };
 
     await Promise.all([
+      request(updateOrganizationTransaction, { input: updatedTransaction }),
       request(createOrganizationTransaction, { input: transaction }),
       request(updateOrganizationUser, { input: updatedUser }),
     ]);
 
     setIsLoading(false);
+    setVisible(false);
     onUpdate && onUpdate();
   };
 
@@ -88,6 +95,17 @@ export default function TransactionListItem({ transaction, onUpdate }) {
     onUpdate && onUpdate();
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    setTransaction(inData);
+    setNote(inData.note);
+  }, [inData]);
+
+  if (!transaction) return null;
+
+  const color = getTypeColor(transaction.type);
+  const amount = currency(transaction.points);
+  const date = moment(transaction.updatedAt).format('MM/DD/YYYY hh:mm');
 
   return (
     <View style={styles.container}>
@@ -119,10 +137,24 @@ export default function TransactionListItem({ transaction, onUpdate }) {
         >
           <View style={styles.headerContainer}>
             <Text style={{ color }}>{getTypeName(transaction.type)}紀錄</Text>
-            {transaction.type !== 'cancel' &&
+            {transaction.type !== 'cancel' && !transaction.isCancelled &&
             <Button
               color={Colors.error}
-              onPress={()=> cancel(transaction)}
+              onPress={()=> {
+                Alert.alert(
+                  '取消交易亦會修正使用者餘額',
+                  '',
+                  [
+                    {
+                      text: '放棄',
+                      onPress: () => {},
+                      style: 'cancel',
+                    },
+                    { text: '確認取消交易', onPress: () => cancel(transaction) },
+                  ],
+                  { cancelable: false },
+                );
+              }}
               disabled={isLoading}
             >
               取消交易

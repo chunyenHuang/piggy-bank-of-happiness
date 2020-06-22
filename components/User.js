@@ -73,8 +73,7 @@ export default function User({ user: inUser, mode }) {
       </View>}
       {/* <UserTaskList tasks={user.tasks.items} /> */}
       <UserTransactionList
-        transactions={user.transactions.items}
-        onUpdate={load}
+        user={user}
       />
     </View>
   );

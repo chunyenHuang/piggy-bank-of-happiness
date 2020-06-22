@@ -1,16 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
 import { sortBy } from '../src/utils/sorting';
 import TransactionListItem from './TransactionListItem';
+import request from '../src/utils/request';
+import { getTransactionsByUserByCreatedAt } from '../src/graphql/queries';
 
 const deviceHeight = Platform.OS === 'ios' ?
   Dimensions.get('window').height :
   require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
 
-export default function UserTransactionList({ transactions = [], onUpdate }) {
+export default function UserTransactionList({ user = {} }) {
+  const [transactions, setTransactions] = useState([]);
+
+  const load = async () => {
+    const { username } = user;
+
+    if (!username) return;
+
+    const { data: { getTransactionsByUserByCreatedAt: { items } } } = await request(getTransactionsByUserByCreatedAt, {
+      username,
+      sortDirection: 'DESC',
+      limit: 20,
+    });
+
+    setTransactions(items);
+  };
+
+  useEffect(() => {
+    load();
+  }, [user]);
+
   return (
     <View style={styles.container}>
       {/* <Text h4 h4Style={styles.header}>交易紀錄</Text> */}
@@ -18,7 +40,7 @@ export default function UserTransactionList({ transactions = [], onUpdate }) {
         <TransactionListItem
           key={index}
           transaction={tx}
-          onUpdate={onUpdate}
+          onUpdate={()=>load()}
         />
       ))}
     </View>

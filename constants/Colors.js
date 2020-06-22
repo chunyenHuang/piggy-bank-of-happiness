@@ -6,6 +6,7 @@ const error = 'red';
 
 const dark = '#242424'; // #424242
 const light = '#888';
+const highlight = '#f7f7f7';
 
 export default {
   primary,
@@ -18,6 +19,7 @@ export default {
   secondaryText: light,
   light,
   dark,
+  highlight,
 
   tintColor: primary,
   tabIconDefault: light,

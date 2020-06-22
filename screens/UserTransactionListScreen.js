@@ -10,9 +10,9 @@ export default function UserTransactionListScreen() {
   useEffect(() => {
     (async () => {
       const data = {
-        organizationId: await AsyncStorage.getItem('organizationId'),
-        username: await AsyncStorage.getItem('username'),
-        name: await AsyncStorage.getItem('name'),
+        organizationId: await AsyncStorage.getItem('app:organizationId'),
+        username: await AsyncStorage.getItem('app:username'),
+        name: await AsyncStorage.getItem('app:name'),
       };
       console.log('data', data);
       setUser(data);

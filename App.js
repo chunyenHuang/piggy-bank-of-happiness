@@ -25,20 +25,26 @@ Analytics.disable();
 
 const setupUser = async () => {
   console.log('setup user');
+
   const user = await Auth.currentAuthenticatedUser();
   // console.log(user);
   // user is not assigned to organization yet
-  if (!user.attributes['custom:organizationId']) {
-    return;
-  }
+  // if (!user.attributes['custom:organizationId']) {
+  //   return;
+  // }
 
-  await AsyncStorage.setItem('organizationId', user.attributes['custom:organizationId']);
-  await AsyncStorage.setItem('organizationName', user.attributes['custom:organizationName']);
-  await AsyncStorage.setItem('name', user.attributes['name']);
-  await AsyncStorage.setItem('email', user.attributes['email']);
-  await AsyncStorage.setItem('username', user.username);
-  await AsyncStorage.setItem('group', (user.signInUserSession.accessToken.payload['cognito:groups'][0] || 'N/A'));
-  // console.log(await AsyncStorage.getAllKeys());
+  console.log(user.signInUserSession.accessToken.payload['cognito:groups']);
+
+  const items = [
+    ['app:organizationId', user.attributes['custom:organizationId'] || 'N/A'],
+    ['app:organizationName', user.attributes['custom:organizationName'] || 'N/A'],
+    ['app:name', user.attributes['name']],
+    ['app:email', user.attributes['email']],
+    ['app:username', user.username],
+    ['app:group', (user.signInUserSession.accessToken.payload['cognito:groups'].filter((x) => !x.includes('_'))[0] || 'N/A')],
+  ];
+
+  await AsyncStorage.multiSet(items);
 };
 
 const Stack = createStackNavigator();
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 35,
     right: 20,
-    zIndex: 9999999,
+    // zIndex: 9999999,
   },
 });
 

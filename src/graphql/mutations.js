@@ -116,6 +116,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
       id
       username
       refTransactionId
+      isCancelled
       points
       type
       note
@@ -125,6 +126,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -139,12 +141,6 @@ export const createOrganizationTransaction = /* GraphQL */ `
           isActive
           createdAt
           updatedAt
-        }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
         }
       }
     }
@@ -160,6 +156,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
       id
       username
       refTransactionId
+      isCancelled
       points
       type
       note
@@ -169,6 +166,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -183,12 +181,6 @@ export const updateOrganizationTransaction = /* GraphQL */ `
           isActive
           createdAt
           updatedAt
-        }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
         }
       }
     }
@@ -204,6 +196,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
       id
       username
       refTransactionId
+      isCancelled
       points
       type
       note
@@ -213,6 +206,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -228,12 +222,6 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
-        }
       }
     }
   }
@@ -246,6 +234,7 @@ export const createOrganizationUser = /* GraphQL */ `
     createOrganizationUser(input: $input, condition: $condition) {
       organizationId
       username
+      idNumber
       name
       role
       isActive
@@ -260,36 +249,6 @@ export const createOrganizationUser = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-      }
-      tasks {
-        items {
-          organizationId
-          id
-          taskName
-          username
-          status
-          note
-          transactionId
-          points
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      transactions {
-        items {
-          organizationId
-          id
-          username
-          refTransactionId
-          points
-          type
-          note
-          createdBy
-          createdAt
-          updatedAt
-        }
-        nextToken
       }
     }
   }
@@ -302,6 +261,7 @@ export const updateOrganizationUser = /* GraphQL */ `
     updateOrganizationUser(input: $input, condition: $condition) {
       organizationId
       username
+      idNumber
       name
       role
       isActive
@@ -316,36 +276,6 @@ export const updateOrganizationUser = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-      }
-      tasks {
-        items {
-          organizationId
-          id
-          taskName
-          username
-          status
-          note
-          transactionId
-          points
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      transactions {
-        items {
-          organizationId
-          id
-          username
-          refTransactionId
-          points
-          type
-          note
-          createdBy
-          createdAt
-          updatedAt
-        }
-        nextToken
       }
     }
   }
@@ -358,6 +288,7 @@ export const deleteOrganizationUser = /* GraphQL */ `
     deleteOrganizationUser(input: $input, condition: $condition) {
       organizationId
       username
+      idNumber
       name
       role
       isActive
@@ -372,36 +303,6 @@ export const deleteOrganizationUser = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-      }
-      tasks {
-        items {
-          organizationId
-          id
-          taskName
-          username
-          status
-          note
-          transactionId
-          points
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      transactions {
-        items {
-          organizationId
-          id
-          username
-          refTransactionId
-          points
-          type
-          note
-          createdBy
-          createdAt
-          updatedAt
-        }
-        nextToken
       }
     }
   }
@@ -425,6 +326,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -440,18 +342,13 @@ export const createOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
-        }
       }
       transaction {
         organizationId
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -461,6 +358,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -505,6 +403,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -520,18 +419,13 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
-        }
       }
       transaction {
         organizationId
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -541,6 +435,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -585,6 +480,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -600,18 +496,13 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
-        }
       }
       transaction {
         organizationId
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -621,6 +512,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive

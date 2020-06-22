@@ -90,6 +90,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
       id
       username
       refTransactionId
+      isCancelled
       points
       type
       note
@@ -99,6 +100,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -113,12 +115,6 @@ export const getOrganizationTransaction = /* GraphQL */ `
           isActive
           createdAt
           updatedAt
-        }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
         }
       }
     }
@@ -146,6 +142,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -155,6 +152,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -173,6 +171,7 @@ export const getOrganizationUser = /* GraphQL */ `
     getOrganizationUser(organizationId: $organizationId, username: $username) {
       organizationId
       username
+      idNumber
       name
       role
       isActive
@@ -187,36 +186,6 @@ export const getOrganizationUser = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-      }
-      tasks {
-        items {
-          organizationId
-          id
-          taskName
-          username
-          status
-          note
-          transactionId
-          points
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      transactions {
-        items {
-          organizationId
-          id
-          username
-          refTransactionId
-          points
-          type
-          note
-          createdBy
-          createdAt
-          updatedAt
-        }
-        nextToken
       }
     }
   }
@@ -241,6 +210,7 @@ export const listOrganizationUsers = /* GraphQL */ `
       items {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -255,12 +225,6 @@ export const listOrganizationUsers = /* GraphQL */ `
           isActive
           createdAt
           updatedAt
-        }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
         }
       }
       nextToken
@@ -283,6 +247,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
       user {
         organizationId
         username
+        idNumber
         name
         role
         isActive
@@ -298,18 +263,13 @@ export const getOrganizationUserTask = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        tasks {
-          nextToken
-        }
-        transactions {
-          nextToken
-        }
       }
       transaction {
         organizationId
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -319,6 +279,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -375,6 +336,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -388,6 +350,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           id
           username
           refTransactionId
+          isCancelled
           points
           type
           note
@@ -435,6 +398,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -444,6 +408,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -479,6 +444,7 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
         id
         username
         refTransactionId
+        isCancelled
         points
         type
         note
@@ -488,6 +454,7 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -532,6 +499,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -545,6 +513,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           id
           username
           refTransactionId
+          isCancelled
           points
           type
           note
@@ -601,6 +570,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
         user {
           organizationId
           username
+          idNumber
           name
           role
           isActive
@@ -614,6 +584,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           id
           username
           refTransactionId
+          isCancelled
           points
           type
           note

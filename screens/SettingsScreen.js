@@ -11,11 +11,11 @@ export default function SettingsScreen() {
   useEffect(() => {
     (async () => {
       const data = {
-        機構: await AsyncStorage.getItem('organizationName'),
-        姓名: await AsyncStorage.getItem('name'),
-        帳號: await AsyncStorage.getItem('username'),
-        電子信箱: await AsyncStorage.getItem('email'),
-        權限: await AsyncStorage.getItem('group'),
+        機構: await AsyncStorage.getItem('app:organizationName'),
+        姓名: await AsyncStorage.getItem('app:name'),
+        // 帳號: await AsyncStorage.getItem('app:username'),
+        電子信箱: await AsyncStorage.getItem('app:email'),
+        權限: await AsyncStorage.getItem('app:group'),
       };
       setData(data);
     })();

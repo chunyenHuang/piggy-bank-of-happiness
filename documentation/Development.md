@@ -46,7 +46,3 @@ Change `@key`
 ## Social Login
 
 https://docs.amplify.aws/lib/auth/social/q/platform/js#setup-frontend
-
-## Icons
-
-https://infinitered.github.io/ionicons-version-3-search/

@@ -79,8 +79,8 @@ export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
     (async () => {
       const [organizationName, group] = await Promise.all([
-        AsyncStorage.getItem('organizationName'),
-        AsyncStorage.getItem('group'),
+        AsyncStorage.getItem('app:organizationName'),
+        AsyncStorage.getItem('app:group'),
       ]);
       setMenu(defaultMenu.filter(({ groups }) => groups.includes(group) || groups.includes('All')));
       setOrganizationName(organizationName);
@@ -107,7 +107,6 @@ function getHeaderTitle(route, organizationName) {
   /* beautify ignore:start */
   const routeName = route.state?.routes[route.state.index]?.name??INITIAL_ROUTE_NAME;
   /* beautify ignore:end */
-  console.log('getHeaderTitle', routeName);
 
   return defaultMenu
     .find(({ name }) => name === routeName).title

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import { Hub } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
@@ -15,8 +16,10 @@ export default function UserList() {
 
   useEffect(() => {
     (async () => {
+      Hub.dispatch('app', { event: 'loading' });
+
       const params = {
-        organizationId: await AsyncStorage.getItem('organizationId'),
+        organizationId: await AsyncStorage.getItem('app:organizationId'),
         limit: 100,
         filter: {
           isActive: { eq: 1 },
@@ -54,6 +57,8 @@ export default function UserList() {
         }
       `, params);
       setUsers(items.sort(sortBy('name')));
+
+      Hub.dispatch('app', { event: 'loading-complete' });
     })();
   }, []);
   return (

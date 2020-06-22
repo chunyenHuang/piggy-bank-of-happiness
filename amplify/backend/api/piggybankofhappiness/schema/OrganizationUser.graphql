@@ -10,6 +10,7 @@ type OrganizationUser
 {
   organizationId: ID!
   username: String!
+  idNumber: String! # ex:學號
   name: String!
   role: RoleType!
   isActive: Int!
@@ -19,7 +20,7 @@ type OrganizationUser
   updatedAt: AWSDateTime!
   # relationship
   organization: Organization @connection(fields:["organizationId"])
-  tasks: [OrganizationUserTask] @connection(keyName: "byUserByOrganization", fields: ["username", "organizationId"])
-  transactions: [OrganizationTransaction] @connection(keyName: "byUserByOrganization", fields: ["username", "organizationId"])
+  # tasks: [OrganizationUserTask] @connection(keyName: "byUserByCreatedAt", fields: ["username"])
+  # transactions: [OrganizationTransaction] @connection(keyName: "byUserByCreatedAt", fields: ["username"])
 }
 

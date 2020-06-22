@@ -17,6 +17,17 @@
 
 ## GetStarted
 
+- [Design](./documentation/Design.md)
 - [Development](./documentation/Development.md)
 - [Deployment](./documentation/Deployment.md)
 - [Testing](./documentation/Testing.md)
+
+## 短期目標
+
+- [x] 新增學生任務與點數(可複選)
+- [x] 提取學生點數
+- [x] 修改交易紀錄備註
+- [x] 取敲交易紀錄
+- [ ] 學生自我註冊後可申請加入機構
+- [ ] 新增任務
+- [ ] 修改任務

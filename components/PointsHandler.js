@@ -17,9 +17,9 @@ export default function PointsHandler({ mode, user, onUpdate }) {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [button, setButton] = useState({
-    icon: '',
-    title: '',
-    color: '',
+    icon: 'md-card',
+    title: '提取',
+    color: Colors.raised,
   });
 
   const submit = async () => {
@@ -52,7 +52,7 @@ export default function PointsHandler({ mode, user, onUpdate }) {
         points: -points,
         type: 'withdraw',
         note,
-        createdBy: await AsyncStorage.getItem('username'),
+        createdBy: await AsyncStorage.getItem('app:username'),
         createdAt: now,
         updatedAt: now,
       };
