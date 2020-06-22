@@ -111,9 +111,11 @@ export default function CustomSignIn({ authState, onStateChange }) {
         // More info please check the Enabling MFA part
         Auth.setupTOTP(user);
       } else {
+        console.log('success');
         goto('signedIn');
       }
     } catch (err) {
+      console.log(err);
       if (err.code === 'UserNotConfirmedException') {
         // The error happens if the user didn't finish the confirmation step when signing up
         // In this case you need to resend the code and confirm the user
@@ -150,6 +152,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
         user,
         newPassword,
       );
+      await submit();
     } catch (err) {
       global.logger.error(err);
     } finally {
@@ -266,13 +269,14 @@ export default function CustomSignIn({ authState, onStateChange }) {
               style={styles.button}
               disabled={!newPassword || isSubmitting}
               onPress={confirmResetPassword}>
-              確認
+              確認修改新密碼
             </Button>}
+            {!requestNewPassword &&
             <Button
               style={styles.textButton}
               onPress={()=>goto('forgotPassword')}>
               忘記密碼
-            </Button>
+            </Button>}
             {/* <Button
             style={styles.button}
             onPress={() => Auth.federatedSignIn()}>

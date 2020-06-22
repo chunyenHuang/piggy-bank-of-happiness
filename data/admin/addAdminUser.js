@@ -179,5 +179,5 @@ async function ensureCustomFields() {
 }
 
 function randomString() {
-  return Math.random().toString(36).substring(2, 12);
+  return Math.random().toString(36).substring(2, 10);
 }
