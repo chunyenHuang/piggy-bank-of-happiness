@@ -13,7 +13,7 @@ import {
   Button,
 } from 'react-native-paper';
 import { Auth, Hub } from 'aws-amplify';
-import { SocialIcon, Divider } from 'react-native-elements';
+import { SocialIcon, Divider, Image } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Colors from '../../constants/Colors';
@@ -180,11 +180,11 @@ export default function CustomSignIn({ authState, onStateChange }) {
         accessible={false}>
         {Platform.OS === 'ios' && <StatusBar barStyle="light-content"/>}
         <View style={styles.scrollContainer}>
-          {/* <View style={styles.logoContainer}>
-          <Image
-            style={styles.logo}
-            source={require('../../assets/images/icon.png')} />
-        </View> */}
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require('../../assets/images/icon.png')} />
+          </View>
           <View style={styles.loginContainer}>
             <SocialIcon
               title='Facebook 帳號登入'
@@ -207,7 +207,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
               }}
             />
 
-            <Divider style={styles.divider} />
+            {/* <Divider style={styles.divider} /> */}
 
             <TextInput
               label="帳號"
@@ -240,7 +240,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
             />}
             {requestNewPassword &&
             <TextInput
-              label='New Password'
+              label='新密碼'
               mode="outlined"
               autoFocus={true}
               autoCompleteType={'password'}
@@ -282,7 +282,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
             onPress={() => Auth.federatedSignIn()}>
               Open Hosted UI
           </Button> */}
-            <Divider style={styles.divider} />
+            {/* <Divider style={styles.divider} /> */}
 
             {/* <Button
               style={{ ...styles.button, marginTop: 5 }}
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     marginBottom: -50,
     paddingTop: 50,
     paddingBottom: 50,
-    backgroundColor: Colors.primary,
+    // backgroundColor: Colors.primary,
   },
   scrollContainer: {
     flex: 1,
@@ -333,8 +333,8 @@ const styles = StyleSheet.create({
   loginContainer: {
     // marginTop: 300,
     backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: Colors.primary,
+    // borderWidth: 1,
+    // borderColor: Colors.primary,
     padding: 32,
     borderRadius: 10,
   },
