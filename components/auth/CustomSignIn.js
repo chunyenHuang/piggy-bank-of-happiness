@@ -186,27 +186,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
               source={require('../../assets/images/icon.png')} />
           </View>
           <View style={styles.loginContainer}>
-            <SocialIcon
-              title='Facebook 帳號登入'
-              button
-              type='facebook'
-              style={styles.socialButton}
-              onPress={() => {
-                setIsSubmitting(true);
-                Auth.federatedSignIn({ provider: 'Facebook' });
-              }}
-            />
-            <SocialIcon
-              title='Google 帳號登入'
-              button
-              type='google'
-              style={styles.socialButton}
-              onPress={() => {
-                setIsSubmitting(true);
-                Auth.federatedSignIn({ provider: 'Google' });
-              }}
-            />
-
             {/* <Divider style={styles.divider} /> */}
 
             <TextInput
@@ -277,6 +256,26 @@ export default function CustomSignIn({ authState, onStateChange }) {
               onPress={()=>goto('forgotPassword')}>
               忘記密碼
             </Button>}
+            <SocialIcon
+              title='Facebook 帳號登入'
+              button
+              type='facebook'
+              style={styles.socialButton}
+              onPress={() => {
+                setIsSubmitting(true);
+                Auth.federatedSignIn({ provider: 'Facebook' });
+              }}
+            />
+            <SocialIcon
+              title='Google 帳號登入'
+              button
+              type='google'
+              style={styles.socialButton}
+              onPress={() => {
+                setIsSubmitting(true);
+                Auth.federatedSignIn({ provider: 'Google' });
+              }}
+            />
             {/* <Button
             style={styles.button}
             onPress={() => Auth.federatedSignIn()}>
