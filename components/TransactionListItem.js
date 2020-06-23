@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { ListItem, Text, Input } from 'react-native-elements';
 import moment from 'moment';
 import Modal from 'react-native-modal';
@@ -11,10 +11,6 @@ import Colors from '../constants/Colors';
 import { currency, shortString } from '../src/utils/format';
 import request from '../src/utils/request';
 import { createOrganizationTransaction, updateOrganizationUser, updateOrganizationTransaction } from '../src/graphql/mutations';
-
-const deviceHeight = Platform.OS === 'ios' ?
-  Dimensions.get('window').height :
-  require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
 
 export default function TransactionListItem({ transaction: inData, onUpdate }) {
   const [transaction, setTransaction] = useState(undefined);
@@ -225,7 +221,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     margin: 0,
-    marginTop: deviceHeight / 4,
+    marginTop: 100,
   },
   modalContainer: {
     flex: 1,

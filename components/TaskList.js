@@ -80,12 +80,14 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                 badgeStyle: styles.badge,
               }}
               onPress={() => {
-                if (!task.isSelected && task.pointMin !== task.pointMax) {
-                  setNewPoint(task.point);
-                  setTask(task);
-                } else {
-                  task.isSelected = !task.isSelected;
-                  handlerPress(task);
+                if (mode === 'select') {
+                  if (!task.isSelected && task.pointMin !== task.pointMax) {
+                    setNewPoint(task.point);
+                    setTask(task);
+                  } else {
+                    task.isSelected = !task.isSelected;
+                    handlerPress(task);
+                  }
                 }
               }}
             />

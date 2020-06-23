@@ -7,8 +7,6 @@ import { Hub } from 'aws-amplify';
 import request from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
 
-const randomAvatarUrl = 'https://i.pravatar.cc/300';
-
 export default function UserList() {
   const navigation = useNavigation();
 
@@ -66,7 +64,7 @@ export default function UserList() {
       {users.map((user, index)=>(
         <ListItem
           key={index}
-          leftAvatar={{ source: { uri: randomAvatarUrl } }}
+          leftAvatar={{ source: { uri: `https://i.pravatar.cc/100?u=${user.username}` } }}
           title={user.name}
           bottomDivider
           chevron

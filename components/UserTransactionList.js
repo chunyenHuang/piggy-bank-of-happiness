@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Text } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
 
 import Colors from '../constants/Colors';
 import { sortBy } from '../src/utils/sorting';
 import TransactionListItem from './TransactionListItem';
 import request from '../src/utils/request';
 import { getTransactionsByUserByCreatedAt } from '../src/graphql/queries';
-
-const deviceHeight = Platform.OS === 'ios' ?
-  Dimensions.get('window').height :
-  require('react-native-extra-dimensions-android').get('REAL_WINDOW_HEIGHT');
 
 export default function UserTransactionList({ user = {}, onUpdate }) {
   const [transactions, setTransactions] = useState([]);
@@ -68,7 +63,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     margin: 0,
-    marginTop: deviceHeight / 2,
+    marginTop: 100,
   },
   modalContainer: {
     flex: 1,

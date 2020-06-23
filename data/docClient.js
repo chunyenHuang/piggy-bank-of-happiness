@@ -111,6 +111,7 @@ async function batchAction(inTableName, inRequestAction, inPrimaryKey, inSortKey
         return docClient.batchWrite(taskParams).promise()
           .then(resolve)
           .catch((err) => {
+            console.log(err);
             return reject(new Error({
               params: taskParams,
               error: err,

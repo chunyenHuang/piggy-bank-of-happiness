@@ -23,5 +23,5 @@ App Store
 https://docs.expo.io/distribution/app-stores/
 
 ## Doc
-
+        
 https://app-privacy-policy-generator.firebaseapp.com/

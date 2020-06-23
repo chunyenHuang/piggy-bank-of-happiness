@@ -17,6 +17,7 @@ import authenticatorConfig from './authenticator.config';
 import amplifyTheme from './constants/Amplify.theme';
 import amplifyConfig from './amplify.config';
 import paperTheme from './constants/Paper.theme';
+import Loading from './components/Loading';
 
 import UserScreen from './screens/UserScreen';
 
@@ -114,11 +115,8 @@ function App({ authState, onStateChange }) {
               <Stack.Screen name="User" component={UserScreen} />
             </Stack.Navigator>
           </NavigationContainer>
-          <ActivityIndicator
-            style={styles.activityIndicator}
-            color={Colors.primary}
-            size={'small'}
-            animating={spinner}
+          <Loading
+            active={spinner}
           />
         </View>
       </PaperProvider>
@@ -130,12 +128,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.primary,
-  },
-  activityIndicator: {
-    position: 'absolute',
-    top: 35,
-    right: 20,
-    // zIndex: 9999999,
   },
 });
 

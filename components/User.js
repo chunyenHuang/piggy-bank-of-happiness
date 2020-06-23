@@ -49,7 +49,7 @@ export default function User({ user: inUser, mode }) {
         <Avatar
           rounded
           size="large"
-          source={{ uri: 'https://i.pravatar.cc/300' }}
+          source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <Text h4>{user.name}</Text>
         <Text h4>{currency(user.currentPoints)}</Text>
