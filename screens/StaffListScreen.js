@@ -1,17 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import UserList from '../components/UserList';
+import StaffList from '../components/StaffList';
 
-export default function UserListScreen() {
+export default function StaffListScreen() {
   return (
     <View style={styles.container}>
-      <UserList />
+      <StaffList />
     </View>
   );
 }
 
-UserListScreen.navigationOptions = {
+StaffListScreen.navigationOptions = {
   header: null,
 };
 

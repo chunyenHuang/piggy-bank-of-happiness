@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "seed:test": "node -r esm ./seed-for-testing",
-    "add:user": "node -r esm ./admin/addUser.js",
+    "user:add": "node -r esm ./admin/addUser.js",
+    "user:sync": "node -r esm ./admin/sync.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

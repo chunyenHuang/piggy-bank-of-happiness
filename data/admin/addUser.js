@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const inquirer = require('inquirer');
+const uuidv1 = require('uuid/v1');
 
 const prompt = require('../prompt');
 const docClient = require('../docClient');
@@ -135,9 +136,10 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ region: AWS_REGION });
     // OrganizationUser
     console.log(`add user to the ddb table`);
     const orgUserData = {
-      organizationName: inputParams.organizationName,
+      // organizationName: inputParams.organizationName,
       organizationId: inputParams.organizationId,
       username: inputParams.username,
+      idNumber: uuidv1(),
       name: inputParams.name,
       role: inputParams.role,
       isActive: 1,
