@@ -87,12 +87,12 @@ export default function UserList({ refresh }) {
           subtitleStyle={styles.subtitle}
           bottomDivider
           chevron
-          badge={{
-            // status: 'success',
-            value: user.currentPoints,
-            textStyle: styles.badgeText,
-            badgeStyle: styles.badge,
-          }}
+          // badge={{
+          //   // status: 'success',
+          //   value: user.currentPoints/100,
+          //   textStyle: styles.badgeText,
+          //   badgeStyle: styles.badge,
+          // }}
           onPress={() => navigation.navigate('User', user)}
         />
       ))
