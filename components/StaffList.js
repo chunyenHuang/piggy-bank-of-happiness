@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,10 +7,11 @@ import request from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
 
-export default function UserList({ refresh }) {
+export default function StaffList() {
   const navigation = useNavigation();
 
   const [users, setUsers] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const renderRefreshingControl = () => {
@@ -28,8 +29,11 @@ export default function UserList({ refresh }) {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
       limit: 100,
       filter: {
-        isActive: { eq: 1 },
-        role: { eq: 'User' },
+        or: [{
+          role: { eq: 'Admin' },
+        }, {
+          role: { eq: 'Manager' },
+        }],
       },
     };
     const { data: { listOrganizationUsers: { items } } } = await request( /* GraphQL */ `
@@ -51,13 +55,10 @@ export default function UserList({ refresh }) {
         ) {
           items {
             organizationId
-            username
-            idNumber
-            name
-            role
-            isActive
-            currentPoints
-            earnedPoints
+              username
+              name
+              role
+              isActive
           }
           nextToken
         }
@@ -67,7 +68,6 @@ export default function UserList({ refresh }) {
 
     setIsLoading(false);
   };
-
   useEffect(() => {
     load();
   }, []);
@@ -78,25 +78,24 @@ export default function UserList({ refresh }) {
       contentContainerStyle={styles.contentContainer}
       refreshControl={renderRefreshingControl()}
     >
-      {users.map((user, index) => (
+      {users.map((user, index)=>(
         <ListItem
           key={index}
           leftAvatar={{ source: { uri: `https://i.pravatar.cc/100?u=${user.username}` } }}
           title={user.name}
-          subtitle={user.idNumber}
+          subtitle={user.role}
           subtitleStyle={styles.subtitle}
           bottomDivider
           chevron
           // badge={{
           //   // status: 'success',
-          //   value: user.currentPoints/100,
+          //   value: user.currentPoints,
           //   textStyle: styles.badgeText,
           //   badgeStyle: styles.badge,
           // }}
           onPress={() => navigation.navigate('User', user)}
         />
-      ))
-      }
+      ))}
     </ScrollView>
   );
 }

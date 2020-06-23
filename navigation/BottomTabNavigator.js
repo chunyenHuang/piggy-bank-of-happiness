@@ -7,7 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import UserListScreen from '../screens/UserListScreen';
 import TaskListScreen from '../screens/TaskListScreen';
-import UserTransactionListScreen from '../screens/UserTransactionListScreen';
+// import UserTransactionListScreen from '../screens/UserTransactionListScreen';
+import StaffListScreen from '../screens/StaffListScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -32,6 +33,16 @@ const defaultMenu = [
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
     },
     groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers'],
+  },
+  {
+    name: 'StaffList',
+    component: StaffListScreen,
+    title: '職員列表',
+    options: {
+      title: '職員',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
+    },
+    groups: ['AppAdmins', 'OrgAdmins'],
   },
   // {
   //   name: 'UserTransactionList',
