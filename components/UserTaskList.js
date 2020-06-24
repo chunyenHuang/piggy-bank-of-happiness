@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { ListItem, Text } from 'react-native-elements';
 import moment from 'moment';
 

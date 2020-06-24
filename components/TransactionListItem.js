@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { ListItem, Text, Input } from 'react-native-elements';
 import moment from 'moment';
-import Modal from 'react-native-modal';
 import { Button } from 'react-native-paper';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { v1 as uuidv1 } from 'uuid';
+import CustomModal from './CustomModal';
 
 import Colors from '../constants/Colors';
 import { currency, shortString } from '../src/utils/format';
@@ -117,79 +116,66 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         onPress={() => setVisible(true)}
         chevron
       />
-      <Modal
-        isVisible={visible}
-        hardwareAccelerated
-        onBackdropPress={()=>setVisible(false)}
-        style={styles.modal}
+      <CustomModal
+        visible={visible}
+        onClose={()=>setVisible(false)}
+        padding
+        bottomButtonProps={{
+          title: `更新備註`,
+          onPress: ()=> updateNote(),
+          disabled: isLoading,
+        }}
       >
-        <KeyboardAwareScrollView
-          style={styles.modalContainer}
-          scrollEnabled={true}
-          enableAutomaticScroll={true}
-          alwaysBounceVertical={false}
-          extraHeight={150}
-          extraScrollHeight={150}
-        >
-          <View style={styles.headerContainer}>
-            <Text style={{ color }}>{getTypeName(transaction.type)}紀錄</Text>
-            {transaction.type !== 'cancel' && !transaction.isCancelled &&
-            <Button
-              color={Colors.error}
-              onPress={()=> {
-                Alert.alert(
-                  '取消交易亦會修正使用者餘額',
-                  '',
-                  [
-                    {
-                      text: '放棄',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                    { text: '確認取消交易', onPress: () => cancel(transaction) },
-                  ],
-                  { cancelable: false },
-                );
-              }}
-              disabled={isLoading}
-            >
-              取消交易
-            </Button>}
-          </View>
-          <Input
-            label="日期"
-            value={date}
-            disabled={true}
-          />
-          <Input
-            label="金額"
-            value={amount}
-            disabled={true}
-          />
-          <Input
-            label="經手人"
-            value={transaction.createdBy}
-            disabled={true}
-          />
-          <Input
-            label="備註"
-            placeholder='原因/用途...'
-            multiline={true}
-            numberOfLines={5}
-            value={note}
-            onChangeText={setNote}
-            disabled={isLoading}
-          />
+        <View style={styles.headerContainer}>
+          <Text style={{ color }}>{getTypeName(transaction.type)}紀錄</Text>
+          {transaction.type !== 'cancel' && !transaction.isCancelled &&
           <Button
-            onPress={updateNote}
-            color={Colors.primary}
-            mode="contained"
+            color={Colors.error}
+            onPress={()=> {
+              Alert.alert(
+                '取消交易亦會修正使用者餘額',
+                '',
+                [
+                  {
+                    text: '放棄',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                  { text: '確認取消交易', onPress: () => cancel(transaction) },
+                ],
+                { cancelable: false },
+              );
+            }}
             disabled={isLoading}
           >
-            更新備註
-          </Button>
-        </KeyboardAwareScrollView>
-      </Modal>
+            取消交易
+          </Button>}
+        </View>
+        <Input
+          label="日期"
+          value={date}
+          disabled={true}
+        />
+        <Input
+          label="金額"
+          value={amount}
+          disabled={true}
+        />
+        <Input
+          label="經手人"
+          value={transaction.createdBy}
+          disabled={true}
+        />
+        <Input
+          label="備註"
+          placeholder='原因/用途...'
+          multiline={true}
+          numberOfLines={5}
+          value={note}
+          onChangeText={setNote}
+          disabled={isLoading}
+        />
+      </CustomModal>
     </View>
   );
 }
@@ -217,16 +203,6 @@ const styles = StyleSheet.create({
   rightTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  modal: {
-    flex: 1,
-    margin: 0,
-    marginTop: 100,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 32,
   },
 });
 

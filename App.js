@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 // amplify
 import Amplify, { Auth, Hub } from 'aws-amplify';
@@ -12,7 +12,7 @@ import './global';
 import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
-import Colors from './constants/Colors';
+// import Colors from './constants/Colors';
 import authenticatorConfig from './authenticator.config';
 import amplifyTheme from './constants/Amplify.theme';
 import amplifyConfig from './amplify.config';
@@ -25,8 +25,6 @@ Amplify.configure(amplifyConfig);
 Analytics.disable();
 
 const setupUser = async () => {
-  console.log('setup user');
-
   const user = await Auth.currentAuthenticatedUser();
   // console.log(user);
   // user is not assigned to organization yet
@@ -127,7 +125,7 @@ function App({ authState, onStateChange }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primary,
+    // backgroundColor: Colors.primary,
   },
 });
 
