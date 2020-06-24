@@ -83,8 +83,9 @@ export default function StaffList() {
           key={index}
           leftAvatar={{ source: { uri: `https://i.pravatar.cc/100?u=${user.username}` } }}
           title={user.name}
-          subtitle={user.role}
+          subtitle={user.username}
           subtitleStyle={styles.subtitle}
+          rightTitle={user.role}
           bottomDivider
           chevron
           // badge={{

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import Modal from 'react-native-modal';
-import { ScrollView } from 'react-native-gesture-handler';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
 import { Hub } from 'aws-amplify';
@@ -11,6 +9,7 @@ import request from '../src/utils/request';
 import { createOrganizationUserTask, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 import TaskList from './TaskList';
 import Colors from '../constants/Colors';
+import CustomModal from './CustomModal';
 
 export default function AddTaskToUser({ user, onUpdate }) {
   const [visible, setVisible] = useState(false);
@@ -127,40 +126,23 @@ export default function AddTaskToUser({ user, onUpdate }) {
         onPress={()=>setVisible(true)}
       />
 
-      <Modal
-        isVisible={visible}
-        hardwareAccelerated
-        onBackdropPress={()=>setVisible(false)}
-        style={styles.modal}
-      >
-        <ScrollView style={styles.modalContainer}>
-          {/* TODO: Multiple select */}
-          <TaskList
-            mode="select"
-            onSelect={handleSelect}
-            disabled={isLoading}
-          />
-        </ScrollView>
-        <Button
-          title={`${tasks.length} 任務 ${tasks.reduce((sum, x) => {
+      <CustomModal
+        visible={visible}
+        onClose={()=>setVisible(false)}
+        bottomButtonProps={{
+          title: `${tasks.length} 任務 ${tasks.reduce((sum, x) => {
             return sum += x.point;
-          }, 0)/100} 點 確認`}
-          onPress={() => handleSubmit()}
-          disabled={tasks.length === 0 || isLoading}
+          }, 0)/100} 點 確認`,
+          onPress: ()=> handleSubmit(),
+          disabled: tasks.length === 0 || isLoading,
+        }}
+      >
+        <TaskList
+          mode="select"
+          onSelect={handleSelect}
+          disabled={isLoading}
         />
-      </Modal>
+      </CustomModal>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    margin: 0,
-    marginTop: 80,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import { API, graphqlOperation } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
+import { onCreateOrganizationUser } from '../src/graphql/subscriptions';
 
-export default function UserList({ refresh }) {
+export default function UserList() {
   const navigation = useNavigation();
 
   const [users, setUsers] = useState([]);
@@ -71,6 +73,25 @@ export default function UserList({ refresh }) {
   useEffect(() => {
     load();
   }, []);
+
+  useEffect(() => {
+    const subscription = API
+      .graphql(graphqlOperation(onCreateOrganizationUser))
+      .subscribe({
+        next: (event) => {
+          if (event) {
+            const newUser = event.value.data.onCreateOrganizationUser;
+            if (!users.find((x) => x.username === newUser.username)) {
+              setUsers([newUser, ...users]);
+            }
+          }
+        },
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [users]);
 
   return (
     <ScrollView

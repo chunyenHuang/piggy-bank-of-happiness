@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import Modal from 'react-native-modal';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Input, Text } from 'react-native-elements';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
 
 import Colors from '../constants/Colors';
 import request from '../src/utils/request';
+import CustomModal from './CustomModal';
 import { createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 
 export default function PointsHandler({ mode, user, onUpdate }) {
@@ -123,66 +122,52 @@ export default function PointsHandler({ mode, user, onUpdate }) {
         onPress={()=>setVisible(true)}
       />
 
-      <Modal
-        isVisible={visible}
-        hardwareAccelerated
-        onBackdropPress={()=>setVisible(false)}
-        style={styles.modal}
+      <CustomModal
+        visible={visible}
+        onClose={()=>setVisible(false)}
+        padding
+        bottomButtonProps={{
+          title: button.title,
+          onPress: ()=> submit(),
+          disabled: isLoading,
+        }}
+        bottomButtonStyle={{ backgroundColor: button.color }}
       >
-        <ScrollView style={styles.modalContainer}>
-          <Text h4 h4Style={styles.header}>{button.title}</Text>
-          <Input
-            label="金額"
-            labelStyle={styles.inputLabel}
-            inputStyle={styles.input}
-            placeholder='0.00'
-            keyboardType="decimal-pad"
-            autoFocus={true}
-            value={amount}
-            onChangeText={setAmount}
-            leftIcon={
-              <Icon
-                name='logo-usd'
-                type='ionicon'
-                size={24}
-                color='black'
-              />
-            }
-          />
+        <Text h4 h4Style={styles.header}>{button.title}</Text>
+        <Input
+          label="金額"
+          labelStyle={styles.inputLabel}
+          inputStyle={styles.input}
+          placeholder='0.00'
+          keyboardType="decimal-pad"
+          autoFocus={true}
+          value={amount}
+          onChangeText={setAmount}
+          leftIcon={
+            <Icon
+              name='logo-usd'
+              type='ionicon'
+              size={24}
+              color='black'
+            />
+          }
+        />
 
-          <Input
-            label="備註"
-            labelStyle={styles.inputLabel}
-            placeholder='原因/用途...'
-            multiline={true}
-            numberOfLines={5}
-            value={note}
-            onChangeText={setNote}
-          />
-
-          <Button
-            title={button.title}
-            buttonStyle={{ backgroundColor: button.color }}
-            onPress={() => submit()}
-            disabled={isLoading}
-          />
-        </ScrollView>
-      </Modal>
+        <Input
+          label="備註"
+          labelStyle={styles.inputLabel}
+          placeholder='原因/用途...'
+          multiline={true}
+          numberOfLines={5}
+          value={note}
+          onChangeText={setNote}
+        />
+      </CustomModal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    margin: 0,
-    marginTop: 80,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 32,
-  },
   header: {
     textAlign: 'center',
     marginBottom: 32,

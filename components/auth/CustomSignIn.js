@@ -13,7 +13,11 @@ import {
   Button,
 } from 'react-native-paper';
 import { Auth, Hub } from 'aws-amplify';
-import { SocialIcon, Divider, Image } from 'react-native-elements';
+import {
+  SocialIcon,
+  // Divider,
+  Image,
+} from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Colors from '../../constants/Colors';

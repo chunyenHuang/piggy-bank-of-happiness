@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
+import { Header } from 'react-native-elements';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -9,6 +10,9 @@ import UserListScreen from '../screens/UserListScreen';
 import TaskListScreen from '../screens/TaskListScreen';
 // import UserTransactionListScreen from '../screens/UserTransactionListScreen';
 import StaffListScreen from '../screens/StaffListScreen';
+// import Colors from '../constants/Colors';
+import ModifyUser from '../components/ModifyUser';
+import ModifyTask from '../components/ModifyTask';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -18,6 +22,7 @@ const defaultMenu = [
     component: HomeScreen,
     // title: '幸福存摺 @ {{organizationName}}',
     title: '幸福存摺',
+    rightComponent: null,
     options: {
       title: '首頁',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
@@ -28,6 +33,7 @@ const defaultMenu = [
     name: 'UserList',
     component: UserListScreen,
     title: '學生列表',
+    rightComponent: <ModifyUser />,
     options: {
       title: '學生',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
@@ -37,6 +43,7 @@ const defaultMenu = [
   {
     name: 'StaffList',
     component: StaffListScreen,
+    rightComponent: null,
     title: '職員列表',
     options: {
       title: '職員',
@@ -58,6 +65,7 @@ const defaultMenu = [
     name: 'TaskList',
     component: TaskListScreen,
     title: '任務列表',
+    rightComponent: <ModifyTask />,
     options: {
       title: '任務',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
@@ -68,6 +76,7 @@ const defaultMenu = [
     name: 'Settings',
     component: SettingsScreen,
     title: '個人設定',
+    rightComponent: null,
     options: {
       title: '設定',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-settings" />,
@@ -81,11 +90,28 @@ const INITIAL_ROUTE_NAME = 'Home';
 export default function BottomTabNavigator({ navigation, route }) {
   const [organizationName, setOrganizationName] = useState('');
   const [menu, setMenu] = useState(defaultMenu.filter(({ groups }) => groups.includes('All')));
-  console.log('BottomTabNavigator load');
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle: getHeaderTitle(route, organizationName) });
+  navigation.setOptions({
+    header: (...args) => {
+      const { title, rightComponent } = getHeaderProps(route, organizationName);
+      return (
+        /* beautify ignore:start */
+        <Header
+          statusBarProps={{ barStyle: 'dark-content' }}
+          barStyle="light-content"
+          // leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{
+            text: title,
+            style: { color: '#fff', fontSize: 16 },
+          }}
+          rightComponent={rightComponent}
+        />
+        /* beautify ignore:end */
+      );
+    },
+  });
 
   useEffect(() => {
     (async () => {
@@ -114,12 +140,15 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-function getHeaderTitle(route, organizationName) {
+function getHeaderProps(route, organizationName) {
   /* beautify ignore:start */
   const routeName = route.state?.routes[route.state.index]?.name??INITIAL_ROUTE_NAME;
   /* beautify ignore:end */
 
-  return defaultMenu
-    .find(({ name }) => name === routeName).title
-    .replace('{{organizationName}}', organizationName);
+  const { title, rightComponent } = defaultMenu.find(({ name }) => name === routeName);
+
+  return {
+    title: title.replace('{{organizationName}}', organizationName),
+    rightComponent,
+  };
 }

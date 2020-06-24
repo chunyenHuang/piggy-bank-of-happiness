@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import { Avatar, Text } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
-import { API, graphqlOperation } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { getOrganizationUser } from '../src/graphql/queries';
@@ -12,19 +11,9 @@ import AddTaskToUser from './AddTaskToUser';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
 import { currency } from '../src/utils/format';
-import ModifyUser from './ModifyUser';
-import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 
-export default function User({ user: inUser, mode }) {
-  // const navigation = useNavigation();
-  // navigation.setOptions({
-  //   title: inUser.name,
-  // });
-  const [user, setUser] = useState({
-    currentPoints: 0,
-    tasks: { items: [] },
-    transactions: { items: [] },
-  });
+export default function UserForm({ user: inUser, mode = 'view' }) {
+  const [user, setUser] = useState(inUser);
 
   const load = async () => {
     Hub.dispatch('app', { event: 'loading' });
@@ -44,20 +33,6 @@ export default function User({ user: inUser, mode }) {
     (async () => {
       await load();
     })();
-    const subscription = API
-      .graphql(graphqlOperation(onUpdateOrganizationUser))
-      .subscribe({
-        next: (event) => {
-          if (event) {
-            const updatedUser = event.value.data.onUpdateOrganizationUser;
-            setUser(updatedUser);
-          }
-        },
-      });
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, [inUser]);
 
   return (
@@ -73,10 +48,6 @@ export default function User({ user: inUser, mode }) {
       </View>
       {mode !== 'view' &&
       <View style={styles.headerContainer}>
-        <ModifyUser
-          user={user}
-          button
-        />
         <PointsHandler
           user={user}
           mode={'withdraw'}
