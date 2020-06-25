@@ -168,7 +168,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
 
   return (
     <KeyboardAvoidingView
-      behavior="padding"
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       enabled
       style={styles.container}
     >

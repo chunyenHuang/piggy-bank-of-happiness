@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Dimensions } from 'react-native';
 import { Header } from 'react-native-elements';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -99,6 +99,14 @@ const defaultMenu = [
 
 const INITIAL_ROUTE_NAME = 'Home';
 
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+const isIphoneX = Platform.OS === 'ios' &&
+  (deviceHeight === 812 ||
+    deviceWidth === 812 ||
+    deviceHeight === 896 ||
+    deviceWidth === 896);
+
 export default function BottomTabNavigator({ navigation, route }) {
   const [organizationName, setOrganizationName] = useState('');
   const [menu, setMenu] = useState(defaultMenu.filter(({ groups }) => groups.includes('All')));
@@ -111,8 +119,13 @@ export default function BottomTabNavigator({ navigation, route }) {
       return (
         /* beautify ignore:start */
         <Header
-          statusBarProps={{ barStyle: 'dark-content' }}
           barStyle="light-content"
+          containerStyle={{
+            height: Platform.OS == 'ios' ?
+              (isIphoneX ? 80: 60) : 40,
+            paddingTop: Platform.OS == 'ios' ?
+              (isIphoneX ? 40: 20): 0,
+          }}
           // leftComponent={{ icon: 'menu', color: '#fff' }}
           centerComponent={{
             text: title,
@@ -127,6 +140,7 @@ export default function BottomTabNavigator({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
+      console.log('load menu...');
       const [organizationName, group] = await Promise.all([
         AsyncStorage.getItem('app:organizationName'),
         AsyncStorage.getItem('app:group'),

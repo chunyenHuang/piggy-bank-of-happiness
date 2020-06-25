@@ -87,14 +87,14 @@ export default function StaffList() {
           subtitleStyle={styles.subtitle}
           rightTitle={user.role}
           bottomDivider
-          chevron
+          // chevron
           // badge={{
           //   // status: 'success',
           //   value: user.currentPoints,
           //   textStyle: styles.badgeText,
           //   badgeStyle: styles.badge,
           // }}
-          onPress={() => navigation.navigate('User', user)}
+          // onPress={() => navigation.navigate('User', user)}
         />
       ))}
     </ScrollView>

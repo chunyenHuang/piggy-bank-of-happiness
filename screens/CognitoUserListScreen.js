@@ -25,7 +25,6 @@ async function listUsers(limit = 60) {
   const { NextToken, ...rest } = await API.get(apiName, path, myInit);
   const { Users } = rest;
   nextToken = NextToken;
-  console.log(Users[0]);
   return Users;
 }
 
@@ -50,7 +49,6 @@ export default function StaffListScreen() {
           user[Name] = Value;
         });
         user.isVerified = (user.status === 'CONFIRMED' && user['email_verified']) || (user.status === 'EXTERNAL_PROVIDER') ? 1 : 0;
-        console.log(user);
         return user;
       })
       .sort(sortBy('name'))

@@ -50,6 +50,7 @@ const Stack = createStackNavigator();
 
 function App({ authState, onStateChange }) {
   const [spinner, setSpinner] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const authListener = ({ payload: { event, data } }) => {
     console.log('auth event', event);
@@ -84,11 +85,15 @@ function App({ authState, onStateChange }) {
 
   useEffect(() => {
     (async () => {
+      setIsReady(false);
+      setSpinner(true);
       Hub.listen('auth', authListener);
       Hub.listen('app', appListener);
       await Promise.all([
         setupUser(),
       ]);
+      setIsReady(true);
+      setSpinner(false);
     })();
 
     return () => {
@@ -107,12 +112,13 @@ function App({ authState, onStateChange }) {
       <PaperProvider theme={paperTheme}>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-          <NavigationContainer linking={LinkingConfiguration}>
-            <Stack.Navigator>
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
-              <Stack.Screen name="User" component={UserScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
+          {isReady &&
+            <NavigationContainer linking={LinkingConfiguration}>
+              <Stack.Navigator>
+                <Stack.Screen name="Root" component={BottomTabNavigator} />
+                <Stack.Screen name="User" component={UserScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>}
           <Loading
             active={spinner}
           />

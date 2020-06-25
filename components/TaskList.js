@@ -165,7 +165,8 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                     task.isSelected = !task.isSelected;
                     handlerPress(task);
                   }
-                } else if (mode === 'edit') {
+                } else
+                if (mode === 'edit') {
                   setTask(task);
                 }
               }}
@@ -174,7 +175,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         </View>
       ))}
       <Modal
-        isVisible={task?true:false}
+        isVisible={ mode ==='select' && task?true:false }
         hardwareAccelerated
         onBackdropPress={()=>setTask(undefined)}
         style={styles.modal}
