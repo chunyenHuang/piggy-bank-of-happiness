@@ -13,6 +13,7 @@ import StaffListScreen from '../screens/StaffListScreen';
 // import Colors from '../constants/Colors';
 import ModifyUser from '../components/ModifyUser';
 import ModifyTask from '../components/ModifyTask';
+import CognitoUserListScreen from '../screens/CognitoUserListScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -50,6 +51,17 @@ const defaultMenu = [
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
     },
     groups: ['AppAdmins', 'OrgAdmins'],
+  },
+  {
+    name: 'CognitoUserList',
+    component: CognitoUserListScreen,
+    rightComponent: null,
+    title: 'APP註冊列表',
+    options: {
+      title: '用戶',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-lock" />,
+    },
+    groups: ['AppAdmins'],
   },
   // {
   //   name: 'UserTransactionList',
