@@ -17,6 +17,33 @@ const { CognitoIdentityServiceProvider } = require('aws-sdk');
 const cognitoIdentityServiceProvider = new CognitoIdentityServiceProvider();
 const userPoolId = process.env.USERPOOL;
 
+async function updateUserAttributes(username, attributes = {}) {
+  const params = {
+    UserPoolId: userPoolId,
+    Username: username,
+    UserAttributes: Object.keys(attributes).map((key) => {
+      return {
+        Name: key,
+        Value: attributes[key],
+      };
+    })
+  };
+
+  console.log(`Attempting to update ${username} attributes`);
+
+  try {
+    const result = await cognitoIdentityServiceProvider.adminUpdateUserAttributes(params).promise();
+    console.log(`Success update ${username} attributes`);
+    return {
+      message: `Success update ${username} attributes`,
+    };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+
 async function addUserToGroup(username, groupname) {
   const params = {
     GroupName: groupname,
@@ -177,10 +204,10 @@ async function listGroupsForUser(username, Limit, NextToken) {
      */
     result.Groups.forEach((val) => {
       delete val.UserPoolId,
-      delete val.LastModifiedDate,
-      delete val.CreationDate,
-      delete val.Precedence,
-      delete val.RoleArn;
+        delete val.LastModifiedDate,
+        delete val.CreationDate,
+        delete val.Precedence,
+        delete val.RoleArn;
     });
 
     return result;
@@ -232,6 +259,7 @@ async function signUserOut(username) {
 }
 
 module.exports = {
+  updateUserAttributes,
   addUserToGroup,
   removeUserFromGroup,
   confirmUserSignUp,

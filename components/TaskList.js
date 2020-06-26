@@ -177,7 +177,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
       <Modal
         isVisible={ mode ==='select' && task?true:false }
         hardwareAccelerated
-        onBackdropPress={()=>setTask(undefined)}
+        onBackdropPress={() => {}}
         style={styles.modal}
       >
         {task && <View style={styles.modalContainer}>
@@ -203,6 +203,14 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               task.point = newPoint;
               task.isSelected = true;
               handlerPress(task);
+              setTask(undefined);
+            }}
+          />
+          <Button
+            title="取消"
+            type="clear"
+            style={{ marginTop: 20 }}
+            onPress={() => {
               setTask(undefined);
             }}
           />
@@ -243,6 +251,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: '#fff',
     padding: 32,
-    height: 300,
+    height: 360,
+    borderRadius: 20,
   },
 });

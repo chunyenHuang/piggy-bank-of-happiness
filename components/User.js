@@ -30,12 +30,16 @@ export default function User({ user: inUser, mode }) {
     Hub.dispatch('app', { event: 'loading' });
 
     const { organizationId, username } = inUser;
-    const { data: { getOrganizationUser: userData } } = await request(getOrganizationUser, {
-      organizationId,
-      username,
-    });
-    console.log('userData', userData);
-    userData && setUser(userData);
+    if (organizationId) {
+      const { data: { getOrganizationUser: userData } } = await request(getOrganizationUser, {
+        organizationId,
+        username,
+      });
+      console.log('userData', userData);
+      userData && setUser(userData);
+    } else {
+      setUser(inUser);
+    }
 
     Hub.dispatch('app', { event: 'loading-complete' });
   };

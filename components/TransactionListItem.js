@@ -117,11 +117,12 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         chevron
       />
       <CustomModal
+        title="更新備註"
         visible={visible}
         onClose={()=>setVisible(false)}
         padding
         bottomButtonProps={{
-          title: `更新備註`,
+          title: `確認`,
           onPress: ()=> updateNote(),
           disabled: isLoading,
         }}

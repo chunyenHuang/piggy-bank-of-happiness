@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, Dimensions } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { Header } from 'react-native-elements';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -14,6 +14,7 @@ import StaffListScreen from '../screens/StaffListScreen';
 import ModifyUser from '../components/ModifyUser';
 import ModifyTask from '../components/ModifyTask';
 import CognitoUserListScreen from '../screens/CognitoUserListScreen';
+import { isIphoneX } from '../src/utils/device';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -40,6 +41,17 @@ const defaultMenu = [
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
     },
     groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers'],
+  },
+  {
+    name: 'TaskList',
+    component: TaskListScreen,
+    title: '任務列表',
+    rightComponent: <ModifyTask />,
+    options: {
+      title: '任務',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
+    },
+    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'User'],
   },
   {
     name: 'StaffList',
@@ -74,17 +86,6 @@ const defaultMenu = [
   //   groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'N/A'],
   // },
   {
-    name: 'TaskList',
-    component: TaskListScreen,
-    title: '任務列表',
-    rightComponent: <ModifyTask />,
-    options: {
-      title: '任務',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
-    },
-    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'User'],
-  },
-  {
     name: 'Settings',
     component: SettingsScreen,
     title: '個人設定',
@@ -98,14 +99,6 @@ const defaultMenu = [
 ];
 
 const INITIAL_ROUTE_NAME = 'Home';
-
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const isIphoneX = Platform.OS === 'ios' &&
-  (deviceHeight === 812 ||
-    deviceWidth === 812 ||
-    deviceHeight === 896 ||
-    deviceWidth === 896);
 
 export default function BottomTabNavigator({ navigation, route }) {
   const [organizationName, setOrganizationName] = useState('');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { Input, Text } from 'react-native-elements';
+import { Input } from 'react-native-elements';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
 
@@ -123,20 +123,20 @@ export default function PointsHandler({ mode, user, onUpdate }) {
       />
 
       <CustomModal
+        title={button.title}
         visible={visible}
         onClose={()=>setVisible(false)}
         padding
         bottomButtonProps={{
-          title: button.title,
+          title: '確認',
           onPress: ()=> submit(),
           disabled: isLoading,
         }}
         bottomButtonStyle={{ backgroundColor: button.color }}
       >
-        <Text h4 h4Style={styles.header}>{button.title}</Text>
         <Input
           label="金額"
-          labelStyle={styles.inputLabel}
+          labelStyle={{ ...styles.inputLabel, paddingTop: 16 }}
           inputStyle={styles.input}
           placeholder='0.00'
           keyboardType="decimal-pad"

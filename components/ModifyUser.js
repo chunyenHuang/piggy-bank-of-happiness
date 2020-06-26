@@ -124,11 +124,12 @@ export default function ModifyUser({ user: inUser, button }) {
           onPress={() => setVisible(true)}
         />}
       <CustomModal
+        title={`${isModified ? '修改':'新增'}學生資料`}
         visible={visible}
         onClose={() => setVisible(false)}
         padding
         bottomButtonProps={{
-          title: `${isModified ? '修改':'新增'}學生資料`,
+          title: `確認`,
           onPress: ()=> handleSubmit(),
           disabled: !isDirty || isLoading,
         }}
