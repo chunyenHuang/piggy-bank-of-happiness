@@ -3,7 +3,7 @@ type OrganizationUser
   @model
   @key(fields: ["organizationId","username"])
   @auth(rules: [
-    {allow: owner, ownerField: "username", operations: [read]},
+    {allow: owner, ownerField: "username", operations: [read, create]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])

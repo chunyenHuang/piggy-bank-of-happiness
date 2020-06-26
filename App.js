@@ -7,6 +7,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import Amplify, { Auth, Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
 import Analytics from '@aws-amplify/analytics';
+import moment from 'moment';
 
 import './global';
 import useCachedResources from './hooks/useCachedResources';
@@ -21,30 +22,65 @@ import Loading from './components/Loading';
 
 import UserScreen from './screens/UserScreen';
 
+// import request from './src/utils/request';
+// import { createOrganizationUser } from './src/graphql/mutations';
+// import { getRoleByGroup } from './src/admin/services';
+
 Amplify.configure(amplifyConfig);
 Analytics.disable();
 Storage.configure({ level: 'public' });
 
 const setupUser = async () => {
   const user = await Auth.currentAuthenticatedUser();
-  console.log(user.attributes);
-  // user is not assigned to organization yet
-  // if (!user.attributes['custom:organizationId']) {
-  //   return;
+
+  const organizationId = user.attributes['custom:organizationId'];
+  const organizationName = user.attributes['custom:organizationName'];
+  const { username } = user;
+
+  // // user is not assigned to organization yet
+  // if (!organizationId) {
+  //   console.log('assign to default org');
+
+  //   organizationId = '58e127ce-b36c-11ea-b3de-0242ac130004';
+  //   organizationName = '小豬銀行';
+
+  //   await Auth.updateUserAttributes(user, {
+  //     'custom:organizationId': organizationId,
+  //     'custom:organizationName': organizationName,
+  //   });
   // }
 
-  console.log(user.signInUserSession.accessToken.payload['cognito:groups']);
-
+  const userGroup = (user.signInUserSession.accessToken.payload['cognito:groups'].filter((x) => !x.includes('_'))[0] || 'N/A');
   const items = [
-    ['app:organizationId', user.attributes['custom:organizationId'] || 'N/A'],
-    ['app:organizationName', user.attributes['custom:organizationName'] || 'N/A'],
+    ['app:organizationId', organizationId || 'N/A'],
+    ['app:organizationName', organizationName || 'N/A'],
     ['app:name', user.attributes['name']],
     ['app:email', user.attributes['email']],
-    ['app:username', user.username],
-    ['app:group', (user.signInUserSession.accessToken.payload['cognito:groups'].filter((x) => !x.includes('_'))[0] || 'N/A')],
+    ['app:username', username],
+    ['app:group', userGroup],
   ];
 
   await AsyncStorage.multiSet(items);
+
+  // try {
+  //   const now = moment().toISOString();
+  //   await request(createOrganizationUser, {
+  //     input: {
+  //       organizationId,
+  //       username,
+  //       idNumber: 'N/A',
+  //       name: user.attributes['name'],
+  //       role: getRoleByGroup(userGroup),
+  //       isActive: 1,
+  //       currentPoints: 0,
+  //       earnedPoints: 0,
+  //       createdAt: now,
+  //       updatedAt: now,
+  //     },
+  //   });
+  // } catch (e) {
+  //   console.log(e);
+  // }
 };
 
 const Stack = createStackNavigator();

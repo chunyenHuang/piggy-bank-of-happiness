@@ -21,7 +21,8 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Colors from '../../constants/Colors';
-// import Footer from '../Footer';
+// import { listOrganizations } from '../../src/graphql/queries';
+// import request from '../../src/utils/request';
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -36,6 +37,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
   const [newPassword, setNewPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [requestNewPassword, setRequestNewPassword] = useState(false);
+  // const [organizations, setOrganizations] = useState([]);
 
   const authListener = ({ payload: { event, data } }) => {
     switch (event) {
@@ -68,6 +70,11 @@ export default function CustomSignIn({ authState, onStateChange }) {
     (async () => {
       Hub.listen('auth', authListener);
       Hub.listen('app', appListener);
+
+      // const { data: { listOrganizations: { items: organizations } } } = await request(listOrganizations, {
+      //   limit: 100,
+      // });
+      // setOrganizations(organizations);
     })();
 
     return () => {

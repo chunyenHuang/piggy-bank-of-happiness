@@ -200,8 +200,8 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onCreateOrganizationUser = /* GraphQL */ `
-  subscription OnCreateOrganizationUser {
-    onCreateOrganizationUser {
+  subscription OnCreateOrganizationUser($username: String) {
+    onCreateOrganizationUser(username: $username) {
       organizationId
       username
       idNumber
