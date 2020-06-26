@@ -10,5 +10,9 @@
     {
         "groupName": "OrgManagers",
         "precedence": 3
+    },
+    {
+        "groupName": "Users",
+        "precedence": 4
     }
 ]

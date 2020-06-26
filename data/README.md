@@ -7,6 +7,8 @@ https://github.com/aws-amplify/amplify-cli/issues/2187
 `amplify/backend/auth/*-template.yml - UserPool`
 
 ```yml
+  UserPool:
+    Properties:
       # Add this to make admin only
       AdminCreateUserConfig:
           AllowAdminCreateUserOnly: True

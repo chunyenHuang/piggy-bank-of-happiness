@@ -3,7 +3,17 @@
 		"piggybankofhappinesscf2e2c90": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
-			"dependsOn": []
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
+					"triggerProvider": "Cognito",
+					"attributes": [
+						"Arn",
+						"Name"
+					]
+				}
+			]
 		},
 		"userPoolGroups": {
 			"service": "Cognito-UserPool-Groups",
@@ -71,6 +81,54 @@
 					"resourceName": "piggybankofhappinesscf2e2c90",
 					"attributes": [
 						"UserPoolId"
+					]
+				}
+			]
+		},
+		"piggybankofhappinesscf2e2c90PostConfirmation": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda"
+		}
+	},
+	"storage": {
+		"avatars": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "auth",
+					"resourceName": "piggybankofhappinesscf2e2c90",
+					"attributes": [
+						"UserPoolId"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "userPoolGroups",
+					"attributes": [
+						"AppAdminsGroupRole"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "userPoolGroups",
+					"attributes": [
+						"OrgAdminsGroupRole"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "userPoolGroups",
+					"attributes": [
+						"OrgManagersGroupRole"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "userPoolGroups",
+					"attributes": [
+						"UsersGroupRole"
 					]
 				}
 			]

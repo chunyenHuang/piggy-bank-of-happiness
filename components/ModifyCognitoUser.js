@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
 import moment from 'moment';
 
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request from '../src/utils/request';
-import Colors from '../constants/Colors';
 
 import { listOrganizations, getOrganizationUser } from '../src/graphql/queries';
 import { createOrganizationUser, updateOrganizationUser, deleteOrganizationUser } from '../src/graphql/mutations';
-import { updateUserAttributes, addUserToGroup, getUserGroup, getRoleByGroup } from '../src/admin/services';
+import {
+  updateUserAttributes,
+  addUserToGroup,
+  removeUserFromGroup,
+  getUserGroup,
+  getRoleByGroup,
+} from '../src/admin/services';
 
-export default function ModifyCognitoUser({ user: inUser, button }) {
+export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [user, setUser] = useState({});
+  const [oldUserGroup, setOldUserGroup] = useState(undefined);
   const [orgUser, setOrgUser] = useState(undefined);
   const [errors, setErrors] = useState([]);
   const [organizations, setOrganizations] = useState([]);
@@ -50,7 +54,10 @@ export default function ModifyCognitoUser({ user: inUser, button }) {
       'custom:organizationName': organizations.find((x) => x.id === organizationId).name,
     });
 
-    // TODO: remove user from group
+    if (oldUserGroup !== userGroup) {
+      await removeUserFromGroup(username, oldUserGroup);
+    }
+
     await addUserToGroup(username, userGroup);
 
     // Update DDB User
@@ -100,6 +107,9 @@ export default function ModifyCognitoUser({ user: inUser, button }) {
     setVisible(false);
     setUser({});
     setOrgUser(undefined);
+    setOldUserGroup(undefined);
+
+    onUpdate && onUpdate();
   };
 
   const fields = [
@@ -122,6 +132,7 @@ export default function ModifyCognitoUser({ user: inUser, button }) {
         { value: 'AppAdmins' },
         { value: 'OrgAdmins' },
         { value: 'OrgManagers' },
+        { value: 'Users' },
       ],
       props: {
         label: '權限',
@@ -197,6 +208,7 @@ export default function ModifyCognitoUser({ user: inUser, button }) {
         console.log(inUser);
 
         inUser.userGroup = await getUserGroup(inUser.username);
+        setOldUserGroup(inUser.userGroup);
 
         if (inUser['custom:organizationId']) {
           const { data: { getOrganizationUser: orgUser } } = await request(getOrganizationUser, {

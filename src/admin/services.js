@@ -40,6 +40,7 @@ export function getRoleByGroup(inGroup) {
     return 'Admin';
   case 'OrgManagers':
     return 'Manager';
+  case 'Users':
   case 'N/A':
   default:
     return 'User';
@@ -106,6 +107,18 @@ export async function updateUserAttributes(username, attributes = {}) {
 
 export async function addUserToGroup(username, groupname) {
   const path = '/addUserToGroup';
+  const params = {
+    body: {
+      username,
+      groupname,
+    },
+    headers: await getHeaders(),
+  };
+  return API.post(apiName, path, params);
+}
+
+export async function removeUserFromGroup(username, groupname) {
+  const path = '/removeUserFromGroup';
   const params = {
     body: {
       username,

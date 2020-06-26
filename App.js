@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 // amplify
-import Amplify, { Auth, Hub } from 'aws-amplify';
+import Amplify, { Auth, Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
 import Analytics from '@aws-amplify/analytics';
 
@@ -23,10 +23,11 @@ import UserScreen from './screens/UserScreen';
 
 Amplify.configure(amplifyConfig);
 Analytics.disable();
+Storage.configure({ level: 'public' });
 
 const setupUser = async () => {
   const user = await Auth.currentAuthenticatedUser();
-  // console.log(user);
+  console.log(user.attributes);
   // user is not assigned to organization yet
   // if (!user.attributes['custom:organizationId']) {
   //   return;

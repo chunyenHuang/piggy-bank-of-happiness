@@ -4,7 +4,7 @@ import { ListItem, Text } from 'react-native-elements';
 
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
-import { listUsers, listUsersInGroup } from '../src/admin/services';
+import { listUsersInGroup } from '../src/admin/services';
 import ModifyCognitoUser from './ModifyCognitoUser';
 
 export default function CognitoUserList() {
@@ -19,6 +19,7 @@ export default function CognitoUserList() {
       'AppAdmins',
       'OrgAdmins',
       'OrgManagers',
+      'Users',
     ];
     const groups = await Promise.all(groupNames.map(async (name) => {
       const { users } = await listUsersInGroup(name);
@@ -46,7 +47,10 @@ export default function CognitoUserList() {
 
   return (
     <View style={styles.container}>
-      <ModifyCognitoUser user={selectedUser} />
+      <ModifyCognitoUser
+        user={selectedUser}
+        onUpdate={() => load()}
+      />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
