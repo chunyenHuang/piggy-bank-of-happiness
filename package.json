@@ -11,8 +11,8 @@
     "test": "jest --watchAll",
     "lint": "eslint .",
     "graphql:compile": "amplify api gql-compile",
-    "build:ios": "node build-version.js && expo build:ios -t archive",
-    "build:android": "node build-version.js && expo build:android",
+    "build:ios": "node build-version.js ios && expo build:ios -t archive",
+    "build:android": "node build-version.js android && expo build:android",
     "upload:ios": "expo upload:ios",
     "upload:android": "expo upload:android --latest"
   },
