@@ -9,6 +9,7 @@ import Form from './Form';
 import request from '../src/utils/request';
 import Colors from '../constants/Colors';
 import { createOrganizationUser, updateOrganizationUser } from '../src/graphql/mutations';
+import check from '../src/permission/check';
 
 export default function ModifyUser({ user: inUser, button }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,9 @@ export default function ModifyUser({ user: inUser, button }) {
   const isModified = inUser ? true : false;
 
   const handleSubmit = async () => {
+    if (isModified && !await check('ORG_USER__UPDATE', true)) return;
+    if (!isModified && !await check('ORG_USER__CREATE', true)) return;
+
     const errors = fields.map(({ key, required }) => {
       if (required && !user[key]) {
         return '必填';

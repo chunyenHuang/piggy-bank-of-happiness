@@ -7,7 +7,6 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import Amplify, { Auth, Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
 import Analytics from '@aws-amplify/analytics';
-import moment from 'moment';
 
 import './global';
 import useCachedResources from './hooks/useCachedResources';
@@ -103,6 +102,8 @@ function App({ authState, onStateChange }) {
       // setUser(null);
       onStateChange && onStateChange('signedOut');
       break;
+    case 'loading':
+      return <Loading active={true} />;
     case 'customOAuthState':
       // setCustomState(data);
     }
@@ -143,7 +144,10 @@ function App({ authState, onStateChange }) {
   const isLoadingComplete = useCachedResources();
 
   if (!isLoadingComplete) {
-    return null;
+    return (
+      <Loading
+        active={true}
+      />);
   } else {
     return (
       <PaperProvider theme={paperTheme}>

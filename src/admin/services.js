@@ -36,6 +36,7 @@ const normalizeCognitoUserData = (inCognitoUser) => {
 
 export function getRoleByGroup(inGroup) {
   switch (inGroup) {
+  case 'AppAdmins':
   case 'OrgAdmins':
     return 'Admin';
   case 'OrgManagers':

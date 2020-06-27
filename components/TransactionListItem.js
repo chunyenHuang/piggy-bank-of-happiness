@@ -10,6 +10,7 @@ import Colors from '../constants/Colors';
 import { currency, shortString } from '../src/utils/format';
 import request from '../src/utils/request';
 import { createOrganizationTransaction, updateOrganizationUser, updateOrganizationTransaction } from '../src/graphql/mutations';
+import check from '../src/permission/check';
 
 export default function TransactionListItem({ transaction: inData, onUpdate }) {
   const [transaction, setTransaction] = useState(undefined);
@@ -74,6 +75,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
   };
 
   const updateNote = async () => {
+    if (!await check('ORG_TX__UPDATE', true)) return;
     setIsLoading(true);
     const { id, organizationId } = transaction;
 
@@ -132,7 +134,9 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
           {transaction.type !== 'cancel' && !transaction.isCancelled &&
           <Button
             color={Colors.error}
-            onPress={()=> {
+            onPress={async ()=> {
+              if (!await check('ORG_TX__CANCEL', true)) return;
+
               Alert.alert(
                 '取消交易亦會修正使用者餘額',
                 '',
@@ -182,7 +186,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
   },
   headerContainer: {
     flex: 1,

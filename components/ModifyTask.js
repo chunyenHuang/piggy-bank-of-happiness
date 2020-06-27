@@ -7,6 +7,7 @@ import CustomModal from './CustomModal';
 import Form from './Form';
 import request from '../src/utils/request';
 import { createOrganizationTask, updateOrganizationTask } from '../src/graphql/mutations';
+import check from '../src/permission/check';
 
 export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,9 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const isModified = inTask ? true : false;
 
   const handleSubmit = async () => {
+    if (isModified && !await check('ORG_TX__UPDATE', true)) return;
+    if (!isModified && !await check('ORG_TX__CREATE', true)) return;
+
     const errors = fields.map(({ key, required }) => {
       if (required && !task[key]) {
         return '必填';
@@ -136,7 +140,10 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     <React.Fragment>
       {!hideButton &&
         <AddButton
-          onPress={() => setVisible(true)}
+          onPress={async () => {
+            if (!await check('ORG_TX__CREATE', true)) return;
+            setVisible(true);
+          }}
         />}
       <CustomModal
         title={`${isModified ? '修改':'新增'}任務`}

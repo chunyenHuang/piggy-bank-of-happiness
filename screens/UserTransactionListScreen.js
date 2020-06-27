@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 import User from '../components/User';
 
@@ -21,9 +20,7 @@ export default function UserTransactionListScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        {user && <User user={user} mode="view"/>}
-      </ScrollView>
+      {user && <User user={user} mode="view"/>}
     </View>
   );
 }

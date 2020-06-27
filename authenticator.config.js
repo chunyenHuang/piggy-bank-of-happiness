@@ -66,6 +66,6 @@ export default {
     <VerifyContact/>,
     <ForgotPassword />,
     // <TOTPSetup />,
-    <Loading />,
+    // <Loading />,
   ],
-}
+};

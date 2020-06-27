@@ -8,7 +8,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import UserListScreen from '../screens/UserListScreen';
 import TaskListScreen from '../screens/TaskListScreen';
-// import UserTransactionListScreen from '../screens/UserTransactionListScreen';
+import UserTransactionListScreen from '../screens/UserTransactionListScreen';
 import StaffListScreen from '../screens/StaffListScreen';
 // import Colors from '../constants/Colors';
 import ModifyUser from '../components/ModifyUser';
@@ -75,16 +75,16 @@ const defaultMenu = [
     },
     groups: ['AppAdmins'],
   },
-  // {
-  //   name: 'UserTransactionList',
-  //   component: UserTransactionListScreen,
-  //   title: '我的存摺',
-  //   options: {
-  //     title: '存摺',
-  //     tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
-  //   },
-  //   groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'N/A'],
-  // },
+  {
+    name: 'UserTransactionList',
+    component: UserTransactionListScreen,
+    title: '我的存摺',
+    options: {
+      title: '存摺',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
+    },
+    groups: ['Users', 'N/A'],
+  },
   {
     name: 'Settings',
     component: SettingsScreen,
