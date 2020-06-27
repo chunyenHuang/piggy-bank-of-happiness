@@ -38,6 +38,7 @@
     "expo-splash-screen": "^0.2.3",
     "expo-web-browser": "~8.2.0",
     "intl": "^1.2.5",
+    "logkitty": "^0.7.1",
     "moment": "^2.27.0",
     "native-base": "2.13.8",
     "react": "~16.9.0",
