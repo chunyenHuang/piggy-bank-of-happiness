@@ -3,7 +3,7 @@ type OrganizationTask
   @key(fields: ["organizationId", "name"])
   @auth(rules: [
     # {allow: owner, ownerField: "createdBy", operations: [create]},
-    {allow: groups, groups: ["OrgManagers"], operations: [read, create]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
 {

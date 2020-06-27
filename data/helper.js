@@ -28,6 +28,7 @@ export async function purgeTable(hash, env, name, partitionKey, sortKey) {
 
 export function getRoleByGroup(inGroup) {
   switch (inGroup) {
+  case 'AppAdmins':
   case 'OrgAdmins':
     return 'Admin';
   case 'OrgManagers':

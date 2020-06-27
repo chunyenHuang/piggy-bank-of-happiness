@@ -19,6 +19,7 @@ export default async (query, params, authMode) => {
   }
 
   if (err) {
+    console.log(err);
     if (__DEV__) {
       global.logger.debug(query);
       global.logger.debug(JSON.stringify(params || {}, null, 2));

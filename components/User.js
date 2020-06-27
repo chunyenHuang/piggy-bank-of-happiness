@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import { Avatar, Text } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
@@ -14,6 +14,7 @@ import PointsHandler from './PointsHandler';
 import { currency } from '../src/utils/format';
 import ModifyUser from './ModifyUser';
 import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
+import check from '../src/permission/check';
 
 export default function User({ user: inUser, mode }) {
   // const navigation = useNavigation();
@@ -45,22 +46,28 @@ export default function User({ user: inUser, mode }) {
   };
 
   useEffect(() => {
+    if (!inUser) return;
+
+    let subscription;
     (async () => {
       await load();
+
+      if (await check('ORG_USER__SUBSCRIPTION')) {
+        subscription = API
+          .graphql(graphqlOperation(onUpdateOrganizationUser))
+          .subscribe({
+            next: (event) => {
+              if (event) {
+                const updatedUser = event.value.data.onUpdateOrganizationUser;
+                setUser(updatedUser);
+              }
+            },
+          });
+      }
     })();
-    const subscription = API
-      .graphql(graphqlOperation(onUpdateOrganizationUser))
-      .subscribe({
-        next: (event) => {
-          if (event) {
-            const updatedUser = event.value.data.onUpdateOrganizationUser;
-            setUser(updatedUser);
-          }
-        },
-      });
 
     return () => {
-      subscription.unsubscribe();
+      subscription && subscription.unsubscribe();
     };
   }, [inUser]);
 
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

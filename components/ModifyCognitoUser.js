@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { Hub } from 'aws-amplify';
 
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
@@ -205,9 +206,11 @@ export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
   useEffect(() => {
     (async () => {
       if (inUser) {
+        Hub.dispatch('app', { event: 'loading' });
+
         console.log(inUser);
 
-        inUser.userGroup = await getUserGroup(inUser.username);
+        inUser.userGroup = inUser.userGroup || await getUserGroup(inUser.username);
         setOldUserGroup(inUser.userGroup);
 
         if (inUser['custom:organizationId']) {
@@ -220,6 +223,8 @@ export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
 
         setUser(inUser);
         setVisible(true);
+
+        Hub.dispatch('app', { event: 'loading-complete' });
       }
     })();
   }, [inUser]);
