@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { Button, Icon, Text } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { isIphoneX } from '../src/utils/device';
+import { isIphoneX, isIOS } from '../src/utils/device';
 
 export default function CustomModal({
   visible,
@@ -59,16 +59,16 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     margin: 0,
-    marginTop: isIphoneX ? 50 : 30,
+    marginTop: isIphoneX ? 50 : isIOS ? 30 : 0,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: isIOS ? 20 : 0,
   },
   modalContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: isIOS ? 20 : 0,
   },
   button: {
-    height: isIphoneX ? 100 : 60,
+    height: isIphoneX ? 100 : isIOS ? 60 : 40,
   },
 });
