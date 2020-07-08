@@ -7,3 +7,6 @@ export const isIphoneX = Platform.OS === 'ios' &&
     deviceWidth === 812 ||
     deviceHeight === 896 ||
     deviceWidth === 896);
+
+export const isIOS = Platform.OS == 'ios';
+export const isAndroid = Platform.OS !== 'ios';
