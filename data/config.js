@@ -7,5 +7,6 @@ module.exports = {
   ENV: aws_cloud_logic_custom ? aws_cloud_logic_custom[0].endpoint.split('/').pop() : null,
   DDB: {
     develop: 'bkdckjojs5bb5m2lp3xc5fyrna',
+    ccfang: 'p6sak5n4tbhufoahygrvalzuxq',
   },
 };
