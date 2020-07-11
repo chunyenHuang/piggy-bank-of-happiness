@@ -2,47 +2,64 @@
 
 ## GetStarted
 
+Install expo and Amplify CLI. Because we're installing them globally, you might need to run the command below with sudo.
 ```bash
-npm install -g expo-cli @aws-amplify/cli
+npm install -g expo-cli
+# If expo command not found after installation, install it again
+npm install -g @aws-amplify/cli
+```
 
-npm i
-expo start
-expo start --reset-cache # if you have package caching issue
+Install packages
+```bash
+npm install
 ```
 
 ## AWS Console
 
 https://piggybankofhappiness.signin.aws.amazon.com/console
 
-Please contact John for AWS credentials.
+Please contact John for an AWS IAM user account, credentials, and a backend environment for development
 
 ## Amplify
 
 https://docs.amplify.aws/start/q/integration/react-native
 
+Configure Amplify by running the following command:
 ```bash
 amplify configure
-# region: `ap-southeast-1` Asia Pacific (Singapore)
+? region:  ap-southeast-1
+? user name:  # User name for IAM user
+? accessKeyId:  # AWS credentials
+? secretAccessKey:  # AWS credentials
+? Profile Name:  piggybankofhappiness
+```
+Login Amplify Console, select YOUR backend environment, the command below will be found in 'Edit Backend'. Make updates by running the command from the root of your project folder.
+```
+amplify pull --appId XXXXXXXX --envName xxxx
+? Do you want to use an AWS profile? Yes
+? Please choose the profile you want to use piggybankofhappiness
+? Choose your default editor: Visual Studio Code
+? Choose the type of app that you're building javascript
+? What javascript framework are you using react-native
+? Source Directory Path:  /
+? Distribution Directory Path: /
+? Build Command:  npm run-script build
+? Start Command: npm run-script start
+Skip auth related questions by input arbitrary value
 ```
 
-## GraphQL
+## Build Test Environment
+
+```
+cd data
+npm install
+npm run seed:test
+npm run user:add
+```
+
+## Start Expo
 
 ```bash
-# support @auto
-# https://github.com/hirochachacha/graphql-auto-transformer#4-export-node_path
-export NODE_PATH=./node_modules
-
-# compile
-amplify api gql-compile
-
-# mock
-amplify mock api
+expo start
+expo start --reset-cache # if you have package caching issue
 ```
-
-Change `@key`
-- Comment out `@model` (remove table)
-- Push and add the `@model` back
-
-## Social Login
-
-https://docs.amplify.aws/lib/auth/social/q/platform/js#setup-frontend
