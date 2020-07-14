@@ -148,7 +148,10 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       <CustomModal
         title={`${isModified ? '修改':'新增'}任務`}
         visible={visible}
-        onClose={() => setVisible(false)}
+        onClose={() => {
+          setVisible(false);
+          onClose && onClose();
+        }}
         padding
         autoFocus={false}
         bottomButtonProps={{
