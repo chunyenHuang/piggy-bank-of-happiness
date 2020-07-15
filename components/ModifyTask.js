@@ -68,10 +68,15 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       await request(updateOrganizationTask, { input: data });
     }
 
+    resetState();
+    onClose && onClose();
+  };
+
+  const resetState = () => {
     setIsLoading(false);
     setVisible(false);
     setTask({});
-    onClose && onClose();
+    setIsDirty(false);
   };
 
   const fields = [
@@ -149,7 +154,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         title={`${isModified ? '修改':'新增'}任務`}
         visible={visible}
         onClose={() => {
-          setVisible(false);
+          resetState();
           onClose && onClose();
         }}
         padding
