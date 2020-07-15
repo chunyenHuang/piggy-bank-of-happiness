@@ -17,6 +17,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [errors, setErrors] = useState([]);
 
   const isModified = inTask ? true : false;
+  const isActive = task.isActive;
 
   const handleSubmit = async () => {
     if (isModified && !await check('ORG_TX__UPDATE', true)) return;
@@ -56,6 +57,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     } else {
       const data = {
         organizationId,
+        isActive: task.isActive ? 1 : 0,
         name: task.name,
         programName: task.programName,
         description: task.description,
@@ -81,6 +83,14 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
 
   const fields = [
     {
+      key: 'isActive',
+      props: {
+        enabledLabel: '使用中',
+        disabledLabel: '停用中',
+      },
+      type: 'switch',
+    },
+    {
       key: 'programName',
       required: true,
       props: {
@@ -88,6 +98,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         autoCorrect: false,
         autoCapitalize: 'none',
         placeholder: 'ex: 學校表現 日常工作',
+        disabled: !isActive,
       },
     },
     {
@@ -96,6 +107,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務名稱',
         autoCorrect: false,
+        disabled: isModified || !isActive,
       },
     },
     {
@@ -104,6 +116,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務內容',
         autoCorrect: false,
+        disabled: !isActive,
       },
     },
     {
@@ -112,6 +125,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '點數',
         keyboardType: 'number-pad',
+        disabled: !isActive,
       },
     },
     {
@@ -119,6 +133,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最低點數 (選填)',
         keyboardType: 'number-pad',
+        disabled: !isActive,
       },
     },
     {
@@ -126,6 +141,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最高點數 (選填)',
         keyboardType: 'number-pad',
+        disabled: !isActive,
       },
     },
   ];
@@ -136,6 +152,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         point: `${inTask.point / 100}`,
         pointMin: `${inTask.pointMin / 100}`,
         pointMax: `${inTask.pointMax / 100}`,
+        isActive: inTask.isActive === 1,
       }));
       setVisible(true);
     }
