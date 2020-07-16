@@ -107,13 +107,20 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
           next: (event) => {
             if (event) {
               const updatedTask = event.value.data.onUpdateOrganizationTask;
-              console.log(updatedTask);
+              // remove the original one first if found
+              programs.some((program) => {
+                const matchedTaskIndex = program.tasks.findIndex((x) => x.name === updatedTask.name);
+                if (matchedTaskIndex !== -1) {
+                  delete program.tasks[matchedTaskIndex];
+                  return true;
+                }
+                return false;
+              });
               const matchedProgram = programs.find((x) => x.name === updatedTask.programName);
               if (matchedProgram) {
-                const matchedTask = matchedProgram.tasks.find((x) => x.name === updatedTask.name);
-                Object.assign(matchedTask, updatedTask);
+                matchedProgram.tasks.push(updatedTask);
               } else {
-                programs.unshift({
+                programs.push({
                   name: updatedTask.programName,
                   tasks: [updatedTask],
                   isExpanded: true,
