@@ -17,7 +17,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [errors, setErrors] = useState([]);
 
   const isModified = inTask ? true : false;
-  const isActive = task.isActive;
+  const isActiveTask = task.isActive === undefined ? true : task.isActive;
 
   const handleSubmit = async () => {
     if (isModified && !await check('ORG_TX__UPDATE', true)) return;
@@ -99,7 +99,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         autoCorrect: false,
         autoCapitalize: 'none',
         placeholder: 'ex: 學校表現 日常工作',
-        disabled: !isActive,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -108,7 +108,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務名稱',
         autoCorrect: false,
-        disabled: isModified || !isActive,
+        disabled: isModified || !isActiveTask,
       },
     },
     {
@@ -117,7 +117,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務內容',
         autoCorrect: false,
-        disabled: !isActive,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -126,7 +126,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '點數',
         keyboardType: 'number-pad',
-        disabled: !isActive,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -134,7 +134,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最低點數 (選填)',
         keyboardType: 'number-pad',
-        disabled: !isActive,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -142,7 +142,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最高點數 (選填)',
         keyboardType: 'number-pad',
-        disabled: !isActive,
+        disabled: !isActiveTask,
       },
     },
   ];
