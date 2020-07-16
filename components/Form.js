@@ -37,9 +37,8 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
       onChangeText={onChange}
     />;
   case 'switch':
-    return <View style={styles.switchContainer}>
+    return <View key={index} style={styles.switchContainer}>
       <Switch
-        key={index}
         {...props}
         trackColor={{ false: '#767577', true: '#81b0ff' }}
         thumbColor={value ? '#f5dd4b' : '#f4f3f4'}
