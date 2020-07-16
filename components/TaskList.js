@@ -111,7 +111,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               programs.some((program) => {
                 const matchedTaskIndex = program.tasks.findIndex((x) => x.name === updatedTask.name);
                 if (matchedTaskIndex !== -1) {
-                  delete program.tasks[matchedTaskIndex];
+                  program.tasks.splice(matchedTaskIndex, 1);
                   return true;
                 }
                 return false;
