@@ -16,12 +16,12 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [task, setTask] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const isModified = inTask ? true : false;
-  const isActiveTask = task.isActive === undefined ? true : task.isActive;
+  const isEditMode = inTask ? true : false;
+  const isActiveTask = isEditMode ? task.isActive : true;
 
   const handleSubmit = async () => {
-    if (isModified && !await check('ORG_TX__UPDATE', true)) return;
-    if (!isModified && !await check('ORG_TX__CREATE', true)) return;
+    if (isEditMode && !await check('ORG_TX__UPDATE', true)) return;
+    if (!isEditMode && !await check('ORG_TX__CREATE', true)) return;
 
     const errors = fields.map(({ key, required }) => {
       if (required && !task[key]) {
@@ -41,7 +41,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     const username = await AsyncStorage.getItem('app:username');
     const now = moment().toISOString();
 
-    if (!isModified) {
+    if (!isEditMode) {
       const data = Object.assign(task, {
         organizationId,
         isActive: 1,
@@ -87,7 +87,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         enabledLabel: '使用中',
         disabledLabel: '停用中',
-        hidden: !isModified,
+        hidden: !isEditMode,
       },
       type: 'switch',
     },
@@ -108,7 +108,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務名稱',
         autoCorrect: false,
-        disabled: isModified || !isActiveTask,
+        disabled: isEditMode,
       },
     },
     {
@@ -169,7 +169,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
           }}
         />}
       <CustomModal
-        title={`${isModified ? '修改':'新增'}任務`}
+        title={`${isEditMode ? '修改':'新增'}任務`}
         visible={visible}
         onClose={() => {
           resetState();
