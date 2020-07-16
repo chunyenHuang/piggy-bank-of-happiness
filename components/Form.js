@@ -6,6 +6,9 @@ import { Dropdown } from 'react-native-material-dropdown';
 const inputs = [];
 
 const renderComponents = ({ index, type, value, options, props, autoFocus, errorMsg, onSubmit, onChange }) => {
+  if (props.hidden) {
+    return;
+  }
   switch (type) {
   case 'text':
     return <Input

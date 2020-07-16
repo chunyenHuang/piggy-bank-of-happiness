@@ -87,6 +87,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         enabledLabel: '使用中',
         disabledLabel: '停用中',
+        hidden: !isModified,
       },
       type: 'switch',
     },
