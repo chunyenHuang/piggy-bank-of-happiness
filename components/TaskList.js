@@ -223,7 +223,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
       >
         {task && <View style={styles.modalContainer}>
           <Text h4 h4Style={{ textAlign: 'center', marginBottom: 10 }}>
-            {task.name} ({task.pointMin/100} - {task.pointMax/100} 點)
+            {task.name}
           </Text>
           <Text h4 h4Style={{ textAlign: 'center' }}>{newPoint/100} 點</Text>
           <Slider
@@ -235,26 +235,34 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               setNewPoint(value);
             }}
             style={{ marginTop: 30, marginBottom: 50 }}
-            thumbTouchSize={{ width: 60, height: 60 }}
+            thumbTouchSize={{ width: 100, height: 100 }}
             thumbTintColor={Colors.primary}
+            thumbStyle={styles.thumb}
           />
-          <Button
-            title="確認"
-            onPress={() => {
-              task.point = newPoint;
-              task.isSelected = true;
-              handlerPress(task);
-              setTask(undefined);
-            }}
-          />
-          <Button
-            title="取消"
-            type="clear"
-            style={{ marginTop: 20 }}
-            onPress={() => {
-              setTask(undefined);
-            }}
-          />
+          <View style={styles.pointsRangeContainer}>
+            <Text>{task.pointMin/100}</Text>
+            <Text>{task.pointMax/100}</Text>
+          </View>
+          <View style={styles.actionContainer}>
+            <Button
+              title="取消"
+              type="clear"
+              buttonStyle={styles.button}
+              onPress={() => {
+                setTask(undefined);
+              }}
+            />
+            <Button
+              title="確認"
+              buttonStyle={styles.button}
+              onPress={() => {
+                task.point = newPoint;
+                task.isSelected = true;
+                handlerPress(task);
+                setTask(undefined);
+              }}
+            />
+          </View>
         </View>}
         <View></View>
       </Modal>
@@ -302,7 +310,32 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: '#fff',
     padding: 32,
-    height: 360,
+    // height: 360,
     borderRadius: 20,
+  },
+  thumb: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+  },
+  pointsRangeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginTop: -50,
+  },
+  actionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  button: {
+    paddingLeft: 32,
+    paddingRight: 32,
   },
 });

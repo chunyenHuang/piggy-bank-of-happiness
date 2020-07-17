@@ -44,7 +44,7 @@ export default function UserForm({ user: inUser, mode = 'view' }) {
           source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <Text h4>{user.name}</Text>
-        <Text h4>{currency(user.currentPoints)}</Text>
+        <Text h4>{currency(user.currentPoints, false)}</Text>
       </View>
       {mode !== 'view' &&
       <View style={styles.headerContainer}>
