@@ -46,6 +46,57 @@ export const deleteOrganization = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationProgram = /* GraphQL */ `
+  mutation CreateOrganizationProgram(
+    $input: CreateOrganizationProgramInput!
+    $condition: ModelOrganizationProgramConditionInput
+  ) {
+    createOrganizationProgram(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateOrganizationProgram = /* GraphQL */ `
+  mutation UpdateOrganizationProgram(
+    $input: UpdateOrganizationProgramInput!
+    $condition: ModelOrganizationProgramConditionInput
+  ) {
+    updateOrganizationProgram(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteOrganizationProgram = /* GraphQL */ `
+  mutation DeleteOrganizationProgram(
+    $input: DeleteOrganizationProgramInput!
+    $condition: ModelOrganizationProgramConditionInput
+  ) {
+    deleteOrganizationProgram(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createOrganizationTask = /* GraphQL */ `
   mutation CreateOrganizationTask(
     $input: CreateOrganizationTaskInput!
@@ -53,16 +104,28 @@ export const createOrganizationTask = /* GraphQL */ `
   ) {
     createOrganizationTask(input: $input, condition: $condition) {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -73,16 +136,28 @@ export const updateOrganizationTask = /* GraphQL */ `
   ) {
     updateOrganizationTask(input: $input, condition: $condition) {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -93,16 +168,28 @@ export const deleteOrganizationTask = /* GraphQL */ `
   ) {
     deleteOrganizationTask(input: $input, condition: $condition) {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -315,6 +402,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
     createOrganizationUserTask(input: $input, condition: $condition) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -370,16 +458,28 @@ export const createOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -392,6 +492,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
     updateOrganizationUserTask(input: $input, condition: $condition) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -447,16 +548,28 @@ export const updateOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -469,6 +582,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
     deleteOrganizationUserTask(input: $input, condition: $condition) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -524,16 +638,28 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }

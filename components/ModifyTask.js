@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import moment from 'moment';
+import { v1 as uuidv1 } from 'uuid';
 
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request from '../src/utils/request';
+import { listOrganizationPrograms } from '../src/graphql/queries';
 import { createOrganizationTask, updateOrganizationTask } from '../src/graphql/mutations';
 import check from '../src/permission/check';
 
@@ -13,6 +15,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [programs, setPrograms] = useState([]);
   const [task, setTask] = useState({});
   const [errors, setErrors] = useState([]);
 
@@ -44,6 +47,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     if (!isEditMode) {
       const data = Object.assign(task, {
         organizationId,
+        id: uuidv1(),
         isActive: 1,
         point: parseInt(task.point) * 100,
         pointMin: parseInt(task.pointMin || task.point) * 100,
@@ -57,9 +61,10 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     } else {
       const data = {
         organizationId,
+        id: task.id,
         isActive: task.isActive ? 1 : 0,
         name: task.name,
-        programName: task.programName,
+        programId: task.programId,
         description: task.description,
         point: parseInt(task.point) * 100,
         pointMin: parseInt(task.pointMin || task.point) * 100,
@@ -92,13 +97,14 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       type: 'switch',
     },
     {
-      key: 'programName',
+      key: 'programId',
       required: true,
+      type: 'select',
+      options: programs.map((item) => {
+        return { label: item.name, value: item.id };
+      }),
       props: {
         label: '類別',
-        autoCorrect: false,
-        autoCapitalize: 'none',
-        placeholder: 'ex: 學校表現 日常工作',
         disabled: !isActiveTask,
       },
     },
@@ -108,7 +114,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務名稱',
         autoCorrect: false,
-        disabled: isEditMode,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -158,6 +164,20 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       setVisible(true);
     }
   }, [inTask]);
+
+  useEffect(() => {
+    (async () => {
+      const programParams = {
+        organizationId: await AsyncStorage.getItem('app:organizationId'),
+        filter: {
+          isActive: { eq: 1 },
+        },
+        limit: 100,
+      };
+      const { data: { listOrganizationPrograms: { items: programs } } } = await request(listOrganizationPrograms, programParams);
+      setPrograms(programs);
+    })();
+  }, []);
 
   return (
     <React.Fragment>

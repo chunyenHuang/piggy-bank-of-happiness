@@ -1,59 +1,26 @@
-// const uuidv1 = require('uuid/v1');
+const fs = require('fs');
 const csvtojson = require('csvtojson');
 const path = require('path');
 
 const prompt = require('../prompt');
-const { purgeTable, writeData } = require('../helper');
-
-const tables = [{
-  name: 'Organization',
-  partitionKey: 'id',
-  sortKey: null,
-  source: 'organizations.csv',
-  dataFunc: (item) => item,
-}, {
-  name: 'OrganizationTask',
-  partitionKey: 'organizationId',
-  sortKey: 'name',
-  source: 'organization_tasks.csv',
-  dataFunc: (item) => item,
-}, {
-  name: 'OrganizationUser',
-  partitionKey: 'organizationId',
-  sortKey: 'username',
-  source: 'organization_users.csv',
-  dataFunc: (item) => item,
-}, {
-  name: 'OrganizationTask',
-  partitionKey: 'organizationId',
-  sortKey: 'name',
-}, {
-  name: 'OrganizationTransaction',
-  partitionKey: 'organizationId',
-  sortKey: 'id',
-}, {
-  name: 'OrganizationUserTask',
-  partitionKey: 'organizationId',
-  sortKey: 'id',
-}];
+const { writeData } = require('../helper');
 
 (async () => {
   try {
     const {
-      env: ENV,
-      hash: HASH,
-      shouldPurge: PURGE,
+      tableNames,
     } = await prompt();
-    await tables.map(async ({ name, partitionKey, sortKey, source, dataFunc }) => {
-      if (PURGE) {
-        await purgeTable(HASH, ENV, name, partitionKey, sortKey);
-      }
+    const sourceDir = path.join(__dirname, 'source');
+    const sources = fs.readdirSync(sourceDir).filter((x) => x.endsWith('.csv'));
 
-      if (source) {
-        const data = (await csvtojson({ checkType: true }).fromFile(path.join(__dirname, 'source', source))).map(dataFunc);
-        await writeData(HASH, ENV, name, data);
-      }
+    const promises = sources.map(async (source) => {
+      const data = await csvtojson({ checkType: true }).fromFile(path.join(sourceDir, source));
+
+      const typeName = source.replace('.csv', '');
+      const tableName = tableNames.find((x) => x.startsWith(`${typeName}-`));
+      writeData(tableName, typeName, data);
     });
+    await Promise.all(promises);
   } catch (e) {
     console.log(e);
   }

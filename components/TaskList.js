@@ -8,7 +8,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
-import { listOrganizationTasks } from '../src/graphql/queries';
+import { getOrgTasksByProgramByActive, listOrganizationPrograms } from '../src/graphql/queries';
 import Colors from '../constants/Colors';
 import { onCreateOrganizationTask, onUpdateOrganizationTask } from '../src/graphql/subscriptions';
 import ModifyTask from './ModifyTask';
@@ -43,28 +43,32 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     mode === 'edit' && setIsLoading(true);
     mode === 'select' && Hub.dispatch('app', { event: 'loading' });
 
-    const params = {
+    const programParams = {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
       limit: 100, // TODO: need to handle task more than 100
     };
     if (mode === 'select') {
-      params.filter = {
+      programParams.filter = {
         isActive: { eq: 1 },
       };
     }
-    const { data: { listOrganizationTasks: { items } } } = await request(listOrganizationTasks, params);
-    // group by programName
-    const programMappings = items.sort(sortBy('programName')).reduce((mapping, task, index) => {
-      mapping[task.programName] = mapping[task.programName] || {
-        name: task.programName,
-        isExpanded: index === 0 ? true : false,
-        tasks: [],
-      };
-      mapping[task.programName].tasks.push(task);
-      return mapping;
-    }, {});
 
-    setPrograms(Object.keys(programMappings).map((key) => programMappings[key]));
+    const { data: { listOrganizationPrograms: { items: programs } } } = await request(listOrganizationPrograms, programParams);
+    const promises = await programs.map(async (program) => {
+      const taskParams = {
+        programId: program.id,
+        limit: 100,
+      };
+      if (mode === 'select') {
+        taskParams.isActive = 1;
+      }
+      const { data: { getOrgTasksByProgramByActive: { items: tasks } } } = await request(getOrgTasksByProgramByActive, taskParams);
+      program.tasks = tasks;
+      program.isExpanded = true;
+    });
+    await Promise.all(promises);
+
+    setPrograms(programs);
 
     mode === 'edit' && setIsLoading(false);
     mode === 'select' && Hub.dispatch('app', { event: 'loading-complete' });
@@ -87,17 +91,13 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
           next: (event) => {
             if (event) {
               const newTask = event.value.data.onCreateOrganizationTask;
-              const matchedProgram = programs.find((x) => x.name === newTask.programName);
+              const matchedProgram = programs.find(({ id }) => id === newTask.programId);
               if (matchedProgram) {
                 matchedProgram.tasks.unshift(newTask);
+                setPrograms([...programs]);
               } else {
-                programs.unshift({
-                  name: newTask.programName,
-                  tasks: [newTask],
-                  isExpanded: true,
-                });
+                load();
               }
-              setPrograms([...programs]);
             }
           },
         });
@@ -116,15 +116,12 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                 }
                 return false;
               });
-              const matchedProgram = programs.find((x) => x.name === updatedTask.programName);
+              const matchedProgram = programs.find(({ id }) => id === updatedTask.progrmId);
               if (matchedProgram) {
                 matchedProgram.tasks.push(updatedTask);
+                setPrograms([...programs]);
               } else {
-                programs.push({
-                  name: updatedTask.programName,
-                  tasks: [updatedTask],
-                  isExpanded: true,
-                });
+                load();
               }
               setPrograms([...programs]);
             }
@@ -141,7 +138,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
   const getBadge = (task) => {
     if (task.isActive) {
       return {
-        value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point/100),
+        value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point / 100),
         textStyle: styles.badgeTextActive,
         badgeStyle: styles.badgeActive,
       };
@@ -171,6 +168,8 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
           <List.Accordion
             key={index}
             title={`${program.name} (${program.tasks.length})`}
+            description={program.description}
+            descriptionStyle={{ marginTop: 10, fontSize: 12 }}
             expanded={program.isExpanded}
             onPress={()=>{
               program.isExpanded = !program.isExpanded;

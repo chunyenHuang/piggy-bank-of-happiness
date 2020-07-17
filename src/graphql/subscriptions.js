@@ -37,20 +37,74 @@ export const onDeleteOrganization = /* GraphQL */ `
     }
   }
 `;
+export const onCreateOrganizationProgram = /* GraphQL */ `
+  subscription OnCreateOrganizationProgram {
+    onCreateOrganizationProgram {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateOrganizationProgram = /* GraphQL */ `
+  subscription OnUpdateOrganizationProgram {
+    onUpdateOrganizationProgram {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteOrganizationProgram = /* GraphQL */ `
+  subscription OnDeleteOrganizationProgram {
+    onDeleteOrganizationProgram {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateOrganizationTask = /* GraphQL */ `
   subscription OnCreateOrganizationTask {
     onCreateOrganizationTask {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -58,16 +112,28 @@ export const onUpdateOrganizationTask = /* GraphQL */ `
   subscription OnUpdateOrganizationTask {
     onUpdateOrganizationTask {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
@@ -75,22 +141,34 @@ export const onDeleteOrganizationTask = /* GraphQL */ `
   subscription OnDeleteOrganizationTask {
     onDeleteOrganizationTask {
       organizationId
+      id
       name
       isActive
-      programName
+      programId
       description
+      note
       point
       pointMin
       pointMax
       createdBy
       createdAt
       updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
     }
   }
 `;
 export const onCreateOrganizationTransaction = /* GraphQL */ `
-  subscription OnCreateOrganizationTransaction {
-    onCreateOrganizationTransaction {
+  subscription OnCreateOrganizationTransaction($username: String) {
+    onCreateOrganizationTransaction(username: $username) {
       organizationId
       id
       username
@@ -126,8 +204,8 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganizationTransaction = /* GraphQL */ `
-  subscription OnUpdateOrganizationTransaction {
-    onUpdateOrganizationTransaction {
+  subscription OnUpdateOrganizationTransaction($username: String) {
+    onUpdateOrganizationTransaction(username: $username) {
       organizationId
       id
       username
@@ -163,8 +241,8 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationTransaction = /* GraphQL */ `
-  subscription OnDeleteOrganizationTransaction {
-    onDeleteOrganizationTransaction {
+  subscription OnDeleteOrganizationTransaction($username: String) {
+    onDeleteOrganizationTransaction(username: $username) {
       organizationId
       id
       username
@@ -224,8 +302,8 @@ export const onCreateOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganizationUser = /* GraphQL */ `
-  subscription OnUpdateOrganizationUser {
-    onUpdateOrganizationUser {
+  subscription OnUpdateOrganizationUser($username: String) {
+    onUpdateOrganizationUser(username: $username) {
       organizationId
       username
       idNumber
@@ -248,8 +326,8 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationUser = /* GraphQL */ `
-  subscription OnDeleteOrganizationUser {
-    onDeleteOrganizationUser {
+  subscription OnDeleteOrganizationUser($username: String) {
+    onDeleteOrganizationUser(username: $username) {
       organizationId
       username
       idNumber
@@ -272,10 +350,11 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onCreateOrganizationUserTask = /* GraphQL */ `
-  subscription OnCreateOrganizationUserTask {
-    onCreateOrganizationUserTask {
+  subscription OnCreateOrganizationUserTask($username: String) {
+    onCreateOrganizationUserTask(username: $username) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -331,25 +410,38 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }
 `;
 export const onUpdateOrganizationUserTask = /* GraphQL */ `
-  subscription OnUpdateOrganizationUserTask {
-    onUpdateOrganizationUserTask {
+  subscription OnUpdateOrganizationUserTask($username: String) {
+    onUpdateOrganizationUserTask(username: $username) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -405,25 +497,38 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }
 `;
 export const onDeleteOrganizationUserTask = /* GraphQL */ `
-  subscription OnDeleteOrganizationUserTask {
-    onDeleteOrganizationUserTask {
+  subscription OnDeleteOrganizationUserTask($username: String) {
+    onDeleteOrganizationUserTask(username: $username) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -479,16 +584,28 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }

@@ -13,7 +13,7 @@ type OrganizationTask
   name: String!
   isActive: Int!
   programId: ID!
-  description: String!
+  description: String
   note: String
   point: Int!
   pointMin: Int!
