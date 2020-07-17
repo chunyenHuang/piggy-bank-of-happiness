@@ -164,7 +164,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         <ModifyTask
           hideButton={true}
           task={task}
-          onClose={()=>setTask(undefined)}
+          onClose={() => setTask(undefined)}
         />}
       <List.Section>
         {programs.map((program, index)=>(
@@ -177,7 +177,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               setPrograms([...programs]);
             }}
           >
-            {program.tasks.sort(sortBy('name')).sort(sortBy('isActive', true)).map((task)=>(
+            {program.tasks.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((task)=>(
               <ListItem
                 key={task.name}
                 // leftAvatar={{ source: { uri: randomAvatarUrl } }}
