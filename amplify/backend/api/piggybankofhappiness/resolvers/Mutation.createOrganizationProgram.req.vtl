@@ -42,8 +42,6 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
 #end
 ## [End] Check authMode and execute owner/group checks **
 
-
-
 ## [Start] Set the primary @key. **
 #set( $modelObjectKey = {
   "organizationId": $util.dynamodb.toDynamoDB($ctx.args.input.organizationId),
@@ -52,7 +50,7 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
 ## [End] Set the primary @key. **
 
 ## [Start] Prepare DynamoDB PutItem Request. **
-$util.qr($context.args.input.put("__typename", "OrganizationTask"))
+$util.qr($context.args.input.put("__typename", "OrganizationProgram"))
 #set( $condition = {
   "expression": "attribute_not_exists(#id)",
   "expressionNames": {

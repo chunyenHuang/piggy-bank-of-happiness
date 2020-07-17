@@ -1,0 +1,17 @@
+type OrganizationProgram
+  @model
+  @key(fields: ["organizationId", "id"])
+  @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  id: ID!
+  name: String!
+  isActive: Int!
+  description: String
+  createdBy: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
