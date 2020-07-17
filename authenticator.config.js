@@ -3,7 +3,7 @@ import {
   ConfirmSignIn,
   RequireNewPassword,
   // SignUp,
-  ConfirmSignUp,
+  // ConfirmSignUp,
   VerifyContact,
   // ForgotPassword,
   // TOTPSetup,
@@ -11,6 +11,7 @@ import {
 } from 'aws-amplify-react-native';
 import CustomSignIn from './components/auth/CustomSignIn';
 import CustomSignUp from './components/auth/CustomSignUp';
+import CustomConfirmSignUp from './components/auth/CustomConfirmSignUp';
 import CustomForgotPassword from './components/auth/CustomForgotPassword';
 
 // - signIn
@@ -29,7 +30,8 @@ export default {
     // <SignIn />,
     // <SignUp signUpConfig={signUpConfig}/>,
     <CustomSignIn override={'SignIn'}/>, // eslint-disable-line
-    <ConfirmSignUp />, // eslint-disable-line
+    // <ConfirmSignUp />, // eslint-disable-line
+    <CustomConfirmSignUp override={'ConfirmSignUp'}/>, // eslint-disable-line
     <CustomSignUp override={'SignUp'}/>, // eslint-disable-line
     <ConfirmSignIn />, // eslint-disable-line
     <RequireNewPassword />, // eslint-disable-line
