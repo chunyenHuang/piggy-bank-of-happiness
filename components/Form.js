@@ -23,6 +23,7 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
       errorStyle={{ color: 'red' }}
       errorMessage={errorMsg}
     />;
+  case 'select':
   case 'dropdown':
     return <Dropdown
       key={index}
