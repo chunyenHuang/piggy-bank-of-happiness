@@ -10,3 +10,4 @@ global.logger = logger;
 
 // Disable warning message
 console.disableYellowBox = true; /* eslint-disable-line no-console */
+console.ignoredYellowBox = ['Setting a timer']; /* eslint-disable-line no-console */
