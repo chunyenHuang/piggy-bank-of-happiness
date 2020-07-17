@@ -62,6 +62,7 @@ export default function AddTaskToUser({ user, onUpdate }) {
       const userTask = {
         organizationId,
         id: uuidv1(),
+        taskId: task.id,
         taskName: task.name,
         username,
         status: 'Completed',

@@ -11,6 +11,7 @@ type OrganizationUserTask
 {
   organizationId: ID!
   id: ID!
+  taskId: ID!
   taskName: String!
   username: String!
   status: TaskStatusType!
@@ -24,6 +25,6 @@ type OrganizationUserTask
   # organization: Organization @connection(fields:["organizationId"])
   user: OrganizationUser @connection(fields:["organizationId", "username"])
   transaction: OrganizationTransaction @connection(fields:["organizationId", "transactionId"])
-  task: OrganizationTask @connection(fields:["organizationId", "taskName"])
+  task: OrganizationTask @connection(fields:["organizationId", "taskId"])
 }
 

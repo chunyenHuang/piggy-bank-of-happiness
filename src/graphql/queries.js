@@ -32,35 +32,32 @@ export const listOrganizations = /* GraphQL */ `
     }
   }
 `;
-export const getOrganizationTask = /* GraphQL */ `
-  query GetOrganizationTask($organizationId: ID!, $name: String!) {
-    getOrganizationTask(organizationId: $organizationId, name: $name) {
+export const getOrganizationProgram = /* GraphQL */ `
+  query GetOrganizationProgram($organizationId: ID!, $id: ID!) {
+    getOrganizationProgram(organizationId: $organizationId, id: $id) {
       organizationId
+      id
       name
       isActive
-      programName
       description
-      point
-      pointMin
-      pointMax
       createdBy
       createdAt
       updatedAt
     }
   }
 `;
-export const listOrganizationTasks = /* GraphQL */ `
-  query ListOrganizationTasks(
+export const listOrganizationPrograms = /* GraphQL */ `
+  query ListOrganizationPrograms(
     $organizationId: ID
-    $name: ModelStringKeyConditionInput
-    $filter: ModelOrganizationTaskFilterInput
+    $id: ModelIDKeyConditionInput
+    $filter: ModelOrganizationProgramFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
-    listOrganizationTasks(
+    listOrganizationPrograms(
       organizationId: $organizationId
-      name: $name
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -68,16 +65,88 @@ export const listOrganizationTasks = /* GraphQL */ `
     ) {
       items {
         organizationId
+        id
         name
         isActive
-        programName
         description
+        createdBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrganizationTask = /* GraphQL */ `
+  query GetOrganizationTask($organizationId: ID!, $id: ID!) {
+    getOrganizationTask(organizationId: $organizationId, id: $id) {
+      organizationId
+      id
+      name
+      isActive
+      programId
+      description
+      note
+      point
+      pointMin
+      pointMax
+      createdBy
+      createdAt
+      updatedAt
+      program {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const listOrganizationTasks = /* GraphQL */ `
+  query ListOrganizationTasks(
+    $organizationId: ID
+    $id: ModelIDKeyConditionInput
+    $filter: ModelOrganizationTaskFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOrganizationTasks(
+      organizationId: $organizationId
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        organizationId
+        id
+        name
+        isActive
+        programId
+        description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -236,6 +305,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
     getOrganizationUserTask(organizationId: $organizationId, id: $id) {
       organizationId
       id
+      taskId
       taskName
       username
       status
@@ -291,16 +361,28 @@ export const getOrganizationUserTask = /* GraphQL */ `
       }
       task {
         organizationId
+        id
         name
         isActive
-        programName
+        programId
         description
+        note
         point
         pointMin
         pointMax
         createdBy
         createdAt
         updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
+          createdBy
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -325,6 +407,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
       items {
         organizationId
         id
+        taskId
         taskName
         username
         status
@@ -360,13 +443,61 @@ export const listOrganizationUserTasks = /* GraphQL */ `
         }
         task {
           organizationId
+          id
           name
           isActive
-          programName
+          programId
           description
+          note
           point
           pointMin
           pointMax
+          createdBy
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrgTasksByProgramByActive = /* GraphQL */ `
+  query GetOrgTasksByProgramByActive(
+    $programId: ID
+    $isActive: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTaskFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getOrgTasksByProgramByActive(
+      programId: $programId
+      isActive: $isActive
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        organizationId
+        id
+        name
+        isActive
+        programId
+        description
+        note
+        point
+        pointMin
+        pointMax
+        createdBy
+        createdAt
+        updatedAt
+        program {
+          organizationId
+          id
+          name
+          isActive
+          description
           createdBy
           createdAt
           updatedAt
@@ -488,6 +619,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
       items {
         organizationId
         id
+        taskId
         taskName
         username
         status
@@ -523,10 +655,12 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
         }
         task {
           organizationId
+          id
           name
           isActive
-          programName
+          programId
           description
+          note
           point
           pointMin
           pointMax
@@ -559,6 +693,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
       items {
         organizationId
         id
+        taskId
         taskName
         username
         status
@@ -594,10 +729,12 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
         }
         task {
           organizationId
+          id
           name
           isActive
-          programName
+          programId
           description
+          note
           point
           pointMin
           pointMax

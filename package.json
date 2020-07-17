@@ -14,7 +14,9 @@
     "build:ios": "node build-version.js ios && expo build:ios -t archive",
     "build:android": "node build-version.js android && expo build:android",
     "upload:ios": "expo upload:ios",
-    "upload:android": "expo upload:android --latest"
+    "upload:android": "expo upload:android --latest",
+    "amplify:update:schema": "amplify codegen",
+    "amplify:update:resolvers": "rm -rf amplify/backend/api/piggybankofhappiness/resolvers && amplify api gql-compile && mv amplify/backend/api/piggybankofhappiness/build/resolvers amplify/backend/api/piggybankofhappiness/resolvers"
   },
   "jest": {
     "preset": "jest-expo"
