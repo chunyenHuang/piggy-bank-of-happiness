@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
-import { ListItem, Text, Input } from 'react-native-elements';
+import { ListItem, Input } from 'react-native-elements';
 import moment from 'moment';
 import { Button } from 'react-native-paper';
 import { v1 as uuidv1 } from 'uuid';
@@ -119,7 +119,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         chevron
       />
       <CustomModal
-        title="更新備註"
+        title="交易紀錄"
         visible={visible}
         onClose={()=>setVisible(false)}
         padding
@@ -130,10 +130,10 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         }}
       >
         <View style={styles.headerContainer}>
-          <Text style={{ color }}>{getTypeName(transaction.type)}紀錄</Text>
           {transaction.type !== 'cancel' && !transaction.isCancelled &&
           <Button
             color={Colors.error}
+            compact={true}
             onPress={async ()=> {
               if (!await check('ORG_TX__CANCEL', true)) return;
 
@@ -156,6 +156,11 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
             取消交易
           </Button>}
         </View>
+        <Input
+          label="類別"
+          value={getTypeName(transaction.type)}
+          disabled={true}
+        />
         <Input
           label="日期"
           value={date}
