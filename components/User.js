@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
-import { Avatar, Text } from 'react-native-elements';
+import { Avatar, Text, Badge } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 
@@ -15,6 +15,7 @@ import { currency } from '../src/utils/format';
 import ModifyUser from './ModifyUser';
 import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
+import PointBadge from './PointBadge';
 
 export default function User({ user: inUser, mode }) {
   // const navigation = useNavigation();
@@ -80,7 +81,7 @@ export default function User({ user: inUser, mode }) {
           source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <Text h4>{user.name}</Text>
-        <Text h4>{currency(user.currentPoints)}</Text>
+        <PointBadge value={user.currentPoints} />
       </View>
       {mode !== 'view' &&
       <View style={styles.headerContainer}>
