@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Alert,
   View,
   StyleSheet,
   KeyboardAvoidingView,
@@ -21,6 +20,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Colors from '../../constants/Colors';
+import { errorAlert } from '../../src/utils/alert';
 // import { listOrganizations } from '../../src/graphql/queries';
 // import request from '../../src/utils/request';
 
@@ -126,7 +126,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
         goto('signedIn');
       }
     } catch (err) {
-      console.log(err);
       if (err.code === 'UserNotConfirmedException') {
         // The error happens if the user didn't finish the confirmation step when signing up
         // In this case you need to resend the code and confirm the user
@@ -144,13 +143,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
         console.log(err);
       }
 
-      Alert.alert(
-        `${JSON.stringify(err.message || err)}`,
-        ``,
-        [
-          { text: 'OK', onPress: () => {} },
-        ], { cancelable: false },
-      );
+      errorAlert(err);
     } finally {
       setIsSubmitting(false);
     }
