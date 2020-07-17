@@ -11,11 +11,11 @@ import AddTaskToUser from './AddTaskToUser';
 // import UserTaskList from './UserTaskList';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
-import { currency } from '../src/utils/format';
 import ModifyUser from './ModifyUser';
 import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
 import PointBadge from './PointBadge';
+import Colors from '../constants/Colors';
 
 export default function User({ user: inUser, mode }) {
   // const navigation = useNavigation();
@@ -78,7 +78,9 @@ export default function User({ user: inUser, mode }) {
         <Avatar
           rounded
           size="large"
-          source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
+          title={user.name && user.name.substring(0, 1)}
+          overlayContainerStyle={{ backgroundColor: Colors.light }}
+          // source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <Text h4>{user.name}</Text>
         <PointBadge value={user.currentPoints} />
