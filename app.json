@@ -25,13 +25,13 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "buildNumber": "25",
+            "buildNumber": "29",
             "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
             "infoPlist": {}
         },
         "android": {
             "package": "cloud.goldax.piggy_bank_of_happiness",
-            "versionCode": 15
+            "versionCode": 16
         },
         "web": {
             "favicon": "./assets/images/favicon.png"
