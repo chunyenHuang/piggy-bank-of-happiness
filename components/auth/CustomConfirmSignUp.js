@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,52 +17,10 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { errorAlert } from '../../src/utils/alert';
 import Form from '../Form';
 
-const PASSWORD_MIN_LENGTH = 8;
-
-const fields = [
-  {
-    key: 'name',
-    required: true,
-    props: {
-      label: '姓名',
-      autoCorrect: false,
-      mode: 'outlined',
-    },
-  },
-  {
-    key: 'email',
-    required: true,
-    props: {
-      label: 'Email',
-      autoCorrect: false,
-      autoCapitalize: 'none',
-      autoCompleteType: 'email',
-      keyboardType: 'email-address',
-    },
-  },
-  {
-    key: 'username',
-    required: true,
-    props: {
-      label: '帳號',
-      autoCorrect: false,
-      autoCapitalize: 'none',
-    },
-  },
-  {
-    key: 'password',
-    required: true,
-    props: {
-      label: '密碼',
-      autoCorrect: false,
-      autoCompleteType: 'password',
-      secureTextEntry: true,
-    },
-  },
-];
-
 export default function CustomSignUp({ authState, onStateChange }) {
+  const [savedUsername, setSavedUsername] = useState('');
   const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
 
@@ -75,9 +33,6 @@ export default function CustomSignUp({ authState, onStateChange }) {
       if (required && !data[key]) {
         return '必填';
       } else {
-        if (key === 'password' && data[key].length < PASSWORD_MIN_LENGTH) {
-          return '至少8碼';
-        }
         return;
       }
     });
@@ -89,24 +44,15 @@ export default function CustomSignUp({ authState, onStateChange }) {
 
     setIsSubmitting(true);
     try {
-      const signupInfo = {
-        username: data.username,
-        password: data.password,
-        attributes: {
-          name: data.name,
-          email: data.email,
-        },
-      };
+      await Auth.confirmSignUp(data.username, data.code);
 
-      await Auth.signUp(signupInfo);
-
-      const items = [
-        ['app:username', data.username],
-        ['app:password', data.password],
-      ];
-      await AsyncStorage.multiSet(items);
-
-      goto('confirmSignUp');
+      const password = await AsyncStorage.getItem('app:password');
+      if (password) {
+        await Auth.signIn(data.username, password);
+        goto('signedIn');
+      } else {
+        goto('signIn');
+      }
     } catch (err) {
       errorAlert(err);
     } finally {
@@ -114,7 +60,38 @@ export default function CustomSignUp({ authState, onStateChange }) {
     }
   };
 
-  if (authState !== 'signUp') return null;
+  const fields = [
+    {
+      key: 'username',
+      required: true,
+      props: {
+        label: '帳號',
+        autoCorrect: false,
+        autoCapitalize: 'none',
+        disabled: savedUsername ? true : false,
+      },
+    },
+    {
+      key: 'code',
+      required: true,
+      props: {
+        label: '授權碼',
+        autoCorrect: false,
+        autoCapitalize: 'none',
+      },
+    },
+  ];
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const username = await AsyncStorage.getItem('app:username');
+      setSavedUsername(username);
+      setIsLoading(false);
+    })();
+  }, [authState]);
+
+  if (authState !== 'confirmSignUp' || isLoading) return null;
 
   return (
     <KeyboardAvoidingView
@@ -134,12 +111,13 @@ export default function CustomSignUp({ authState, onStateChange }) {
         accessible={false}>
         <View style={styles.scrollContainer}>
           <Text style={styles.header}>
-            註冊
+            註冊：確認電子信箱
           </Text>
 
           <Form
             fields={fields}
             errors={errors}
+            defaultValue={{ username: savedUsername }}
             onUpdate={(data)=>{
               setData(data);
             }}
@@ -151,7 +129,7 @@ export default function CustomSignUp({ authState, onStateChange }) {
             style={{ ...styles.button }}
             disabled={isSubmitting}
             onPress={handleSubmit}>
-            註冊
+            完成註冊
           </Button>
 
           <Button

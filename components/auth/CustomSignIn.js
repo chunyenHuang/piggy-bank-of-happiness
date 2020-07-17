@@ -6,6 +6,8 @@ import {
   Keyboard,
   StatusBar,
   TouchableOpacity,
+  Text,
+  AsyncStorage,
 } from 'react-native';
 import {
   TextInput,
@@ -94,6 +96,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
 
     try {
       const user = await Auth.signIn(username, password);
+      await AsyncStorage.setItem('app:username', username);
       setUser(user);
 
       // console.log(user);
@@ -260,6 +263,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
               onPress={()=>goto('forgotPassword')}>
               忘記密碼
             </Button>}
+
             <SocialIcon
               title='Facebook 帳號登入'
               button
@@ -280,20 +284,14 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 Auth.federatedSignIn({ provider: 'Google' });
               }}
             />
-            {/* <Button
-            style={styles.button}
-            onPress={() => Auth.federatedSignIn()}>
-              Open Hosted UI
-          </Button> */}
-            {/* <Divider style={styles.divider} /> */}
-
-            {/* <Button
-              style={{ ...styles.button, marginTop: 5 }}
+            <TouchableOpacity
+              style={styles.registerButton}
               onPress={()=>goto('signUp')}>
-              註冊
-            </Button> */}
+              <Text style={styles.textButton}>
+                註冊
+              </Text>
+            </TouchableOpacity>
           </View>
-          {/* <Footer/> */}
         </View>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -364,5 +362,14 @@ const styles = StyleSheet.create({
   textButton: {
     color: '#fff',
     margin: 8,
+  },
+  registerButton: {
+    backgroundColor: Colors.accent,
+    margin: 7,
+    borderRadius: 5,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#fff',
   },
 });
