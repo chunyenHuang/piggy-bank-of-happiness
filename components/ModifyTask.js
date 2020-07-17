@@ -16,11 +16,12 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const [task, setTask] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const isModified = inTask ? true : false;
+  const isEditMode = inTask ? true : false;
+  const isActiveTask = isEditMode ? task.isActive : true;
 
   const handleSubmit = async () => {
-    if (isModified && !await check('ORG_TX__UPDATE', true)) return;
-    if (!isModified && !await check('ORG_TX__CREATE', true)) return;
+    if (isEditMode && !await check('ORG_TX__UPDATE', true)) return;
+    if (!isEditMode && !await check('ORG_TX__CREATE', true)) return;
 
     const errors = fields.map(({ key, required }) => {
       if (required && !task[key]) {
@@ -40,7 +41,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     const username = await AsyncStorage.getItem('app:username');
     const now = moment().toISOString();
 
-    if (!isModified) {
+    if (!isEditMode) {
       const data = Object.assign(task, {
         organizationId,
         isActive: 1,
@@ -56,6 +57,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     } else {
       const data = {
         organizationId,
+        isActive: task.isActive ? 1 : 0,
         name: task.name,
         programName: task.programName,
         description: task.description,
@@ -68,13 +70,27 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       await request(updateOrganizationTask, { input: data });
     }
 
-    setIsLoading(false);
-    setVisible(false);
-    setTask({});
+    resetState();
     onClose && onClose();
   };
 
+  const resetState = () => {
+    setIsLoading(false);
+    setVisible(false);
+    setTask({});
+    setIsDirty(false);
+  };
+
   const fields = [
+    {
+      key: 'isActive',
+      props: {
+        enabledLabel: '使用中',
+        disabledLabel: '停用中',
+        hidden: !isEditMode,
+      },
+      type: 'switch',
+    },
     {
       key: 'programName',
       required: true,
@@ -83,6 +99,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         autoCorrect: false,
         autoCapitalize: 'none',
         placeholder: 'ex: 學校表現 日常工作',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -91,6 +108,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務名稱',
         autoCorrect: false,
+        disabled: isEditMode,
       },
     },
     {
@@ -99,6 +117,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '任務內容',
         autoCorrect: false,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -107,6 +126,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '點數',
         keyboardType: 'number-pad',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -114,6 +134,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最低點數 (選填)',
         keyboardType: 'number-pad',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -121,6 +142,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '最高點數 (選填)',
         keyboardType: 'number-pad',
+        disabled: !isActiveTask,
       },
     },
   ];
@@ -131,6 +153,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         point: `${inTask.point / 100}`,
         pointMin: `${inTask.pointMin / 100}`,
         pointMax: `${inTask.pointMax / 100}`,
+        isActive: inTask.isActive === 1,
       }));
       setVisible(true);
     }
@@ -146,9 +169,12 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
           }}
         />}
       <CustomModal
-        title={`${isModified ? '修改':'新增'}任務`}
+        title={`${isEditMode ? '修改':'新增'}任務`}
         visible={visible}
-        onClose={() => setVisible(false)}
+        onClose={() => {
+          resetState();
+          onClose && onClose();
+        }}
         padding
         autoFocus={false}
         bottomButtonProps={{

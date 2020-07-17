@@ -45,14 +45,16 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
 
     const params = {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
-      limit: 100,
-      filter: {
-        isActive: { eq: 1 },
-      },
+      limit: 100, // TODO: need to handle task more than 100
     };
+    if (mode === 'select') {
+      params.filter = {
+        isActive: { eq: 1 },
+      };
+    }
     const { data: { listOrganizationTasks: { items } } } = await request(listOrganizationTasks, params);
     // group by programName
-    const programMappings = items.sort(sortBy('name')).reduce((mapping, task, index) => {
+    const programMappings = items.sort(sortBy('programName')).reduce((mapping, task, index) => {
       mapping[task.programName] = mapping[task.programName] || {
         name: task.programName,
         isExpanded: index === 0 ? true : false,
@@ -105,13 +107,20 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
           next: (event) => {
             if (event) {
               const updatedTask = event.value.data.onUpdateOrganizationTask;
-              console.log(updatedTask);
+              // remove the original one first if found
+              programs.some((program) => {
+                const matchedTaskIndex = program.tasks.findIndex((x) => x.name === updatedTask.name);
+                if (matchedTaskIndex !== -1) {
+                  program.tasks.splice(matchedTaskIndex, 1);
+                  return true;
+                }
+                return false;
+              });
               const matchedProgram = programs.find((x) => x.name === updatedTask.programName);
               if (matchedProgram) {
-                const matchedTask = matchedProgram.tasks.find((x) => x.name === updatedTask.name);
-                Object.assign(matchedTask, updatedTask);
+                matchedProgram.tasks.push(updatedTask);
               } else {
-                programs.unshift({
+                programs.push({
                   name: updatedTask.programName,
                   tasks: [updatedTask],
                   isExpanded: true,
@@ -128,6 +137,22 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
       subscriptionUpdate && subscriptionUpdate.unsubscribe();
     };
   }, [programs]);
+
+  const getBadge = (task) => {
+    if (task.isActive) {
+      return {
+        value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point/100),
+        textStyle: styles.badgeTextActive,
+        badgeStyle: styles.badgeActive,
+      };
+    } else {
+      return {
+        value: '停用中',
+        textStyle: styles.badgeTextInactive,
+        badgeStyle: styles.badgeInactive,
+      };
+    }
+  };
 
   return (
     <ScrollView
@@ -152,7 +177,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               setPrograms([...programs]);
             }}
           >
-            {program.tasks.map((task)=>(
+            {program.tasks.sort(sortBy('name')).sort(sortBy('isActive', true)).map((task)=>(
               <ListItem
                 key={task.name}
                 // leftAvatar={{ source: { uri: randomAvatarUrl } }}
@@ -170,12 +195,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                     type='ionicon'
                     containerStyle={{ paddingRight: 10 }}
                   /> : undefined}
-                badge={{
-                  // status: 'success',
-                  value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point/100),
-                  textStyle: styles.badgeText,
-                  badgeStyle: styles.badge,
-                }}
+                badge={getBadge(task)}
                 onPress={() => {
                   if (mode === 'select') {
                     if (!task.isSelected && task.pointMin !== task.pointMax) {
@@ -256,14 +276,24 @@ const styles = StyleSheet.create({
     color: Colors.light,
     marginTop: 5,
   },
-  badgeText: {
+  badgeTextActive: {
     color: '#ffffff',
     fontSize: 16,
     lineHeight: 16,
   },
-  badge: {
+  badgeTextInactive: {
+    color: '#ffffff',
+    fontSize: 14,
+    lineHeight: 16,
+  },
+  badgeActive: {
     height: 25,
     padding: 5,
+  },
+  badgeInactive: {
+    height: 25,
+    padding: 5,
+    backgroundColor: '#767577',
   },
   modal: {
     flex: 1,
