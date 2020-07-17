@@ -64,7 +64,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ region: AWS_REGION });
       UserPoolId: COGNITO_POOLS_ID,
       Username: inputParams.username,
       DesiredDeliveryMediums: ['EMAIL'],
-      TemporaryPassword: randomString(),
+      TemporaryPassword: 'password', // randomString(),
       UserAttributes: [
         {
           Name: 'name',
