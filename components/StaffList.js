@@ -78,7 +78,14 @@ export default function StaffList() {
       {users.map((user, index)=>(
         <ListItem
           key={index}
-          leftAvatar={{ source: { uri: `https://i.pravatar.cc/100?u=${user.username}` } }}
+          leftAvatar={{
+            title: `${user.name.substring(0, 1)}`,
+            borderRadius: 25,
+            width: 50,
+            height: 50,
+            backgroundColor: Colors.light,
+            // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
+          }}
           title={user.name}
           subtitle={user.username}
           subtitleStyle={styles.subtitle}
