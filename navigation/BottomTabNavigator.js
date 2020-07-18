@@ -10,6 +10,7 @@ import UserListScreen from '../screens/UserListScreen';
 import TaskListScreen from '../screens/TaskListScreen';
 import UserTransactionListScreen from '../screens/UserTransactionListScreen';
 import StaffListScreen from '../screens/StaffListScreen';
+import PendingApprovalUserListScreen from '../screens/PendingApprovalUserListScreen';
 // import Colors from '../constants/Colors';
 import ModifyUser from '../components/ModifyUser';
 import ModifyTask from '../components/ModifyTask';
@@ -61,6 +62,17 @@ const defaultMenu = [
     options: {
       title: '職員',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
+    },
+    groups: ['AppAdmins', 'OrgAdmins'],
+  },
+  {
+    name: 'PendingApprovalUserList',
+    component: PendingApprovalUserListScreen,
+    rightComponent: null,
+    title: '申請列表',
+    options: {
+      title: '審核',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
     },
     groups: ['AppAdmins', 'OrgAdmins'],
   },

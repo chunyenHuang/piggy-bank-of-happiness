@@ -12,6 +12,7 @@ enum RoleType {
   Admin
   Manager
   User
+  PendingApproval
 }
 
 enum TaskStatusType {

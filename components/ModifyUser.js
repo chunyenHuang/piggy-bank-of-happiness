@@ -11,11 +11,19 @@ import Colors from '../constants/Colors';
 import { createOrganizationUser, updateOrganizationUser } from '../src/graphql/mutations';
 import check from '../src/permission/check';
 
+// TODO: Use api or constants
+const roles = [
+  { name: '管理員', id: 'Admin' },
+  { name: '老師', id: 'Manager' },
+  { name: '學生', id: 'User' },
+  { name: '審核中', id: 'PendingApproval' },
+];
+
 export default function ModifyUser({ user: inUser, button }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ role: 'User' });
   const [errors, setErrors] = useState([]);
 
   const isModified = inUser ? true : false;
@@ -45,7 +53,6 @@ export default function ModifyUser({ user: inUser, button }) {
     if (!isModified) {
       const data = Object.assign(user, {
         organizationId,
-        role: 'User',
         isActive: 1,
         currentPoints: 0,
         earnedPoints: 0,
@@ -58,6 +65,7 @@ export default function ModifyUser({ user: inUser, button }) {
       const data = Object.assign({
         organizationId,
         username: user.username,
+        role: user.role,
         name: user.name,
         idNumber: user.idNumber,
         updatedAt: now,
@@ -72,6 +80,17 @@ export default function ModifyUser({ user: inUser, button }) {
   };
 
   const fields = [
+    {
+      key: 'role',
+      required: true,
+      type: 'select',
+      options: roles.map((item) => {
+        return { label: item.name, value: item.id };
+      }),
+      props: {
+        label: '身份',
+      },
+    },
     {
       key: 'name',
       required: true,
@@ -128,7 +147,7 @@ export default function ModifyUser({ user: inUser, button }) {
           onPress={() => setVisible(true)}
         />}
       <CustomModal
-        title={`${isModified ? '修改':'新增'}學生資料`}
+        title={`${isModified ? '修改':'新增'}個人資料`}
         visible={visible}
         onClose={() => setVisible(false)}
         padding
