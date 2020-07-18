@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
-import { Avatar, Text, Badge } from 'react-native-elements';
+import { Avatar, Text } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import request from '../src/utils/request';
 import { getOrganizationUser } from '../src/graphql/queries';
 import AddTaskToUser from './AddTaskToUser';
-// import UserTaskList from './UserTaskList';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
 import ModifyUser from './ModifyUser';
@@ -18,10 +16,6 @@ import PointBadge from './PointBadge';
 import Colors from '../constants/Colors';
 
 export default function User({ user: inUser, mode }) {
-  // const navigation = useNavigation();
-  // navigation.setOptions({
-  //   title: inUser.name,
-  // });
   const [user, setUser] = useState({
     currentPoints: 0,
     tasks: { items: [] },
@@ -72,6 +66,8 @@ export default function User({ user: inUser, mode }) {
     };
   }, [inUser]);
 
+  const isActive = user.isActive ? true : false;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -91,20 +87,22 @@ export default function User({ user: inUser, mode }) {
           user={user}
           button
         />
+        {isActive &&
         <PointsHandler
           user={user}
           mode={'withdraw'}
           onUpdate={load}
-        />
+        />}
         {/* <PointsHandler
           user={user}
           mode={'adjustment'}
           onUpdate={load}
         /> */}
+        {isActive &&
         <AddTaskToUser
           user={user}
           onUpdate={load}
-        />
+        />}
       </View>}
       {/* <UserTaskList tasks={user.tasks.items} /> */}
       <UserTransactionList
