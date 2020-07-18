@@ -12,8 +12,9 @@ import { createOrganizationUser, updateOrganizationUser } from '../src/graphql/m
 import check from '../src/permission/check';
 
 // TODO: Use api or constants
+// TODO: Cognito User Group
 const roles = [
-  { name: '管理員', id: 'Admin' },
+  // { name: '管理員', id: 'Admin' },
   { name: '老師', id: 'Manager' },
   { name: '學生', id: 'User' },
   { name: '審核中', id: 'PendingApproval' },
