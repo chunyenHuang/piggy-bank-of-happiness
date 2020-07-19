@@ -2,7 +2,7 @@ import API, { graphqlOperation } from '@aws-amplify/api';
 import to from 'await-to-js';
 const THRESHOLD = 500;
 
-export default async (query, params, authMode) => {
+export default async function request(query, params, authMode) {
   const startedAt = Date.now();
   const options = graphqlOperation(query, params);
   // https://github.com/aws-amplify/amplify-js/blob/master/packages/api/src/types/index.ts#L75
@@ -30,4 +30,20 @@ export default async (query, params, authMode) => {
   }
 
   return res;
-};
+}
+
+export async function asyncListAll(operation, input = {}, allItems = []) {
+  const res = await request(operation, {
+    ...input,
+    limit: 100,
+  });
+
+  const { items, nextToken } = res.data[Object.keys(res.data)[0]];
+  allItems = [...allItems, ...items];
+
+  if (nextToken) {
+    return asyncListAll(operation, { ...input, nextToken }, allItems);
+  }
+
+  return allItems;
+}
