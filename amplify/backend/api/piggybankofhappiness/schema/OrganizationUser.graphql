@@ -2,6 +2,7 @@
 type OrganizationUser
   @model
   @key(fields: ["organizationId","username"])
+  @key(name: "byGroupByActive", fields: ["groupId", "isActive"], queryField: "getOrgUsersByGroupByActive")
   @auth(rules: [
     {allow: owner, ownerField: "username", operations: [read, create]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
@@ -13,6 +14,7 @@ type OrganizationUser
   idNumber: String! # ex:學號
   name: String!
   role: RoleType!
+  groupId: ID
   isActive: Int!
   currentPoints: Int!
   earnedPoints: Int!
@@ -20,6 +22,7 @@ type OrganizationUser
   updatedAt: AWSDateTime!
   # relationship
   organization: Organization @connection(fields:["organizationId"])
+  # group: OrganizationGroup @connection(fields:["organization", "groupId"])
   # tasks: [OrganizationUserTask] @connection(keyName: "byUserByCreatedAt", fields: ["username"])
   # transactions: [OrganizationTransaction] @connection(keyName: "byUserByCreatedAt", fields: ["username"])
 }

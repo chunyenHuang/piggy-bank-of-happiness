@@ -1,0 +1,19 @@
+type OrganizationGroup
+  @model
+  @key(fields: ["organizationId", "id"])
+  @auth(rules: [
+    {allow: groups, groups: ["Users", "OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  id: ID!
+  name: String!
+  isActive: Int!
+  description: String
+  createdBy: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  # relationship
+  users: [OrganizationUser] @connection(keyName: "byGroupByActive", fields:["id"])
+}
