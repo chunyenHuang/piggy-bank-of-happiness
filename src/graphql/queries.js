@@ -32,6 +32,70 @@ export const listOrganizations = /* GraphQL */ `
     }
   }
 `;
+export const getOrganizationGroup = /* GraphQL */ `
+  query GetOrganizationGroup($organizationId: ID!, $id: ID!) {
+    getOrganizationGroup(organizationId: $organizationId, id: $id) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const listOrganizationGroups = /* GraphQL */ `
+  query ListOrganizationGroups(
+    $organizationId: ID
+    $id: ModelIDKeyConditionInput
+    $filter: ModelOrganizationGroupFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOrganizationGroups(
+      organizationId: $organizationId
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        organizationId
+        id
+        name
+        isActive
+        description
+        createdBy
+        createdAt
+        updatedAt
+        users {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganizationProgram = /* GraphQL */ `
   query GetOrganizationProgram($organizationId: ID!, $id: ID!) {
     getOrganizationProgram(organizationId: $organizationId, id: $id) {
@@ -172,6 +236,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -224,6 +289,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -243,6 +309,7 @@ export const getOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -282,6 +349,7 @@ export const listOrganizationUsers = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -320,6 +388,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -352,6 +421,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -422,6 +492,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -542,6 +613,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -588,9 +660,52 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrgUsersByGroupByActive = /* GraphQL */ `
+  query GetOrgUsersByGroupByActive(
+    $groupId: ID
+    $isActive: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getOrgUsersByGroupByActive(
+      groupId: $groupId
+      isActive: $isActive
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        organizationId
+        username
+        idNumber
+        name
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        updatedAt
+        organization {
+          id
+          name
+          description
+          isActive
           createdAt
           updatedAt
         }
@@ -634,6 +749,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -708,6 +824,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints

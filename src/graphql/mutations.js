@@ -46,6 +46,105 @@ export const deleteOrganization = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationGroup = /* GraphQL */ `
+  mutation CreateOrganizationGroup(
+    $input: CreateOrganizationGroupInput!
+    $condition: ModelOrganizationGroupConditionInput
+  ) {
+    createOrganizationGroup(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const updateOrganizationGroup = /* GraphQL */ `
+  mutation UpdateOrganizationGroup(
+    $input: UpdateOrganizationGroupInput!
+    $condition: ModelOrganizationGroupConditionInput
+  ) {
+    updateOrganizationGroup(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const deleteOrganizationGroup = /* GraphQL */ `
+  mutation DeleteOrganizationGroup(
+    $input: DeleteOrganizationGroupInput!
+    $condition: ModelOrganizationGroupConditionInput
+  ) {
+    deleteOrganizationGroup(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
 export const createOrganizationProgram = /* GraphQL */ `
   mutation CreateOrganizationProgram(
     $input: CreateOrganizationProgramInput!
@@ -216,6 +315,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -256,6 +356,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -296,6 +397,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -324,6 +426,7 @@ export const createOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -351,6 +454,7 @@ export const updateOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -378,6 +482,7 @@ export const deleteOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -417,6 +522,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -449,6 +555,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -507,6 +614,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -539,6 +647,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -597,6 +706,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -629,6 +739,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints

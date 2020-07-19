@@ -37,6 +37,96 @@ export const onDeleteOrganization = /* GraphQL */ `
     }
   }
 `;
+export const onCreateOrganizationGroup = /* GraphQL */ `
+  subscription OnCreateOrganizationGroup {
+    onCreateOrganizationGroup {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onUpdateOrganizationGroup = /* GraphQL */ `
+  subscription OnUpdateOrganizationGroup {
+    onUpdateOrganizationGroup {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onDeleteOrganizationGroup = /* GraphQL */ `
+  subscription OnDeleteOrganizationGroup {
+    onDeleteOrganizationGroup {
+      organizationId
+      id
+      name
+      isActive
+      description
+      createdBy
+      createdAt
+      updatedAt
+      users {
+        items {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+    }
+  }
+`;
 export const onCreateOrganizationProgram = /* GraphQL */ `
   subscription OnCreateOrganizationProgram {
     onCreateOrganizationProgram {
@@ -186,6 +276,7 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -223,6 +314,7 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -260,6 +352,7 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -285,6 +378,7 @@ export const onCreateOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -309,6 +403,7 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -333,6 +428,7 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
       idNumber
       name
       role
+      groupId
       isActive
       currentPoints
       earnedPoints
@@ -369,6 +465,7 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -401,6 +498,7 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -456,6 +554,7 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -488,6 +587,7 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
@@ -543,6 +643,7 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         idNumber
         name
         role
+        groupId
         isActive
         currentPoints
         earnedPoints
@@ -575,6 +676,7 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
           idNumber
           name
           role
+          groupId
           isActive
           currentPoints
           earnedPoints
