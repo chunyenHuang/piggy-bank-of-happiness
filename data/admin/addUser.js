@@ -2,9 +2,10 @@ const AWS = require('aws-sdk');
 const inquirer = require('inquirer');
 const uuidv1 = require('uuid/v1');
 
+const { aws_user_pools_id: COGNITO_POOLS_ID } = require('../../aws-exports').default;
 const prompt = require('../prompt');
 const docClient = require('../docClient');
-const { AWS_REGION, AWS_PROFILE, COGNITO_POOLS_ID } = require('../config');
+const { AWS_REGION, AWS_PROFILE } = require('../config');
 const { getRoleByGroup, writeData } = require('../helper');
 
 AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: AWS_PROFILE });
@@ -14,13 +15,15 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ region: AWS_REGION });
 (async () => {
   try {
     const {
-      env: ENV,
-      hash: HASH,
-    } = await prompt(1);
+      tableNames,
+    } = await prompt();
 
     await ensureCustomFields();
 
-    const orgOptions = (await docClient.scanAll({ TableName: `Organization-${HASH}-${ENV}` })).map((item) => {
+    const OrgTableName = tableNames.find((x) => x.startsWith('Organization-'));
+    const OrgUserTableName = tableNames.find((x) => x.startsWith('OrganizationUser-'));
+
+    const orgOptions = (await docClient.scanAll({ TableName: OrgTableName })).map((item) => {
       return {
         name: item.name,
         value: item,
@@ -146,7 +149,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({ region: AWS_REGION });
       currentPoints: 0,
       earnedPoints: 0,
     };
-    await writeData(HASH, ENV, 'OrganizationUser', [orgUserData]);
+    await writeData(OrgUserTableName, [orgUserData]);
   } catch (e) {
     console.log(e);
   }
@@ -178,8 +181,4 @@ async function ensureCustomFields() {
       throw new Error(e);
     }
   }
-}
-
-function randomString() {
-  return Math.random().toString(36).substring(2, 10);
 }

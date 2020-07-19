@@ -54,8 +54,13 @@ export function getRoleByGroup(inGroup) {
     return 'Admin';
   case 'OrgManagers':
     return 'Manager';
+  case 'User':
   case 'N/A':
   default:
     return 'User';
   }
+}
+
+export function randomString() {
+  return Math.random().toString(36).substring(2, 10);
 }
