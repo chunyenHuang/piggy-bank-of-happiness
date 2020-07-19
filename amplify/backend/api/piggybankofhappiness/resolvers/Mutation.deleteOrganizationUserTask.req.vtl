@@ -152,7 +152,7 @@
 } )
 #end
 {
-  "version": "2017-02-28",
+  "version": "2018-05-29",
   "operation": "DeleteItem",
   "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
   "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)

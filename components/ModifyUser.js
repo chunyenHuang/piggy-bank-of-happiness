@@ -6,8 +6,9 @@ import moment from 'moment';
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
-import request from '../src/utils/request';
+import request, { asyncListAll } from '../src/utils/request';
 import Colors from '../constants/Colors';
+import { listOrganizationGroups } from '../src/graphql/queries';
 import { createOrganizationUser, updateOrganizationUser } from '../src/graphql/mutations';
 import check from '../src/permission/check';
 
@@ -24,6 +25,7 @@ export default function ModifyUser({ user: inUser, button }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [groups, setGroups] = useState([]);
   const [user, setUser] = useState({ role: 'User' });
   const [errors, setErrors] = useState([]);
 
@@ -67,6 +69,7 @@ export default function ModifyUser({ user: inUser, button }) {
         organizationId,
         username: user.username,
         role: user.role,
+        groupId: user.groupId,
         name: user.name,
         idNumber: user.idNumber,
         updatedAt: now,
@@ -90,6 +93,17 @@ export default function ModifyUser({ user: inUser, button }) {
       }),
       props: {
         label: '身份',
+      },
+    },
+    {
+      key: 'groupId',
+      required: false,
+      type: 'select',
+      options: groups.map((item) => {
+        return { label: item.name, value: item.id };
+      }),
+      props: {
+        label: '分組',
       },
     },
     {
@@ -126,6 +140,14 @@ export default function ModifyUser({ user: inUser, button }) {
       setUser(inUser);
     }
   }, [inUser]);
+
+  useEffect(() => {
+    (async () => {
+      const organizationId = await AsyncStorage.getItem('app:organizationId');
+      const groups = await asyncListAll(listOrganizationGroups, { organizationId });
+      setGroups(groups);
+    })();
+  }, []);
 
   return (
     <React.Fragment>
