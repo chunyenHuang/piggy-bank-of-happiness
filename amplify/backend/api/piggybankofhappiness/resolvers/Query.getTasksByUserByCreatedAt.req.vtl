@@ -57,7 +57,7 @@
 ## [End] Set query expression for @key **
 #set( $limit = $util.defaultIfNull($context.args.limit, 100) )
 #set( $QueryRequest = {
-  "version": "2017-02-28",
+  "version": "2018-05-29",
   "operation": "Query",
   "limit": $limit,
   "query": $modelQueryExpression,
