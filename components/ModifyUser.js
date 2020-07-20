@@ -29,11 +29,12 @@ export default function ModifyUser({ user: inUser, button }) {
   const [user, setUser] = useState({ role: 'User' });
   const [errors, setErrors] = useState([]);
 
-  const isModified = inUser ? true : false;
+  const isEditMode = inUser ? true : false;
+  const isActiveTask = isEditMode ? user.isActive : true;
 
   const handleSubmit = async () => {
-    if (isModified && !await check('ORG_USER__UPDATE', true)) return;
-    if (!isModified && !await check('ORG_USER__CREATE', true)) return;
+    if (isEditMode && !await check('ORG_USER__UPDATE', true)) return;
+    if (!isEditMode && !await check('ORG_USER__CREATE', true)) return;
 
     const errors = fields.map(({ key, required }) => {
       if (required && !user[key]) {
@@ -53,7 +54,7 @@ export default function ModifyUser({ user: inUser, button }) {
 
     const now = moment().toISOString();
 
-    if (!isModified) {
+    if (!isEditMode) {
       const data = Object.assign(user, {
         organizationId,
         isActive: 1,
@@ -73,6 +74,7 @@ export default function ModifyUser({ user: inUser, button }) {
         name: user.name,
         idNumber: user.idNumber,
         updatedAt: now,
+        isActive: user.isActive ? 1 : 0,
       });
 
       await request(updateOrganizationUser, { input: data });
@@ -85,6 +87,15 @@ export default function ModifyUser({ user: inUser, button }) {
 
   const fields = [
     {
+      key: 'isActive',
+      props: {
+        enabledLabel: '帳號使用中',
+        disabledLabel: '帳號停用中',
+        hidden: !isEditMode,
+      },
+      type: 'switch',
+    },
+    {
       key: 'role',
       required: true,
       type: 'select',
@@ -93,6 +104,7 @@ export default function ModifyUser({ user: inUser, button }) {
       }),
       props: {
         label: '身份',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -104,6 +116,7 @@ export default function ModifyUser({ user: inUser, button }) {
       }),
       props: {
         label: '分組',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -112,6 +125,7 @@ export default function ModifyUser({ user: inUser, button }) {
       props: {
         label: '姓名',
         autoCorrect: false,
+        disabled: !isActiveTask,
       },
     },
     {
@@ -121,6 +135,7 @@ export default function ModifyUser({ user: inUser, button }) {
         label: '學號',
         autoCorrect: false,
         autoCapitalize: 'none',
+        disabled: !isActiveTask,
       },
     },
     {
@@ -130,14 +145,16 @@ export default function ModifyUser({ user: inUser, button }) {
         label: '帳號',
         autoCorrect: false,
         autoCapitalize: 'none',
-        disabled: isModified ? true : false,
+        disabled: isEditMode ? true : false,
       },
     },
   ];
 
   useEffect(() => {
     if (inUser) {
-      setUser(inUser);
+      setUser(Object.assign({}, inUser, {
+        isActive: inUser.isActive === 1,
+      }));
     }
   }, [inUser]);
 
@@ -170,7 +187,7 @@ export default function ModifyUser({ user: inUser, button }) {
           onPress={() => setVisible(true)}
         />}
       <CustomModal
-        title={`${isModified ? '修改':'新增'}個人資料`}
+        title={`${isEditMode ? '修改':'新增'}個人資料`}
         visible={visible}
         onClose={() => setVisible(false)}
         padding

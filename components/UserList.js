@@ -37,7 +37,6 @@ export default function UserList() {
     const promises = updatedGroups.map(async (group) => {
       const params = {
         groupId: group.id,
-        isActive: { eq: 1 },
         filter: {
           role: { eq: 'User' },
         },
@@ -82,6 +81,16 @@ export default function UserList() {
     };
   }, [groups]);
 
+  const getBadge = (user) => {
+    if (!user.isActive) {
+      return {
+        value: '帳號停用中',
+        textStyle: styles.badgeTextInactive,
+        badgeStyle: styles.badgeInactive,
+      };
+    }
+  };
+
   return (
     <View style={styles.container}>
       <CustomSearchBar
@@ -123,12 +132,7 @@ export default function UserList() {
                   subtitleStyle={styles.subtitle}
                   bottomDivider
                   chevron
-                  // badge={{
-                  //   // status: 'success',
-                  //   value: user.currentPoints/100,
-                  //   textStyle: styles.badgeText,
-                  //   badgeStyle: styles.badge,
-                  // }}
+                  badge={getBadge(user)}
                   onPress={() => navigation.navigate('User', user)}
                 />
               ))}
@@ -152,8 +156,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
   },
+  badgeTextInactive: {
+    color: '#ffffff',
+    fontSize: 14,
+    lineHeight: 16,
+  },
   badge: {
     height: 25,
     padding: 5,
+  },
+  badgeInactive: {
+    height: 25,
+    padding: 5,
+    backgroundColor: '#767577',
   },
 });
