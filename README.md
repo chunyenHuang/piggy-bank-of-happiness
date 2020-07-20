@@ -1,11 +1,8 @@
 # 幸福存摺
 
-> 小草書屋的幸福存摺運作
-> - Step 1 孩子們在書屋執行所有任務即可獲得相對應的「金額」
-> - Step 2 每周進行一次統計
-> - Step 3 填寫於紙本的幸福存摺
-> - Step 4 定期審視存摺內的金額 隨時可視實際發生需求提領
-> 希望建置一套電子資訊系統，能結合類銀行模式，讓孩子實際感受獲得自身付出所得到的酬勞，進而推廣至全台灣的非營利事業組織兒少陪伴單位。
+設計給非營利事業組織兒少陪伴單位的電子資訊系統，讓孩子們透過執行任務獲得點數，累積的點數可向機構換取獎品或是客製化的需求（例如：修鞋，修車）。
+
+> ...台灣每年約有4萬3千名高風險家庭的兒少、2萬3千名中離學生及4千名中輟生，因為家庭功能不足，獨自面對學習落後、生存挑戰，甚至提早離開學習現場，繼續陷入惡性循環。
 
 - [跳坑首頁](https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ)
 - [零時小學校提案：小草書屋的幸福存摺](https://g0v.hackmd.io/isRy-pOZQ2Kihcynk76NYQ?both)
@@ -14,3 +11,8 @@
 - [系統設計](https://g0v.hackmd.io/3PktZ7w-Rkua5SS8k38uUA)
 
 ## GetStarted
+
+- [Design](./documentation/Design.md)
+- [Development](./documentation/Development.md)
+- [Deployment](./documentation/Deployment.md)
+- [Testing](./documentation/Testing.md)

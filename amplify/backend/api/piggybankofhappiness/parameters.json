@@ -1,0 +1,8 @@
+{
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authpiggybankofhappinesscf2e2c90",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

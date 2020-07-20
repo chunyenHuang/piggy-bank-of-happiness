@@ -1,0 +1,15 @@
+type Organization
+  @model
+  @auth(rules: [
+    {allow: private, operations: [read]},
+    {allow: owner, ownerField: "id", identityField:"custom:organizationId", operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  id: ID!
+  name: String!
+  description: String!
+  isActive: Int!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}

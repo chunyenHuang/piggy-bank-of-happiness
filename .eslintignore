@@ -1,0 +1,5 @@
+.expo*
+.git*
+node_modules
+web-build
+aws-exports.js

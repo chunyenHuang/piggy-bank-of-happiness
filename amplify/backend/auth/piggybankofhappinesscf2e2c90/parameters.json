@@ -1,0 +1,88 @@
+{
+    "identityPoolName": "piggybankofhappinesscf2e2c90_identitypool_cf2e2c90",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "piggybcf2e2c90",
+    "userPoolName": "piggybankofhappinesscf2e2c90_userpool_cf2e2c90",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "[幸福存摺] 您的授權碼是 {####}",
+    "smsVerificationMessage": "[幸福存摺] 您的授權碼是 {####}",
+    "emailVerificationSubject": "[幸福存摺] 授權碼",
+    "emailVerificationMessage": "[幸福存摺] 您的授權碼是 {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+        "email",
+        "name"
+    ],
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+        "email"
+    ],
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "userpoolClientLambdaRole": "piggybcf2e2c90_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "resourceName": "piggybankofhappinesscf2e2c90",
+    "authSelections": "identityPoolAndUserPool",
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    },
+    "unauthRoleArn": {
+        "Fn::GetAtt": [
+            "UnauthRole",
+            "Arn"
+        ]
+    },
+    "useDefault": "manual",
+    "hostedUI": true,
+    "triggers": "{\"PostConfirmation\":[\"add-to-group\"]}",
+    "userPoolGroupList": [
+        "AppAdmins",
+        "OrgAdmins",
+        "OrgManagers",
+        "Users"
+    ],
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [
+        "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}"
+    ],
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
+            "triggerProvider": "Cognito",
+            "attributes": [
+                "Arn",
+                "Name"
+            ]
+        }
+    ],
+    "thirdPartyAuth": true,
+    "authProviders": [
+        "graph.facebook.com",
+        "accounts.google.com"
+    ],
+    "userPoolGroups": true,
+    "adminQueries": false,
+    "hostedUIDomainName": "piggybankofhappinesscf2e2c90-cf2e2c90",
+    "authProvidersUserPool": [
+        "Facebook",
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"],\"LogoutURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"]}"
+}

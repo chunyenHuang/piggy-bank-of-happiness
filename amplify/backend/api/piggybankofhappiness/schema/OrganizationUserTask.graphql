@@ -1,0 +1,30 @@
+type OrganizationUserTask
+  @model
+  @key(fields: ["organizationId","id"])
+  @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTasksByUserByCreatedAt")
+  @key(name: "byUserByOrganization", fields: ["username","organizationId"], queryField: "getTasksByUserByOrganization")
+  @auth(rules: [
+    {allow: owner, ownerField: "username", operations: [read]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  id: ID!
+  taskId: ID!
+  taskName: String!
+  username: String!
+  status: TaskStatusType!
+  note: String!
+  transactionId: ID!
+  points: Int!
+  # deadline: AWSDateTime
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  # relationship
+  # organization: Organization @connection(fields:["organizationId"])
+  user: OrganizationUser @connection(fields:["organizationId", "username"])
+  transaction: OrganizationTransaction @connection(fields:["organizationId", "transactionId"])
+  task: OrganizationTask @connection(fields:["organizationId", "taskId"])
+}
+

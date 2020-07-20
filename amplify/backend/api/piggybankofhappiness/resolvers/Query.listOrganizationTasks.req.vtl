@@ -1,0 +1,84 @@
+## [Start] Set query expression for @key **
+#if( $util.isNull($ctx.args.organizationId) && !$util.isNull($ctx.args.sortDirection) )
+  $util.error("When providing argument 'sortDirection' you must also provide argument 'organizationId'.", "InvalidArgumentsError")
+#end
+#set( $modelQueryExpression = {} )
+## [Start] Validate key arguments. **
+#if( !$util.isNull($ctx.args.id) && $util.isNull($ctx.args.organizationId) )
+  $util.error("When providing argument 'id' you must also provide arguments organizationId", "InvalidArgumentsError")
+#end
+## [End] Validate key arguments. **
+#if( !$util.isNull($ctx.args.organizationId) )
+  #set( $modelQueryExpression.expression = "#organizationId = :organizationId" )
+  #set( $modelQueryExpression.expressionNames = {
+  "#organizationId": "organizationId"
+} )
+  #set( $modelQueryExpression.expressionValues = {
+  ":organizationId": {
+      "S": "$ctx.args.organizationId"
+  }
+} )
+#end
+## [Start] Applying Key Condition **
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.beginsWith) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.beginsWith" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.between) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey0", { "S": "$ctx.args.id.between[0]" }))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey1", { "S": "$ctx.args.id.between[1]" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.eq) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey = :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.eq" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.lt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey < :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.lt" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.le) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey <= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.le" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.gt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey > :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.gt" }))
+#end
+#if( !$util.isNull($ctx.args.id) && !$util.isNull($ctx.args.id.ge) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey >= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "id"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.id.ge" }))
+#end
+## [End] Applying Key Condition **
+## [End] Set query expression for @key **
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $ListRequest = {
+  "version": "2018-05-29",
+  "limit": $limit
+} )
+#if( $context.args.nextToken )
+  #set( $ListRequest.nextToken = $context.args.nextToken )
+#end
+#if( $context.args.filter )
+  #set( $ListRequest.filter = $util.parseJson("$util.transform.toDynamoDBFilterExpression($ctx.args.filter)") )
+#end
+#if( !$util.isNull($modelQueryExpression)
+                        && !$util.isNullOrEmpty($modelQueryExpression.expression) )
+  $util.qr($ListRequest.put("operation", "Query"))
+  $util.qr($ListRequest.put("query", $modelQueryExpression))
+  #if( !$util.isNull($ctx.args.sortDirection) && $ctx.args.sortDirection == "DESC" )
+    #set( $ListRequest.scanIndexForward = false )
+  #else
+    #set( $ListRequest.scanIndexForward = true )
+  #end
+#else
+  $util.qr($ListRequest.put("operation", "Scan"))
+#end
+$util.toJson($ListRequest)

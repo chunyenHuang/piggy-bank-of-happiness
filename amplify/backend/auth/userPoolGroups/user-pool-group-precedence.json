@@ -1,0 +1,18 @@
+[
+    {
+        "groupName": "AppAdmins",
+        "precedence": 1
+    },
+    {
+        "groupName": "OrgAdmins",
+        "precedence": 2
+    },
+    {
+        "groupName": "OrgManagers",
+        "precedence": 3
+    },
+    {
+        "groupName": "Users",
+        "precedence": 4
+    }
+]

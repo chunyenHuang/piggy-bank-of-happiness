@@ -1,0 +1,23 @@
+{
+    "groupPermissionMap": {
+        "AppAdmins": [
+            "create/update",
+            "read",
+            "delete"
+        ],
+        "OrgAdmins": [
+            "create/update",
+            "read",
+            "delete"
+        ],
+        "OrgManagers": [
+            "create/update",
+            "read",
+            "delete"
+        ],
+        "Users": [
+            "create/update",
+            "read"
+        ]
+    }
+}

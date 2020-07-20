@@ -1,0 +1,29 @@
+type OrganizationTransaction
+  @model
+  @key(fields: ["organizationId", "id"])
+  @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTransactionsByUserByCreatedAt")
+  @key(name: "byUserByOrganization", fields: ["username","organizationId"], queryField: "getTransactionsByUserByOrganization")
+  # @key(name: "byRewardByCreatedAt", fields: ["rewardId", "createdAt"], queryField: "getTransactionsByRewardByDate")
+  @auth(rules: [
+    {allow: owner, ownerField: "username", operations: [read]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read, create]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  id: ID!
+  username: String!
+  # rewardId: ID!
+  refTransactionId: ID
+  isCancelled: Int
+  points: Int!
+  type: TransactionType!
+  note: String
+  createdBy: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  # relationship
+  # organization: Organization @connection(fields:["organizationId"])
+  user: OrganizationUser @connection(fields:["organizationId", "username"])
+  # reward: OrganizationReward @connection(fields:["organizationId", "rewardId"])
+}

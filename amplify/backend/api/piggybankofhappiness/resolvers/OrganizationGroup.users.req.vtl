@@ -1,0 +1,76 @@
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $query = {
+  "expression": "#partitionKey = :partitionKey",
+  "expressionNames": {
+      "#partitionKey": "groupId"
+  },
+  "expressionValues": {
+      ":partitionKey": {
+          "S": "$context.source.id"
+    }
+  }
+} )
+## [Start] Applying Key Condition **
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.beginsWith) )
+  #set( $query.expression = "$query.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.beginsWith" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.between) )
+  #set( $query.expression = "$query.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey0", { "N": "$ctx.args.isActive.between[0]" }))
+  $util.qr($query.expressionValues.put(":sortKey1", { "N": "$ctx.args.isActive.between[1]" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.eq) )
+  #set( $query.expression = "$query.expression AND #sortKey = :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.eq" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.lt) )
+  #set( $query.expression = "$query.expression AND #sortKey < :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.lt" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.le) )
+  #set( $query.expression = "$query.expression AND #sortKey <= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.le" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.gt) )
+  #set( $query.expression = "$query.expression AND #sortKey > :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.gt" }))
+#end
+#if( !$util.isNull($ctx.args.isActive) && !$util.isNull($ctx.args.isActive.ge) )
+  #set( $query.expression = "$query.expression AND #sortKey >= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "isActive"))
+  $util.qr($query.expressionValues.put(":sortKey", { "N": "$ctx.args.isActive.ge" }))
+#end
+## [End] Applying Key Condition **
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "query":   $util.toJson($query),
+  "scanIndexForward":   #if( $context.args.sortDirection )
+    #if( $context.args.sortDirection == "ASC" )
+true
+    #else
+false
+    #end
+  #else
+true
+  #end,
+  "filter":   #if( $context.args.filter )
+$util.transform.toDynamoDBFilterExpression($ctx.args.filter)
+  #else
+null
+  #end,
+  "limit": $limit,
+  "nextToken":   #if( $context.args.nextToken )
+$util.toJson($context.args.nextToken)
+  #else
+null
+  #end,
+  "index": "byGroupByActive"
+}

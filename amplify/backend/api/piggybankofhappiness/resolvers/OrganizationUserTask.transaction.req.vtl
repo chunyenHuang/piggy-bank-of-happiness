@@ -1,0 +1,8 @@
+{
+  "version": "2018-05-29",
+  "operation": "GetItem",
+  "key": {
+      "organizationId": $util.dynamodb.toDynamoDBJson($util.defaultIfNullOrBlank($ctx.source.organizationId, "___xamznone____")),
+      "id": $util.dynamodb.toDynamoDBJson($util.defaultIfNullOrBlank($ctx.source.transactionId, "___xamznone____"))
+  }
+}
