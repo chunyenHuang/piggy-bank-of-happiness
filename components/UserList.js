@@ -115,7 +115,7 @@ export default function UserList() {
                 setGroups([...groups]);
               }}
             >
-              {group.users.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((user)=>(
+              {group.users.sort(sortBy('idNumber')).sort(sortBy('isActive', true)).map((user)=>(
                 <ListItem
                   key={user.username}
                   leftAvatar={{
