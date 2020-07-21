@@ -421,8 +421,8 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationUser = /* GraphQL */ `
-  subscription OnDeleteOrganizationUser($username: String) {
-    onDeleteOrganizationUser(username: $username) {
+  subscription OnDeleteOrganizationUser {
+    onDeleteOrganizationUser {
       organizationId
       username
       idNumber
