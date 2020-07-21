@@ -59,9 +59,10 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         programId: program.id,
         limit: 100,
       };
-      if (mode === 'select') {
-        taskParams.isActive = 1;
-      }
+      // TODO: how to filter?
+      // if (mode === 'select') {
+      //   taskParams.isActive = 1;
+      // }
       const { data: { getOrgTasksByProgramByActive: { items: tasks } } } = await request(getOrgTasksByProgramByActive, taskParams);
       program.tasks = tasks;
       program.isExpanded = true;
