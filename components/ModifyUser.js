@@ -30,7 +30,7 @@ export default function ModifyUser({ user: inUser, button }) {
   const [errors, setErrors] = useState([]);
 
   const isEditMode = inUser ? true : false;
-  const isActiveTask = isEditMode ? user.isActive : true;
+  const isActiveUser = isEditMode ? user.isActive : true;
 
   const handleSubmit = async () => {
     if (isEditMode && !await check('ORG_USER__UPDATE', true)) return;
@@ -104,7 +104,7 @@ export default function ModifyUser({ user: inUser, button }) {
       }),
       props: {
         label: '身份',
-        disabled: !isActiveTask,
+        disabled: !isActiveUser,
       },
     },
     {
@@ -116,7 +116,7 @@ export default function ModifyUser({ user: inUser, button }) {
       }),
       props: {
         label: '分組',
-        disabled: !isActiveTask,
+        disabled: !isActiveUser,
       },
     },
     {
@@ -125,7 +125,7 @@ export default function ModifyUser({ user: inUser, button }) {
       props: {
         label: '姓名',
         autoCorrect: false,
-        disabled: !isActiveTask,
+        disabled: !isActiveUser,
       },
     },
     {
@@ -135,7 +135,7 @@ export default function ModifyUser({ user: inUser, button }) {
         label: '學號',
         autoCorrect: false,
         autoCapitalize: 'none',
-        disabled: !isActiveTask,
+        disabled: !isActiveUser,
       },
     },
     {
