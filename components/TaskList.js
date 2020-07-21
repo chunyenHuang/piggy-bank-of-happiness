@@ -123,7 +123,6 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               } else {
                 load();
               }
-              setPrograms([...programs]);
             }
           },
         });
