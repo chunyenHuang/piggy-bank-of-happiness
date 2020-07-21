@@ -9,8 +9,9 @@ import { asyncListAll } from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
 import { listOrganizationGroups, getOrgUsersByGroupByActive } from '../src/graphql/queries';
-import { onCreateOrganizationUser } from '../src/graphql/subscriptions';
+import { onCreateOrganizationUser, onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import CustomSearchBar from './CustomSearchBar';
+import check from '../src/permission/check';
 
 export default function UserList() {
   const navigation = useNavigation();
@@ -59,25 +60,57 @@ export default function UserList() {
   }, [searchValue]);
 
   useEffect(() => {
-    const subscription = API
-      .graphql(graphqlOperation(onCreateOrganizationUser))
-      .subscribe({
-        next: (event) => {
-          if (event) {
-            const newUser = event.value.data.onCreateOrganizationUser;
-            const matchedGroup = groups.find(({ id }) => id === newUser.groupId);
-            if (matchedGroup) {
-              matchedGroup.users.unshift(newUser);
-              setGroups([...groups]);
-            } else {
-              load();
+    let subscriptionCreate;
+    let subscriptionUpdate;
+
+    (async () => {
+      if (!await check('ORG_USER__SUBSCRIPTION')) return;
+      subscriptionCreate = API
+        .graphql(graphqlOperation(onCreateOrganizationUser))
+        .subscribe({
+          next: (event) => {
+            if (event) {
+              const newUser = event.value.data.onCreateOrganizationUser;
+              const matchedGroup = groups.find(({ id }) => id === newUser.groupId);
+              if (matchedGroup) {
+                matchedGroup.users.unshift(newUser);
+                setGroups([...groups]);
+              } else {
+                load();
+              }
             }
-          }
-        },
-      });
+          },
+        });
+      subscriptionUpdate = API
+        .graphql(graphqlOperation(onUpdateOrganizationUser))
+        .subscribe({
+          next: (event) => {
+            if (event) {
+              const updatedUser = event.value.data.onUpdateOrganizationUser;
+              // remove the original one first if found
+              groups.some((group) => {
+                const matchedUserIndex = group.users.findIndex((x) => x.username === updatedUser.username);
+                if (matchedUserIndex !== -1) {
+                  group.users.splice(matchedUserIndex, 1);
+                  return true;
+                }
+                return false;
+              });
+              const matchedGroup = groups.find(({ id }) => id === updatedUser.groupId);
+              if (matchedGroup) {
+                matchedGroup.users.push(updatedUser);
+                setGroups([...groups]);
+              } else {
+                load();
+              }
+            }
+          },
+        });
+    })();
 
     return () => {
-      subscription.unsubscribe();
+      subscriptionCreate && subscriptionCreate.unsubscribe();
+      subscriptionUpdate && subscriptionUpdate.unsubscribe();
     };
   }, [groups]);
 
