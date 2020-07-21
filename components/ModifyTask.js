@@ -119,7 +119,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     },
     {
       key: 'description',
-      required: true,
+      required: false,
       props: {
         label: '任務內容',
         autoCorrect: false,
