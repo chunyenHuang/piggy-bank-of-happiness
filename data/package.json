@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "node -r esm ./seed",
     "seed:test": "node -r esm ./seed-for-testing",
     "user:add": "node -r esm ./admin/addUser.js",
     "user:sync": "node -r esm ./admin/sync.js",
