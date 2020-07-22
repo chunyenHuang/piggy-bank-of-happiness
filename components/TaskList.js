@@ -59,8 +59,9 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         programId: program.id,
         limit: 100,
       };
+      // TODO: how to filter?
       if (mode === 'select') {
-        taskParams.isActive = 1;
+        taskParams.isActive = { eq: 1 };
       }
       const { data: { getOrgTasksByProgramByActive: { items: tasks } } } = await request(getOrgTasksByProgramByActive, taskParams);
       program.tasks = tasks;
@@ -123,7 +124,6 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               } else {
                 load();
               }
-              setPrograms([...programs]);
             }
           },
         });

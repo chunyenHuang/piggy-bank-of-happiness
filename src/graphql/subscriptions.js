@@ -257,8 +257,8 @@ export const onDeleteOrganizationTask = /* GraphQL */ `
   }
 `;
 export const onCreateOrganizationTransaction = /* GraphQL */ `
-  subscription OnCreateOrganizationTransaction($username: String) {
-    onCreateOrganizationTransaction(username: $username) {
+  subscription OnCreateOrganizationTransaction {
+    onCreateOrganizationTransaction {
       organizationId
       id
       username
@@ -295,8 +295,8 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganizationTransaction = /* GraphQL */ `
-  subscription OnUpdateOrganizationTransaction($username: String) {
-    onUpdateOrganizationTransaction(username: $username) {
+  subscription OnUpdateOrganizationTransaction {
+    onUpdateOrganizationTransaction {
       organizationId
       id
       username
@@ -333,8 +333,8 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationTransaction = /* GraphQL */ `
-  subscription OnDeleteOrganizationTransaction($username: String) {
-    onDeleteOrganizationTransaction(username: $username) {
+  subscription OnDeleteOrganizationTransaction {
+    onDeleteOrganizationTransaction {
       organizationId
       id
       username
@@ -371,8 +371,8 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
   }
 `;
 export const onCreateOrganizationUser = /* GraphQL */ `
-  subscription OnCreateOrganizationUser($username: String) {
-    onCreateOrganizationUser(username: $username) {
+  subscription OnCreateOrganizationUser {
+    onCreateOrganizationUser {
       organizationId
       username
       idNumber
@@ -396,8 +396,8 @@ export const onCreateOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganizationUser = /* GraphQL */ `
-  subscription OnUpdateOrganizationUser($username: String) {
-    onUpdateOrganizationUser(username: $username) {
+  subscription OnUpdateOrganizationUser {
+    onUpdateOrganizationUser {
       organizationId
       username
       idNumber
@@ -421,8 +421,8 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationUser = /* GraphQL */ `
-  subscription OnDeleteOrganizationUser($username: String) {
-    onDeleteOrganizationUser(username: $username) {
+  subscription OnDeleteOrganizationUser {
+    onDeleteOrganizationUser {
       organizationId
       username
       idNumber
@@ -446,8 +446,8 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
   }
 `;
 export const onCreateOrganizationUserTask = /* GraphQL */ `
-  subscription OnCreateOrganizationUserTask($username: String) {
-    onCreateOrganizationUserTask(username: $username) {
+  subscription OnCreateOrganizationUserTask {
+    onCreateOrganizationUserTask {
       organizationId
       id
       taskId
@@ -535,8 +535,8 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganizationUserTask = /* GraphQL */ `
-  subscription OnUpdateOrganizationUserTask($username: String) {
-    onUpdateOrganizationUserTask(username: $username) {
+  subscription OnUpdateOrganizationUserTask {
+    onUpdateOrganizationUserTask {
       organizationId
       id
       taskId
@@ -624,8 +624,8 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganizationUserTask = /* GraphQL */ `
-  subscription OnDeleteOrganizationUserTask($username: String) {
-    onDeleteOrganizationUserTask(username: $username) {
+  subscription OnDeleteOrganizationUserTask {
+    onDeleteOrganizationUserTask {
       organizationId
       id
       taskId

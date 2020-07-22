@@ -1,5 +1,5 @@
 type OrganizationUserTask
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId","id"])
   @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTasksByUserByCreatedAt")
   @key(name: "byUserByOrganization", fields: ["username","organizationId"], queryField: "getTasksByUserByOrganization")

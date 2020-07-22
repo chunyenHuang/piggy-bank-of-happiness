@@ -1,6 +1,6 @@
 # To avoid querying cognito admin api
 type OrganizationUser
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId","username"])
   @key(name: "byGroupByActive", fields: ["groupId", "isActive"], queryField: "getOrgUsersByGroupByActive")
   @auth(rules: [

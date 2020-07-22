@@ -1,5 +1,5 @@
 type OrganizationProgram
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
     {allow: groups, groups: ["OrgManagers"], operations: [read]},

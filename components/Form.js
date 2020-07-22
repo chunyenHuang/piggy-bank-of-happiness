@@ -27,6 +27,7 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
   case 'dropdown':
     return <Dropdown
       key={index}
+      {...props}
       containerStyle={{ padding: 10, paddingTop: 0 }}
       labelFontSize={16}
       baseColor="rgba(0,0,0,0.5)"

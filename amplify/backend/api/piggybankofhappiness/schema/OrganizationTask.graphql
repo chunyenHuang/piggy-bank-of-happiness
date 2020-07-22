@@ -1,5 +1,5 @@
 type OrganizationTask
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @key(name: "byProgramByActive", fields: ["programId","isActive"], queryField: "getOrgTasksByProgramByActive")
   @auth(rules: [

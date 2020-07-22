@@ -79,6 +79,7 @@ export default function User({ user: inUser, mode }) {
           // source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <Text h4>{user.name}</Text>
+        {!isActive && <Text>(帳號停用中)</Text>}
         <PointBadge value={user.currentPoints} />
       </View>
       {mode !== 'view' &&

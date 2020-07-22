@@ -9,8 +9,9 @@ import { asyncListAll } from '../src/utils/request';
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
 import { listOrganizationGroups, getOrgUsersByGroupByActive } from '../src/graphql/queries';
-import { onCreateOrganizationUser } from '../src/graphql/subscriptions';
+import { onCreateOrganizationUser, onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import CustomSearchBar from './CustomSearchBar';
+import check from '../src/permission/check';
 
 export default function UserList() {
   const navigation = useNavigation();
@@ -37,7 +38,6 @@ export default function UserList() {
     const promises = updatedGroups.map(async (group) => {
       const params = {
         groupId: group.id,
-        isActive: { eq: 1 },
         filter: {
           role: { eq: 'User' },
         },
@@ -60,27 +60,69 @@ export default function UserList() {
   }, [searchValue]);
 
   useEffect(() => {
-    const subscription = API
-      .graphql(graphqlOperation(onCreateOrganizationUser))
-      .subscribe({
-        next: (event) => {
-          if (event) {
-            const newUser = event.value.data.onCreateOrganizationUser;
-            const matchedGroup = groups.find(({ id }) => id === newUser.groupId);
-            if (matchedGroup) {
-              matchedGroup.users.unshift(newUser);
-              setGroups([...groups]);
-            } else {
-              load();
+    let subscriptionCreate;
+    let subscriptionUpdate;
+
+    (async () => {
+      if (!await check('ORG_USER__SUBSCRIPTION')) return;
+      subscriptionCreate = API
+        .graphql(graphqlOperation(onCreateOrganizationUser))
+        .subscribe({
+          next: (event) => {
+            if (event) {
+              const newUser = event.value.data.onCreateOrganizationUser;
+              const matchedGroup = groups.find(({ id }) => id === newUser.groupId);
+              if (matchedGroup) {
+                matchedGroup.users.unshift(newUser);
+                setGroups([...groups]);
+              } else {
+                load();
+              }
             }
-          }
-        },
-      });
+          },
+        });
+      subscriptionUpdate = API
+        .graphql(graphqlOperation(onUpdateOrganizationUser))
+        .subscribe({
+          next: (event) => {
+            if (event) {
+              const updatedUser = event.value.data.onUpdateOrganizationUser;
+              // remove the original one first if found
+              groups.some((group) => {
+                const matchedUserIndex = group.users.findIndex((x) => x.username === updatedUser.username);
+                if (matchedUserIndex !== -1) {
+                  group.users.splice(matchedUserIndex, 1);
+                  return true;
+                }
+                return false;
+              });
+              const matchedGroup = groups.find(({ id }) => id === updatedUser.groupId);
+              if (matchedGroup) {
+                matchedGroup.users.push(updatedUser);
+                setGroups([...groups]);
+              } else {
+                load();
+              }
+            }
+          },
+        });
+    })();
 
     return () => {
-      subscription.unsubscribe();
+      subscriptionCreate && subscriptionCreate.unsubscribe();
+      subscriptionUpdate && subscriptionUpdate.unsubscribe();
     };
   }, [groups]);
+
+  const getBadge = (user) => {
+    if (!user.isActive) {
+      return {
+        value: '帳號停用中',
+        textStyle: styles.badgeTextInactive,
+        badgeStyle: styles.badgeInactive,
+      };
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -106,7 +148,7 @@ export default function UserList() {
                 setGroups([...groups]);
               }}
             >
-              {group.users.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((user)=>(
+              {group.users.sort(sortBy('idNumber')).sort(sortBy('isActive', true)).map((user)=>(
                 <ListItem
                   key={user.username}
                   leftAvatar={{
@@ -123,12 +165,7 @@ export default function UserList() {
                   subtitleStyle={styles.subtitle}
                   bottomDivider
                   chevron
-                  // badge={{
-                  //   // status: 'success',
-                  //   value: user.currentPoints/100,
-                  //   textStyle: styles.badgeText,
-                  //   badgeStyle: styles.badge,
-                  // }}
+                  badge={getBadge(user)}
                   onPress={() => navigation.navigate('User', user)}
                 />
               ))}
@@ -152,8 +189,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
   },
+  badgeTextInactive: {
+    color: '#ffffff',
+    fontSize: 14,
+    lineHeight: 16,
+  },
   badge: {
     height: 25,
     padding: 5,
+  },
+  badgeInactive: {
+    height: 25,
+    padding: 5,
+    backgroundColor: '#767577',
   },
 });
