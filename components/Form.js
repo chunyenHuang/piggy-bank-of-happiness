@@ -70,7 +70,7 @@ export default function Form({ fields = [], errors = [], defaultValue = {}, auto
           return renderComponents({
             index,
             type,
-            value: data[key],
+            value: data[key] || '',
             options,
             props,
             autoFocus,
