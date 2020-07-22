@@ -4,10 +4,10 @@ import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
 
-import request from '../src/utils/request';
-import { sortBy } from '../src/utils/sorting';
-import Colors from '../constants/Colors';
-import { onCreateOrganizationUser } from '../src/graphql/subscriptions';
+import request from 'src/utils/request';
+import { sortBy } from 'src/utils/sorting';
+import Colors from 'constants/Colors';
+import { onCreateOrganizationUser } from 'src/graphql/subscriptions';
 
 export default function PendingApprovalUserList() {
   const navigation = useNavigation();
@@ -121,7 +121,7 @@ export default function PendingApprovalUserList() {
           //   textStyle: styles.badgeText,
           //   badgeStyle: styles.badge,
           // }}
-          onPress={() => navigation.navigate('User', user)}
+          onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
         />
       ))
       }

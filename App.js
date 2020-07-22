@@ -10,17 +10,18 @@ import Analytics from '@aws-amplify/analytics';
 
 import './global';
 import useCachedResources from './hooks/useCachedResources';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
+import BottomTabNavigator from 'navigation/BottomTabNavigator';
+import LinkingConfiguration from 'navigation/LinkingConfiguration';
+import StackNavigator from 'navigation/StackNavigator';
 // import Colors from './constants/Colors';
 import authenticatorConfig from './authenticator.config';
-import amplifyTheme from './constants/Amplify.theme';
 import amplifyConfig from './amplify.config';
-import paperTheme from './constants/Paper.theme';
-import Loading from './components/Loading';
-import UserSetup from './components/UserSetup';
 
-import UserScreen from './screens/UserScreen';
+import amplifyTheme from 'constants/Amplify.theme';
+import paperTheme from 'constants/Paper.theme';
+import Loading from 'components/Loading';
+import UserSetup from 'components/UserSetup';
+
 
 Amplify.configure(amplifyConfig);
 Analytics.disable();
@@ -102,7 +103,7 @@ function App({ authState, onStateChange }) {
           <NavigationContainer linking={LinkingConfiguration}>
             <Stack.Navigator>
               <Stack.Screen name="Root" component={BottomTabNavigator} />
-              <Stack.Screen name="User" component={UserScreen} />
+              <Stack.Screen name="Stacks" component={StackNavigator} hea/>
             </Stack.Navigator>
           </NavigationContainer>}
         <Loading

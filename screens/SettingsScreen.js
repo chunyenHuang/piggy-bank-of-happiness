@@ -1,28 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, AsyncStorage } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { ListItem } from 'react-native-elements';
 
-import SignOutButton from '../components/auth/SignOutButton';
-import DetailsList from '../components/DetailsList';
+import SignOutButton from 'components/auth/SignOutButton';
+import Profile from 'components/Profile';
 import Version from 'components/Version';
 
 export default function SettingsScreen() {
-  const [data, setData] = useState({});
+  const navigation = useNavigation();
+
+  const [menu, setMenu] = useState([]);
+
   useEffect(() => {
     (async () => {
-      const data = {
-        機構: await AsyncStorage.getItem('app:organizationName'),
-        姓名: await AsyncStorage.getItem('app:name'),
-        // 帳號: await AsyncStorage.getItem('app:username'),
-        電子信箱: await AsyncStorage.getItem('app:email'),
-        權限: await AsyncStorage.getItem('app:group'),
-      };
-      setData(data);
+      const userGroup = await AsyncStorage.getItem('app:group');
+      const menu = [
+        {
+          title: '註冊用戶列表',
+          onPress: () => {
+            navigation.navigate('Stacks', { screen: 'CognitoUserList', initial: false, params: {} });
+          },
+          groups: ['AppAdmins'],
+        },
+        {
+          title: '任務類別',
+          onPress: () => {
+            navigation.navigate('Stacks', { screen: 'Programs', initial: false, params: {} });
+          },
+          groups: ['AppAdmins', 'OrgAdmins'],
+        },
+        {
+          title: '學生分組',
+          component: Profile,
+          onPress: () => {
+            navigation.navigate('Stacks', { screen: 'Groups', initial: false, params: {} });
+          },
+          groups: ['AppAdmins', 'OrgAdmins'],
+        },
+        {
+          title: '個人資料',
+          component: Profile,
+          onPress: () => {
+            navigation.navigate('Stacks', { screen: 'Profile', initial: false, params: {} });
+          },
+          groups: ['All'],
+        },
+      ].filter(({ groups }) => groups.includes(userGroup) || groups.includes('All'));
+
+      if (menu.length >= 1) {
+        menu[0].isExpanded = true;
+      }
+
+      setMenu(menu);
     })();
   }, []);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <DetailsList data={data} />
+      {menu.map(({ title, onPress })=>(
+        <ListItem
+          key={title}
+          title={title}
+          bottomDivider
+          chevron
+          onPress={onPress}
+        />
+      ))}
       <View style={{ height: 32 }}></View>
       <SignOutButton />
       <Version />
@@ -35,7 +80,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fafafa',
   },
-  contentContainer: {
-    padding: 8,
-  },
+  contentContainer: {},
 });

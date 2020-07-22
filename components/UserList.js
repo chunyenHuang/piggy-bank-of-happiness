@@ -166,7 +166,7 @@ export default function UserList() {
                   bottomDivider
                   chevron
                   badge={getBadge(user)}
-                  onPress={() => navigation.navigate('User', user)}
+                  onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
                 />
               ))}
             </List.Accordion>
