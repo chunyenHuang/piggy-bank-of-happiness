@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import SignOutButton from '../components/auth/SignOutButton';
 import DetailsList from '../components/DetailsList';
+import Version from 'components/Version';
 
 export default function SettingsScreen() {
   const [data, setData] = useState({});
@@ -24,6 +25,7 @@ export default function SettingsScreen() {
       <DetailsList data={data} />
       <View style={{ height: 32 }}></View>
       <SignOutButton />
+      <Version />
     </ScrollView>
   );
 }
