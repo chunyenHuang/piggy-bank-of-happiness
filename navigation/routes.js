@@ -18,6 +18,7 @@ import Profile from 'components/Profile';
 import GroupList from 'components/GroupList';
 import ModifyProgram from 'components/ModifyProgram';
 import ModifyGroup from 'components/ModifyGroup';
+import Blank from 'components/Blank';
 
 export default [
   {
@@ -102,6 +103,14 @@ export default [
       title: '設定',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-settings" />,
     },
+    groups: ['All'],
+  },
+  {
+    type: 'stack',
+    name: 'Blank',
+    component: Blank,
+    rightComponent: null,
+    title: '',
     groups: ['All'],
   },
   {
