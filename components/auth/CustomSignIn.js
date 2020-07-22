@@ -21,6 +21,7 @@ import {
 } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import Version from 'components/Version.js';
 import Colors from '../../constants/Colors';
 import { errorAlert } from '../../src/utils/alert';
 // import { listOrganizations } from '../../src/graphql/queries';
@@ -291,6 +292,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 註冊
               </Text>
             </TouchableOpacity>
+            <Version />
           </View>
         </View>
       </TouchableOpacity>
