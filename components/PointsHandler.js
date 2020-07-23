@@ -135,7 +135,7 @@ export default function PointsHandler({ mode, user, onUpdate }) {
         bottomButtonStyle={{ backgroundColor: button.color }}
       >
         <Input
-          label="金額"
+          label="點數"
           labelStyle={{ ...styles.inputLabel, paddingTop: 16 }}
           inputStyle={styles.input}
           placeholder='0.00'
@@ -143,14 +143,6 @@ export default function PointsHandler({ mode, user, onUpdate }) {
           autoFocus={true}
           value={amount}
           onChangeText={setAmount}
-          leftIcon={
-            <Icon
-              name='logo-usd'
-              type='ionicon'
-              size={24}
-              color='black'
-            />
-          }
         />
 
         <Input
