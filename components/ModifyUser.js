@@ -14,19 +14,13 @@ import check from '../src/permission/check';
 
 // TODO: Use api or constants
 // TODO: Cognito User Group
-const roles = [
-  // { name: '管理員', id: 'Admin' },
-  { name: '老師', id: 'Manager' },
-  { name: '學生', id: 'User' },
-  { name: '審核中', id: 'PendingApproval' },
-];
 
 export default function ModifyUser({ user: inUser, button }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [user, setUser] = useState({ role: 'User' });
+  const [user, setUser] = useState({});
   const [errors, setErrors] = useState([]);
 
   const isEditMode = inUser ? true : false;
@@ -58,6 +52,7 @@ export default function ModifyUser({ user: inUser, button }) {
       const data = Object.assign(user, {
         organizationId,
         isActive: 1,
+        role: 'User',
         currentPoints: 0,
         earnedPoints: 0,
         createdAt: now,
@@ -102,20 +97,8 @@ export default function ModifyUser({ user: inUser, button }) {
       type: 'switch',
     },
     {
-      key: 'role',
-      required: true,
-      type: 'select',
-      options: roles.map((item) => {
-        return { label: item.name, value: item.id };
-      }),
-      props: {
-        label: '身份',
-        disabled: !isActiveUser,
-      },
-    },
-    {
       key: 'groupId',
-      required: false,
+      required: true,
       type: 'select',
       options: groups.map((item) => {
         return { label: item.name, value: item.id };
