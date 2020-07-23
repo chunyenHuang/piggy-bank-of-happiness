@@ -84,6 +84,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     setVisible(false);
     setTask({});
     setIsDirty(false);
+    setErrors([]);
   };
 
   const fields = [

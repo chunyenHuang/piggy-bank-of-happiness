@@ -80,9 +80,15 @@ export default function ModifyUser({ user: inUser, button }) {
       await request(updateOrganizationUser, { input: data });
     }
 
+    resetState();
+  };
+
+  const resetState = () => {
     setIsLoading(false);
     setVisible(false);
     setUser({});
+    setIsDirty(false);
+    setErrors([]);
   };
 
   const fields = [
@@ -190,7 +196,10 @@ export default function ModifyUser({ user: inUser, button }) {
       <CustomModal
         title={`${isEditMode ? '修改':'新增'}個人資料`}
         visible={visible}
-        onClose={() => setVisible(false)}
+        onClose={() => {
+          resetState();
+          setVisible(false);
+        }}
         padding
         bottomButtonProps={{
           title: `確認`,
