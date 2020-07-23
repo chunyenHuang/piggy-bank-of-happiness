@@ -117,6 +117,7 @@ export default function ModifyUser({ user: inUser, button }) {
       props: {
         label: '分組',
         disabled: !isActiveUser,
+        placeholder: '選擇組別',
       },
     },
     {
