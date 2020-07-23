@@ -20,6 +20,7 @@ export default function ModifyUser({ user: inUser, button }) {
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [groups, setGroups] = useState([]);
+  const [originalUser, setOriginalUser] = useState({});
   const [user, setUser] = useState({});
   const [errors, setErrors] = useState([]);
 
@@ -81,6 +82,7 @@ export default function ModifyUser({ user: inUser, button }) {
   const resetState = () => {
     setIsLoading(false);
     setVisible(false);
+    setOriginalUser({});
     setUser({});
     setIsDirty(false);
     setErrors([]);
@@ -142,6 +144,9 @@ export default function ModifyUser({ user: inUser, button }) {
 
   useEffect(() => {
     if (inUser) {
+      setOriginalUser(Object.assign({}, inUser, {
+        isActive: inUser.isActive === 1,
+      }));
       setUser(Object.assign({}, inUser, {
         isActive: inUser.isActive === 1,
       }));
@@ -180,8 +185,12 @@ export default function ModifyUser({ user: inUser, button }) {
         title={`${isEditMode ? '修改':'新增'}個人資料`}
         visible={visible}
         onClose={() => {
-          resetState();
+          // restore user data
           setVisible(false);
+          const cloneOrignalUser = JSON.parse(JSON.stringify(originalUser));
+          setUser(cloneOrignalUser);
+          setIsDirty(false);
+          setErrors([]);
         }}
         padding
         bottomButtonProps={{
