@@ -7,7 +7,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import request from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
-import { onCreateOrganizationUser } from 'src/graphql/subscriptions';
+import { onCreateOrganizationUser, onUpdateOrganizationUser } from 'src/graphql/subscriptions';
 
 export default function PendingApprovalUserList() {
   const navigation = useNavigation();
@@ -74,21 +74,29 @@ export default function PendingApprovalUserList() {
   }, []);
 
   useEffect(() => {
-    const subscription = API
+    const subscriptionCreate = API
       .graphql(graphqlOperation(onCreateOrganizationUser))
       .subscribe({
         next: (event) => {
           if (event) {
-            const newUser = event.value.data.onCreateOrganizationUser;
-            if (!users.find((x) => x.username === newUser.username)) {
-              setUsers([newUser, ...users]);
-            }
+            load();
+          }
+        },
+      });
+
+    const subscriptionUpdate = API
+      .graphql(graphqlOperation(onUpdateOrganizationUser))
+      .subscribe({
+        next: (event) => {
+          if (event) {
+            load();
           }
         },
       });
 
     return () => {
-      subscription.unsubscribe();
+      subscriptionCreate.unsubscribe();
+      subscriptionUpdate.unsubscribe();
     };
   }, [users]);
 

@@ -25,8 +25,7 @@ export default [
     type: 'bottom-tab',
     name: 'Home',
     component: HomeScreen,
-    // title: '幸福存摺 @ {{organizationName}}',
-    title: '幸福存摺',
+    title: '{{organizationName}}',
     rightComponent: null,
     options: {
       title: '首頁',

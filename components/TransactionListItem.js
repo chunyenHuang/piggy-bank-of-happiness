@@ -167,7 +167,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
           disabled={true}
         />
         <Input
-          label="金額"
+          label="點數"
           value={amount}
           disabled={true}
         />

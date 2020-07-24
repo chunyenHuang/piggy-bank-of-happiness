@@ -84,6 +84,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     setVisible(false);
     setTask({});
     setIsDirty(false);
+    setErrors([]);
   };
 
   const fields = [
@@ -106,6 +107,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       props: {
         label: '類別',
         disabled: !isActiveTask,
+        placeholder: '選擇類別',
       },
     },
     {

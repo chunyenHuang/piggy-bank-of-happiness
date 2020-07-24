@@ -37,6 +37,7 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
       data={options}
       value={value}
       onChangeText={onChange}
+      error={errorMsg}
     />;
   case 'switch':
     return <View key={index} style={styles.switchContainer}>

@@ -33,7 +33,14 @@ export default function UserList() {
 
     const organizationId = await AsyncStorage.getItem('app:organizationId');
 
-    const updatedGroups = (groups.length === 0) ? await asyncListAll(listOrganizationGroups, { organizationId }) : groups;
+    const updatedGroups = (groups.length === 0) ? await asyncListAll(listOrganizationGroups, {
+      organizationId,
+      filter: {
+        isActive: { eq: 1 },
+      },
+    }) : groups;
+
+    console.log(updatedGroups);
 
     const promises = updatedGroups.map(async (group) => {
       const params = {
