@@ -313,6 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     width: '100%',
+    maxWidth: 600,
   },
   logoContainer: {
     padding: 10,
