@@ -14,8 +14,12 @@ import check from '../src/permission/check';
 
 // TODO: Use api or constants
 // TODO: Cognito User Group
+const roles = [
+  { name: '學生', id: 'User' },
+  { name: '審核中', id: 'PendingApproval' },
+];
 
-export default function ModifyUser({ user: inUser, button }) {
+export default function ModifyUser({ user: inUser, button, isApproval = false }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -99,8 +103,21 @@ export default function ModifyUser({ user: inUser, button }) {
       type: 'switch',
     },
     {
-      key: 'groupId',
+      key: 'role',
       required: true,
+      type: 'select',
+      options: roles.map((item) => {
+        return { label: item.name, value: item.id };
+      }),
+      props: {
+        label: '身份',
+        disabled: !isActiveUser,
+        hidden: !isApproval,
+      },
+    },
+    {
+      key: 'groupId',
+      required: !isApproval,
       type: 'select',
       options: groups.map((item) => {
         return { label: item.name, value: item.id };

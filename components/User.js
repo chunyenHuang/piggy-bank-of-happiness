@@ -87,6 +87,7 @@ export default function User({ user: inUser, mode }) {
         <ModifyUser
           user={user}
           button
+          isApproval={user.role === 'PendingApproval'}
         />
         {isActive &&
         <PointsHandler
