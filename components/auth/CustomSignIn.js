@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   AsyncStorage,
+  ScrollView,
 } from 'react-native';
 import {
   TextInput,
@@ -176,126 +177,128 @@ export default function CustomSignIn({ authState, onStateChange }) {
       enabled
       style={styles.container}
     >
-      <Spinner
-        visible={isSubmitting}
-        textContent={''}
-        textStyle={{ color: '#FFF' }}
-      />
-      <TouchableOpacity
-        style={styles.container}
-        activeOpacity={1}
-        onPress={Keyboard.dismiss}
-        accessible={false}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="light-content"/>}
-        <View style={styles.scrollContainer}>
-          <View style={styles.logoContainer}>
-            <Image
-              style={styles.logo}
-              source={require('../../assets/images/icon.png')} />
-          </View>
-          <View style={styles.loginContainer}>
-            {/* <Divider style={styles.divider} /> */}
+      <ScrollView style={styles.scrollContainer}>
+        <Spinner
+          visible={isSubmitting}
+          textContent={''}
+          textStyle={{ color: '#FFF' }}
+        />
+        <TouchableOpacity
+          style={styles.container}
+          activeOpacity={1}
+          onPress={Keyboard.dismiss}
+          accessible={false}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="light-content"/>}
+          <View style={styles.scrollContainer}>
+            <View style={styles.logoContainer}>
+              <Image
+                style={styles.logo}
+                source={require('../../assets/images/icon.png')} />
+            </View>
+            <View style={styles.loginContainer}>
+              {/* <Divider style={styles.divider} /> */}
 
-            <TextInput
-              label="帳號"
-              mode="outlined"
-              // autoFocus={true}
-              disabled={requestNewPassword}
-              autoCompleteType={'email'}
-              keyboardType="email-address"
-              style={styles.input}
-              onChangeText={setUsername}
-              value={username}
-              autoCapitalize={'none'}
-              returnKeyType={'next'}
-              onSubmitEditing={()=> secondTextInput.focus()}
-            />
-            {!requestNewPassword &&
-            <TextInput
-              label='密碼'
-              ref={(input) => secondTextInput = input}
-              mode="outlined"
-              autoCompleteType={'password'}
-              disabled={requestNewPassword}
-              secureTextEntry={true}
-              style={styles.input}
-              onChangeText={setPassword}
-              value={password}
-              autoCapitalize={'none'}
-              returnKeyType={'send'}
-              onSubmitEditing={submit}
-            />}
-            {requestNewPassword &&
-            <TextInput
-              label='新密碼'
-              mode="outlined"
-              autoFocus={true}
-              autoCompleteType={'password'}
-              secureTextEntry={true}
-              style={styles.input}
-              onChangeText={(value)=>{
-                setNewPassword(value);
-                setPassword(value);
-              }}
-              value={newPassword}
-              autoCapitalize={'none'}
-              returnKeyType={'go'}
-              onSubmitEditing={submit}
-              enablesReturnKeyAutomatically={true}
-            />}
-            {!requestNewPassword &&
-            <Button
-              mode="contained"
-              style={{ ...styles.button }}
-              disabled={!username || password.length < PASSWORD_MIN_LENGTH || isSubmitting}
-              onPress={submit}>
-              登入
-            </Button>}
-            {requestNewPassword &&
-            <Button
-              style={styles.button}
-              disabled={!newPassword || isSubmitting}
-              onPress={confirmResetPassword}>
-              確認修改新密碼
-            </Button>}
-            {!requestNewPassword &&
-            <Button
-              style={styles.textButton}
-              onPress={()=>goto('forgotPassword')}>
-              忘記密碼
-            </Button>}
+              <TextInput
+                label="帳號"
+                mode="outlined"
+                // autoFocus={true}
+                disabled={requestNewPassword}
+                autoCompleteType={'email'}
+                keyboardType="email-address"
+                style={styles.input}
+                onChangeText={setUsername}
+                value={username}
+                autoCapitalize={'none'}
+                returnKeyType={'next'}
+                onSubmitEditing={()=> secondTextInput.focus()}
+              />
+              {!requestNewPassword &&
+              <TextInput
+                label='密碼'
+                ref={(input) => secondTextInput = input}
+                mode="outlined"
+                autoCompleteType={'password'}
+                disabled={requestNewPassword}
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                autoCapitalize={'none'}
+                returnKeyType={'send'}
+                onSubmitEditing={submit}
+              />}
+              {requestNewPassword &&
+              <TextInput
+                label='新密碼'
+                mode="outlined"
+                autoFocus={true}
+                autoCompleteType={'password'}
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={(value)=>{
+                  setNewPassword(value);
+                  setPassword(value);
+                }}
+                value={newPassword}
+                autoCapitalize={'none'}
+                returnKeyType={'go'}
+                onSubmitEditing={submit}
+                enablesReturnKeyAutomatically={true}
+              />}
+              {!requestNewPassword &&
+              <Button
+                mode="contained"
+                style={{ ...styles.button }}
+                disabled={!username || password.length < PASSWORD_MIN_LENGTH || isSubmitting}
+                onPress={submit}>
+                登入
+              </Button>}
+              {requestNewPassword &&
+              <Button
+                style={styles.button}
+                disabled={!newPassword || isSubmitting}
+                onPress={confirmResetPassword}>
+                確認修改新密碼
+              </Button>}
+              {!requestNewPassword &&
+              <Button
+                style={styles.textButton}
+                onPress={()=>goto('forgotPassword')}>
+                忘記密碼
+              </Button>}
 
-            <SocialIcon
-              title='Facebook 帳號登入'
-              button
-              type='facebook'
-              style={styles.socialButton}
-              onPress={() => {
-                setIsSubmitting(true);
-                Auth.federatedSignIn({ provider: 'Facebook' });
-              }}
-            />
-            <SocialIcon
-              title='Google 帳號登入'
-              button
-              type='google'
-              style={styles.socialButton}
-              onPress={() => {
-                setIsSubmitting(true);
-                Auth.federatedSignIn({ provider: 'Google' });
-              }}
-            />
-            <TouchableOpacity
-              style={styles.registerButton}
-              onPress={()=>goto('signUp')}>
-              <Text style={styles.textButton}>
-                註冊
-              </Text>
-            </TouchableOpacity>
-            <Version />
+              <SocialIcon
+                title='Facebook 帳號登入'
+                button
+                type='facebook'
+                style={styles.socialButton}
+                onPress={() => {
+                  setIsSubmitting(true);
+                  Auth.federatedSignIn({ provider: 'Facebook' });
+                }}
+              />
+              <SocialIcon
+                title='Google 帳號登入'
+                button
+                type='google'
+                style={styles.socialButton}
+                onPress={() => {
+                  setIsSubmitting(true);
+                  Auth.federatedSignIn({ provider: 'Google' });
+                }}
+              />
+              <TouchableOpacity
+                style={styles.registerButton}
+                onPress={()=>goto('signUp')}>
+                <Text style={styles.textButton}>
+                  註冊
+                </Text>
+              </TouchableOpacity>
+              <Version />
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -305,15 +308,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    marginTop: -50,
-    marginBottom: -50,
-    paddingTop: 50,
-    paddingBottom: 50,
-    // backgroundColor: Colors.primary,
   },
   scrollContainer: {
     flex: 1,
-    padding: 32,
+    padding: 16,
     width: '100%',
   },
   logoContainer: {
