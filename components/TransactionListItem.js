@@ -221,6 +221,8 @@ const getTypeColor = (type) => {
   case 'withdraw':
     return Colors.error;
   case 'cancel':
+    return Colors.dark;
+  case 'adjustment':
     return Colors.accent;
   case 'credits':
   default:
@@ -232,6 +234,8 @@ const getTypeName = (type) => {
   switch (type) {
   case 'withdraw':
     return '提款';
+  case 'adjustment':
+    return '調整';
   case 'cancel':
     return '取消';
   case 'credits':
