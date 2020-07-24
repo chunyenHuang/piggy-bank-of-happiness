@@ -22,28 +22,27 @@ export default function PointsHandler({ mode, user, onUpdate }) {
   });
 
   const submit = async () => {
-    if (mode === 'withdraw') {
-      setIsLoading(true);
+    setIsLoading(true);
+    const { organizationId, username } = user;
 
-      const { organizationId, username } = user;
-
-      // pull the latest user record
-      const { data: { getOrganizationUser: { currentPoints, earnedPoints } } } = await request( /* GraphQL */ `
-            query GetOrganizationUser($organizationId: ID!, $username: String!) {
-              getOrganizationUser(organizationId: $organizationId, username: $username) {
-                currentPoints
-                earnedPoints
-              }
+    // pull the latest user record
+    const { data: { getOrganizationUser: { currentPoints, earnedPoints } } } = await request( /* GraphQL */ `
+          query GetOrganizationUser($organizationId: ID!, $username: String!) {
+            getOrganizationUser(organizationId: $organizationId, username: $username) {
+              currentPoints
+              earnedPoints
             }
-          `, {
-        organizationId,
-        username,
-      });
+          }
+        `, {
+      organizationId,
+      username,
+    });
 
-      const points = parseFloat(amount) * 100;
-      console.log({ points, note });
+    const now = moment().toISOString();
+    const points = parseFloat(amount) * 100;
+    console.log({ points, note });
 
-      const now = moment().toISOString();
+    if (mode === 'withdraw') {
       const transaction = {
         organizationId,
         id: uuidv1(),
@@ -67,11 +66,36 @@ export default function PointsHandler({ mode, user, onUpdate }) {
         request(createOrganizationTransaction, { input: transaction }),
         request(updateOrganizationUser, { input: updatedUser }),
       ]);
+    } else
+    if (mode === 'adjustment') {
+      const transaction = {
+        organizationId,
+        id: uuidv1(),
+        username,
+        points: points,
+        type: 'adjustment',
+        note,
+        createdBy: await AsyncStorage.getItem('app:username'),
+        createdAt: now,
+        updatedAt: now,
+      };
+      const updatedUser = {
+        organizationId,
+        username,
+        currentPoints: currentPoints + points,
+        earnedPoints: earnedPoints + points,
+        updatedAt: now,
+      };
 
-      onUpdate && onUpdate();
-      setIsLoading(false);
-      setVisible(false);
+      await Promise.all([
+        request(createOrganizationTransaction, { input: transaction }),
+        request(updateOrganizationUser, { input: updatedUser }),
+      ]);
     }
+
+    onUpdate && onUpdate();
+    setIsLoading(false);
+    setVisible(false);
   };
 
   useEffect(() => {
@@ -88,8 +112,8 @@ export default function PointsHandler({ mode, user, onUpdate }) {
     switch (mode) {
     case 'adjustment':
       button = {
-        icon: 'md-create',
-        title: '修正',
+        icon: 'md-sync',
+        title: '調整',
         color: Colors.accent,
       };
       break;

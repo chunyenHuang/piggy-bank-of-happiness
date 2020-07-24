@@ -95,11 +95,12 @@ export default function User({ user: inUser, mode }) {
           mode={'withdraw'}
           onUpdate={load}
         />}
-        {/* <PointsHandler
+        {isActive &&
+        <PointsHandler
           user={user}
           mode={'adjustment'}
           onUpdate={load}
-        /> */}
+        />}
         {isActive &&
         <AddTaskToUser
           user={user}
