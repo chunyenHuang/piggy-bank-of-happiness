@@ -16,3 +16,15 @@
 - [Development](./documentation/Development.md)
 - [Deployment](./documentation/Deployment.md)
 - [Testing](./documentation/Testing.md)
+
+
+### Mobile App
+
+```bash
+cd mobile
+npm start
+```
+
+### Web App
+
+(WIP)
