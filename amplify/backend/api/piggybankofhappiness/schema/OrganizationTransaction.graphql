@@ -1,5 +1,5 @@
 type OrganizationTransaction
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTransactionsByUserByCreatedAt")
   @key(name: "byUserByOrganization", fields: ["username","organizationId"], queryField: "getTransactionsByUserByOrganization")

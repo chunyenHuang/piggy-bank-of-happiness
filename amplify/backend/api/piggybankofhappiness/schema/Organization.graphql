@@ -1,5 +1,5 @@
 type Organization
-  @model
+  @model (subscriptions: { level: public })
   @auth(rules: [
     {allow: private, operations: [read]},
     {allow: owner, ownerField: "id", identityField:"custom:organizationId", operations: [read]},
