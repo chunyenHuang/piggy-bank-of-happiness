@@ -83,7 +83,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
 
     return () => {
       willUnmount = true;
-      console.log('unmount CustomSignIn.js');
       Hub.remove('auth', authListener);
       Hub.remove('app', appListener);
     };
@@ -100,8 +99,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
       const user = await Auth.signIn(username, password);
       await AsyncStorage.setItem('app:username', username);
       setUser(user);
-
-      // console.log(user);
 
       if (user.challengeName === 'SMS_MFA' ||
         user.challengeName === 'SOFTWARE_TOKEN_MFA') {
@@ -127,7 +124,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
         // More info please check the Enabling MFA part
         Auth.setupTOTP(user);
       } else {
-        console.log('success');
         goto('signedIn');
       }
     } catch (err) {
@@ -145,7 +141,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
       } else if (err.code === 'UserNotFoundException') {
         // The error happens when the supplied username/email does not exist in the Cognito user pool
       } else {
-        console.log(err);
+        global.logger.error(err);
       }
 
       errorAlert(err);

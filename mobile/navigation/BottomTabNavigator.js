@@ -29,7 +29,6 @@ export default function BottomTabNavigator({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      console.log('load menu...');
       const [organizationName, group] = await Promise.all([
         AsyncStorage.getItem('app:organizationName'),
         AsyncStorage.getItem('app:group'),

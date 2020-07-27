@@ -40,8 +40,6 @@ export default function UserList() {
       },
     }) : groups;
 
-    console.log(updatedGroups);
-
     const promises = updatedGroups.map(async (group) => {
       const params = {
         groupId: group.id,
