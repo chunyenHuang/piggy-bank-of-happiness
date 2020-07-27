@@ -34,4 +34,6 @@ const client = new AWS.SecretsManager({
 
     const data = JSON.parse(SecretString);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+
+    console.log(process.env);
 })();
