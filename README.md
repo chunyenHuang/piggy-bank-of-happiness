@@ -27,4 +27,7 @@ npm start
 
 ### Web App
 
-(WIP)
+```bash
+cd web
+npm start
+```

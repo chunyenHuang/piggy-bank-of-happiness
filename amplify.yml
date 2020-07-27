@@ -1,0 +1,35 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - echo "$TEAM_PROVIDER_INFO" > amplify/team-provider-info.json
+        - cat amplify/team-provider-info.json
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install
+        - nvm use 10
+        - npm install --silent --global expo-cli
+        - |-
+          if [ -f yarn.lock ]; then
+           yarn
+          elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+           npm ci
+          else
+           npm install
+          fi
+    build:
+      commands:
+        - 'expo build:web'
+  artifacts:
+    baseDirectory: web-build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - $(npm root --global)/**/*
