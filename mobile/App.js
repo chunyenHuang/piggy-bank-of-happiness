@@ -35,8 +35,6 @@ function App({ authState, onStateChange }) {
   const [isReady, setIsReady] = useState(false);
 
   const authListener = ({ payload: { event, data } }) => {
-    console.log('auth event', event);
-
     switch (event) {
     case 'signIn':
       // setupUser();
@@ -76,7 +74,6 @@ function App({ authState, onStateChange }) {
     setSpinner(false);
 
     return () => {
-      console.log('unmount app.js');
       Hub.remove('auth', authListener);
       Hub.remove('app', appListener);
     };

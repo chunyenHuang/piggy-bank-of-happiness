@@ -208,8 +208,6 @@ export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
       if (inUser) {
         Hub.dispatch('app', { event: 'loading' });
 
-        console.log(inUser);
-
         inUser.userGroup = inUser.userGroup || await getUserGroup(inUser.username);
         setOldUserGroup(inUser.userGroup);
 

@@ -20,7 +20,6 @@ export default function AddTaskToUser({ user, onUpdate }) {
   const color = Colors.focused;
 
   const handleSelect = (task) => {
-    console.log(task);
     if (task.isSelected) {
       tasks.push(task);
     } else {
@@ -53,7 +52,7 @@ export default function AddTaskToUser({ user, onUpdate }) {
         organizationId,
         username,
       });
-      console.log({ currentPoints, earnedPoints });
+      global.logger.debug({ currentPoints, earnedPoints });
 
       // For now, assign and complete the task immediately and then create the transaction for user
       const transactionId = uuidv1();

@@ -19,11 +19,10 @@ export default async function request(query, params, authMode) {
   }
 
   if (err) {
-    console.log(err);
+    global.logger.error(err);
     if (__DEV__) {
       global.logger.debug(query);
       global.logger.debug(JSON.stringify(params || {}, null, 2));
-      console.log(err);
     }
     global.logger.error(err);
     throw err;

@@ -23,7 +23,7 @@ export default function UserForm({ user: inUser, mode = 'view' }) {
       organizationId,
       username,
     });
-    console.log('userData', userData);
+
     userData && setUser(userData);
 
     Hub.dispatch('app', { event: 'loading-complete' });

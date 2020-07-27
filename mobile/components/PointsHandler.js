@@ -40,7 +40,6 @@ export default function PointsHandler({ mode, user, onUpdate }) {
 
     const now = moment().toISOString();
     const points = parseFloat(amount) * 100;
-    console.log({ points, note });
 
     if (mode === 'withdraw') {
       const transaction = {
