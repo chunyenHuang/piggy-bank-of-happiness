@@ -6,9 +6,19 @@ const {
     AWS_BRANCH
 } = process.env;
 
-const envInfo = teamInfo[AWS_BRANCH];
+let ENV;
+switch (AWS_BRANCH) {
+    case 'master':
+        ENV = 'prd';
+        break;
+    default:
+        ENV = AWS_BRANCH;
+        break;
+}
+
+const envInfo = teamInfo[ENV];
 if (!envInfo) {
-    console.log(`Can not find env ${AWS_BRANCH} in team-provider-info.json`);
+    console.log(`Can not find env ${ENV} in team-provider-info.json`);
     return process.exit(1);
 }
 
@@ -40,7 +50,7 @@ const authConfig = {
 
 const commands = [
     'amplify init',
-    `--amplify "{\\"envName\\":\\"${AWS_BRANCH}\\"}"`,
+    `--amplify "{\\"envName\\":\\"${ENV}\\"}"`,
     `--categories "${JSON.stringify(authConfig).replace(/"/g, '\\"')}"`,
     '--yes',
 ];
