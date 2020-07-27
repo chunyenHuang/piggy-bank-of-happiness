@@ -47,16 +47,9 @@ const commands = [
 
 console.log(commands.join(' '));
 
-const event = exec(commands.join(' '), (err, stdout, stderr) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(stdout);
-        console.log(stderr);
-    }
-});
+const event = exec(commands.join(' '));
 
-event.on('exit', (code) => {
-    console.log(code);
-    process.exit(code);
-});
+event.stdout.on('data', console.log);
+event.stderr.on('data', console.log);
+
+event.on('exit', process.exit);
