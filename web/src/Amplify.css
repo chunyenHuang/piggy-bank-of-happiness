@@ -1,0 +1,12 @@
+/* https://docs.amplify.aws/ui/customization/theming/q/framework/react */
+:root {
+    --amplify-font-family:  ‘Helvetica Neue Light’, ‘Helvetica Neue’, ‘Helvetica’, ‘Arial’, ‘sans-serif’;
+    --amplify-primary-color: #06466e;
+    --amplify-primary-tint: #136cae;
+    --amplify-primary-shade: #608ab9;
+}
+
+.amplify-auth-container {
+    width: 460px;
+    margin: 100px auto;
+}
