@@ -1,0 +1,12 @@
+import React from 'react';
+
+import SignOutButton from 'components/SignOutButton';
+
+export default function Dashboard() {
+  return (
+    <div>
+      幸福存摺 User Dashboard
+      <SignOutButton />
+    </div>
+  );
+}
