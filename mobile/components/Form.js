@@ -23,6 +23,21 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
       errorStyle={{ color: 'red' }}
       errorMessage={errorMsg}
     />;
+  case 'number':
+    return <Input
+      key={index}
+      {...props}
+      defaultValue={value}
+      autoFocus={autoFocus && index === 0 ? true : false}
+      ref={(input) => inputs[index] = input}
+      returnKeyType={inputs[index+1] ? 'next' : 'send'}
+      placeholder="0"
+      keyboardType="number-pad"
+      onSubmitEditing={()=> inputs[index+1] ? inputs[index+1].focus() : onSubmit()}
+      onChangeText={onChange}
+      errorStyle={{ color: 'red' }}
+      errorMessage={errorMsg}
+    />;
   case 'select':
   case 'dropdown':
     return <Dropdown
