@@ -12,4 +12,4 @@ if (target === 'android') {
   appJson.expo.android.versionCode = parseInt(appJson.expo.android.versionCode) + 1;
 }
 
-fs.writeFileSync(appJsonFilePath, JSON.stringify(appJson, null, 4));
+fs.writeFileSync(appJsonFilePath, JSON.stringify(appJson, null, 2));
