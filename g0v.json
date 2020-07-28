@@ -1,0 +1,37 @@
+{
+    "repo": "chunyenHuang/piggy-bank-of-happiness",
+    "author": "John Huang",
+    "status": "Beta",
+    "name": "Piggy Bank of Happiness",
+    "name_zh": "幸福存摺",
+    "description": "A experimental platform that puts collaborative fact-checking to test. In the real world, in Taiwan.",
+    "description_zh": "設計給非營利事業組織兒少陪伴單位的電子資訊系統，讓孩子們透過執行任務獲得點數，累積的點數可向機構換取獎品或是客製化的需求（例如：修鞋，修車）。",
+    "homepage": "https://www.piggybankofhappiness.org/",
+    "thumbnail": "https://lh3.googleusercontent.com/DPdUbwYZRFV6_CRIeZhH5EfITIdHtNnLPqbimSuIqUe4rZUCT-X7SUndl9aKMWr2FTk=s180-rw",
+    "document": "https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ",
+    "repository": "https://github.com/chunyenHuang/piggy-bank-of-happiness",
+    "licenses": [
+        "MIT - All source codes"
+    ],
+    "keywords": [
+        "教育",
+        "偏鄉",
+        "獎勵"
+    ],
+    "audience": [
+        "非營利事業組織兒少陪伴單位"
+    ],
+    "products": [
+        "https://www.piggybankofhappiness.org/",
+        "https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness&hl=en_US"
+    ],
+    "partOf": "",
+    "contributors": [
+        "chunyenHuang",
+        "justin65"
+    ],
+    "needs": [
+        "專案經理",
+        "ReactJS 工程師"
+    ]
+}
