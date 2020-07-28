@@ -165,7 +165,13 @@ export default function PointsHandler({ mode, user, onUpdate }) {
           keyboardType="decimal-pad"
           autoFocus={true}
           value={amount}
-          onChangeText={setAmount}
+          onChangeText={(e)=>{
+            if (!isNaN(e)) {
+              setAmount(e);
+            }
+          }}
+          errorStyle={{ color: 'red' }}
+          errorMessage={''}
         />
 
         <Input
