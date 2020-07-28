@@ -51,6 +51,13 @@ const renderComponents = ({ index, type, value, options, props, autoFocus, error
       animationDuration={200}
       data={options}
       value={value}
+      itemColor="rgba(0,0,0,0.8)"
+      selectedItemColor="rgba(0,0,0,1)"
+      disabledItemColor="rgba(0,0,0,0.2)"
+      propsExtractor={(item) => {
+        if (item.disabled) return { disabled: true };
+        return {};
+      }}
       onChangeText={onChange}
       error={errorMsg}
     />;
