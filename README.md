@@ -10,7 +10,7 @@
 - [入口網站](https://www.piggybankofhappiness.org/)
 - [入口網站（develop）](https://develop.piggybankofhappiness.org/)
 - [Google Play Store (Beta)](https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness&hl=zh_TW)
-- [Apple Store (WIP)]()
+- [Apple Store (Testflights)](https://testflight.apple.com/join/8DJbdJnr)
 
 ### Mobile App
 
