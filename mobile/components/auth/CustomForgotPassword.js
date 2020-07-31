@@ -10,6 +10,7 @@ import {
 import {
   TextInput,
   Button,
+  Colors,
 } from 'react-native-paper';
 import { Auth } from 'aws-amplify';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -111,6 +112,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
           {!isSettingNewPassword &&
           <Button
             mode="contained"
+            dark={Colors.useDark}
             style={{ ...styles.button }}
             disabled={!username || isSubmitting}
             onPress={submit}>

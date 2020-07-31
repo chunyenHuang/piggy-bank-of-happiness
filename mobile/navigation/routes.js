@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Text } from 'react-native';
+
 import TabBarIcon from 'components/TabBarIcon';
 import HomeScreen from 'screens/HomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';

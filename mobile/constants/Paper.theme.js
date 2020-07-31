@@ -8,7 +8,7 @@ export default {
     accent: Colors.accent,
     background: '#f6f6f6',
     surface: 'white',
-    error: '#B00020',
+    error: Colors.error,
     text: Colors.dark,
     onBackground: '#000000',
     onSurface: '#000000',
