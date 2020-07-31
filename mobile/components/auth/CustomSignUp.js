@@ -14,8 +14,9 @@ import {
 import { Auth } from 'aws-amplify';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import { errorAlert } from '../../src/utils/alert';
+import { errorAlert } from 'src/utils/alert';
 import Form from '../Form';
+import Colors from 'constants/Colors';
 
 const PASSWORD_MIN_LENGTH = 8;
 
@@ -148,6 +149,7 @@ export default function CustomSignUp({ authState, onStateChange }) {
 
           <Button
             mode="contained"
+            dark={Colors.useDark}
             style={{ ...styles.button }}
             disabled={isSubmitting}
             onPress={handleSubmit}>

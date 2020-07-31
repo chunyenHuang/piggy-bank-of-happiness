@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native';
 import CustomHeader from 'components/CustomHeader';
 
 import routes from './routes';
+import Colors from 'constants/Colors';
 
 const filterRoutes = routes.filter((x) => x.type === 'bottom-tab');
 
@@ -38,8 +39,12 @@ export default function BottomTabNavigator({ navigation, route }) {
     })();
   }, []);
 
+  const tabBarOptions = {
+    activeTintColor: Colors.primary,
+  };
+
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={tabBarOptions}>
       {
         menu.map(({ name, component, options })=>(
           <BottomTab.Screen

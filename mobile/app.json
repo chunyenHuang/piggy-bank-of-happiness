@@ -6,8 +6,7 @@
     "privacy": "public",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -33,14 +32,11 @@
       "package": "cloud.goldax.piggy_bank_of_happiness",
       "versionCode": 20
     },
-    "androidStatusBarColor": "#2189DC",
+    "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
       "barStyle": "light-content",
-      "backgroundColor": "#2189DC",
+      "backgroundColor": "#68b386",
       "translucent": false
-    },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
     }
   }
 }

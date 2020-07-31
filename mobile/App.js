@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { ThemeProvider } from 'react-native-elements';
 // amplify
 import Amplify, { Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -19,6 +20,7 @@ import amplifyConfig from './amplify.config';
 
 import amplifyTheme from 'constants/Amplify.theme';
 import paperTheme from 'constants/Paper.theme';
+import elementsTheme from 'constants/Elements.theme';
 import Loading from 'components/Loading';
 import UserSetup from 'components/UserSetup';
 
@@ -94,19 +96,21 @@ function App({ authState, onStateChange }) {
 
   return (
     <PaperProvider theme={paperTheme}>
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-        {isReady &&
-          <NavigationContainer linking={LinkingConfiguration}>
-            <Stack.Navigator>
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
-              <Stack.Screen name="Stacks" component={StackNavigator} hea/>
-            </Stack.Navigator>
-          </NavigationContainer>}
-        <Loading
-          active={spinner}
-        />
-      </View>
+      <ThemeProvider theme={elementsTheme}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+          {isReady &&
+            <NavigationContainer linking={LinkingConfiguration}>
+              <Stack.Navigator>
+                <Stack.Screen name="Root" component={BottomTabNavigator} />
+                <Stack.Screen name="Stacks" component={StackNavigator} hea/>
+              </Stack.Navigator>
+            </NavigationContainer>}
+          <Loading
+            active={spinner}
+          />
+        </View>
+      </ThemeProvider>
     </PaperProvider>
   );
 }
