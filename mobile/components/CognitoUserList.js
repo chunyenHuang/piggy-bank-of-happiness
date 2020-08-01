@@ -3,39 +3,55 @@ import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
-import { sortBy } from '../src/utils/sorting';
-import Colors from '../constants/Colors';
-import { listUsersInGroup } from '../src/admin/services';
+import { sortBy } from 'src/utils/sorting';
+import { listUsers, listUsersInGroup } from 'src/admin/services';
+import { getGroupNames, getGroupDisplayName } from 'src/admin/utils';
+import Colors from 'constants/Colors';
+
 import ModifyCognitoUser from './ModifyCognitoUser';
 
+const groupNames = getGroupNames();
+
 export default function CognitoUserList() {
-  const [groups, setGroups] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(undefined);
 
+
   const load = async () => {
     setIsLoading(true);
+    const userGroupMappings = {};
 
-    const groupNames = [
-      'AppAdmins',
-      'OrgAdmins',
-      'OrgManagers',
-      'Users',
-    ];
-    const groups = await Promise.all(groupNames.map(async (name) => {
-      const { users } = await listUsersInGroup(name);
+    const [
+      allUsers,
+    ] = await Promise.all([
+      listUsers(true).then(({ data }) => data),
+      ...groupNames.map(async (name) => {
+        const { data: users } = await listUsersInGroup(name, true);
+        users.forEach((user) => {
+          userGroupMappings[user.sub] = name;
+        });
+      }),
+    ]);
+
+    const allOrganizations = {};
+
+    allUsers.forEach((user) => {
+      const org = user['custom:organizationName'] || 'N/A';
+      allOrganizations[org] = allOrganizations[org] || [];
+
+      user.group = getGroupDisplayName(userGroupMappings[user.sub]);
+      allOrganizations[org].push(user);
+    });
+
+    const orgs = Object.keys(allOrganizations).map((key) => {
       return {
-        name,
-        isExpanded: false,
-        users: users
-          .map((user) => {
-            user.userGroup = name;
-            return user;
-          })
-          .sort(sortBy('custom:organizationName', true)),
+        name: key,
+        users: allOrganizations[key].sort(sortBy('name')).sort(sortBy('group')),
       };
-    }));
-    setGroups(groups);
+    });
+
+    setOrganizations(orgs);
 
     setIsLoading(false);
   };
@@ -64,7 +80,7 @@ export default function CognitoUserList() {
         refreshControl={renderRefreshingControl()}
       >
         <List.Section>
-          {groups.map(({ name, users }, index)=>(
+          {organizations.map(({ name, users }, index)=>(
             <List.Accordion
               key={index}
               title={`${name} (${users.length})`}
@@ -84,9 +100,10 @@ export default function CognitoUserList() {
                   title={user.name}
                   subtitle={user.username}
                   subtitleStyle={styles.subtitle}
-                  rightTitle={user['custom:organizationName']}
-                  rightSubtitle={user.updatedAt}
-                  rightSubtitleStyle={styles.subtitle}
+                  rightTitle={user.group}
+                  rightTitleStyle={styles.subtitle}
+                  // rightSubtitle={user.updatedAt}
+                  // rightSubtitleStyle={styles.subtitle}
                   bottomDivider
                   chevron
                   badge={{
@@ -120,5 +137,6 @@ const styles = StyleSheet.create({
   subtitle: {
     color: Colors.light,
     paddingTop: 5,
+    fontSize: 14,
   },
 });

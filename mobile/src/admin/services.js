@@ -48,7 +48,7 @@ export function getRoleByGroup(inGroup) {
   }
 }
 
-export async function listUsers(limit = LIMIT, inNextToken) {
+export async function listUsers(listAll = false, limit = LIMIT, inNextToken, inResults = []) {
   const path = '/listUsers';
   const params = {
     queryStringParameters: {
@@ -59,24 +59,40 @@ export async function listUsers(limit = LIMIT, inNextToken) {
   };
   const { NextToken: nextToken, ...rest } = await API.get(apiName, path, params);
   const { Users: users } = rest;
+
+  const results = users.map(normalizeCognitoUserData);
+
+  if (listAll && nextToken) {
+    return listUsers(listAll, limit, nextToken, results);
+  }
+
   return {
     nextToken,
-    users: users.map(normalizeCognitoUserData),
+    data: [...inResults, ...results],
   };
 }
 
-export async function listUsersInGroup(groupname) {
+export async function listUsersInGroup(groupname, listAll = false, limit = LIMIT, inNextToken, inResults = []) {
   const path = '/listUsersInGroup';
   const params = {
     queryStringParameters: {
       groupname,
+      limit,
+      token: inNextToken,
     },
     headers: await getHeaders(),
   };
   const { NextToken: nextToken, Users: users } = await API.get(apiName, path, params);
+
+  const results = users.map(normalizeCognitoUserData);
+
+  if (listAll && nextToken) {
+    return listUsersInGroup(groupname, listAll, limit, nextToken, results);
+  }
+
   return {
     nextToken,
-    users: users.map(normalizeCognitoUserData),
+    data: [...inResults, ...results],
   };
 }
 

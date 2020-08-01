@@ -11,11 +11,9 @@ const filterRoutes = routes.filter((x) => x.type === 'bottom-tab');
 
 const BottomTab = createBottomTabNavigator();
 
-const INITIAL_ROUTE_NAME = 'Home';
-
 export default function BottomTabNavigator({ navigation, route }) {
   const [organizationName, setOrganizationName] = useState('');
-  const [menu, setMenu] = useState(filterRoutes.filter(({ groups }) => groups.includes('All')));
+  const [menu, setMenu] = useState();
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
@@ -43,8 +41,10 @@ export default function BottomTabNavigator({ navigation, route }) {
     activeTintColor: Colors.primary,
   };
 
+  if (!menu) return null;
+
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={tabBarOptions}>
+    <BottomTab.Navigator initialRouteName={menu[0].name} tabBarOptions={tabBarOptions}>
       {
         menu.map(({ name, component, options })=>(
           <BottomTab.Screen
@@ -59,9 +59,9 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-function getHeaderProps(route, organizationName) {
+function getHeaderProps(route, organizationName, initialRouteName = 'Home') {
   /* beautify ignore:start */
-  const routeName = route.state?.routes[route.state.index]?.name??INITIAL_ROUTE_NAME;
+  const routeName = route.state?.routes[route.state.index]?.name??initialRouteName;
   /* beautify ignore:end */
 
   const { title, rightComponent } = filterRoutes.find(({ name }) => name === routeName);

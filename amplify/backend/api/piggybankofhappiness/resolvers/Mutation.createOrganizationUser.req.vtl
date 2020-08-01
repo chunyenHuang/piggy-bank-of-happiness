@@ -73,6 +73,8 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
 
 
 
+
+
 ## [Start] Set the primary @key. **
 #set( $modelObjectKey = {
   "organizationId": $util.dynamodb.toDynamoDB($ctx.args.input.organizationId),

@@ -20,14 +20,14 @@ export default function SettingsScreen() {
         {
           title: '註冊用戶列表',
           onPress: () => {
-            navigation.navigate('Stacks', { screen: 'CognitoUserList', initial: false, params: {} });
+            navigation.navigate('Stacks', { screen: 'CognitoUserList', params: {} });
           },
           groups: ['AppAdmins'],
         },
         {
           title: '任務類別',
           onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Programs', initial: false, params: {} });
+            navigation.navigate('Stacks', { screen: 'Programs', params: {} });
           },
           groups: ['AppAdmins', 'OrgAdmins'],
         },
@@ -35,7 +35,7 @@ export default function SettingsScreen() {
           title: '學生分組',
           component: Profile,
           onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Groups', initial: false, params: {} });
+            navigation.navigate('Stacks', { screen: 'Groups', params: {} });
           },
           groups: ['AppAdmins', 'OrgAdmins'],
         },
@@ -43,7 +43,7 @@ export default function SettingsScreen() {
           title: '個人資料',
           component: Profile,
           onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Profile', initial: false, params: {} });
+            navigation.navigate('Stacks', { screen: 'Profile', params: {} });
           },
           groups: ['All'],
         },

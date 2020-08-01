@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Text } from 'react-native';
-
 import TabBarIcon from 'components/TabBarIcon';
 import HomeScreen from 'screens/HomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
@@ -33,7 +31,18 @@ export default [
       title: '首頁',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
     },
-    groups: ['All'],
+    groups: [], // disable home for admins before the dashboard is implemented.
+  },
+  {
+    type: 'bottom-tab',
+    name: 'UserTransactionList',
+    component: UserTransactionListScreen,
+    title: '我的存摺',
+    options: {
+      title: '存摺',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
+    },
+    groups: ['Users', 'N/A'],
   },
   {
     type: 'bottom-tab',
@@ -57,7 +66,7 @@ export default [
       title: '任務',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
     },
-    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'User'],
+    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'Users'],
   },
   {
     type: 'bottom-tab',
@@ -85,20 +94,9 @@ export default [
   },
   {
     type: 'bottom-tab',
-    name: 'UserTransactionList',
-    component: UserTransactionListScreen,
-    title: '我的存摺',
-    options: {
-      title: '存摺',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
-    },
-    groups: ['Users', 'N/A'],
-  },
-  {
-    type: 'bottom-tab',
     name: 'Settings',
     component: SettingsScreen,
-    title: '設定',
+    title: '{{organizationName}}',
     rightComponent: null,
     options: {
       title: '設定',
@@ -152,10 +150,6 @@ export default [
     component: CognitoUserListScreen,
     rightComponent: null,
     title: '註冊用戶列表',
-    options: {
-      title: '用戶',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-lock" />,
-    },
     groups: ['AppAdmins'],
   },
 ];

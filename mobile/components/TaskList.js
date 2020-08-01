@@ -15,7 +15,6 @@ import ModifyTask from './ModifyTask';
 import check from 'src/permission/check';
 
 export default function TaskList({ mode = 'edit', onSelect, disabled = false }) {
-  // const [tasks, setTasks] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [task, setTask] = useState(undefined);
   const [newPoint, setNewPoint] = useState(0);
@@ -71,7 +70,9 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
   };
 
   useEffect(() => {
-    load();
+    (async () => {
+      load();
+    })();
   }, []);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     let subscriptionUpdate;
 
     (async () => {
-      if (!await check('ORG_TX__SUBSCRIPTION')) return;
+      if (!await check('ORG_TSK__SUBSCRIPTION')) return;
 
       subscriptionCreate = API
         .graphql(graphqlOperation(onCreateOrganizationTask))
