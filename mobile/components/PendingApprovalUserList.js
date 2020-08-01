@@ -4,9 +4,10 @@ import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
 
-import request from 'src/utils/request';
+import { asyncListAll } from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
+import { getOrgUsersByRoleByOrg } from 'src/graphql/queries';
 import { onCreateOrganizationUser, onUpdateOrganizationUser } from 'src/graphql/subscriptions';
 
 export default function PendingApprovalUserList() {
@@ -27,43 +28,10 @@ export default function PendingApprovalUserList() {
     setIsLoading(true);
 
     const params = {
-      organizationId: await AsyncStorage.getItem('app:organizationId'),
-      limit: 100,
-      filter: {
-        role: { eq: 'PendingApproval' },
-      },
+      role: 'PendingApproval',
+      organizationId: { eq: await AsyncStorage.getItem('app:organizationId') },
     };
-    const { data: { listOrganizationUsers: { items } } } = await request( /* GraphQL */ `
-      query ListOrganizationUsers(
-        $organizationId: ID
-        $username: ModelStringKeyConditionInput
-        $filter: ModelOrganizationUserFilterInput
-        $limit: Int
-        $nextToken: String
-        $sortDirection: ModelSortDirection
-      ) {
-        listOrganizationUsers(
-          organizationId: $organizationId
-          username: $username
-          filter: $filter
-          limit: $limit
-          nextToken: $nextToken
-          sortDirection: $sortDirection
-        ) {
-          items {
-            organizationId
-            username
-            idNumber
-            name
-            role
-            isActive
-            currentPoints
-            earnedPoints
-          }
-          nextToken
-        }
-      }
-    `, params);
+    const items = await asyncListAll(getOrgUsersByRoleByOrg, params);
     setUsers(items.sort(sortBy('name')));
 
     setIsLoading(false);

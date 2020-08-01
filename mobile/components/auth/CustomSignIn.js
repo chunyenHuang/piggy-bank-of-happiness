@@ -83,7 +83,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
 
     return () => {
       willUnmount = true;
-      console.log('unmount CustomSignIn.js');
       Hub.remove('auth', authListener);
       Hub.remove('app', appListener);
     };
@@ -100,8 +99,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
       const user = await Auth.signIn(username, password);
       await AsyncStorage.setItem('app:username', username);
       setUser(user);
-
-      // console.log(user);
 
       if (user.challengeName === 'SMS_MFA' ||
         user.challengeName === 'SOFTWARE_TOKEN_MFA') {
@@ -127,7 +124,6 @@ export default function CustomSignIn({ authState, onStateChange }) {
         // More info please check the Enabling MFA part
         Auth.setupTOTP(user);
       } else {
-        console.log('success');
         goto('signedIn');
       }
     } catch (err) {
@@ -145,7 +141,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
       } else if (err.code === 'UserNotFoundException') {
         // The error happens when the supplied username/email does not exist in the Cognito user pool
       } else {
-        console.log(err);
+        global.logger.error(err);
       }
 
       errorAlert(err);
@@ -193,11 +189,9 @@ export default function CustomSignIn({ authState, onStateChange }) {
             <View style={styles.logoContainer}>
               <Image
                 style={styles.logo}
-                source={require('../../assets/images/icon.png')} />
+                source={require('../../assets/images/logo-256.png')} />
             </View>
             <View style={styles.loginContainer}>
-              {/* <Divider style={styles.divider} /> */}
-
               <TextInput
                 label="帳號"
                 mode="outlined"
@@ -248,6 +242,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
               {!requestNewPassword &&
               <Button
                 mode="contained"
+                dark={Colors.useDark}
                 style={{ ...styles.button }}
                 disabled={!username || password.length < PASSWORD_MIN_LENGTH || isSubmitting}
                 onPress={submit}>
@@ -316,15 +311,12 @@ const styles = StyleSheet.create({
     maxWidth: 600,
   },
   logoContainer: {
-    padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'gray',
   },
   logo: {
-    width: 100,
-    height: 100,
-    // margin: 50,
+    width: 150,
+    height: 150,
   },
   header: {
     textAlign: 'center',
@@ -338,6 +330,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: Colors.primary,
     padding: 32,
+    paddingTop: 8,
     borderRadius: 10,
   },
   socialButton: {
@@ -357,7 +350,6 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   button: {
-    color: '#000',
     margin: 8,
   },
   textButton: {

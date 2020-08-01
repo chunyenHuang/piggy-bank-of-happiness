@@ -1,14 +1,71 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createBrowserHistory } from 'history';
+import { Router, Route, Switch } from 'react-router';
+import Amplify, { Auth } from 'aws-amplify';
+import Analytics from '@aws-amplify/analytics';
+import to from 'await-to-js';
+import { onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
+import awsconfig from './aws-exports.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import LandingPage from 'views/LandingPage/LandingPage';
+
+import './index.css';
+
+Amplify.configure(awsconfig);
+Analytics.disable();
+
+const history = createBrowserHistory();
+
+const theme = createMuiTheme({
+  palette: {
+    // primary: {
+    //   light: '#00cf67',
+    //   main: '#009d4e',
+    //   dark: '#00783c',
+    // },
+  },
+});
+
+function ReactApp() {
+  const [user, setUser] = React.useState();
+  React.useEffect(() => {
+    (async () => {
+      const [err, user] = await to(Auth.currentAuthenticatedUser({ bypassCache: true }));
+      if (err) {
+        console.log(err);
+      } else {
+        setUser(user);
+      }
+    })();
+    return onAuthUIStateChange((nextAuthState, authData) => {
+      setUser(authData);
+    });
+  }, []);
+
+  return (
+    <Router history={history}>
+      <Switch>
+        <Route path="/app" component={App} />
+
+        {user && <Route path="/" component={App} />}
+        {!user && <Route path="/" component={LandingPage} />}
+      </Switch>
+    </Router>
+  );
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <ReactApp />
+    </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -6,16 +6,15 @@ import { Hub } from 'aws-amplify';
 import Modal from 'react-native-modal';
 import { API, graphqlOperation } from 'aws-amplify';
 
-import request from '../src/utils/request';
-import { sortBy } from '../src/utils/sorting';
-import { getOrgTasksByProgramByActive, listOrganizationPrograms } from '../src/graphql/queries';
-import Colors from '../constants/Colors';
-import { onCreateOrganizationTask, onUpdateOrganizationTask } from '../src/graphql/subscriptions';
+import { asyncListAll } from 'src/utils/request';
+import { sortBy } from 'src/utils/sorting';
+import { getOrgTasksByProgramByActive, listOrganizationPrograms } from 'src/graphql/queries';
+import Colors from 'constants/Colors';
+import { onCreateOrganizationTask, onUpdateOrganizationTask } from 'src/graphql/subscriptions';
 import ModifyTask from './ModifyTask';
-import check from '../src/permission/check';
+import check from 'src/permission/check';
 
 export default function TaskList({ mode = 'edit', onSelect, disabled = false }) {
-  // const [tasks, setTasks] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [task, setTask] = useState(undefined);
   const [newPoint, setNewPoint] = useState(0);
@@ -45,25 +44,20 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
 
     const programParams = {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
-      limit: 100, // TODO: need to handle task more than 100
-    };
-    if (mode === 'select') {
-      programParams.filter = {
+      filter: {
         isActive: { eq: 1 },
-      };
-    }
+      },
+    };
 
-    const { data: { listOrganizationPrograms: { items: programs } } } = await request(listOrganizationPrograms, programParams);
+    const programs = await asyncListAll(listOrganizationPrograms, programParams);
     const promises = await programs.map(async (program) => {
       const taskParams = {
         programId: program.id,
-        limit: 100,
       };
-      // TODO: how to filter?
       if (mode === 'select') {
         taskParams.isActive = { eq: 1 };
       }
-      const { data: { getOrgTasksByProgramByActive: { items: tasks } } } = await request(getOrgTasksByProgramByActive, taskParams);
+      const tasks = await asyncListAll(getOrgTasksByProgramByActive, taskParams);
       program.tasks = tasks;
       program.isExpanded = true;
     });
@@ -76,7 +70,9 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
   };
 
   useEffect(() => {
-    load();
+    (async () => {
+      load();
+    })();
   }, []);
 
   useEffect(() => {
@@ -84,7 +80,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     let subscriptionUpdate;
 
     (async () => {
-      if (!await check('ORG_TX__SUBSCRIPTION')) return;
+      if (!await check('ORG_TSK__SUBSCRIPTION')) return;
 
       subscriptionCreate = API
         .graphql(graphqlOperation(onCreateOrganizationTask))

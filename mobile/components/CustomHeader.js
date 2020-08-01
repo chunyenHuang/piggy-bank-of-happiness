@@ -2,11 +2,13 @@ import React from 'react';
 import { Header } from 'react-native-elements';
 
 import { isIphoneX } from 'src/utils/device';
+import Colors from 'constants/Colors';
 
 export default function CustomHeader({ title, leftComponent, rightComponent }) {
   return (
     <Header
       barStyle={'light-content'}
+      backgroundColor={Colors.primary}
       containerStyle={{
         height: Platform.OS == 'ios' ?
           (isIphoneX ? 80: 60) : 40,

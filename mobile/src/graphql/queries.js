@@ -532,6 +532,33 @@ export const listOrganizationUserTasks = /* GraphQL */ `
     }
   }
 `;
+export const getTest = /* GraphQL */ `
+  query GetTest($id: ID!) {
+    getTest(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTests = /* GraphQL */ `
+  query ListTests(
+    $filter: ModelTestFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTests(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrgTasksByProgramByActive = /* GraphQL */ `
   query GetOrgTasksByProgramByActive(
     $programId: ID
@@ -684,6 +711,48 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
     getOrgUsersByGroupByActive(
       groupId: $groupId
       isActive: $isActive
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        organizationId
+        username
+        idNumber
+        name
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        updatedAt
+        organization {
+          id
+          name
+          description
+          isActive
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrgUsersByRoleByOrg = /* GraphQL */ `
+  query GetOrgUsersByRoleByOrg(
+    $role: RoleType
+    $organizationId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getOrgUsersByRoleByOrg(
+      role: $role
+      organizationId: $organizationId
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import CognitoUserList from '../components/CognitoUserList';
+
+import CognitoUserList from 'components/CognitoUserList';
 
 export default function CognitoUserListScreen() {
   return (

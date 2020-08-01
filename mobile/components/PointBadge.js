@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { currency } from '../src/utils/format';
 
 export default function PointBadge({ value }) {
-  const status = value > 0 ? 'primary' : 'error';
+  const status = value >= 0 ? 'primary' : 'error';
   return (
     <Badge
       status={status}

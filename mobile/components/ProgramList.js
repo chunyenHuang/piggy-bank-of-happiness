@@ -4,6 +4,7 @@ import { ListItem } from 'react-native-elements';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import { asyncListAll } from 'src/utils/request';
+import { sortBy } from 'src/utils/sorting';
 import { listOrganizationPrograms } from 'src/graphql/queries';
 import Colors from 'constants/Colors';
 import ModifyProgram from 'components/ModifyProgram';
@@ -29,10 +30,9 @@ export default function ProgramList() {
 
     const params = {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
-      limit: 100,
     };
     const data = await asyncListAll(listOrganizationPrograms, params);
-    setPrograms(data);
+    setPrograms(data.sort(sortBy('name', true)).sort(sortBy('isActive', true)));
 
     setIsLoading(false);
   };

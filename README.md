@@ -4,19 +4,13 @@
 
 > ...台灣每年約有4萬3千名高風險家庭的兒少、2萬3千名中離學生及4千名中輟生，因為家庭功能不足，獨自面對學習落後、生存挑戰，甚至提早離開學習現場，繼續陷入惡性循環。
 
-- [跳坑首頁](https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ)
-- [零時小學校提案：小草書屋的幸福存摺](https://g0v.hackmd.io/isRy-pOZQ2Kihcynk76NYQ?both)
-- [零時小學校提案影片 Youtube](https://www.youtube.com/watch?v=GG0jMVxhxWM&t=9910s)
-- [加入Slack一起討論 #edu-幸福存摺](https://join.slack.com/share/zt-f64325zp-vOAnaPHGu49Cfj_wjWPLiQ)
-- [系統設計](https://g0v.hackmd.io/3PktZ7w-Rkua5SS8k38uUA)
-
 ## GetStarted
 
-- [Design](./documentation/Design.md)
-- [Development](./documentation/Development.md)
-- [Deployment](./documentation/Deployment.md)
-- [Testing](./documentation/Testing.md)
-
+- [共筆/討論/跳坑](https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ)
+- [入口網站](http://www.happinessbankbook.org/)
+- [入口網站（develop）](https://develop.happinessbankbook.org/)
+- [Google Play Store (Beta)](https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness&hl=zh_TW)
+- [Apple Store (Testflights)](https://testflight.apple.com/join/8DJbdJnr)
 
 ### Mobile App
 
@@ -31,3 +25,10 @@ npm start
 cd web
 npm start
 ```
+
+## Documentation
+
+- [Design](./documentation/Design.md)
+- [Development](./documentation/Development.md)
+- [Deployment](./documentation/Deployment.md)
+- [Testing](./documentation/Testing.md)

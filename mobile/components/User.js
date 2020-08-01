@@ -31,7 +31,7 @@ export default function User({ user: inUser, mode }) {
         organizationId,
         username,
       });
-      console.log('userData', userData);
+
       userData && setUser(userData);
     } else {
       setUser(inUser);

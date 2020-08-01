@@ -13,7 +13,7 @@ export default function UserTransactionListScreen() {
         username: await AsyncStorage.getItem('app:username'),
         name: await AsyncStorage.getItem('app:name'),
       };
-      console.log('data', data);
+
       setUser(data);
     })();
   }, []);

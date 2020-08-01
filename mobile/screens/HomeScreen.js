@@ -17,14 +17,12 @@ export default function HomeScreen() {
         'https://g0v.hackmd.io/92ynyG5gSVSpAGNq0xx1mg?view#APP-Home';
       setUri(url);
 
-      setTimeout(()=>{
-        Hub.dispatch('app', { event: 'loading-complete' });
-      }, 2000);
+      Hub.dispatch('app', { event: 'loading-complete' });
     })();
   }, []);
   return (
     <View style={styles.container}>
-      <WebView source={{ uri }} />
+      {uri !== '' && <WebView source={{ uri }} />}
     </View>
   );
 }

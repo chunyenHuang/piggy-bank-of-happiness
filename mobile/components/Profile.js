@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, AsyncStorage, View } from 'react-native';
 
 import DetailsList from 'components/DetailsList';
+import { getGroupDisplayName } from 'src/admin/utils';
 
 export default function Profile() {
   const [data, setData] = useState({});
@@ -12,7 +13,7 @@ export default function Profile() {
         姓名: await AsyncStorage.getItem('app:name'),
         // 帳號: await AsyncStorage.getItem('app:username'),
         電子信箱: await AsyncStorage.getItem('app:email'),
-        權限: await AsyncStorage.getItem('app:group'),
+        權限: getGroupDisplayName(await AsyncStorage.getItem('app:group')),
       };
       setData(data);
     })();

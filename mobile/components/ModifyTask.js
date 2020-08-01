@@ -23,16 +23,33 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const isActiveTask = isEditMode ? task.isActive : true;
 
   const handleSubmit = async () => {
-    if (isEditMode && !await check('ORG_TX__UPDATE', true)) return;
-    if (!isEditMode && !await check('ORG_TX__CREATE', true)) return;
+    if (isEditMode && !await check('ORG_TSK__UPDATE', true)) return;
+    if (!isEditMode && !await check('ORG_TSK__CREATE', true)) return;
 
     const errors = fields.map(({ key, required }) => {
       if (required && !task[key]) {
         return '必填';
-      } else {
-        return;
       }
+      if (key === 'point') {
+        if (parseInt(task.point) < parseInt(task.pointMin) || parseInt(task.point) > parseInt(task.pointMax)) {
+          return `預設點數須介於最低(${task.pointMin})與最高(${task.pointMax})之間`;
+        }
+      }
+      if (key === 'pointMin') {
+        if (parseInt(task.pointMin) > parseInt(task.pointMax)) {
+          return `最低點數不可高於最高點數`;
+        }
+      }
+      if (key === 'pointMax') {
+        if (parseInt(task.pointMin) > parseInt(task.pointMax)) {
+          return `最高點數不可低於最低點數`;
+        }
+      }
+
+      return;
     });
+
+    errors.push('stop');
 
     if (errors.filter((x) => x).length !== 0) {
       setErrors([...errors]);
@@ -130,15 +147,17 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     },
     {
       key: 'point',
+      type: 'number',
       required: true,
       props: {
-        label: '點數',
+        label: '預設點數',
         keyboardType: 'number-pad',
         disabled: !isActiveTask,
       },
     },
     {
       key: 'pointMin',
+      type: 'number',
       props: {
         label: '最低點數 (選填)',
         keyboardType: 'number-pad',
@@ -147,6 +166,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
     },
     {
       key: 'pointMax',
+      type: 'number',
       props: {
         label: '最高點數 (選填)',
         keyboardType: 'number-pad',
@@ -186,7 +206,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       {!hideButton &&
         <AddButton
           onPress={async () => {
-            if (!await check('ORG_TX__CREATE', true)) return;
+            if (!await check('ORG_TSK__CREATE', true)) return;
             setVisible(true);
           }}
         />}

@@ -6,11 +6,12 @@ import moment from 'moment';
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
-import request, { asyncListAll } from '../src/utils/request';
-import Colors from '../constants/Colors';
-import { listOrganizationGroups } from '../src/graphql/queries';
-import { createOrganizationUser, updateOrganizationUser } from '../src/graphql/mutations';
-import check from '../src/permission/check';
+import request, { asyncListAll } from 'src/utils/request';
+import Colors from 'constants/Colors';
+import { listOrganizationGroups } from 'src/graphql/queries';
+import { createOrganizationUser, updateOrganizationUser } from 'src/graphql/mutations';
+import check from 'src/permission/check';
+import { sortBy } from 'src/utils/sorting';
 
 // TODO: Use api or constants
 // TODO: Cognito User Group
@@ -119,8 +120,9 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
       key: 'groupId',
       required: !isApproval,
       type: 'select',
-      options: groups.map((item) => {
-        return { label: item.name, value: item.id };
+      options: groups.sort(sortBy('name')).sort(sortBy('isActive', true)).map((item) => {
+        const appendix = item.isActive === 0 ? '(停用中)' : '';
+        return { label: item.name + appendix, value: item.id, disabled: item.isActive === 0 };
       }),
       props: {
         label: '分組',
