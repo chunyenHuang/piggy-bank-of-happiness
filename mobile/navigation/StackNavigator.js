@@ -15,7 +15,6 @@ export default function StackNavigator({ navigation, route }) {
   navigation.setOptions({
     header: ({ previous, navigation }) => {
       const { title, rightComponent } = getHeaderProps(route);
-
       return (
         <CustomHeader
           title={title}
@@ -58,11 +57,8 @@ export default function StackNavigator({ navigation, route }) {
 }
 
 function getHeaderProps(route) {
-  /* beautify ignore:start */
-  const routeName = route.state?.routes[route.state.index]?.name??'';
-  /* beautify ignore:end */
-
-  const { title, rightComponent } = filterRoutes.find(({ name }) => name === routeName) || {};
+  const routeName = route.params.screen;
+  const { title, rightComponent } = filterRoutes.find(({ name }) => name === routeName);
 
   return {
     title,

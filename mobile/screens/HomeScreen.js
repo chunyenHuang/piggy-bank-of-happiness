@@ -13,8 +13,7 @@ export default function HomeScreen() {
 
       const organizationId = await AsyncStorage.getItem('app:organizationId');
       const url = organizationId !== 'N/A' ?
-        '' :
-        // 'https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ' :
+        'https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ' :
         'https://g0v.hackmd.io/92ynyG5gSVSpAGNq0xx1mg?view#APP-Home';
       setUri(url);
 

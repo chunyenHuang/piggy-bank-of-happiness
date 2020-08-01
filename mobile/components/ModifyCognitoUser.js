@@ -5,17 +5,19 @@ import { Hub } from 'aws-amplify';
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
-import request from '../src/utils/request';
+import request from 'src/utils/request';
 
-import { listOrganizations, getOrganizationUser } from '../src/graphql/queries';
-import { createOrganizationUser, updateOrganizationUser, deleteOrganizationUser } from '../src/graphql/mutations';
+import { listOrganizations, getOrganizationUser } from 'src/graphql/queries';
+import { createOrganizationUser, updateOrganizationUser, deleteOrganizationUser } from 'src/graphql/mutations';
 import {
   updateUserAttributes,
   addUserToGroup,
   removeUserFromGroup,
   getUserGroup,
   getRoleByGroup,
-} from '../src/admin/services';
+} from 'src/admin/services';
+import { errorAlert } from 'src/utils/alert';
+import { getGroupNames, getGroupDisplayName } from 'src/admin/utils';
 
 export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,72 +47,78 @@ export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
 
     setIsLoading(true);
 
-    const organizationId = user['custom:organizationId'];
-    const { username, userGroup, name } = user;
-    const now = moment().toISOString();
+    try {
+      const organizationId = user['custom:organizationId'];
+      const { username, userGroup, name } = user;
+      const now = moment().toISOString();
 
-    // Update Cognito User
-    await updateUserAttributes(username, {
-      'custom:organizationId': organizationId,
-      'custom:organizationName': organizations.find((x) => x.id === organizationId).name,
-    });
+      // Update Cognito User
+      await updateUserAttributes(username, {
+        'custom:organizationId': organizationId,
+        'custom:organizationName': organizations.find((x) => x.id === organizationId).name,
+      });
 
-    if (oldUserGroup !== userGroup) {
-      await removeUserFromGroup(username, oldUserGroup);
-    }
+      if (oldUserGroup && oldUserGroup !== userGroup) {
+        await removeUserFromGroup(username, oldUserGroup);
+      }
 
-    await addUserToGroup(username, userGroup);
+      await addUserToGroup(username, userGroup);
 
-    // Update DDB User
-    const role = getRoleByGroup(userGroup);
-    let shouldCreateOrgUser = true;
+      // Update DDB User
+      const role = getRoleByGroup(userGroup);
+      let shouldCreateOrgUser = true;
 
-    if (orgUser) {
-      if (orgUser.organizationId === organizationId) {
-        // update role
+      if (orgUser) {
+        if (orgUser.organizationId === organizationId) {
+          // update role
+          const data = {
+            organizationId,
+            username,
+            role,
+            updatedAt: now,
+          };
+
+          await request(updateOrganizationUser, { input: data });
+          shouldCreateOrgUser = false;
+        } else {
+          // remove from current org and create a new one
+          const data = {
+            organizationId: orgUser.organizationId,
+            username,
+          };
+
+          await request(deleteOrganizationUser, { input: data });
+        }
+      }
+
+      if (shouldCreateOrgUser) {
         const data = {
           organizationId,
           username,
+          idNumber: 'N/A',
+          name,
           role,
+          isActive: 1,
+          currentPoints: 0,
+          earnedPoints: 0,
+          createdAt: now,
           updatedAt: now,
         };
 
-        await request(updateOrganizationUser, { input: data });
-        shouldCreateOrgUser = false;
-      } else {
-        // remove from current org and create a new one
-        const data = {
-          organizationId: orgUser.organizationId,
-          username,
-        };
-        await request(deleteOrganizationUser, { input: data });
+        await request(createOrganizationUser, { input: data });
       }
+
+      setVisible(false);
+      setUser({});
+      setOrgUser(undefined);
+      setOldUserGroup(undefined);
+
+      onUpdate && onUpdate();
+    } catch (e) {
+      errorAlert(e);
+    } finally {
+      setIsLoading(false);
     }
-
-    if (shouldCreateOrgUser) {
-      const data = {
-        organizationId,
-        username,
-        idNumber: 'N/A',
-        name,
-        role,
-        isActive: 1,
-        currentPoints: 0,
-        earnedPoints: 0,
-        createdAt: now,
-        updatedAt: now,
-      };
-
-      await request(createOrganizationUser, { input: data });
-    }
-
-    setIsLoading(false);
-    setVisible(false);
-    setUser({});
-    setOrgUser(undefined);
-    setOldUserGroup(undefined);
-
-    onUpdate && onUpdate();
   };
 
   const fields = [
@@ -129,12 +137,9 @@ export default function ModifyCognitoUser({ user: inUser, button, onUpdate }) {
       key: 'userGroup',
       required: true,
       type: 'select',
-      options: [
-        { value: 'AppAdmins' },
-        { value: 'OrgAdmins' },
-        { value: 'OrgManagers' },
-        { value: 'Users' },
-      ],
+      options: getGroupNames().map((item) => {
+        return { label: getGroupDisplayName(item), value: item };
+      }),
       props: {
         label: '權限',
       },

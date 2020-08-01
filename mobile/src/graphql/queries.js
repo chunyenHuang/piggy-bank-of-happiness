@@ -741,6 +741,48 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
     }
   }
 `;
+export const getOrgUsersByRoleByOrg = /* GraphQL */ `
+  query GetOrgUsersByRoleByOrg(
+    $role: RoleType
+    $organizationId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getOrgUsersByRoleByOrg(
+      role: $role
+      organizationId: $organizationId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        organizationId
+        username
+        idNumber
+        name
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        updatedAt
+        organization {
+          id
+          name
+          description
+          isActive
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getTasksByUserByCreatedAt = /* GraphQL */ `
   query GetTasksByUserByCreatedAt(
     $username: String

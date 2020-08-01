@@ -31,7 +31,18 @@ export default [
       title: '首頁',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
     },
-    groups: ['Users'], // disable home for admins before the dashboard is implemented.
+    groups: [], // disable home for admins before the dashboard is implemented.
+  },
+  {
+    type: 'bottom-tab',
+    name: 'UserTransactionList',
+    component: UserTransactionListScreen,
+    title: '我的存摺',
+    options: {
+      title: '存摺',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
+    },
+    groups: ['Users', 'N/A'],
   },
   {
     type: 'bottom-tab',
@@ -80,17 +91,6 @@ export default [
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
     },
     groups: ['AppAdmins', 'OrgAdmins'],
-  },
-  {
-    type: 'bottom-tab',
-    name: 'UserTransactionList',
-    component: UserTransactionListScreen,
-    title: '我的存摺',
-    options: {
-      title: '存摺',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
-    },
-    groups: ['Users', 'N/A'],
   },
   {
     type: 'bottom-tab',

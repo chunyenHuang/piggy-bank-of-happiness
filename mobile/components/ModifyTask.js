@@ -23,8 +23,8 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
   const isActiveTask = isEditMode ? task.isActive : true;
 
   const handleSubmit = async () => {
-    if (isEditMode && !await check('ORG_TX__UPDATE', true)) return;
-    if (!isEditMode && !await check('ORG_TX__CREATE', true)) return;
+    if (isEditMode && !await check('ORG_TSK__UPDATE', true)) return;
+    if (!isEditMode && !await check('ORG_TSK__CREATE', true)) return;
 
     const errors = fields.map(({ key, required }) => {
       if (required && !task[key]) {
@@ -206,7 +206,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       {!hideButton &&
         <AddButton
           onPress={async () => {
-            if (!await check('ORG_TX__CREATE', true)) return;
+            if (!await check('ORG_TSK__CREATE', true)) return;
             setVisible(true);
           }}
         />}

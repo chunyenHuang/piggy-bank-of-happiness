@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 
-export const errorAlert = (err) => {
-  global.logger.error(err);
+export const errorAlert = (err, logging = true) => {
+  logging && global.logger.error(err);
   Alert.alert(
     `${JSON.stringify(err.message || err)}`,
     ``,
