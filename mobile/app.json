@@ -24,13 +24,13 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "33",
+      "buildNumber": "34",
       "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
       "infoPlist": {}
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 20
+      "versionCode": 21
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
