@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Text } from 'react-native';
-
 import TabBarIcon from 'components/TabBarIcon';
 import HomeScreen from 'screens/HomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
@@ -33,7 +31,7 @@ export default [
       title: '首頁',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
     },
-    groups: ['All'],
+    groups: ['Users'], // disable home for admins before the dashboard is implemented.
   },
   {
     type: 'bottom-tab',
@@ -57,7 +55,7 @@ export default [
       title: '任務',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
     },
-    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'User'],
+    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'Users'],
   },
   {
     type: 'bottom-tab',
@@ -98,7 +96,7 @@ export default [
     type: 'bottom-tab',
     name: 'Settings',
     component: SettingsScreen,
-    title: '設定',
+    title: '{{organizationName}}',
     rightComponent: null,
     options: {
       title: '設定',

@@ -23,7 +23,6 @@ export default function StackNavigator({ navigation, route }) {
             icon: 'arrow-back',
             color: '#fff',
             onPress: () => {
-              console.log(previous);
               previous && navigation.goBack();
             },
           } : undefined}

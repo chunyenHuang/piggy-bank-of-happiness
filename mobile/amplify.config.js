@@ -49,4 +49,6 @@ if (redirectUrl.startsWith(`${APP_SCHEME}://`)) {
 amplifyConfig.oauth.redirectSignIn = redirectUrl;
 amplifyConfig.oauth.redirectSignOut = redirectUrl;
 
+amplifyConfig.env = amplifyConfig.aws_cloud_logic_custom[0].endpoint.split('/').pop();
+
 export default amplifyConfig;

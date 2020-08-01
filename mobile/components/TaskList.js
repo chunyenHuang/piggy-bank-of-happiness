@@ -51,6 +51,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     };
 
     const programs = await asyncListAll(listOrganizationPrograms, programParams);
+    console.log(programParams, programs);
     const promises = await programs.map(async (program) => {
       const taskParams = {
         programId: program.id,

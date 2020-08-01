@@ -13,18 +13,17 @@ export default function HomeScreen() {
 
       const organizationId = await AsyncStorage.getItem('app:organizationId');
       const url = organizationId !== 'N/A' ?
-        'https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ' :
+        '' :
+        // 'https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ' :
         'https://g0v.hackmd.io/92ynyG5gSVSpAGNq0xx1mg?view#APP-Home';
       setUri(url);
 
-      setTimeout(()=>{
-        Hub.dispatch('app', { event: 'loading-complete' });
-      }, 2000);
+      Hub.dispatch('app', { event: 'loading-complete' });
     })();
   }, []);
   return (
     <View style={styles.container}>
-      <WebView source={{ uri }} />
+      {uri !== '' && <WebView source={{ uri }} />}
     </View>
   );
 }

@@ -10,14 +10,12 @@ import {
 
 import Form from './Form';
 
-import request from '../src/utils/request';
-import { listOrganizations } from '../src/graphql/queries';
-import { createOrganizationUser } from '../src/graphql/mutations';
-import Colors from '../constants/Colors';
-import { errorAlert } from '../src/utils/alert';
+import request from 'src/utils/request';
+import { listOrganizations } from 'src/graphql/queries';
+import { createOrganizationUser } from 'src/graphql/mutations';
+import Colors from 'constants/Colors';
+import { errorAlert } from 'src/utils/alert';
 import SignOutButton from './auth/SignOutButton';
-
-// // import { getRoleByGroup } from './src/admin/services';
 
 export default function UserSetup({ onComplete }) {
   const [showApplication, setShowApplication] = useState(false);

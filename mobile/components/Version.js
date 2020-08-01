@@ -9,7 +9,7 @@ export default function Version() {
   const version = appConfig.expo.version;
   const buildNumber = Platform.OS === 'ios' ? appConfig.expo.ios.buildNumber :
     Platform.OS === 'android' ? appConfig.expo.android.versionCode : '';
-  const envName = amplifyConfig.aws_cloud_logic_custom[0].endpoint.split('/').pop();
+  const envName = amplifyConfig.env;
 
   const isPrd = envName === 'prd';
 
