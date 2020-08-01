@@ -7,8 +7,8 @@
 ## GetStarted
 
 - [共筆/討論/跳坑](https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ)
-- [入口網站](https://www.piggybankofhappiness.org/)
-- [入口網站（develop）](https://develop.piggybankofhappiness.org/)
+- [入口網站](http://www.happinessbankbook.org/)
+- [入口網站（develop）](https://develop.happinessbankbook.org/)
 - [Google Play Store (Beta)](https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness&hl=zh_TW)
 - [Apple Store (Testflights)](https://testflight.apple.com/join/8DJbdJnr)
 
