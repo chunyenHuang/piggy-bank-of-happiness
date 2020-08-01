@@ -10,7 +10,7 @@ const filterRoutes = routes.filter((x) => x.type === 'stack');
 const Stack = createStackNavigator();
 
 export default function StackNavigator({ navigation, route }) {
-  const [stacks, setStacks] = useState(filterRoutes.filter(({ groups }) => groups.includes('All')));
+  const [stacks, setStacks] = useState();
 
   navigation.setOptions({
     header: ({ previous, navigation }) => {
@@ -19,13 +19,14 @@ export default function StackNavigator({ navigation, route }) {
       return (
         <CustomHeader
           title={title}
-          leftComponent={{
+          leftComponent={previous ? {
             icon: 'arrow-back',
             color: '#fff',
             onPress: () => {
+              console.log(previous);
               previous && navigation.goBack();
             },
-          }}
+          } : undefined}
           rightComponent={rightComponent}
         />
       );
@@ -40,6 +41,8 @@ export default function StackNavigator({ navigation, route }) {
       setStacks(filterRoutes.filter(({ groups }) => groups.includes(group) || groups.includes('All')));
     })();
   }, []);
+
+  if (!stacks) return null;
 
   return (
     <Stack.Navigator>

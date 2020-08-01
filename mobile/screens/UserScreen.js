@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import User from '../components/User';
+import User from 'components/User';
 
 export default function UserScreen({ route }) {
   return (

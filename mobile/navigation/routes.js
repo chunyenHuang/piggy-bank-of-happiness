@@ -152,10 +152,6 @@ export default [
     component: CognitoUserListScreen,
     rightComponent: null,
     title: '註冊用戶列表',
-    options: {
-      title: '用戶',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-lock" />,
-    },
     groups: ['AppAdmins'],
   },
 ];
