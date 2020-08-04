@@ -142,6 +142,7 @@ export default function UserSetup({ onComplete }) {
       </View>
       <Button
         mode="contained"
+        dark={Colors.useDark}
         disabled={!selectedOrganizationId || isSubmitting}
         onPress={submit}>
         申請加入
