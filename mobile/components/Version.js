@@ -14,7 +14,7 @@ export default function Version() {
   const isPrd = envName === 'prd';
 
   const env = isPrd ? '' : envName;
-  Platform.OS === 'ios'
+  Platform.OS === 'ios';
   const build = isPrd ? '' : buildNumber;
 
   return (

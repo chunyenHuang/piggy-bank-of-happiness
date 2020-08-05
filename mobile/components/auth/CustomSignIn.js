@@ -23,12 +23,13 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import Version from 'components/Version.js';
-import Colors from '../../constants/Colors';
-import { errorAlert } from '../../src/utils/alert';
-// import { listOrganizations } from '../../src/graphql/queries';
-// import request from '../../src/utils/request';
+import Colors from 'constants/Colors';
+import { errorAlert } from 'src/utils/alert';
+
+import amplifyConfig from '../../amplify.config';
 
 const PASSWORD_MIN_LENGTH = 8;
+const isPrd = amplifyConfig.env === 'prd';
 
 let willUnmount = false;
 
@@ -280,6 +281,18 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 onPress={() => {
                   setIsSubmitting(true);
                   Auth.federatedSignIn({ provider: 'Google' });
+                }}
+              />
+              <SocialIcon
+                title='Apple 帳號登入'
+                button
+                type='apple'
+                style={styles.socialButton}
+                disabled={!isPrd}
+                light={true}
+                onPress={() => {
+                  setIsSubmitting(true);
+                  Auth.federatedSignIn({ provider: 'SignInWithApple' });
                 }}
               />
               <TouchableOpacity
