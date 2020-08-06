@@ -35,6 +35,23 @@ let willUnmount = false;
 
 let secondTextInput = null;
 
+const socialProviders = [
+  {
+    name: 'Facebook',
+    provider: 'Facebook',
+  },
+  {
+    name: 'Google',
+    provider: 'Google',
+  },
+  {
+    name: 'Apple',
+    provider: 'SignInWithApple',
+    backgroundColor: '#000',
+    disabled: !isPrd,
+  },
+];
+
 export default function CustomSignIn({ authState, onStateChange }) {
   const [user, setUser] = useState({});
   const [username, setUsername] = useState('');
@@ -263,38 +280,24 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 忘記密碼
               </Button>}
 
-              <SocialIcon
-                title='Facebook 帳號登入'
-                button
-                type='facebook'
-                style={styles.socialButton}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'Facebook' });
-                }}
-              />
-              <SocialIcon
-                title='Google 帳號登入'
-                button
-                type='google'
-                style={styles.socialButton}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'Google' });
-                }}
-              />
-              <SocialIcon
-                title='Apple 帳號登入'
-                button
-                type='apple'
-                style={styles.socialButton}
-                disabled={!isPrd}
-                light={true}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'SignInWithApple' });
-                }}
-              />
+              {socialProviders.map(({ name, provider, backgroundColor, disabled }) => {
+                const style = (backgroundColor) ? { ...styles.socialButton, backgroundColor } : styles.socialButton;
+
+                return (
+                  <SocialIcon
+                    key={name}
+                    title={`使用 ${name} 登入`}
+                    button
+                    type={name.toLowerCase()}
+                    style={style}
+                    disabled={disabled}
+                    onPress={() => {
+                      setIsSubmitting(true);
+                      Auth.federatedSignIn({ provider });
+                    }}
+                  />
+                );
+              })}
               <TouchableOpacity
                 style={styles.registerButton}
                 onPress={()=>goto('signUp')}>
