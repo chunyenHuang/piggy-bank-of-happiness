@@ -32,8 +32,11 @@ const PASSWORD_MIN_LENGTH = 8;
 const isPrd = amplifyConfig.env === 'prd';
 
 let willUnmount = false;
-
 let secondTextInput = null;
+
+// Before amplify fix the apple sign in issue, disable social for ios
+// https://github.com/aws-amplify/amplify-js/issues/4580https://github.com/aws-amplify/amplify-js/issues/4580
+const DISABLE_SOCIAL = Platform.OS === 'ios' ? true : false;
 
 const socialProviders = [
   {
@@ -280,7 +283,8 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 忘記密碼
               </Button>}
 
-              {socialProviders.map(({ name, provider, backgroundColor, disabled }) => {
+              {!DISABLE_SOCIAL &&
+              socialProviders.map(({ name, provider, backgroundColor, disabled }) => {
                 const style = (backgroundColor) ? { ...styles.socialButton, backgroundColor } : styles.socialButton;
 
                 return (
@@ -298,13 +302,19 @@ export default function CustomSignIn({ authState, onStateChange }) {
                   />
                 );
               })}
-              <TouchableOpacity
-                style={styles.registerButton}
-                onPress={()=>goto('signUp')}>
-                <Text style={styles.textButton}>
+              {DISABLE_SOCIAL ?
+                <Button
+                  style={styles.textButton}
+                  onPress={()=>goto('signUp')}>
                   註冊
-                </Text>
-              </TouchableOpacity>
+                </Button>:
+                <TouchableOpacity
+                  style={styles.registerButton}
+                  onPress={()=>goto('signUp')}>
+                  <Text style={styles.textButton}>
+                    註冊
+                  </Text>
+                </TouchableOpacity>}
               <Version />
             </View>
           </View>

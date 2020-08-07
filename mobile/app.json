@@ -25,7 +25,7 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "buildNumber": "43",
+      "buildNumber": "45",
       "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
       "infoPlist": {}
     },
