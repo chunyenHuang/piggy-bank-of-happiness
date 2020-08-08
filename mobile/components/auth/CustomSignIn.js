@@ -32,8 +32,28 @@ const PASSWORD_MIN_LENGTH = 8;
 const isPrd = amplifyConfig.env === 'prd';
 
 let willUnmount = false;
-
 let secondTextInput = null;
+
+// Before amplify fix the apple sign in issue, disable social for ios
+// https://github.com/aws-amplify/amplify-js/issues/4580https://github.com/aws-amplify/amplify-js/issues/4580
+const DISABLE_SOCIAL = Platform.OS === 'ios' ? true : false;
+
+const socialProviders = [
+  {
+    name: 'Facebook',
+    provider: 'Facebook',
+  },
+  {
+    name: 'Google',
+    provider: 'Google',
+  },
+  {
+    name: 'Apple',
+    provider: 'SignInWithApple',
+    backgroundColor: '#000',
+    disabled: !isPrd,
+  },
+];
 
 export default function CustomSignIn({ authState, onStateChange }) {
   const [user, setUser] = useState({});
@@ -263,45 +283,38 @@ export default function CustomSignIn({ authState, onStateChange }) {
                 忘記密碼
               </Button>}
 
-              <SocialIcon
-                title='Facebook 帳號登入'
-                button
-                type='facebook'
-                style={styles.socialButton}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'Facebook' });
-                }}
-              />
-              <SocialIcon
-                title='Google 帳號登入'
-                button
-                type='google'
-                style={styles.socialButton}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'Google' });
-                }}
-              />
-              <SocialIcon
-                title='Apple 帳號登入'
-                button
-                type='apple'
-                style={styles.socialButton}
-                disabled={!isPrd}
-                light={true}
-                onPress={() => {
-                  setIsSubmitting(true);
-                  Auth.federatedSignIn({ provider: 'SignInWithApple' });
-                }}
-              />
-              <TouchableOpacity
-                style={styles.registerButton}
-                onPress={()=>goto('signUp')}>
-                <Text style={styles.textButton}>
+              {!DISABLE_SOCIAL &&
+              socialProviders.map(({ name, provider, backgroundColor, disabled }) => {
+                const style = (backgroundColor) ? { ...styles.socialButton, backgroundColor } : styles.socialButton;
+
+                return (
+                  <SocialIcon
+                    key={name}
+                    title={`使用 ${name} 登入`}
+                    button
+                    type={name.toLowerCase()}
+                    style={style}
+                    disabled={disabled}
+                    onPress={() => {
+                      setIsSubmitting(true);
+                      Auth.federatedSignIn({ provider });
+                    }}
+                  />
+                );
+              })}
+              {DISABLE_SOCIAL ?
+                <Button
+                  style={styles.textButton}
+                  onPress={()=>goto('signUp')}>
                   註冊
-                </Text>
-              </TouchableOpacity>
+                </Button>:
+                <TouchableOpacity
+                  style={styles.registerButton}
+                  onPress={()=>goto('signUp')}>
+                  <Text style={styles.textButton}>
+                    註冊
+                  </Text>
+                </TouchableOpacity>}
               <Version />
             </View>
           </View>
