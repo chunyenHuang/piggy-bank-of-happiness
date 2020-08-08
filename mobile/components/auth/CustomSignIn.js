@@ -52,8 +52,9 @@ const socialProviders = [
     provider: 'SignInWithApple',
     backgroundColor: '#000',
     disabled: !isPrd,
+    platform: 'ios',
   },
-];
+].filter(({ platform }) => !platform || (platform && platform === Platform.OS));
 
 export default function CustomSignIn({ authState, onStateChange }) {
   const [user, setUser] = useState({});
