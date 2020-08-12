@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "幸福存摺",
-    "slug": "happiness-bankbook",
-    "scheme": "happinessbankbook",
+    "slug": "piggy-bank-of-happiness",
+    "scheme": "piggybankofhappiness",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -31,7 +31,7 @@
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 26
+      "versionCode": 27
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {

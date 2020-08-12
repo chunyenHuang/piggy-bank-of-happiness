@@ -4,7 +4,7 @@ import { Hub } from 'aws-amplify';
 
 import awsconfig from './aws-exports';
 
-const APP_SCHEME = 'happinessbankbook';
+const APP_SCHEME = 'piggybankofhappiness';
 
 const amplifyConfig = {
   ...awsconfig,
