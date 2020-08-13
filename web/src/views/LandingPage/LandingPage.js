@@ -27,6 +27,7 @@ export default function LandingPage() {
         <Grid container justify="space-around" alignItems="center" className={classes.content}>
           <Button
             variant="outlined"
+            color="primary"
             className={classes.button}
             startIcon={<AndroidIcon />}
             href="https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness"
@@ -35,6 +36,7 @@ export default function LandingPage() {
           </Button>
           <Button
             variant="outlined"
+            color="primary"
             className={classes.button}
             startIcon={<AppleIcon />}
             href="https://apps.apple.com/app/id1519658020" // testflight https://apps.apple.com/nz/app/%E5%B9%B8%E7%A6%8F%E5%AD%98%E6%91%BA/id1519658020s

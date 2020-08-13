@@ -23,11 +23,12 @@ const history = createBrowserHistory();
 
 const theme = createMuiTheme({
   palette: {
-    // primary: {
-    //   light: '#00cf67',
-    //   main: '#009d4e',
-    //   dark: '#00783c',
-    // },
+    type: 'dark',
+    primary: {
+      light: '#89C9A3',
+      main: '#68b386',
+      dark: '#439463',
+    },
   },
 });
 
