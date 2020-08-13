@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "piggy-bank-of-happiness",
+    "name": "幸福存摺",
     "slug": "piggy-bank-of-happiness",
     "scheme": "piggybankofhappiness",
     "privacy": "public",
@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -31,7 +31,7 @@
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 26
+      "versionCode": 28
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
