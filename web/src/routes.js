@@ -4,6 +4,8 @@ import ProtectedRoute from 'components/ProtectedRoute';
 
 import UserDashboard from 'views/User/Dashboard/Dashboard';
 import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
+import Organizations from 'views/Admin/Organizations/Organizations';
+import Organization from 'views/Admin/Organization/Organization';
 
 export const general = [
 ].map((item) => {
@@ -28,12 +30,28 @@ export const user = [
 
 export const admin = [
   {
-    title: '幸福存摺',
+    title: '首頁',
     paths: [
       { path: '/', exact: true },
       { path: '/dashboard', exact: true },
     ],
     component: AdminDashboard,
+    hideFromMenu: true,
+  },
+  {
+    title: '機構',
+    paths: [
+      { path: '/organizations', exact: true },
+    ],
+    component: Organizations,
+  },
+  {
+    title: '機構',
+    paths: [
+      { path: '/organization/:id', exact: true },
+    ],
+    component: Organization,
+    hideFromMenu: true,
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
