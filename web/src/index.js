@@ -9,6 +9,7 @@ import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
+import './global';
 import awsconfig from './aws-exports.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -21,13 +22,14 @@ Analytics.disable();
 
 const history = createBrowserHistory();
 
+// https://material-ui.com/customization/default-theme/
 const theme = createMuiTheme({
   palette: {
-    type: 'dark',
     primary: {
       light: '#89C9A3',
       main: '#68b386',
       dark: '#439463',
+      contrastText: '#fff',
     },
   },
 });

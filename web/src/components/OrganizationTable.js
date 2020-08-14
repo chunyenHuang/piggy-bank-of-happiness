@@ -4,12 +4,24 @@ import Table from 'components/Table/Table';
 import LinkButton from 'components/Table/LinkButton';
 import { listOrganizations } from 'graphql/queries';
 import { updateOrganization } from 'graphql/mutations';
-import { asyncListAll, asyncRetryMutation } from 'utilities/graph';
+import { asyncListAll, request } from 'utilities/graph';
 
 const title = '機構列表';
 const description = '';
 
 const columns = [
+  {
+    name: 'isActive',
+    label: '狀態',
+    type: 'checkbox',
+    edit: {
+      type: 'checkbox',
+    },
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
   {
     name: 'id',
     label: 'ID',
@@ -38,18 +50,6 @@ const columns = [
     options: {
       filter: false,
       sort: false,
-    },
-  },
-  {
-    name: 'isActive',
-    label: '使用中',
-    type: 'checkbox',
-    edit: {
-      type: 'checkbox',
-    },
-    options: {
-      filter: true,
-      sort: true,
     },
   },
   {
@@ -102,7 +102,7 @@ function OrganizationTable() {
         input[name] = item[name];
       }
     });
-    await asyncRetryMutation(updateOrganization, { input }, {});
+    await request(updateOrganization, { input }, {});
 
     Object.assign(data[dataIndex], input);
     setData([...data]);

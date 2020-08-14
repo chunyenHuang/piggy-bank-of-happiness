@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from 'components/Table/Table';
-import LinkButton from 'components/Table/LinkButton';
-import { listOrganizationUsers } from 'graphql/queries';
-import { updateOrganizationUser } from 'graphql/mutations';
+import { listOrganizationTasks, getOrgTasksByProgramByActive } from 'graphql/queries';
+import { updateOrganizationTask } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 
@@ -22,46 +21,54 @@ const columns = [
     },
   },
   {
-    name: 'username',
-    label: '帳號',
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'idNumber',
+    name: 'id',
     label: 'ID',
-    edit: {
-      type: 'text',
-    },
     options: {
+      display: false,
       filter: false,
-      sort: true,
+      sort: false,
     },
   },
   {
-    name: 'name',
-    label: '名字',
-    edit: {
-      type: 'text',
-    },
+    name: 'program.name',
+    label: '類別',
     options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'role',
-    label: '職位',
-    options: {
+      display: false,
       filter: true,
       sort: true,
     },
   },
   {
-    name: 'currentPoints',
-    label: '目前點數',
+    name: 'name',
+    label: '名稱',
+    edit: {
+      type: 'text',
+    },
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'description',
+    label: '描述',
+    options: {
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'note',
+    label: '註記',
+    options: {
+      display: false,
+      filter: false,
+      sort: false,
+    },
+  },
+  {
+    name: 'point',
+    label: '點數',
     type: 'number',
     options: {
       filter: false,
@@ -69,8 +76,17 @@ const columns = [
     },
   },
   {
-    name: 'earnedPoints',
-    label: '總點數',
+    name: 'pointMin',
+    label: '最低點數',
+    type: 'number',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'pointMax',
+    label: '最高點數',
     type: 'number',
     options: {
       filter: false,
@@ -82,6 +98,7 @@ const columns = [
     label: '創立於',
     type: 'datetime',
     options: {
+      display: false,
       filter: false,
       sort: true,
     },
@@ -95,26 +112,9 @@ const columns = [
       sort: true,
     },
   },
-  {
-    name: 'id',
-    label: ' ',
-    options: {
-      display: true,
-      filter: false,
-      sort: false,
-      customBodyRender(username) {
-        return (
-          <LinkButton
-            path={`/organizationUser/${username}`}
-            label="前往使用者專頁"
-          />
-        );
-      },
-    },
-  },
 ];
 
-function OrganizationUserTable({ title = '人員列表', description, organizationId }) {
+function OrganizationTaskTable({ title = '任務列表', description, organizationId, programId }) {
   const [data, setData] = useState([]);
   const options = {};
 
@@ -128,7 +128,7 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
         input[name] = item[name];
       }
     });
-    await request(updateOrganizationUser, { input });
+    await request(updateOrganizationTask, { input });
 
     Object.assign(data[dataIndex], input);
     setData([...data]);
@@ -136,17 +136,24 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
 
 
   useEffect(() => {
-    if (!organizationId) return;
-
     (async () => {
       try {
-        const records = (await asyncListAll(listOrganizationUsers, { organizationId }));
-        setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
+        let records;
+        if (organizationId) {
+          records = (await asyncListAll(listOrganizationTasks, { organizationId }));
+        } else
+        if (programId) {
+          records = (await asyncListAll(getOrgTasksByProgramByActive, { programId }));
+        }
+
+        if (records) {
+          setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
+        }
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [organizationId]);
+  }, [organizationId, programId]);
 
   return (
     <Table
@@ -160,10 +167,11 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
   );
 }
 
-OrganizationUserTable.propTypes = {
-  organizationId: PropTypes.string.isRequired,
+OrganizationTaskTable.propTypes = {
+  organizationId: PropTypes.string,
+  programId: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
 };
 
-export default OrganizationUserTable;
+export default OrganizationTaskTable;

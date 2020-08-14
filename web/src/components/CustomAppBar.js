@@ -108,7 +108,7 @@ export default function CustomAppBar({ routes }) {
   }
 
   return (
-    <AppBar position="absolute" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar className={classes.toolbar}>
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           <Link to="/dashboard" className={classes.unstyledHyperlink} data-test-id="title">
@@ -126,7 +126,7 @@ export default function CustomAppBar({ routes }) {
         <Version />
         <IconButton
           ref={anchorRef}
-          color="default"
+          color="inherit"
           aria-controls={open ? 'user-menu' : undefined}
           aria-haspopup="true"
           onClick={handleToggleMenu}

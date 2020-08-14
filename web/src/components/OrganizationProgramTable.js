@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from 'components/Table/Table';
-import LinkButton from 'components/Table/LinkButton';
-import { listOrganizationUsers } from 'graphql/queries';
-import { updateOrganizationUser } from 'graphql/mutations';
+import NestedTableContainer from 'components/Table/NestedTableContainer';
+import OrganizationTaskTable from 'components/OrganizationTaskTable';
+
+import { listOrganizationPrograms } from 'graphql/queries';
+import { updateOrganizationProgram } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 
@@ -22,27 +24,17 @@ const columns = [
     },
   },
   {
-    name: 'username',
-    label: '帳號',
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'idNumber',
+    name: 'id',
     label: 'ID',
-    edit: {
-      type: 'text',
-    },
     options: {
+      display: false,
       filter: false,
-      sort: true,
+      sort: false,
     },
   },
   {
     name: 'name',
-    label: '名字',
+    label: '任務類別名稱',
     edit: {
       type: 'text',
     },
@@ -52,26 +44,16 @@ const columns = [
     },
   },
   {
-    name: 'role',
-    label: '職位',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'currentPoints',
-    label: '目前點數',
-    type: 'number',
+    name: 'description',
+    label: '描述',
     options: {
       filter: false,
-      sort: true,
+      sort: false,
     },
   },
   {
-    name: 'earnedPoints',
-    label: '總點數',
-    type: 'number',
+    name: 'createdBy',
+    label: '創立者',
     options: {
       filter: false,
       sort: true,
@@ -82,6 +64,7 @@ const columns = [
     label: '創立於',
     type: 'datetime',
     options: {
+      display: false,
       filter: false,
       sort: true,
     },
@@ -95,28 +78,24 @@ const columns = [
       sort: true,
     },
   },
-  {
-    name: 'id',
-    label: ' ',
-    options: {
-      display: true,
-      filter: false,
-      sort: false,
-      customBodyRender(username) {
-        return (
-          <LinkButton
-            path={`/organizationUser/${username}`}
-            label="前往使用者專頁"
-          />
-        );
-      },
-    },
-  },
 ];
 
-function OrganizationUserTable({ title = '人員列表', description, organizationId }) {
+export default function OrganizationProgramTable({ title = '任務', description, organizationId }) {
   const [data, setData] = useState([]);
-  const options = {};
+
+  const options = {
+    expandableRows: true,
+    isRowExpandable: () => true,
+    renderExpandableRow(rowData, rowMeta) {
+      const { id } = data[rowMeta.dataIndex];
+      console.log(id);
+      return (
+        <NestedTableContainer columns={columns}>
+          <OrganizationTaskTable programId={id} />
+        </NestedTableContainer>
+      );
+    },
+  };
 
   const onUpate = async (item, dataIndex) => {
     const input = {
@@ -128,7 +107,7 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
         input[name] = item[name];
       }
     });
-    await request(updateOrganizationUser, { input });
+    await request(updateOrganizationProgram, { input });
 
     Object.assign(data[dataIndex], input);
     setData([...data]);
@@ -140,7 +119,7 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
 
     (async () => {
       try {
-        const records = (await asyncListAll(listOrganizationUsers, { organizationId }));
+        const records = (await asyncListAll(listOrganizationPrograms, { organizationId }));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
@@ -160,10 +139,8 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
   );
 }
 
-OrganizationUserTable.propTypes = {
+OrganizationProgramTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
   title: PropTypes.string,
   description: PropTypes.string,
 };
-
-export default OrganizationUserTable;

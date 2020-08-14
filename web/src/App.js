@@ -65,7 +65,7 @@ function App() {
                 </DocumentTitle>)
               }/>
           ))}
-          <Redirect to="/" />
+          <Redirect to="/organizations" />
         </Switch>
       </div>
     </div>

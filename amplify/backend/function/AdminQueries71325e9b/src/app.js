@@ -29,6 +29,9 @@ const {
   signUserOut,
 } = require('./cognitoActions');
 
+// Only perform tasks if the user is in specific groups
+const allowedGroups = ['AppAdmins', 'OrgAdmins'];
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,22 +44,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// Only perform tasks if the user is in a specific group
-const allowedGroup = process.env.GROUP;
-
 const checkGroup = function(req, res, next) {
   if (req.path == '/signUserOut') {
-    return next();
-  }
-
-  if (typeof allowedGroup === 'undefined' || allowedGroup === 'NONE') {
     return next();
   }
 
   // Fail if group enforcement is being used
   if (req.apiGateway.event.requestContext.authorizer.claims['cognito:groups']) {
     const groups = req.apiGateway.event.requestContext.authorizer.claims['cognito:groups'].split(',');
-    if (!(allowedGroup && groups.indexOf(allowedGroup) > -1)) {
+    if (!(groups.some((group) => allowedGroups.includes(group)))) {
       const err = new Error(`User does not have permissions to perform administrative tasks`);
       next(err);
     }
