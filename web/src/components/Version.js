@@ -8,13 +8,13 @@ export default function Version() {
   const version = appConfig.version;
   const envName = amplifyConfig.aws_cloud_logic_custom[0].endpoint.split('/').pop();
 
-  const isPrd = envName === 'prd';
+  const isPrd = envName === 'prd' || process.env.NODE_ENV !== 'development';
 
   const env = isPrd ? '' : envName;
 
   return (
-    <Typography component="p" variant="body1" color="textPrimary" noWrap>
-      {env.toUpperCase()} v{version}
+    <Typography component="p" variant="body1" color="inherit" noWrap>
+      v{version} {env ? `(${env})` : ''}
     </Typography>
   );
 }

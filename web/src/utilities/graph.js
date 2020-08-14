@@ -1,68 +1,49 @@
-import {
-  API,
-  graphqlOperation,
-} from 'aws-amplify';
+import API, { graphqlOperation } from '@aws-amplify/api';
+import to from 'await-to-js';
+const THRESHOLD = 500;
 
-import * as retry from 'retry';
+const __DEV__ = process.env.NODE_ENV === 'development';
 
-/**
- * asyncRetryMutation
- * @param {String} operation GraphQL Operation
- * @param {Object} input Query params
- * @param {Object} options
- * @return {Promise<Object>}
- */
-export function asyncRetryMutation(operation, input, options) {
-  const retryOptions = Object.assign({
-    retries: 3,
-    factor: 3,
-  }, options);
+export async function request(query, params, authMode) {
+  const startedAt = Date.now();
+  const options = graphqlOperation(query, params);
+  // https://github.com/aws-amplify/amplify-js/blob/master/packages/api/src/types/index.ts#L75
+  options.authMode = authMode || 'AMAZON_COGNITO_USER_POOLS';
+  // global.logger.debug(options);
+  const [err, res] = await to(API.graphql(options));
 
-  return new Promise((resolve, reject) => {
-    retry.operation(retryOptions).attempt(async () => {
-      try {
-        const result = await API.graphql(graphqlOperation(operation, input));
-        resolve(result);
-      } catch (e) {
-        console.error(e);
-        reject(e.message || e);
-      }
-    });
-  });
+  if (__DEV__) {
+    // global.logger.debug(JSON.stringify(res, null, 2));
+
+    const time = Date.now() - startedAt;
+    const name = `${query.split('(')[0].replace(/ +/g, ' ').replace(/\n+/g, '')}`;
+    global.logger.info(`API:${name} ${time} ms ${time>THRESHOLD?'***':''}`);
+  }
+
+  if (err) {
+    global.logger.error(err);
+    if (__DEV__) {
+      global.logger.debug(query);
+      global.logger.debug(JSON.stringify(params || {}, null, 2));
+    }
+    global.logger.error(err);
+    throw err;
+  }
+
+  return res;
 }
 
-/**
- * asyncGet
- * @param {String} operation GraphQL Operation
- * @param {Object} input Query params
- * @param {Object} options
- * @return {Promise<Object>}
- **/
-export async function asyncGet(operation, input, options = {}) {
-  const result = await API.graphql(graphqlOperation(operation, input));
-
-  return result;
-}
-
-/**
- * asyncListAll
- * @param {String} operation GraphQL Operation
- * @param {Object} input Query params
- * @param {Object} options
- * @param {Array} allItems
- * @return {Promise<Array[]>}
- */
-export async function asyncListAll(operation, input = {}, options = {}, allItems = []) {
-  const res = await API.graphql(graphqlOperation(operation, {
+export async function asyncListAll(operation, input = {}, allItems = []) {
+  const res = await request(operation, {
     ...input,
     limit: 100,
-  }));
+  });
 
   const { items, nextToken } = res.data[Object.keys(res.data)[0]];
   allItems = [...allItems, ...items];
 
   if (nextToken) {
-    return asyncListAll(operation, { ...input, nextToken }, options, allItems);
+    return asyncListAll(operation, { ...input, nextToken }, allItems);
   }
 
   return allItems;

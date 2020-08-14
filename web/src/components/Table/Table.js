@@ -98,6 +98,40 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
           textLabels={textLabels} />
       );
     },
+    textLabels: {
+      body: {
+        noMatch: '抱歉，找不到相關資料',
+        toolTip: '排序',
+        columnHeaderTooltip: (column) => `使用[${column.label}]排序`,
+      },
+      pagination: {
+        next: '下一頁',
+        previous: '上一頁',
+        rowsPerPage: '每頁顯示',
+        displayRows: '總項目數',
+      },
+      toolbar: {
+        search: '搜尋',
+        downloadCsv: '下載 CSV',
+        print: '列印',
+        viewColumns: '顯示欄位',
+        filterTable: '篩選數據',
+      },
+      filter: {
+        all: '全部',
+        title: '篩選數據',
+        reset: '重設',
+      },
+      viewColumns: {
+        title: '欄位',
+        titleAria: '顯示/隱藏欄位',
+      },
+      // selectedRows: {
+      //   text: 'row(s) selected',
+      //   delete: 'Delete',
+      //   deleteAria: 'Delete Selected Rows',
+      // },
+    },
   }, options);
 
   useEffect(() => {

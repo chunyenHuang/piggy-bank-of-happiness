@@ -3,9 +3,10 @@ import { Route } from 'react-router-dom';
 import ProtectedRoute from 'components/ProtectedRoute';
 
 import UserDashboard from 'views/User/Dashboard/Dashboard';
-import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
+// import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
 import Organizations from 'views/Admin/Organizations/Organizations';
 import Organization from 'views/Admin/Organization/Organization';
+import Users from 'views/Admin/Users/Users';
 
 export const general = [
 ].map((item) => {
@@ -29,15 +30,15 @@ export const user = [
 });
 
 export const admin = [
-  {
-    title: '首頁',
-    paths: [
-      { path: '/', exact: true },
-      { path: '/dashboard', exact: true },
-    ],
-    component: AdminDashboard,
-    hideFromMenu: true,
-  },
+  // {
+  //   title: '首頁',
+  //   paths: [
+  //     { path: '/', exact: true },
+  //     { path: '/dashboard', exact: true },
+  //   ],
+  //   component: AdminDashboard,
+  //   hideFromMenu: true,
+  // },
   {
     title: '機構',
     paths: [
@@ -52,6 +53,13 @@ export const admin = [
     ],
     component: Organization,
     hideFromMenu: true,
+  },
+  {
+    title: '軟體用戶',
+    paths: [
+      { path: '/appUsers', exact: true },
+    ],
+    component: Users,
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
