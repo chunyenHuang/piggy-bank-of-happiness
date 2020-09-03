@@ -116,7 +116,11 @@ export default [
     type: 'stack',
     name: 'User',
     component: UserScreen,
-    rightComponent: null,
+    rightComponent: ((user) => user ? <ModifyUser
+      user={user}
+      button
+      isApproval={user.role === 'PendingApproval'}
+    /> : null),
     title: '學生',
     groups: ['All'],
   },

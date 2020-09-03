@@ -62,6 +62,6 @@ function getHeaderProps(route) {
 
   return {
     title,
-    rightComponent,
+    rightComponent: typeof rightComponent === 'function' ? rightComponent(route.params.params) : rightComponent,
   };
 }

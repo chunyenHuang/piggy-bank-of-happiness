@@ -9,7 +9,6 @@ import { getOrganizationUser } from '../src/graphql/queries';
 import AddTaskToUser from './AddTaskToUser';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
-import ModifyUser from './ModifyUser';
 import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
 import PointBadge from './PointBadge';
@@ -84,11 +83,6 @@ export default function User({ user: inUser, mode }) {
       </View>
       {mode !== 'view' &&
       <View style={styles.headerContainer}>
-        <ModifyUser
-          user={user}
-          button
-          isApproval={user.role === 'PendingApproval'}
-        />
         {isActive &&
         <PointsHandler
           user={user}
