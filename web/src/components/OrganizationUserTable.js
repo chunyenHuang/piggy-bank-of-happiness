@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from 'components/Table/Table';
-import LinkButton from 'components/Table/LinkButton';
+// import LinkButton from 'components/Table/LinkButton';
 import { listOrganizationUsers } from 'graphql/queries';
 import { updateOrganizationUser } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
@@ -11,7 +11,7 @@ import { sortBy } from 'utilities/sorting';
 const columns = [
   {
     name: 'isActive',
-    label: '狀態',
+    label: '使用中',
     type: 'checkbox',
     edit: {
       type: 'checkbox',
@@ -116,6 +116,9 @@ const columns = [
 
 function OrganizationUserTable({ title = '人員列表', description, organizationId }) {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState();
+
   const options = {};
 
   const onUpate = async (item, dataIndex) => {
@@ -140,22 +143,27 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
 
     (async () => {
       try {
+        setIsLoading(true);
         const records = (await asyncListAll(listOrganizationUsers, { organizationId }));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
+      } finally {
+        setIsLoading(false);
       }
     })();
-  }, [organizationId]);
+  }, [organizationId, lastUpdatedAt]);
 
   return (
     <Table
       title={title}
+      isLoading={isLoading}
       description={description}
       data={data}
       columns={columns}
       options={options}
       onUpdateItem={onUpate}
+      onRefresh={() => setLastUpdatedAt(Date.now())}
     />
   );
 }

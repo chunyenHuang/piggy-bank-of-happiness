@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { v1 as uuidv1 } from 'uuid';
 
 import Table from 'components/Table/Table';
 import NestedTableContainer from 'components/Table/NestedTableContainer';
 import OrganizationTaskTable from 'components/OrganizationTaskTable';
+import DetailFormDialog from 'components/DetailFormDialog';
 
 import { listOrganizationPrograms } from 'graphql/queries';
-import { updateOrganizationProgram } from 'graphql/mutations';
+import { createOrganizationProgram, updateOrganizationProgram } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
+
+import formMetadata from 'forms/OrganizationProgram';
 
 const columns = [
   {
     name: 'isActive',
-    label: '狀態',
+    label: '使用中',
     type: 'checkbox',
     edit: {
       type: 'checkbox',
@@ -46,6 +50,9 @@ const columns = [
   {
     name: 'description',
     label: '描述',
+    edit: {
+      type: 'text',
+    },
     options: {
       filter: false,
       sort: false,
@@ -82,13 +89,17 @@ const columns = [
 
 export default function OrganizationProgramTable({ title = '任務', description, organizationId }) {
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const username = localStorage.getItem('app:username');
 
   const options = {
     expandableRows: true,
     isRowExpandable: () => true,
     renderExpandableRow(rowData, rowMeta) {
       const { id } = data[rowMeta.dataIndex];
-      console.log(id);
       return (
         <NestedTableContainer columns={columns}>
           <OrganizationTaskTable programId={id} />
@@ -98,44 +109,89 @@ export default function OrganizationProgramTable({ title = '任務', description
   };
 
   const onUpate = async (item, dataIndex) => {
-    const input = {
-      organizationId: item.organizationId,
-      username: item.username,
-    };
-    columns.forEach(({ name, edit }) => {
-      if (edit) {
-        input[name] = item[name];
-      }
-    });
-    await request(updateOrganizationProgram, { input });
+    try {
+      setIsLoading(true);
+      const input = {
+        organizationId: item.organizationId,
+        id: item.id,
+      };
+      columns.forEach(({ name, edit }) => {
+        if (edit) {
+          input[name] = item[name];
+        }
+      });
+      await request(updateOrganizationProgram, { input });
 
-    Object.assign(data[dataIndex], input);
-    setData([...data]);
+      Object.assign(data[dataIndex], input);
+      setData([...data]);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  const onCreate = async (newRecord) => {
+    try {
+      setIsLoading(true);
+      const input = Object.assign(newRecord, {});
+      await request(createOrganizationProgram, { input });
+
+      data.unshift(input);
+      setData([...data]);
+      setOpen(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!organizationId) return;
 
     (async () => {
       try {
+        setIsLoading(true);
         const records = (await asyncListAll(listOrganizationPrograms, { organizationId }));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
+      } finally {
+        setIsLoading(false);
       }
     })();
-  }, [organizationId]);
+  }, [organizationId, lastUpdatedAt]);
 
   return (
-    <Table
-      title={title}
-      description={description}
-      data={data}
-      columns={columns}
-      options={options}
-      onUpdateItem={onUpate}
-    />
+    <React.Fragment>
+      <Table
+        title={title}
+        isLoading={isLoading}
+        description={description}
+        data={data}
+        columns={columns}
+        options={options}
+        onAddItem={() => setOpen(true)}
+        onUpdateItem={onUpate}
+        onRefresh={() => setLastUpdatedAt(Date.now())}
+      />
+      {open &&
+        <DetailFormDialog
+          openOnInit={true}
+          onClose={() => setOpen(false)}
+          // details form props
+          data={{
+            organizationId,
+            id: uuidv1(),
+            createdBy: username,
+            isActive: 1,
+          }}
+          metadata={formMetadata}
+          isLoading={isLoading}
+          onSubmit={onCreate}
+        />}
+    </React.Fragment>
   );
 }
 

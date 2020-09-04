@@ -10,8 +10,8 @@ import AppleIcon from '@material-ui/icons/Apple';
 const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
-    padding: theme.spacing(2),
-    height: `calc(100vh - 64px)`,
+    padding: theme.spacing(4),
+    // height: `calc(100vh - 64px)`,
   },
 }));
 

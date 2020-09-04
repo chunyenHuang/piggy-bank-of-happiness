@@ -13,19 +13,32 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 import SyncIcon from '@material-ui/icons/Sync';
 import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
-import DetailForm from 'react-material-final-form';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Footer from './Footer';
 import EditField from './EditField';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    position: 'relative',
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
   number: {
     textAlign: 'right',
+  },
+  loadingContainer: {
+    position: 'absolute',
+    zIndex: 110,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: 'rgba(255,255,255,0.8)',
   },
 }));
 
@@ -64,7 +77,7 @@ const theme = (props = {}) => {
 
 const NON_EDITABLE_FIELDS = ['actions', 'createdAt', 'updatedAt', 'username'];
 
-function Table({
+export default function Table({
   title,
   description,
   data,
@@ -73,14 +86,14 @@ function Table({
   themeProps,
   onUpdateItem,
   onRefresh,
-  onAdd,
+  onAddItem,
+  isLoading,
 }) {
   const classes = useStyles();
 
   const [updatedColumns, setUpdatedColumns] = useState(columns);
   const [editDataIndex, setEditDataIndex] = useState(-1);
   const [editItem, setEditItem] = useState(null);
-  const [openAddDialog, setOpenAddDialog] = useState(false);
 
   // overwrite options
   const updatedOptions = Object.assign({
@@ -117,12 +130,12 @@ function Table({
               <SyncIcon />
             </IconButton>
           </Tooltip>}
-        {onAdd &&
+        {onAddItem &&
           <Tooltip title={'新增資料'}>
             <IconButton
               data-testid={'add-iconButton'}
               aria-label={'add'}
-              onClick={() => setOpenAddDialog(true)}>
+              onClick={onAddItem}>
               <AddIcon />
             </IconButton>
           </Tooltip>}
@@ -285,6 +298,9 @@ function Table({
             options.customBodyRender ? options.customBodyRender(defaultValue) : defaultValue;
         };
       }
+      // if (editDataIndex !== -1 && !edit && name !== 'actions') {
+      //   options.display = false;
+      // }
     });
 
     setUpdatedColumns(newColumns);
@@ -292,44 +308,18 @@ function Table({
 
   return (
     <MuiThemeProvider theme={theme(themeProps)}>
-      <MUIDataTable
-        title={title}
-        data={data}
-        columns={updatedColumns}
-        options={updatedOptions}
-      />
-      <Dialog
-        open={openAddDialog}
-        onClose={()=>setOpenAddDialog(false)}
-        disableBackdropClick={true}
-        disableEscapeKeyDown={true}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">
-          新增資料
-          <IconButton
-            onClick={()=>setOpenAddDialog(false)}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <DetailForm
-            // title={'新增資料'}
-            metadata={{ fields: [{key: 'name', type: 'string', label: 'name' }]}}
-            onSubmit={(data) => {
-              console.log(data);
-            }}
-            submitButtonText={'新增'}
-            submitButtonProps={{
-              variant: 'contained',
-              color: 'primary',
-              type: 'submit',
-              fullWidth: true,
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-
+      <div className={classes.container}>
+        {isLoading &&
+          <div className={classes.loadingContainer}>
+            <CircularProgress size={36} />
+          </div>}
+        <MUIDataTable
+          title={title}
+          data={data}
+          columns={updatedColumns}
+          options={updatedOptions}
+        />
+      </div>
     </MuiThemeProvider>
   );
 }
@@ -345,7 +335,6 @@ Table.propTypes = {
   maxHeight: PropTypes.string,
   onUpdateItem: PropTypes.func,
   onRefresh: PropTypes.func,
-  onAdd: PropTypes.func,
+  onAddItem: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
-
-export default Table;

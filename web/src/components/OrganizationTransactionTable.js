@@ -91,6 +91,7 @@ const columns = [
 
 export default function OrganizationTransactionTable({ title = '交易紀錄', description, organizationId }) {
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
 
   const options = {
@@ -128,10 +129,13 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
 
     (async () => {
       try {
+        setIsLoading(true);
         const records = (await asyncListAll(listOrganizationTransactions, { organizationId }));
         setData(records.sort(sortBy('createdAt', true)));
       } catch (e) {
         console.log(e);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [organizationId, lastUpdatedAt]);
@@ -140,12 +144,12 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
     <Table
       title={title}
       description={description}
+      isLoading={isLoading}
       data={data}
       columns={columns}
       options={options}
       onUpdateItem={onUpate}
       onRefresh={() => setLastUpdatedAt(Date.now())}
-      onAdd={(item) => console.log('new item', item)}
     />
   );
 }

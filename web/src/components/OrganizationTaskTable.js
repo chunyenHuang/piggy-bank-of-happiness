@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { v1 as uuidv1 } from 'uuid';
 
 import Table from 'components/Table/Table';
+import DetailFormDialog from 'components/DetailFormDialog';
 import { listOrganizationTasks, getOrgTasksByProgramByActive } from 'graphql/queries';
-import { updateOrganizationTask } from 'graphql/mutations';
+import { createOrganizationTask, updateOrganizationTask } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
+
+import formMetadata from 'forms/OrganizationTask';
 
 const columns = [
   {
     name: 'isActive',
-    label: '狀態',
+    label: '使用中',
     type: 'checkbox',
     edit: {
       type: 'checkbox',
@@ -52,6 +56,9 @@ const columns = [
   {
     name: 'description',
     label: '描述',
+    edit: {
+      type: 'text',
+    },
     options: {
       filter: false,
       sort: false,
@@ -60,6 +67,9 @@ const columns = [
   {
     name: 'note',
     label: '註記',
+    edit: {
+      type: 'text',
+    },
     options: {
       display: false,
       filter: false,
@@ -70,6 +80,9 @@ const columns = [
     name: 'point',
     label: '點數',
     type: 'number',
+    edit: {
+      type: 'number',
+    },
     options: {
       filter: false,
       sort: true,
@@ -79,6 +92,9 @@ const columns = [
     name: 'pointMin',
     label: '最低點數',
     type: 'number',
+    edit: {
+      type: 'number',
+    },
     options: {
       filter: false,
       sort: true,
@@ -88,6 +104,17 @@ const columns = [
     name: 'pointMax',
     label: '最高點數',
     type: 'number',
+    edit: {
+      type: 'number',
+    },
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'createdBy',
+    label: '創立者',
     options: {
       filter: false,
       sort: true,
@@ -116,28 +143,56 @@ const columns = [
 
 function OrganizationTaskTable({ title = '任務列表', description, organizationId, programId }) {
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
   const options = {};
+  const username = localStorage.getItem('app:username');
 
   const onUpate = async (item, dataIndex) => {
-    const input = {
-      organizationId: item.organizationId,
-      username: item.username,
-    };
-    columns.forEach(({ name, edit }) => {
-      if (edit) {
-        input[name] = item[name];
-      }
-    });
-    await request(updateOrganizationTask, { input });
+    try {
+      setIsLoading(true);
+      const input = {
+        organizationId: item.organizationId,
+        id: item.id,
+      };
+      columns.forEach(({ name, edit }) => {
+        if (edit) {
+          input[name] = item[name];
+        }
+      });
+      await request(updateOrganizationTask, { input });
 
-    Object.assign(data[dataIndex], input);
-    setData([...data]);
+      Object.assign(data[dataIndex], input);
+      setData([...data]);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  const onCreate = async (newRecord) => {
+    try {
+      setIsLoading(true);
+      const input = Object.assign(newRecord, {});
+      await request(createOrganizationTask, { input });
+
+      data.unshift(input);
+      setData([...data]);
+      setOpen(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         let records;
         if (organizationId) {
           records = (await asyncListAll(listOrganizationTasks, { organizationId }));
@@ -151,19 +206,42 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
         }
       } catch (e) {
         console.log(e);
+      } finally {
+        setIsLoading(false);
       }
     })();
-  }, [organizationId, programId]);
+  }, [organizationId, programId, lastUpdatedAt]);
 
   return (
-    <Table
-      title={title}
-      description={description}
-      data={data}
-      columns={columns}
-      options={options}
-      onUpdateItem={onUpate}
-    />
+    <React.Fragment>
+      <Table
+        title={title}
+        isLoading={isLoading}
+        description={description}
+        data={data}
+        columns={columns}
+        options={options}
+        onAddItem={() => setOpen(true)}
+        onUpdateItem={onUpate}
+        onRefresh={() => setLastUpdatedAt(Date.now())}
+      />
+      {open &&
+        <DetailFormDialog
+          openOnInit={true}
+          onClose={() => setOpen(false)}
+          // details form props
+          data={{
+            organizationId: localStorage.getItem('app:organizationId'),
+            programId,
+            id: uuidv1(),
+            createdBy: username,
+            isActive: 1,
+          }}
+          metadata={formMetadata}
+          isLoading={isLoading}
+          onSubmit={onCreate}
+        />}
+    </React.Fragment>
   );
 }
 
