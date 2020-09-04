@@ -8,6 +8,10 @@ import Organizations from 'views/Admin/Organizations/Organizations';
 import Organization from 'views/Admin/Organization/Organization';
 import Users from 'views/Admin/Users/Users';
 
+import OrganizationUsers from 'views/OrgAdmin/Users/Users';
+import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
+import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
+
 export const general = [
 ].map((item) => {
   item.route = item.route || Route;
@@ -26,6 +30,34 @@ export const user = [
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
   item.roles = ['Users'];
+  return item;
+});
+
+export const orgAdmin = [
+  {
+    title: '人員列表',
+    paths: [
+      { path: '/users', exact: true },
+    ],
+    component: OrganizationUsers,
+  },
+  {
+    title: '任務列表',
+    paths: [
+      { path: '/programs', exact: true },
+    ],
+    component: OrganizationPrograms,
+  },
+  {
+    title: '交易紀錄',
+    paths: [
+      { path: '/transactions', exact: true },
+    ],
+    component: OrganizationTransactions,
+  },
+].map((item) => {
+  item.route = item.route || ProtectedRoute;
+  item.roles = ['OrgAdmins'];
   return item;
 });
 
@@ -63,12 +95,12 @@ export const admin = [
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
-  item.roles = ['OrgAdmins', 'AppAdmins'];
+  item.roles = ['AppAdmins'];
   return item;
 });
 
 export const appRoutes = [
-  ...general, ...user, ...admin,
+  ...general, ...user, ...orgAdmin, ...admin,
 ].reduce((all, item) => {
   item.paths.forEach(({ path, exact = true }) => {
     all.push(Object.assign({ path, exact }, item));

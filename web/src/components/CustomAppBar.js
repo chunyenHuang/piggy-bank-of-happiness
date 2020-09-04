@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   title: {
+    // marginLeft: theme.spacing(2),
     marginRight: theme.spacing(4),
   },
   flexbox: {
@@ -70,13 +71,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomAppBar({ routes }) {
+export default function CustomAppBar({ user, routes }) {
   const classes = useStyles();
   const history = useHistory();
 
   const [open, setOpen] = useState(false);
+  const [orgName, setOrgName] = useState();
   const anchorRef = useRef(null);
   const prevOpen = useRef(open);
+
+  const userName = localStorage.getItem('app:name') || '';
+  const userRole = localStorage.getItem('app:role') || '';
+
+  useEffect(() => {
+    setOrgName(localStorage.getItem('app:organizationName') || '幸福存摺');
+  }, [user]);
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -100,6 +109,7 @@ export default function CustomAppBar({ routes }) {
   async function handleSignOut(event) {
     handleCloseMenu(event);
     try {
+      localStorage.clear();
       await Auth.signOut();
       history.push('/');
     } catch (e) {
@@ -108,11 +118,11 @@ export default function CustomAppBar({ routes }) {
   }
 
   return (
-    <AppBar position="fixed" color="primary">
+    <AppBar position="fixed" color="primary" elevation={0}>
       <Toolbar className={classes.toolbar}>
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          <Link to="/dashboard" className={classes.unstyledHyperlink} data-test-id="title">
-            幸福存摺
+          <Link to="/" className={classes.unstyledHyperlink} data-test-id="title">
+            {orgName}
           </Link>
         </Typography>
         {routes.filter((x) => !x.hideFromMenu).map((route) => (
@@ -123,16 +133,27 @@ export default function CustomAppBar({ routes }) {
           </Typography>
         ))}
         <div className={classes.flexbox} />
-        <Version />
-        <IconButton
-          ref={anchorRef}
-          color="inherit"
-          aria-controls={open ? 'user-menu' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggleMenu}
-        >
-          <PersonIcon />
-        </IconButton>
+        {user ?
+          <IconButton
+            ref={anchorRef}
+            color="inherit"
+            aria-controls={open ? 'user-menu' : undefined}
+            aria-haspopup="true"
+            onClick={handleToggleMenu}
+          >
+            <PersonIcon />
+            &nbsp;
+            {userName}
+          </IconButton>:
+          <Typography component="p" color="inherit" noWrap className={classes.title}>
+            <Link
+              to={'/app'}
+              className={classes.unstyledHyperlink}
+            >
+              登入
+            </Link>
+          </Typography>
+        }
         <Popper
           open={open}
           anchorEl={anchorRef.current}
@@ -146,6 +167,10 @@ export default function CustomAppBar({ routes }) {
                   handleCloseMenu(e);
                   history.push('/me');
                 }}>My Profile</MenuItem> */}
+                <MenuItem disabled={true}>
+                  <Version />
+                </MenuItem>
+                <MenuItem disabled={true}>{userRole}</MenuItem>
                 <MenuItem onClick={handleSignOut}>登出</MenuItem>
               </MenuList>
             </ClickAwayListener>
@@ -157,5 +182,6 @@ export default function CustomAppBar({ routes }) {
 }
 
 CustomAppBar.propTypes = {
+  user: PropTypes.object,
   routes: PropTypes.array.isRequired,
 };
