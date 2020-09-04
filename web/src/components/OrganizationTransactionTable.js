@@ -8,6 +8,7 @@ import { listOrganizationTransactions } from 'graphql/queries';
 import { updateOrganizationTransaction } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
+import transactionTypes from 'constants/transactionTypes';
 
 const columns = [
   {
@@ -17,6 +18,18 @@ const columns = [
     options: {
       filter: true,
       sort: true,
+    },
+  },
+  {
+    name: 'type',
+    label: '類別',
+    options: {
+      filter: true,
+      sort: true,
+      customBodyRender(item) {
+        const matched = transactionTypes.find(({ value }) => value === item);
+        return matched ? matched.label : item;
+      },
     },
   },
   {
@@ -33,14 +46,6 @@ const columns = [
     label: '使用者',
     options: {
       filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'type',
-    label: '類別',
-    options: {
-      filter: true,
       sort: true,
     },
   },
@@ -62,7 +67,7 @@ const columns = [
   },
   {
     name: 'createdBy',
-    label: '創立者',
+    label: '經手人',
     options: {
       filter: false,
       sort: true,

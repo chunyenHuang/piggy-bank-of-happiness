@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   AmplifyAuthenticator,
   AmplifySignIn,
+  AmplifySignUp,
 } from '@aws-amplify/ui-react';
 import {
   AuthState,
@@ -10,6 +12,7 @@ import {
 import { Switch, Redirect } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import DocumentTitle from 'react-document-title';
+import querystring from 'query-string';
 
 // import CustomAppBar from 'components/CustomAppBar';
 import APP from 'constants/app.js';
@@ -25,12 +28,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+function App({ location }) {
   const classes = useStyles();
 
   const [authState, setAuthState] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [filteredRoutes, setFilteredRoutes] = React.useState(appRoutes);
+  const [initialAuthState, setInitialAuthState] = React.useState(AuthState.SignIn);
+
+  React.useEffect(() => {
+    const { state } = querystring.parse(location.search);
+    if (state) {
+      console.log('change state?', state);
+      setInitialAuthState(null);
+      setTimeout(() => {
+        setInitialAuthState(state);
+      });
+    }
+  }, [location.search]);
 
   React.useEffect(() => {
     if (!user) return;
@@ -74,29 +89,51 @@ function App() {
         <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : '/'} />
       </Switch>
     </div>
-  ) : (
-    <AmplifyAuthenticator>
+  ) : initialAuthState ? (
+    <AmplifyAuthenticator initialAuthState={initialAuthState}>
       {/* https://github.com/aws-amplify/amplify-js/issues/6113 */}
       {/* https://docs.amplify.aws/ui/auth/authenticator/q/framework/react#slots */}
       <AmplifySignIn
         slot="sign-in"
         federated={{}}
-        // headerText="幸福存摺"
-        // submitButtonText="登入"
-        // formFields={[{
-        //   type: 'username',
-        //   label: '帳號',
-        //   placeholder: ' ',
-        //   required: true,
-        // }, {
-        //   type: 'password',
-        //   label: '密碼',
-        //   placeholder: ' ',
-        //   required: true,
-        // }]}
+      />
+      <AmplifySignUp
+        slot="sign-up"
+        formFields={[
+          {
+            type: 'name',
+            label: '名字',
+            placeholder: ' ',
+            required: true,
+          },
+          {
+            type: 'email',
+            label: 'Email',
+            placeholder: ' ',
+            required: true,
+          },
+          {
+            type: 'username',
+            label: '帳號',
+            placeholder: ' ',
+            required: true,
+          },
+          {
+            type: 'password',
+            label: '密碼',
+            placeholder: ' ',
+            required: true,
+          },
+        ]}
       />
     </AmplifyAuthenticator>
-  );
+  ) : <div className="amplify-authenticator" />;
 }
 
 export default App;
+
+App.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }),
+};

@@ -7,11 +7,11 @@ import CognitoUsersTable from 'components/CognitoUsersTable';
 const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
-    padding: theme.spacing(2),
+    // padding: theme.spacing(2),
   },
 }));
 
-export default function Users() {
+export default function AppUsers() {
   const classes = useStyles();
 
   return (

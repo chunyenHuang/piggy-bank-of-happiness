@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Table from 'components/Table/Table';
-import LinkButton from 'components/Table/LinkButton';
+// import LinkButton from 'components/Table/LinkButton';
 import { listOrganizations } from 'graphql/queries';
 import { updateOrganization } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
@@ -70,23 +70,24 @@ const columns = [
       sort: true,
     },
   },
-  {
-    name: 'id',
-    label: ' ',
-    options: {
-      display: true,
-      filter: false,
-      sort: false,
-      customBodyRender(id) {
-        return (
-          <LinkButton
-            path={`/organization/${id}`}
-            label="前往機構專頁"
-          />
-        );
-      },
-    },
-  },
+  // TODO: Switch organization
+  // {
+  //   name: 'id',
+  //   label: ' ',
+  //   options: {
+  //     display: true,
+  //     filter: false,
+  //     sort: false,
+  //     customBodyRender(id) {
+  //       return (
+  //         <LinkButton
+  //           path={`/organization/${id}`}
+  //           label="前往機構專頁"
+  //         />
+  //       );
+  //     },
+  //   },
+  // },
 ];
 
 function OrganizationTable() {

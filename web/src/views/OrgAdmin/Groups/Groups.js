@@ -2,7 +2,7 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import OrganizationTable from 'components/OrganizationTable';
+import OrganizationGroupTable from 'components/OrganizationGroupTable';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -11,12 +11,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Organizations() {
+export default function Groups() {
   const classes = useStyles();
+
+  const id = localStorage.getItem('app:organizationId');
 
   return (
     <div className={classes.content}>
-      <OrganizationTable />
+      <OrganizationGroupTable organizationId={id} />
     </div>
   );
 }

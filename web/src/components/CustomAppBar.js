@@ -125,9 +125,9 @@ export default function CustomAppBar({ user, routes }) {
             {orgName}
           </Link>
         </Typography>
-        {routes.filter((x) => !x.hideFromMenu).map((route) => (
-          <Typography key={route.path} component="p" color="inherit" noWrap className={classes.title}>
-            <Link to={route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
+        {routes.filter((x) => !x.hideFromMenu).map((route, index) => (
+          <Typography key={index} component="p" color="inherit" noWrap className={classes.title}>
+            <Link to={route.link || route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
               {route.title}
             </Link>
           </Typography>
@@ -144,14 +144,32 @@ export default function CustomAppBar({ user, routes }) {
           >
             {userName}
           </Button>:
-          <Typography component="p" color="inherit" noWrap className={classes.title}>
-            <Link
-              to={'/app'}
-              className={classes.unstyledHyperlink}
-            >
-              登入
-            </Link>
-          </Typography>
+          <React.Fragment>
+            {/* <Typography component="p" color="inherit" noWrap className={classes.title}>
+              <Link
+                to={'/application'}
+                className={classes.unstyledHyperlink}
+              >
+                機構申請
+              </Link>
+            </Typography> */}
+            <Typography component="p" color="inherit" noWrap className={classes.title}>
+              <Link
+                to={'/app?state=signup'}
+                className={classes.unstyledHyperlink}
+              >
+                註冊
+              </Link>
+            </Typography>
+            <Typography component="p" color="inherit" noWrap className={classes.title}>
+              <Link
+                to={'/app?state=signin'}
+                className={classes.unstyledHyperlink}
+              >
+                登入
+              </Link>
+            </Typography>
+          </React.Fragment>
         }
         <Popper
           open={open}

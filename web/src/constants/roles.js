@@ -1,18 +1,18 @@
 export default [
   {
-    label: 'APP管理者',
-    value: 'AppAdmins',
+    label: '管理員',
+    value: 'Admin',
   },
   {
-    label: '機構管理者',
-    value: 'OrgAdmins',
+    label: '職員',
+    value: 'Manager',
   },
   {
-    label: '機構行政人員',
-    value: 'OrgManagers',
+    label: '學生',
+    value: 'User',
   },
   {
-    label: '用戶',
-    value: 'Users',
+    label: '審核中',
+    value: 'PendingApproval',
   },
 ];

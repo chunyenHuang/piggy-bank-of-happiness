@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: grey['200'],
   },
   childrenContainer: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
 }));
 

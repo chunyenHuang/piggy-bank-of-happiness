@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { v1 as uuidv1 } from 'uuid';
 
 import Table from 'components/Table/Table';
+import NestedTableContainer from 'components/Table/NestedTableContainer';
+import OrganizationUserTable from 'components/OrganizationUserTable';
 import DetailFormDialog from 'components/DetailFormDialog';
-import { listOrganizationTasks, getOrgTasksByProgramByActive } from 'graphql/queries';
-import { createOrganizationTask, updateOrganizationTask } from 'graphql/mutations';
+
+import { listOrganizationGroups } from 'graphql/queries';
+import { createOrganizationGroup, updateOrganizationGroup } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 
-import formMetadata from 'forms/OrganizationTask';
+import formMetadata from 'forms/OrganizationGroup';
 
 const columns = [
   {
@@ -34,17 +37,8 @@ const columns = [
     },
   },
   {
-    name: 'program.name',
-    label: '類別',
-    options: {
-      display: false,
-      filter: true,
-      sort: true,
-    },
-  },
-  {
     name: 'name',
-    label: '名稱',
+    label: '任務類別名稱',
     edit: {
       type: 'text',
     },
@@ -62,54 +56,6 @@ const columns = [
     options: {
       filter: false,
       sort: false,
-    },
-  },
-  {
-    name: 'note',
-    label: '註記',
-    edit: {
-      type: 'text',
-    },
-    options: {
-      display: false,
-      filter: false,
-      sort: false,
-    },
-  },
-  {
-    name: 'point',
-    label: '點數',
-    type: 'number',
-    edit: {
-      type: 'number',
-    },
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'pointMin',
-    label: '最低點數',
-    type: 'number',
-    edit: {
-      type: 'number',
-    },
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'pointMax',
-    label: '最高點數',
-    type: 'number',
-    edit: {
-      type: 'number',
-    },
-    options: {
-      filter: false,
-      sort: true,
     },
   },
   {
@@ -141,14 +87,30 @@ const columns = [
   },
 ];
 
-function OrganizationTaskTable({ title = '任務列表', description, organizationId, programId, nested }) {
+export default function OrganizationGroupTable({ title = '班級', description, organizationId }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const options = {};
   const username = localStorage.getItem('app:username');
+
+  const options = {
+    expandableRows: true,
+    isRowExpandable: () => true,
+    renderExpandableRow(rowData, rowMeta) {
+      const { id } = data[rowMeta.dataIndex];
+      return (
+        <NestedTableContainer columns={columns}>
+          <OrganizationUserTable
+            title="學生列表"
+            groupId={id}
+            nested={true}
+          />
+        </NestedTableContainer>
+      );
+    },
+  };
 
   const onUpate = async (item, dataIndex) => {
     try {
@@ -162,7 +124,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
           input[name] = item[name];
         }
       });
-      await request(updateOrganizationTask, { input });
+      await request(updateOrganizationGroup, { input });
 
       Object.assign(data[dataIndex], input);
       setData([...data]);
@@ -177,7 +139,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
     try {
       setIsLoading(true);
       const input = Object.assign(newRecord, {});
-      await request(createOrganizationTask, { input });
+      await request(createOrganizationGroup, { input });
 
       data.unshift(input);
       setData([...data]);
@@ -190,27 +152,20 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
   };
 
   useEffect(() => {
+    if (!organizationId) return;
+
     (async () => {
       try {
         setIsLoading(true);
-        let records;
-        if (organizationId) {
-          records = (await asyncListAll(listOrganizationTasks, { organizationId }));
-        } else
-        if (programId) {
-          records = (await asyncListAll(getOrgTasksByProgramByActive, { programId }));
-        }
-
-        if (records) {
-          setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
-        }
+        const records = (await asyncListAll(listOrganizationGroups, { organizationId }));
+        setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [organizationId, programId, lastUpdatedAt]);
+  }, [organizationId, lastUpdatedAt]);
 
   return (
     <React.Fragment>
@@ -221,7 +176,6 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
         data={data}
         columns={columns}
         options={options}
-        nested={nested}
         onAddItem={() => setOpen(true)}
         onUpdateItem={onUpate}
         onRefresh={() => setLastUpdatedAt(Date.now())}
@@ -232,8 +186,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
           onClose={() => setOpen(false)}
           // details form props
           data={{
-            organizationId: localStorage.getItem('app:organizationId'),
-            programId,
+            organizationId,
             id: uuidv1(),
             createdBy: username,
             isActive: 1,
@@ -246,12 +199,8 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
   );
 }
 
-OrganizationTaskTable.propTypes = {
-  organizationId: PropTypes.string,
-  programId: PropTypes.string,
+OrganizationGroupTable.propTypes = {
+  organizationId: PropTypes.string.isRequired,
   title: PropTypes.string,
   description: PropTypes.string,
-  nested: PropTypes.bool,
 };
-
-export default OrganizationTaskTable;

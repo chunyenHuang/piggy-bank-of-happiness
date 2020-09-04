@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
-import { Router, Route, Switch } from 'react-router';
+import { Router, Route, Switch, Redirect } from 'react-router';
 import Amplify, { Auth } from 'aws-amplify';
 import Analytics from '@aws-amplify/analytics';
 import to from 'await-to-js';
@@ -16,6 +16,7 @@ import awsconfig from './aws-exports.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import LandingPage from 'views/LandingPage/LandingPage';
+import OrgApplication from 'views/OrgApplication/OrgApplication';
 import CustomAppBar from 'components/CustomAppBar';
 
 import './index.css';
@@ -91,8 +92,13 @@ function ReactApp() {
         <Switch>
           <Route path="/app" component={App} />
 
-          {user && <Route path="/" component={App} />}
-          {!user && <Route path="/" component={LandingPage} />}
+          {user ?
+            <Route path="/" component={App} />:
+            <React.Fragment>
+              <Route path="/application" exact component={OrgApplication} />
+              <Route path="/" exact component={LandingPage} />
+              <Redirect to="/" />
+            </React.Fragment>}
         </Switch>
       </div>
     </Router>

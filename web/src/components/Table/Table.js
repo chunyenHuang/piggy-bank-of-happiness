@@ -25,8 +25,9 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     width: '100%',
   },
-  number: {
+  numberContainer: {
     textAlign: 'right',
+    paddingRight: theme.spacing(1),
   },
   loadingContainer: {
     position: 'absolute',
@@ -47,6 +48,7 @@ const theme = (props = {}) => {
   const cellStyle = Object.assign({
 
   }, cell);
+
 
   return createMuiTheme({
     overrides: {
@@ -88,6 +90,7 @@ export default function Table({
   onRefresh,
   onAddItem,
   isLoading,
+  nested = false,
 }) {
   const classes = useStyles();
 
@@ -99,7 +102,9 @@ export default function Table({
   const updatedOptions = Object.assign({
     enableNestedDataAccess: '.',
     pagination: true,
-    responsive: 'standard',
+    responsive: nested ? 'vertical' : 'standard',
+    tableBodyHeight: nested ? undefined : 'calc(100vh - 183px)',
+    // tableBodyMaxHeight
     rowsPerPageOptions: [10, 20, 100],
     rowsPerPage: 10,
     filterType: 'checkbox',
@@ -243,24 +248,31 @@ export default function Table({
       case 'actions':
         break;
       case 'datetime':
-        options.customBodyRender = (value) => value ? moment(value).format('YYYY/MM/DD h:mm a') : '';
+        options.customBodyRender = (value) => {
+          if (!value) return '';
+          return (
+            <div>
+              {moment(value).format('YYYY/MM/DD')} <br/>
+              {moment(value).format('HH:mm')}
+            </div>);
+        };
         break;
       case 'checkbox':
         options.customBodyRender = (value) => {
-          const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false;
+          const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false; // eslint-disable-line eqeqeq
           return (<Checkbox checked={isChecked} />);
         };
         break;
       case 'number':
         options.customBodyRender = (val) => (
-          <div className={classes.number}>
+          <div className={classes.numberContainer}>
             {!isNaN(val) ? new Intl.NumberFormat().format(val) : 'N/A'}
           </div>
         );
         break;
       case 'currency':
         options.customBodyRender = (val) => (
-          <div className={classes.number}>
+          <div className={classes.numberContainer}>
             {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val / 100)}
           </div>
         );
@@ -304,7 +316,7 @@ export default function Table({
     });
 
     setUpdatedColumns(newColumns);
-  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.number]);
+  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.numberContainer]);
 
   return (
     <MuiThemeProvider theme={theme(themeProps)}>

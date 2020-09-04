@@ -10,7 +10,7 @@ import {
   enableUser,
 } from 'utilities/cognito';
 import { sortBy } from 'utilities/sorting';
-import roles from 'constants/roles';
+import cognitoGroups from 'constants/cognitoGroups';
 
 const title = '軟體用戶列表';
 const description = '';
@@ -74,14 +74,14 @@ const columns = [
     label: '權限',
     edit: {
       type: 'select',
-      menu: roles,
+      menu: cognitoGroups,
     },
     options: {
       filter: true,
       sort: true,
       customBodyRender(item) {
-        const { label = 'N/A' } = roles.find(({ value }) => value === item) || {};
-        return label;
+        const matched = cognitoGroups.find(({ value }) => value === item);
+        return matched ? matched.label : item;
       },
     },
   },
@@ -143,7 +143,7 @@ export default function CognitoUsersTable() {
   useEffect(() => {
     (async () => {
       try {
-        const groups = roles.map(({ value }) => value);
+        const groups = cognitoGroups.map(({ value }) => value);
         const results = await Promise.all(groups.map((group) => listUsersInGroup(group, true)));
 
         const allUsers = [];

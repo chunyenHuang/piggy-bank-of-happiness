@@ -102,7 +102,7 @@ export default function OrganizationProgramTable({ title = '任務', description
       const { id } = data[rowMeta.dataIndex];
       return (
         <NestedTableContainer columns={columns}>
-          <OrganizationTaskTable programId={id} />
+          <OrganizationTaskTable programId={id} nested={true}/>
         </NestedTableContainer>
       );
     },

@@ -3,12 +3,25 @@ import PropTypes from 'prop-types';
 
 import Table from 'components/Table/Table';
 // import LinkButton from 'components/Table/LinkButton';
-import { listOrganizationUsers } from 'graphql/queries';
+import { listOrganizationUsers, getOrgUsersByGroupByActive, getOrgUsersByRoleByOrg } from 'graphql/queries';
 import { updateOrganizationUser } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
+import roles from 'constants/roles';
 
 const columns = [
+  {
+    name: 'role',
+    label: '職位',
+    options: {
+      filter: true,
+      sort: true,
+      customBodyRender(item) {
+        const matched = roles.find(({ value }) => value === item);
+        return matched ? matched.label : item;
+      },
+    },
+  },
   {
     name: 'isActive',
     label: '使用中',
@@ -52,14 +65,6 @@ const columns = [
     },
   },
   {
-    name: 'role',
-    label: '職位',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
     name: 'currentPoints',
     label: '目前點數',
     type: 'number',
@@ -82,6 +87,7 @@ const columns = [
     label: '創立於',
     type: 'datetime',
     options: {
+      display: false,
       filter: false,
       sort: true,
     },
@@ -91,6 +97,7 @@ const columns = [
     label: '更新於',
     type: 'datetime',
     options: {
+      display: false,
       filter: false,
       sort: true,
     },
@@ -114,7 +121,14 @@ const columns = [
   // },
 ];
 
-function OrganizationUserTable({ title = '人員列表', description, organizationId }) {
+function OrganizationUserTable({
+  title = '人員列表',
+  description,
+  organizationId,
+  groupId,
+  roles,
+  nested,
+}) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
@@ -139,26 +153,46 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
 
 
   useEffect(() => {
-    if (!organizationId) return;
+    if (!organizationId && !groupId) return;
 
     (async () => {
       try {
         setIsLoading(true);
-        const records = (await asyncListAll(listOrganizationUsers, { organizationId }));
-        setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
+
+        let records = [];
+        if (groupId) {
+          records = (await asyncListAll(getOrgUsersByGroupByActive, { groupId }));
+        } else
+        if (organizationId) {
+          if (roles && roles.length > 0) {
+            const promises = roles.map(async (role) => {
+              const results = await asyncListAll(getOrgUsersByRoleByOrg, {
+                role,
+                organizationId: { eq: organizationId },
+              });
+              records = [...records, ...results];
+            });
+            await Promise.all(promises);
+          } else {
+            records = (await asyncListAll(listOrganizationUsers, { organizationId }));
+          }
+        }
+
+        setData(records.sort(sortBy('name')).sort(sortBy('role')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [organizationId, lastUpdatedAt]);
+  }, [organizationId, groupId, roles, lastUpdatedAt]);
 
   return (
     <Table
       title={title}
       isLoading={isLoading}
       description={description}
+      nested={nested}
       data={data}
       columns={columns}
       options={options}
@@ -169,9 +203,12 @@ function OrganizationUserTable({ title = '人員列表', description, organizati
 }
 
 OrganizationUserTable.propTypes = {
-  organizationId: PropTypes.string.isRequired,
+  organizationId: PropTypes.string,
+  groupId: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  nested: PropTypes.bool,
+  roles: PropTypes.array,
 };
 
 export default OrganizationUserTable;
