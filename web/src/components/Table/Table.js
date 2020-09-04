@@ -10,6 +10,15 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
+import SyncIcon from '@material-ui/icons/Sync';
+import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import DetailForm from 'react-material-final-form';
 
 import Footer from './Footer';
 import EditField from './EditField';
@@ -55,12 +64,23 @@ const theme = (props = {}) => {
 
 const NON_EDITABLE_FIELDS = ['actions', 'createdAt', 'updatedAt', 'username'];
 
-function Table({ title, description, data, columns, options, themeProps, onUpdateItem }) {
+function Table({
+  title,
+  description,
+  data,
+  columns,
+  options,
+  themeProps,
+  onUpdateItem,
+  onRefresh,
+  onAdd,
+}) {
   const classes = useStyles();
 
   const [updatedColumns, setUpdatedColumns] = useState(columns);
   const [editDataIndex, setEditDataIndex] = useState(-1);
   const [editItem, setEditItem] = useState(null);
+  const [openAddDialog, setOpenAddDialog] = useState(false);
 
   // overwrite options
   const updatedOptions = Object.assign({
@@ -86,6 +106,27 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
       const item = data[rowMeta.dataIndex];
       console.log(item);
     },
+    customToolbar: () =>
+      <React.Fragment>
+        {onRefresh &&
+          <Tooltip title={'更新資料'}>
+            <IconButton
+              data-testid={'refresh-iconButton'}
+              aria-label={'refresh'}
+              onClick={onRefresh}>
+              <SyncIcon />
+            </IconButton>
+          </Tooltip>}
+        {onAdd &&
+          <Tooltip title={'新增資料'}>
+            <IconButton
+              data-testid={'add-iconButton'}
+              aria-label={'add'}
+              onClick={() => setOpenAddDialog(true)}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>}
+      </React.Fragment>,
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
       return (
         <Footer
@@ -257,6 +298,38 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
         columns={updatedColumns}
         options={updatedOptions}
       />
+      <Dialog
+        open={openAddDialog}
+        onClose={()=>setOpenAddDialog(false)}
+        disableBackdropClick={true}
+        disableEscapeKeyDown={true}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">
+          新增資料
+          <IconButton
+            onClick={()=>setOpenAddDialog(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <DetailForm
+            // title={'新增資料'}
+            metadata={{ fields: [{key: 'name', type: 'string', label: 'name' }]}}
+            onSubmit={(data) => {
+              console.log(data);
+            }}
+            submitButtonText={'新增'}
+            submitButtonProps={{
+              variant: 'contained',
+              color: 'primary',
+              type: 'submit',
+              fullWidth: true,
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
     </MuiThemeProvider>
   );
 }
@@ -271,6 +344,8 @@ Table.propTypes = {
   themeProps: PropTypes.object,
   maxHeight: PropTypes.string,
   onUpdateItem: PropTypes.func,
+  onRefresh: PropTypes.func,
+  onAdd: PropTypes.func,
 };
 
 export default Table;

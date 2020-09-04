@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from 'components/Table/Table';
-import NestedTableContainer from 'components/Table/NestedTableContainer';
-import OrganizationTaskTable from 'components/OrganizationTaskTable';
+// import NestedTableContainer from 'components/Table/NestedTableContainer';
 
 import { listOrganizationTransactions } from 'graphql/queries';
 import { updateOrganizationTransaction } from 'graphql/mutations';
@@ -91,20 +90,20 @@ const columns = [
 ];
 
 export default function OrganizationTransactionTable({ title = '交易紀錄', description, organizationId }) {
+  const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [data, setData] = useState([]);
 
   const options = {
     expandableRows: true,
-    isRowExpandable: () => true,
-    renderExpandableRow(rowData, rowMeta) {
-      const { id } = data[rowMeta.dataIndex];
-      console.log(id);
-      return (
-        <NestedTableContainer columns={columns}>
-          <OrganizationTaskTable programId={id} />
-        </NestedTableContainer>
-      );
-    },
+    isRowExpandable: () => false,
+    // renderExpandableRow(rowData, rowMeta) {
+    //   const { id } = data[rowMeta.dataIndex];
+    //   console.log(id);
+    //   return (
+    //     <NestedTableContainer columns={columns}>
+    //     </NestedTableContainer>
+    //   );
+    // },
   };
 
   const onUpate = async (item, dataIndex) => {
@@ -135,7 +134,7 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
         console.log(e);
       }
     })();
-  }, [organizationId]);
+  }, [organizationId, lastUpdatedAt]);
 
   return (
     <Table
@@ -145,6 +144,8 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
       columns={columns}
       options={options}
       onUpdateItem={onUpate}
+      onRefresh={() => setLastUpdatedAt(Date.now())}
+      onAdd={(item) => console.log('new item', item)}
     />
   );
 }

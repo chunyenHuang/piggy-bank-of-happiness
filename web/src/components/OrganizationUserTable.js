@@ -95,23 +95,23 @@ const columns = [
       sort: true,
     },
   },
-  {
-    name: 'id',
-    label: ' ',
-    options: {
-      display: true,
-      filter: false,
-      sort: false,
-      customBodyRender(username) {
-        return (
-          <LinkButton
-            path={`/organizationUser/${username}`}
-            label="前往使用者專頁"
-          />
-        );
-      },
-    },
-  },
+  // {
+  //   name: 'id',
+  //   label: ' ',
+  //   options: {
+  //     display: true,
+  //     filter: false,
+  //     sort: false,
+  //     customBodyRender(username) {
+  //       return (
+  //         <LinkButton
+  //           path={`/organizationUser/${username}`}
+  //           label="前往使用者專頁"
+  //         />
+  //       );
+  //     },
+  //   },
+  // },
 ];
 
 function OrganizationUserTable({ title = '人員列表', description, organizationId }) {
