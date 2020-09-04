@@ -3,6 +3,7 @@ type OrganizationUser
   @model (subscriptions: { level: public })
   @key(fields: ["organizationId","username"])
   @key(name: "byGroupByActive", fields: ["groupId", "isActive"], queryField: "getOrgUsersByGroupByActive")
+  # should be byOrgByRole =_= but it has to re-create the table...
   @key(name: "byRoleByOrg", fields: ["role", "organizationId"], queryField: "getOrgUsersByRoleByOrg")
   @auth(rules: [
     {allow: owner, ownerField: "username", operations: [read, create]},

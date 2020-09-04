@@ -10,7 +10,8 @@ import AppleIcon from '@material-ui/icons/Apple';
 const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
+    // height: `calc(100vh - 64px)`,
   },
 }));
 
@@ -20,13 +21,14 @@ export default function LandingPage() {
   return (
     <Container maxWidth="sm">
       <Grid className={classes.content} container alignItems="center" justify="center" direction="column">
-        <Box component="div" className={classes.content}>
+        <Box component="div" p={4}>
           <img src="/images/logo-256.png" alt="Logo" width="256" />
         </Box>
 
-        <Grid container justify="space-around" alignItems="center" className={classes.content}>
+        <Grid container justify="space-around" alignItems="center">
           <Button
             variant="outlined"
+            color="primary"
             className={classes.button}
             startIcon={<AndroidIcon />}
             href="https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness"
@@ -35,6 +37,7 @@ export default function LandingPage() {
           </Button>
           <Button
             variant="outlined"
+            color="primary"
             className={classes.button}
             startIcon={<AppleIcon />}
             href="https://apps.apple.com/app/id1519658020" // testflight https://apps.apple.com/nz/app/%E5%B9%B8%E7%A6%8F%E5%AD%98%E6%91%BA/id1519658020s

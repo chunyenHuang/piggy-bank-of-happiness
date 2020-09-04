@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProtectedRoute = ({ component: Component, render, roles, user: inUser }) => {
+const ProtectedRoute = ({ component: Component, render, roles, user: inUser, ...args }) => {
   const classes = useStyles();
 
   const [user, setUser] = useState(null);
@@ -71,7 +71,7 @@ const ProtectedRoute = ({ component: Component, render, roles, user: inUser }) =
     );
   }
 
-  return render ? render({ user }) : (<Component user={user} />);
+  return render ? render({ user, ...args }) : (<Component user={user} {...args} />);
 };
 
 ProtectedRoute.propTypes = {
