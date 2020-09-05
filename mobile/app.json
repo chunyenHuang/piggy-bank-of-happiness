@@ -31,7 +31,7 @@
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 26
+      "versionCode": 28
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
