@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 import { Avatar, Text } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -11,8 +11,8 @@ import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
 import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
-import PointBadge from './PointBadge';
 import Colors from '../constants/Colors';
+import { currency } from '../src/utils/format';
 
 export default function User({ user: inUser, mode }) {
   const [user, setUser] = useState({
@@ -77,35 +77,48 @@ export default function User({ user: inUser, mode }) {
           overlayContainerStyle={{ backgroundColor: Colors.light }}
           // source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
-        <Text h4>{user.name}</Text>
-        {!isActive && <Text>(帳號停用中)</Text>}
-        <PointBadge value={user.currentPoints} />
+        <View style={styles.headerColumn}>
+          <Text h4>{user.name}</Text>
+          {!isActive && <Text>(帳號停用中)</Text>}
+          <View style={styles.headerRow}>
+            <View style={styles.pointString}>
+              <Text style={styles.pointTitle}>點數</Text>
+              <Text style={styles.pointValue}>{currency(user.currentPoints, false)}</Text>
+              <Text style={styles.pointTitle}>點</Text>
+            </View>
+            <View style={styles.withdrawButton}>
+              <PointsHandler
+                user={user}
+                mode={'withdraw'}
+                onUpdate={load}
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View // draw a line
+        style={{
+          width: Dimensions.get('window').width,
+          borderBottomColor: 'rgba(162,162,162,1)',
+          borderBottomWidth: 1,
+        }}
+      />
+      <View style={styles.transactionList}>
+        <ScrollView>
+          <UserTransactionList
+            user={user}
+            onUpdate={load}
+          />
+        </ScrollView>
       </View>
       {mode !== 'view' &&
-      <View style={styles.headerContainer}>
-        {isActive &&
-        <PointsHandler
-          user={user}
-          mode={'withdraw'}
-          onUpdate={load}
-        />}
-        {isActive &&
-        <PointsHandler
-          user={user}
-          mode={'adjustment'}
-          onUpdate={load}
-        />}
-        {isActive &&
-        <AddTaskToUser
-          user={user}
-          onUpdate={load}
-        />}
-      </View>}
-      {/* <UserTaskList tasks={user.tasks.items} /> */}
-      <UserTransactionList
-        user={user}
-        onUpdate={load}
-      />
+        <View style={styles.addTaskButton}>
+          {isActive &&
+          <AddTaskToUser
+            user={user}
+            onUpdate={load}
+          />}
+        </View>}
     </View>
   );
 }
@@ -114,10 +127,50 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    // flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    marginLeft: 16,
+  },
+  headerColumn: {
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 16,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    height: 80,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pointString: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  pointTitle: {
+    fontSize: 18,
+  },
+  pointValue: {
+    fontSize: 18,
+    color: Colors.focused,
+    fontWeight: 'bold',
+  },
+  withdrawButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginRight: 16,
+  },
+  transactionList: {
+    height: Dimensions.get('window').height - 200, // Any better solution?
+  },
+  addTaskButton: {
+    position: 'absolute',
+    width: 90,
+    height: 90,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 1,
+    bottom: 1,
   },
 });

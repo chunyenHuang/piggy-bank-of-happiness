@@ -16,7 +16,6 @@ export default function AddTaskToUser({ user, onUpdate }) {
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
-  const buttonTitle = '新增';
   const color = Colors.focused;
 
   const handleSelect = (task) => {
@@ -114,15 +113,12 @@ export default function AddTaskToUser({ user, onUpdate }) {
         icon={
           <Icon
             name="md-add-circle"
-            // size={15}
+            size={70}
             type='ionicon'
             color={color}
-            containerStyle={{ paddingRight: 10 }}
           />
         }
         type="clear"
-        title={buttonTitle}
-        titleStyle={{ color }}
         onPress={()=>setVisible(true)}
       />
 
