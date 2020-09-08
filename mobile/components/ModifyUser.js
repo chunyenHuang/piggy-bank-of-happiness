@@ -87,8 +87,6 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
   const resetState = () => {
     setIsLoading(false);
     setVisible(false);
-    setOriginalUser({});
-    setUser({});
     setIsDirty(false);
     setErrors([]);
   };
