@@ -78,21 +78,23 @@ export default function User({ user: inUser, mode }) {
           // source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
         />
         <View style={styles.headerColumn}>
-          <Text h4>{user.name}</Text>
-          {!isActive && <Text>(帳號停用中)</Text>}
+          <View style={styles.headerRow}>
+            <Text h4>{user.name}</Text>
+            {!isActive && <Text>(帳號停用中)</Text>}
+          </View>
           <View style={styles.headerRow}>
             <View style={styles.pointString}>
               <Text style={styles.pointTitle}>點數</Text>
               <Text style={styles.pointValue}>{currency(user.currentPoints, false)}</Text>
               <Text style={styles.pointTitle}>點</Text>
             </View>
-            <View style={styles.withdrawButton}>
+            {isActive && <View style={styles.withdrawButton}>
               <PointsHandler
                 user={user}
                 mode={'withdraw'}
                 onUpdate={load}
               />
-            </View>
+            </View>}
           </View>
         </View>
       </View>
@@ -111,13 +113,12 @@ export default function User({ user: inUser, mode }) {
           />
         </ScrollView>
       </View>
-      {mode !== 'view' &&
+      {mode !== 'view' && isActive &&
         <View style={styles.addTaskButton}>
-          {isActive &&
           <AddTaskToUser
             user={user}
             onUpdate={load}
-          />}
+          />
         </View>}
     </View>
   );
