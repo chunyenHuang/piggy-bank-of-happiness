@@ -99,11 +99,12 @@ export default function OrganizationGroupTable({ title = '班級', description, 
     expandableRows: true,
     isRowExpandable: () => true,
     renderExpandableRow(rowData, rowMeta) {
-      const { id } = data[rowMeta.dataIndex];
+      const { organizationId, id } = data[rowMeta.dataIndex];
       return (
         <NestedTableContainer columns={columns}>
           <OrganizationUserTable
             title="學生列表"
+            organizationId={organizationId}
             groupId={id}
             roles={['User']}
             nested={true}

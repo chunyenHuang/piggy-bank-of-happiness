@@ -42,7 +42,7 @@ module.exports = {
     const { Item } = await docClient.get(params).promise();
     return Item;
   },
-  async createOrganizationUsers(users = []) {
+  async updateOrganizationUsers(users = []) {
     if (users.length === 0) return;
 
     return docClient.batchUpdate(API_PIGGYBANKOFHAPPINESS_ORGANIZATIONUSERTABLE_NAME, users, 300);

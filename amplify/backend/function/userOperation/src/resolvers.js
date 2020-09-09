@@ -1,23 +1,23 @@
 const {
   getOrganization,
   getOrganizationUser,
-  createOrganizationUsers,
+  updateOrganizationUsers,
 } = require('./opt/ddb');
 
 const {
   getUser,
   createUser,
   addToGroup,
-  // removeUserGroups,
+  removeUserGroups,
   updateOrg,
 } = require('./opt/cognito');
 
 module.exports = {
   Mutation: {
     userOperation: async ({ arguments: { input } }) => {
-      const { users } = input;
+      const { force, users } = input;
       const results = [];
-      const toCreateOrgUsers = [];
+      const toUpdateOrgUsers = [];
       const errors = [];
       console.log(users);
 
@@ -37,15 +37,18 @@ module.exports = {
         } = user;
         // check if user exists
         const existingUser = await getUser(username);
-        console.log(`existingUser; ${existingUser}`);
+        console.log(`existingUser`, existingUser);
 
         if (!existingUser) {
           const user = await createUser(username, name, email);
           password = user.password;
         } else {
-          // TODO: Only update the user with the same organizationId
-          errors.push(`${username} already exists`);
-          return;
+          const userOrgId = (existingUser.UserAttributes.find(({ Name }) => Name === 'custom:organizationId') || {}).Value;
+          if (!force && userOrgId && userOrgId !== organizationId) {
+            throw new Error(`${username} already exists`);
+          } else {
+            await removeUserGroups(username);
+          }
         }
 
         const { name: organizationName } = await getOrganization(organizationId);
@@ -57,7 +60,7 @@ module.exports = {
 
         const existingOrgUser = await getOrganizationUser(organizationId, username);
         if (!existingOrgUser) {
-          toCreateOrgUsers.push({
+          toUpdateOrgUsers.push({
             __typename: 'OrganizationUser',
             organizationId,
             username,
@@ -71,6 +74,12 @@ module.exports = {
             createdAt: now,
             updatedAt: now,
           });
+        } else {
+          toUpdateOrgUsers.push(Object.assign(existingOrgUser, {
+            role,
+            groupId: groupId || existingOrgUser.groupId,
+            updatedAt: now,
+          }));
         }
 
         results.push({
@@ -82,7 +91,7 @@ module.exports = {
 
       await Promise.all(promises);
 
-      await createOrganizationUsers(toCreateOrgUsers);
+      await updateOrganizationUsers(toUpdateOrgUsers);
 
       return {
         errors,

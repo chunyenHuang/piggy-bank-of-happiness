@@ -20,6 +20,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
@@ -45,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButtonHidden: {
     display: 'none',
+  },
+  titleButton: {
+    fontSize: 16,
+    marginLeft: theme.spacing(2),
   },
   title: {
     // marginLeft: theme.spacing(2),
@@ -128,11 +133,22 @@ export default function CustomAppBar({ user, routes }) {
           </Link>
         </Typography>
         {routes.filter((x) => !x.hideFromMenu).map((route, index) => (
-          <Typography key={index} component="p" color="inherit" noWrap className={classes.title}>
-            <Link to={route.link || route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
-              {route.title}
-            </Link>
-          </Typography>
+          // <Typography key={index} component="p" color="inherit" noWrap className={classes.title}>
+          //   <Link to={route.link || route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
+          //     {route.title}
+          //   </Link>
+          // </Typography>
+          <Button
+            key={index}
+            color="inherit"
+            component={Link}
+            to={route.link || route.path}
+            startIcon={route.icon ? <route.icon /> : null}
+            className={classes.titleButton}
+            data-test-id={route.title}
+          >
+            {route.title}
+          </Button>
         ))}
         <div className={classes.flexbox} />
         {user ?
@@ -143,6 +159,7 @@ export default function CustomAppBar({ user, routes }) {
             aria-haspopup="true"
             onClick={handleToggleMenu}
             startIcon={<PersonIcon />}
+            className={classes.titleButton}
           >
             {userName}
           </Button>:
@@ -150,27 +167,29 @@ export default function CustomAppBar({ user, routes }) {
             {/* <Typography component="p" color="inherit" noWrap className={classes.title}>
               <Link
                 to={'/application'}
-                className={classes.unstyledHyperlink}
+                className={classes.unsty  ledHyperlink}
               >
                 機構申請
               </Link>
             </Typography> */}
-            <Typography component="p" color="inherit" noWrap className={classes.title}>
-              <Link
-                to={'/app?state=signup'}
-                className={classes.unstyledHyperlink}
-              >
-                註冊
-              </Link>
-            </Typography>
-            <Typography component="p" color="inherit" noWrap className={classes.title}>
-              <Link
-                to={'/app?state=signin'}
-                className={classes.unstyledHyperlink}
-              >
-                登入
-              </Link>
-            </Typography>
+            <Button
+              color="inherit"
+              component={Link}
+              to={'/app?state=signup'}
+              startIcon={<PersonAddIcon />}
+              className={classes.titleButton}
+            >
+              註冊
+            </Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to={'/app?state=signin'}
+              startIcon={<PersonIcon />}
+              className={classes.titleButton}
+            >
+              登入
+            </Button>
           </React.Fragment>
         }
         <Popper
