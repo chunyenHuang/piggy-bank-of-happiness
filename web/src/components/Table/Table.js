@@ -91,6 +91,7 @@ export default function Table({
   onAddItem,
   isLoading,
   nested = false,
+  hide,
 }) {
   const classes = useStyles();
 
@@ -238,85 +239,91 @@ export default function Table({
       });
     }
 
-    newColumns.map((column, index) => {
-      if (!Object.prototype.hasOwnProperty.call(column, 'options')) {
-        column.options = {};
-      }
-      return column;
-    }).forEach(({ name, edit, type, options = {} }) => {
-      switch (type) {
-      case 'actions':
-        break;
-      case 'datetime':
-        options.customBodyRender = (value) => {
-          if (!value) return '';
-          return (
-            <div>
-              {moment(value).format('YYYY/MM/DD')} <br/>
-              {moment(value).format('HH:mm')}
-            </div>);
-        };
-        break;
-      case 'checkbox':
-        options.customBodyRender = (value) => {
-          const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false; // eslint-disable-line eqeqeq
-          return (<Checkbox checked={isChecked} />);
-        };
-        break;
-      case 'number':
-        options.customBodyRender = (val) => (
-          <div className={classes.numberContainer}>
-            {!isNaN(val) ? new Intl.NumberFormat().format(val) : 'N/A'}
-          </div>
-        );
-        break;
-      case 'currency':
-        options.customBodyRender = (val) => (
-          <div className={classes.numberContainer}>
-            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val / 100)}
-          </div>
-        );
-        break;
-      case 'boolean':
-        options.customBodyRender = (val) => val ? 'yes' : 'no';
-        break;
-      default:
-        options.customBodyRender = options.customBodyRender || ((val) => val ? val : null);
-        break;
-      }
+    newColumns
+      .map((column, index) => {
+        if (!Object.prototype.hasOwnProperty.call(column, 'options')) {
+          column.options = {};
+        }
+        return column;
+      })
+      .forEach(({ name, edit, type, options = {} }) => {
+        switch (type) {
+        case 'actions':
+          break;
+        case 'datetime':
+          options.customBodyRender = (value) => {
+            if (!value) return '';
+            return (
+              <div>
+                {moment(value).format('YYYY/MM/DD')} <br/>
+                {moment(value).format('HH:mm')}
+              </div>);
+          };
+          break;
+        case 'checkbox':
+          options.customBodyRender = (value) => {
+            const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false; // eslint-disable-line eqeqeq
+            return (<Checkbox checked={isChecked} color="default" disabled={true} />);
+          };
+          break;
+        case 'number':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {!isNaN(val) ? new Intl.NumberFormat().format(val) : 'N/A'}
+            </div>
+          );
+          break;
+        case 'currency':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val / 100)}
+            </div>
+          );
+          break;
+        case 'boolean':
+          options.customBodyRender = (val) => val ? 'yes' : 'no';
+          break;
+        default:
+          options.customBodyRender = options.customBodyRender || ((val) => val ? val : null);
+          break;
+        }
 
-      if (editDataIndex !== -1 && edit && !NON_EDITABLE_FIELDS.includes(name)) {
-        options.display = true;
-        options.customBodyRenderLite = (dataIndex) => {
-          const defaultValue = data[dataIndex][name];
-          const currentValue = editItem[name];
+        if (editDataIndex !== -1 && edit && !NON_EDITABLE_FIELDS.includes(name)) {
+          options.display = true;
+          options.customBodyRenderLite = (dataIndex) => {
+            const defaultValue = data[dataIndex][name];
+            const currentValue = editItem[name];
 
-          return (dataIndex === editDataIndex) ?
-            <EditField
-              name={name}
-              data={editItem}
-              value={currentValue}
-              editIndex={dataIndex}
-              {...edit}
-              onUpdate={(value) => {
-                editItem[name] = value;
-                if (edit.rerenderAfterSelect) {
-                  // only reset the editItem if needed
-                  setEditItem({ ...editItem });
-                } else {
-                  setEditItem(editItem);
-                }
-              }} /> :
-            options.customBodyRender ? options.customBodyRender(defaultValue) : defaultValue;
-        };
-      }
-      // if (editDataIndex !== -1 && !edit && name !== 'actions') {
-      //   options.display = false;
-      // }
-    });
+            return (dataIndex === editDataIndex) ?
+              <EditField
+                name={name}
+                data={editItem}
+                value={currentValue}
+                editIndex={dataIndex}
+                {...edit}
+                onUpdate={(value) => {
+                  editItem[name] = value;
+                  if (edit.rerenderAfterSelect) {
+                    // only reset the editItem if needed
+                    setEditItem({ ...editItem });
+                  } else {
+                    setEditItem(editItem);
+                  }
+                }} /> :
+              options.customBodyRender ? options.customBodyRender(defaultValue) : defaultValue;
+          };
+        }
+        // if (editDataIndex !== -1 && !edit && name !== 'actions') {
+        //   options.display = false;
+        // }
+
+        if (Array.isArray(hide) && hide.includes(name)) {
+          options.display = false;
+        }
+      });
 
     setUpdatedColumns(newColumns);
-  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.numberContainer]);
+  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.numberContainer, hide]);
 
   return (
     <MuiThemeProvider theme={theme(themeProps)}>
@@ -349,4 +356,5 @@ Table.propTypes = {
   onRefresh: PropTypes.func,
   onAddItem: PropTypes.func,
   isLoading: PropTypes.bool,
+  hide: PropTypes.array,
 };

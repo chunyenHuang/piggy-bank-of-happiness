@@ -17,6 +17,30 @@ const description = '';
 
 const columns = [
   {
+    name: 'custom:organizationName',
+    label: '機構',
+    options: {
+      filter: true,
+      sort: true,
+    },
+  },
+  {
+    name: 'role',
+    label: '權限',
+    edit: {
+      type: 'select',
+      menu: cognitoGroups,
+    },
+    options: {
+      filter: true,
+      sort: true,
+      customBodyRender(item) {
+        const matched = cognitoGroups.find(({ value }) => value === item);
+        return matched ? matched.label : item;
+      },
+    },
+  },
+  {
     name: 'username',
     label: 'ID',
     options: {
@@ -67,22 +91,6 @@ const columns = [
     options: {
       filter: true,
       sort: true,
-    },
-  },
-  {
-    name: 'role',
-    label: '權限',
-    edit: {
-      type: 'select',
-      menu: cognitoGroups,
-    },
-    options: {
-      filter: true,
-      sort: true,
-      customBodyRender(item) {
-        const matched = cognitoGroups.find(({ value }) => value === item);
-        return matched ? matched.label : item;
-      },
     },
   },
   {
@@ -154,7 +162,12 @@ export default function CognitoUsersTable() {
           });
         });
 
-        setData(allUsers.sort(sortBy('name')).sort(sortBy('username')).sort(sortBy('role')));
+        setData(allUsers
+          .sort(sortBy('name'))
+          .sort(sortBy('username'))
+          .sort(sortBy('role'))
+          .sort(sortBy('custom:organizationName')),
+        );
       } catch (e) {
         console.log(e);
       }

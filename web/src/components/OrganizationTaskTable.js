@@ -162,6 +162,9 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
           input[name] = item[name];
         }
       });
+
+      input.isActive = input.isActive ? 1 : 0;
+
       await request(updateOrganizationTask, { input });
 
       Object.assign(data[dataIndex], input);
@@ -179,8 +182,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
       const input = Object.assign(newRecord, {});
       await request(createOrganizationTask, { input });
 
-      data.unshift(input);
-      setData([...data]);
+      setLastUpdatedAt(Date.now());
       setOpen(false);
     } catch (e) {
       console.log(e);
@@ -228,6 +230,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
       />
       {open &&
         <DetailFormDialog
+          title="新增任務"
           openOnInit={true}
           onClose={() => setOpen(false)}
           // details form props

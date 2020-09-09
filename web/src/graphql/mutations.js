@@ -1,6 +1,18 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const userOperation = /* GraphQL */ `
+  mutation UserOperation($input: UserOperationRequest!) {
+    userOperation(input: $input) {
+      errors
+      organizationUsers {
+        organizationId
+        username
+        password
+      }
+    }
+  }
+`;
 export const createOrganization = /* GraphQL */ `
   mutation CreateOrganization(
     $input: CreateOrganizationInput!

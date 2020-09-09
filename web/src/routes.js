@@ -58,7 +58,11 @@ export const orgAdmin = [
     paths: [
       {
         path: '/users',
-        link: '/users?title=學生&roles[]=User',
+        link: '/users?' + [
+          'title=學生',
+          'roles[]=User',
+          'hide[]=role',
+        ].join('&'),
         exact: true,
       },
     ],
@@ -69,7 +73,14 @@ export const orgAdmin = [
     paths: [
       {
         path: '/users',
-        link: '/users?title=職員&roles[]=Admin&roles[]=Manager',
+        link: '/users?' + [
+          'title=職員',
+          'roles[]=Admin',
+          'roles[]=Manager',
+          'hide[]=idNumber',
+          'hide[]=currentPoints',
+          'hide[]=earnedPoints',
+        ].join('&'),
         exact: true,
       },
     ],

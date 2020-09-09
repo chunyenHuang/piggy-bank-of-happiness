@@ -120,6 +120,9 @@ export default function OrganizationProgramTable({ title = '任務', description
           input[name] = item[name];
         }
       });
+
+      input.isActive = input.isActive ? 1 : 0;
+
       await request(updateOrganizationProgram, { input });
 
       Object.assign(data[dataIndex], input);
@@ -137,8 +140,7 @@ export default function OrganizationProgramTable({ title = '任務', description
       const input = Object.assign(newRecord, {});
       await request(createOrganizationProgram, { input });
 
-      data.unshift(input);
-      setData([...data]);
+      setLastUpdatedAt(Date.now());
       setOpen(false);
     } catch (e) {
       console.log(e);
@@ -178,6 +180,7 @@ export default function OrganizationProgramTable({ title = '任務', description
       />
       {open &&
         <DetailFormDialog
+          title="新增任務類別"
           openOnInit={true}
           onClose={() => setOpen(false)}
           // details form props
