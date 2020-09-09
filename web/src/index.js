@@ -9,6 +9,9 @@ import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import { Provider } from 'react-redux';
+import ReduxToastr from 'react-redux-toastr';
 
 import './global';
 import { appRoutes } from './routes';
@@ -18,7 +21,9 @@ import * as serviceWorker from './serviceWorker';
 import LandingPage from 'views/LandingPage/LandingPage';
 import OrgApplication from 'views/OrgApplication/OrgApplication';
 import CustomAppBar from 'components/CustomAppBar';
+import Loading from 'components/Loading';
 
+import store from './App.reducer';
 import './index.css';
 
 // Disable oauth for web
@@ -49,9 +54,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const initialPath = history.location;
+console.log(`initialPath`, initialPath);
+
 function ReactApp() {
   const classes = useStyles();
 
+  const [isLoading, setIsLoading] = React.useState(true);
   const [user, setUser] = React.useState();
   const [filteredRoutes, setFilteredRoutes] = React.useState([]);
 
@@ -59,9 +68,11 @@ function ReactApp() {
     (async () => {
       const [err, user] = await to(Auth.currentAuthenticatedUser({ bypassCache: true }));
       if (err) {
-        console.log(err);
+        setIsLoading(false);
+        history.push(initialPath);
       } else {
         setUser(user);
+        setIsLoading(false);
       }
     })();
     return onAuthUIStateChange((nextAuthState, authData) => {
@@ -70,17 +81,30 @@ function ReactApp() {
   }, []);
 
   React.useEffect(() => {
-    if (!user) {
+    if (!user || !user.signInUserSession) {
       setFilteredRoutes([]);
       return;
     }
+    // console.log(user);
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
     const filteredRoutes = appRoutes.filter(({ roles }) => {
       return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
     });
 
+    localStorage.setItem('app:username', user.username);
+    localStorage.setItem('app:name', user.attributes.name);
+    localStorage.setItem('app:organizationId', user.attributes['custom:organizationId']);
+    localStorage.setItem('app:organizationName', user.attributes['custom:organizationName']);
+    localStorage.setItem('app:cognitoGroup', userGroups[0]);
+
     setFilteredRoutes(filteredRoutes);
+
+    history.push(initialPath);
   }, [user]);
+
+  if (isLoading) {
+    return (<Loading />);
+  }
 
   return (
     <Router history={history}>
@@ -91,7 +115,6 @@ function ReactApp() {
       <div className={classes.content}>
         <Switch>
           <Route path="/app" component={App} />
-
           {user ?
             <Route path="/" component={App} />:
             <React.Fragment>
@@ -108,6 +131,19 @@ function ReactApp() {
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <div>
+          <ReduxToastr
+            timeOut={10000}
+            newestOnTop={false}
+            preventDuplicates
+            position='top-right'
+            transitionIn='fadeIn'
+            transitionOut='fadeOut'
+            progressBar
+            closeOnToastrClick={false}/>
+        </div>
+      </Provider>
       <ReactApp />
     </ThemeProvider>
   </React.StrictMode>,

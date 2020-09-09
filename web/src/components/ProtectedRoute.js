@@ -4,20 +4,9 @@ import PropTypes from 'prop-types';
 
 import { Auth } from 'aws-amplify';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-}));
+// import Loading from 'components/Loading';
 
 const ProtectedRoute = ({ component: Component, render, roles, user: inUser, ...args }) => {
-  const classes = useStyles();
-
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
   const [isAuthorized, setIsAuthorized] = useState(undefined);
@@ -56,20 +45,18 @@ const ProtectedRoute = ({ component: Component, render, roles, user: inUser, ...
   }, [user, inUser]);
 
   if (isAuthenticated === false) {
-    return (<Redirect to={{ pathname: '/signin' }} />);
+    return (<Redirect to={{ pathname: '/' }} />);
   }
 
   if (isAuthorized === false) {
-    return (<Redirect to={{ pathname: '/dashboard' }} />);
+    return (<Redirect to={{ pathname: '/' }} />);
   }
 
-  if (!user || isAuthorized === undefined || isAuthenticated === undefined) {
-    return (
-      <Backdrop className={classes.backdrop} open={!user}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-  }
+  // if (!user || isAuthorized === undefined || isAuthenticated === undefined) {
+  //   return (
+  //     <Loading />
+  //   );
+  // }
 
   return render ? render({ user, ...args }) : (<Component user={user} {...args} />);
 };

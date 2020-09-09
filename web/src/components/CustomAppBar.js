@@ -24,6 +24,7 @@ import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Version from 'components/Version';
+import cognitoGroups from 'constants/cognitoGroups';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,7 +82,8 @@ export default function CustomAppBar({ user, routes }) {
   const prevOpen = useRef(open);
 
   const userName = localStorage.getItem('app:name') || '';
-  const userRole = localStorage.getItem('app:role') || '';
+  const userCognitoGroupName = localStorage.getItem('app:cognitoGroup') || '';
+  const userCognitoGroupLabel = userCognitoGroupName ? cognitoGroups.find(({ value }) => value === userCognitoGroupName).label : '';
 
   useEffect(() => {
     setOrgName(localStorage.getItem('app:organizationName') || '幸福存摺');
@@ -187,7 +189,7 @@ export default function CustomAppBar({ user, routes }) {
                 <MenuItem disabled={true}>
                   <Version />
                 </MenuItem>
-                <MenuItem disabled={true}>{userRole}</MenuItem>
+                <MenuItem disabled={true}>{userCognitoGroupLabel}</MenuItem>
                 <MenuItem onClick={handleSignOut}>登出</MenuItem>
               </MenuList>
             </ClickAwayListener>

@@ -8,7 +8,7 @@ export default [
     value: 'OrgAdmins',
   },
   {
-    label: '機構行政人員',
+    label: '機構職員',
     value: 'OrgManagers',
   },
   {

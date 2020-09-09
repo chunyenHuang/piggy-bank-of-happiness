@@ -1,0 +1,16 @@
+{
+  "typeName": "Mutation",
+  "fieldName": "userOperation",
+  "arguments": {
+    "input": {
+      "users": [{
+        "username": "abc001",
+        "organizationId": "04ea0ef0-b1b0-11ea-b065-2366992def46",
+        "name": "name-001",
+        "role": "Admin",
+        "idNumber": "id-001",
+        "email": "demo@goldax.cloud"
+      }]
+    }
+  }
+}
