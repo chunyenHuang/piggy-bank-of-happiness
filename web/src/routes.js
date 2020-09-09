@@ -17,6 +17,13 @@ import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
 import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
 import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
 
+import ListIcon from '@material-ui/icons/List';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import PeopleIcon from '@material-ui/icons/People';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import PaymentIcon from '@material-ui/icons/Payment';
+import BusinessIcon from '@material-ui/icons/Business';
+import LockIcon from '@material-ui/icons/Lock';
 
 export const general = [].map((item) => {
   item.route = item.route || Route;
@@ -38,9 +45,10 @@ export const user = [
   return item;
 });
 
-export const orgAdmin = [
+export const orgManager = [
   {
     title: '班級',
+    icon: GroupWorkIcon,
     paths: [
       { path: '/groups', exact: true },
     ],
@@ -48,6 +56,7 @@ export const orgAdmin = [
   },
   {
     title: '任務',
+    icon: ListIcon,
     paths: [
       { path: '/programs', exact: true },
     ],
@@ -55,6 +64,46 @@ export const orgAdmin = [
   },
   {
     title: '學生',
+    icon: PeopleIcon,
+    paths: [
+      {
+        path: '/users',
+        link: '/users?' + [
+          'title=學生',
+          'roles[]=User',
+          'hide[]=role',
+        ].join('&'),
+        exact: true,
+      },
+    ],
+    component: OrganizationUsers,
+  },
+].map((item) => {
+  item.route = item.route || ProtectedRoute;
+  item.roles = ['OrgManagers'];
+  return item;
+});
+
+export const orgAdmin = [
+  {
+    title: '班級',
+    icon: GroupWorkIcon,
+    paths: [
+      { path: '/groups', exact: true },
+    ],
+    component: OrganizationGroups,
+  },
+  {
+    title: '任務',
+    icon: ListIcon,
+    paths: [
+      { path: '/programs', exact: true },
+    ],
+    component: OrganizationPrograms,
+  },
+  {
+    title: '學生',
+    icon: PeopleIcon,
     paths: [
       {
         path: '/users',
@@ -70,6 +119,7 @@ export const orgAdmin = [
   },
   {
     title: '職員',
+    icon: SupervisedUserCircleIcon,
     paths: [
       {
         path: '/users',
@@ -80,6 +130,7 @@ export const orgAdmin = [
           'hide[]=idNumber',
           'hide[]=currentPoints',
           'hide[]=earnedPoints',
+          'hide[]=groupId',
         ].join('&'),
         exact: true,
       },
@@ -88,6 +139,7 @@ export const orgAdmin = [
   },
   {
     title: '交易紀錄',
+    icon: PaymentIcon,
     paths: [
       { path: '/transactions', exact: true },
     ],
@@ -111,6 +163,7 @@ export const admin = [
   // },
   {
     title: '機構',
+    icon: BusinessIcon,
     paths: [
       { path: '/organizations', exact: true },
     ],
@@ -126,6 +179,7 @@ export const admin = [
   // },
   {
     title: '軟體用戶',
+    icon: LockIcon,
     paths: [
       { path: '/appUsers', exact: true },
     ],
@@ -138,7 +192,7 @@ export const admin = [
 });
 
 export const appRoutes = [
-  ...general, ...admin, ...orgAdmin, ...user,
+  ...general, ...admin, ...orgAdmin, ...orgManager, ...user,
 ].reduce((all, item) => {
   item.paths.forEach(({ path, link, exact = true }) => {
     all.push(Object.assign({ path, link, exact }, item));

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import { v1 as uuidv1 } from 'uuid';
+import SyncIcon from '@material-ui/icons/Sync';
 
 import Table from 'components/Table/Table';
 // import LinkButton from 'components/Table/LinkButton';
@@ -108,6 +109,7 @@ function OrganizationTable() {
             <Button
               onClick={() => switchOrg(id)}
               disabled={id === currentOrgId}
+              startIcon={<SyncIcon />}
             >
               切換
             </Button>
