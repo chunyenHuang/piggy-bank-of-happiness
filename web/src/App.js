@@ -13,9 +13,12 @@ import { Switch, Redirect } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import DocumentTitle from 'react-document-title';
 import querystring from 'query-string';
+import { Hub } from 'aws-amplify';
+import { toastr } from 'react-redux-toastr';
 
 // import CustomAppBar from 'components/CustomAppBar';
 import APP from 'constants/app.js';
+import authErrorCodes from 'constants/authErrorCodes';
 
 import './i18n/Amplify';
 import { appRoutes } from './routes';
@@ -27,6 +30,22 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
   },
 }));
+
+const authListener = ({ payload: { event, data } }) => {
+  console.log(event, data);
+  let errorMessage;
+  switch (event) {
+  case 'signUp_failure':
+  case 'signIn_failure':
+    errorMessage = authErrorCodes[data.code] || data.code;
+    break;
+  default:
+  }
+
+  if (errorMessage) {
+    toastr.error(errorMessage);
+  }
+};
 
 function App({ location }) {
   const classes = useStyles();
@@ -48,22 +67,19 @@ function App({ location }) {
   }, [location.search]);
 
   React.useEffect(() => {
-    if (!user) return;
+    if (!user || !user.signInUserSession || !user.attributes) return;
+
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
     const filteredRoutes = appRoutes.filter(({ roles }) => {
       return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
     });
 
     setFilteredRoutes(filteredRoutes);
-
-    localStorage.setItem('app:username', user.username);
-    localStorage.setItem('app:name', user.attributes.name);
-    localStorage.setItem('app:organizationId', user.attributes['custom:organizationId']);
-    localStorage.setItem('app:organizationName', user.attributes['custom:organizationName']);
-    localStorage.setItem('app:role', userGroups[0]);
   }, [user]);
 
   React.useEffect(() => {
+    Hub.listen('auth', authListener);
+
     return onAuthUIStateChange((nextAuthState, authData) => {
       setAuthState(nextAuthState);
       setUser(authData);
@@ -89,45 +105,46 @@ function App({ location }) {
         <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : '/'} />
       </Switch>
     </div>
-  ) : initialAuthState ? (
-    <AmplifyAuthenticator initialAuthState={initialAuthState}>
-      {/* https://github.com/aws-amplify/amplify-js/issues/6113 */}
-      {/* https://docs.amplify.aws/ui/auth/authenticator/q/framework/react#slots */}
-      <AmplifySignIn
-        slot="sign-in"
-        federated={{}}
-      />
-      <AmplifySignUp
-        slot="sign-up"
-        formFields={[
-          {
-            type: 'name',
-            label: '名字',
-            placeholder: ' ',
-            required: true,
-          },
-          {
-            type: 'email',
-            label: 'Email',
-            placeholder: ' ',
-            required: true,
-          },
-          {
-            type: 'username',
-            label: '帳號',
-            placeholder: ' ',
-            required: true,
-          },
-          {
-            type: 'password',
-            label: '密碼',
-            placeholder: ' ',
-            required: true,
-          },
-        ]}
-      />
-    </AmplifyAuthenticator>
-  ) : <div className="amplify-authenticator" />;
+  ) : <div className="amplify-authenticator" >
+    {initialAuthState &&
+      <AmplifyAuthenticator initialAuthState={initialAuthState}>
+        {/* https://github.com/aws-amplify/amplify-js/issues/6113 */}
+        {/* https://docs.amplify.aws/ui/auth/authenticator/q/framework/react#slots */}
+        <AmplifySignIn
+          slot="sign-in"
+          federated={{}}
+        />
+        <AmplifySignUp
+          slot="sign-up"
+          formFields={[
+            {
+              type: 'name',
+              label: '名字',
+              placeholder: ' ',
+              required: true,
+            },
+            {
+              type: 'email',
+              label: 'Email',
+              placeholder: ' ',
+              required: true,
+            },
+            {
+              type: 'username',
+              label: '帳號',
+              placeholder: ' ',
+              required: true,
+            },
+            {
+              type: 'password',
+              label: '密碼',
+              placeholder: ' ',
+              required: true,
+            },
+          ]}
+        />
+      </AmplifyAuthenticator>}
+  </div>;
 }
 
 export default App;

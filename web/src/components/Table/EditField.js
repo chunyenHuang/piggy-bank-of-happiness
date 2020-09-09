@@ -31,6 +31,7 @@ export default function EditField({ data: inDataObject, type, name, value, editI
     })();
   }, [inDataObject, inMenu]);
 
+  let isChecked;
   switch (type) {
   case 'select':
     return (
@@ -82,15 +83,18 @@ export default function EditField({ data: inDataObject, type, name, value, editI
       />
     );
   case 'checkbox': // TODO: handle case of 0/1 instead of boolean
+    isChecked = (data == 'true' || data === 'yes' || data === true || data === 1) ? true : false; // eslint-disable-line eqeqeq
+
     return (
       <Checkbox
-        checked={data}
+        checked={isChecked}
         value={data}
         onChange={(e) => {
           setData(e.target.checked);
           onUpdate(e.target.checked);
         }}
         name={name}
+        color="default"
         inputProps={{
           'data-test-id': `${name}-${editIndex}`,
         }}

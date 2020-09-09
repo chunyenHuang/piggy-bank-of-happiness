@@ -105,6 +105,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
           <OrganizationUserTable
             title="學生列表"
             groupId={id}
+            roles={['User']}
             nested={true}
           />
         </NestedTableContainer>
@@ -124,6 +125,9 @@ export default function OrganizationGroupTable({ title = '班級', description, 
           input[name] = item[name];
         }
       });
+
+      input.isActive = input.isActive ? 1 : 0;
+
       await request(updateOrganizationGroup, { input });
 
       Object.assign(data[dataIndex], input);
@@ -182,6 +186,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
       />
       {open &&
         <DetailFormDialog
+          title="新增班級"
           openOnInit={true}
           onClose={() => setOpen(false)}
           // details form props

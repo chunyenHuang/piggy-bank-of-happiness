@@ -16,7 +16,7 @@ export default function Users({ location }) {
   const classes = useStyles();
 
   const id = localStorage.getItem('app:organizationId');
-  const { title, roles } = querystring.parse(location.search, { arrayFormat: 'bracket' });
+  const { title, roles, hide } = querystring.parse(location.search, { arrayFormat: 'bracket' });
 
   return (
     <div className={classes.content}>
@@ -24,6 +24,7 @@ export default function Users({ location }) {
         organizationId={id}
         title={title}
         roles={roles}
+        hide={hide}
       />
     </div>
   );
