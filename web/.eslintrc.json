@@ -45,6 +45,7 @@
     "document": true,
     "fetch": true,
     "FormData": true,
-    "localStorage": true
+    "localStorage": true,
+    "FileReader": true
   }
 }

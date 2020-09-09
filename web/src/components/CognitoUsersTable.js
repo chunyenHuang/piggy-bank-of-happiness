@@ -8,7 +8,6 @@ import {
   // addUserToGroup,
   disableUser,
   enableUser,
-  getRoleByGroup,
 } from 'utilities/cognito';
 import { sortBy } from 'utilities/sorting';
 import cognitoGroups from 'constants/cognitoGroups';
@@ -162,7 +161,7 @@ export default function CognitoUsersTable() {
         organizationId: newOrgId,
         name,
         email,
-        role: getRoleByGroup(newCognitoGroup),
+        role: newCognitoGroup,
         idNumber: 'N/A',
       };
 

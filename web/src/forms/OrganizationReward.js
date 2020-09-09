@@ -1,24 +1,11 @@
 export default {
   fields: [
     {
-      key: 'organizationId',
+      key: 'id',
       type: 'String',
       label: '機構 ID',
       isRequired: true,
       isDisabled: true,
-    },
-    {
-      key: 'id',
-      type: 'String',
-      label: 'ID',
-      isRequired: true,
-      isDisabled: true,
-    },
-    {
-      key: 'name',
-      type: 'String',
-      label: '名稱',
-      isRequired: true,
     },
     {
       key: 'isActive',
@@ -32,17 +19,28 @@ export default {
       ],
     },
     {
+      key: 'name',
+      type: 'String',
+      label: '名稱',
+      isRequired: true,
+    },
+    {
       key: 'description',
       type: 'String',
       label: '描述',
-      isRequired: false,
+      isRequired: true,
     },
     {
-      key: 'createdBy',
-      type: 'String',
-      label: '創立者',
+      key: 'requiredPoints',
+      type: 'Number',
+      label: '所需點數',
       isRequired: true,
-      isDisabled: true,
+    },
+    {
+      key: 'total',
+      type: 'Number',
+      label: '數量',
+      isRequired: true,
     },
   ],
 };

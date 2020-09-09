@@ -26,7 +26,7 @@ export default {
       type: 'String',
       label: '創立者',
       isRequired: true,
-      isDefault: true,
+      isDisabled: true,
     },
     {
       key: 'name',

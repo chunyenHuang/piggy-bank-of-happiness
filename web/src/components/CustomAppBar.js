@@ -118,9 +118,9 @@ export default function CustomAppBar({ user, routes }) {
     try {
       localStorage.clear();
       await Auth.signOut();
-      history.push('/');
+      history.push('/app');
     } catch (e) {
-      history.push('/');
+      history.push('/app');
     }
   }
 

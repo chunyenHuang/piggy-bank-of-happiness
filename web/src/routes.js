@@ -16,6 +16,7 @@ import OrganizationUsers from 'views/OrgAdmin/Users/Users';
 import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
 import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
 import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
+import OrganizationRewards from 'views/OrgAdmin/Rewards/Rewards';
 
 import ListIcon from '@material-ui/icons/List';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
@@ -24,6 +25,7 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import PaymentIcon from '@material-ui/icons/Payment';
 import BusinessIcon from '@material-ui/icons/Business';
 import LockIcon from '@material-ui/icons/Lock';
+import RedeemIcon from '@material-ui/icons/Redeem';
 
 export const general = [].map((item) => {
   item.route = item.route || Route;
@@ -100,6 +102,14 @@ export const orgAdmin = [
       { path: '/programs', exact: true },
     ],
     component: OrganizationPrograms,
+  },
+  {
+    title: '獎品',
+    icon: RedeemIcon,
+    paths: [
+      { path: '/rewards', exact: true },
+    ],
+    component: OrganizationRewards,
   },
   {
     title: '學生',

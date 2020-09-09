@@ -141,6 +141,57 @@ export const listOrganizationPrograms = /* GraphQL */ `
     }
   }
 `;
+export const getOrganizationReward = /* GraphQL */ `
+  query GetOrganizationReward($organizationId: ID!, $id: ID!) {
+    getOrganizationReward(organizationId: $organizationId, id: $id) {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
+export const listOrganizationRewards = /* GraphQL */ `
+  query ListOrganizationRewards(
+    $organizationId: ID
+    $id: ModelIDKeyConditionInput
+    $filter: ModelOrganizationRewardFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listOrganizationRewards(
+      organizationId: $organizationId
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        organizationId
+        id
+        name
+        description
+        requiredPoints
+        isActive
+        total
+        createdBy
+        createdAt
+        updatedBy
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganizationTask = /* GraphQL */ `
   query GetOrganizationTask($organizationId: ID!, $id: ID!) {
     getOrganizationTask(organizationId: $organizationId, id: $id) {
@@ -222,6 +273,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -275,6 +327,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -407,6 +460,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -503,6 +557,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           organizationId
           id
           username
+          rewardId
           refTransactionId
           isCancelled
           points
@@ -626,6 +681,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -673,6 +729,55 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdBy
+        createdAt
+        updatedAt
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          updatedAt
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransactionsByRewardByDate = /* GraphQL */ `
+  query GetTransactionsByRewardByDate(
+    $rewardId: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTransactionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getTransactionsByRewardByDate(
+      rewardId: $rewardId
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        organizationId
+        id
+        username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -829,6 +934,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           organizationId
           id
           username
+          rewardId
           refTransactionId
           isCancelled
           points
@@ -904,6 +1010,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           organizationId
           id
           username
+          rewardId
           refTransactionId
           isCancelled
           points

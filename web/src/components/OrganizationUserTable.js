@@ -46,6 +46,7 @@ function OrganizationUserTable({
     {
       name: 'role',
       label: '職位',
+      isTemplate: true,
       edit: {
         type: 'select',
         menu: rolesMenu,
@@ -80,6 +81,7 @@ function OrganizationUserTable({
     {
       name: 'username',
       label: '帳號',
+      isTemplate: true,
       options: {
         display: true,
         filter: false,
@@ -89,6 +91,7 @@ function OrganizationUserTable({
     {
       name: 'idNumber',
       label: '學號',
+      isTemplate: true,
       edit: {
         type: 'text',
       },
@@ -101,6 +104,7 @@ function OrganizationUserTable({
     {
       name: 'name',
       label: '名字',
+      isTemplate: true,
       edit: {
         type: 'text',
       },
@@ -113,6 +117,7 @@ function OrganizationUserTable({
     {
       name: 'currentPoints',
       label: '目前點數',
+      isTemplate: true,
       type: 'number',
       options: {
         display: true,
@@ -123,6 +128,7 @@ function OrganizationUserTable({
     {
       name: 'earnedPoints',
       label: '總點數',
+      isTemplate: true,
       type: 'number',
       options: {
         display: true,
@@ -205,6 +211,26 @@ function OrganizationUserTable({
     }
   };
 
+  const onBatchAdd = async (items) => {
+    try {
+      setIsLoading(true);
+      const users = items.map((item) => {
+        return Object.assign(item, {
+          organizationId,
+          isActive: 1,
+          idNumber: item.idNumber || 'N/A',
+        });
+      });
+
+      await request(userOperation, { input: users });
+      setLastUpdatedAt(Date.now());
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!organizationId && !groupId) return;
 
@@ -273,6 +299,7 @@ function OrganizationUserTable({
         options={options}
         nested={nested}
         onAddItem={() => setOpen(true)}
+        onBatchAdd={onBatchAdd}
         onUpdateItem={onUpate}
         onRefresh={() => setLastUpdatedAt(Date.now())}
       />
