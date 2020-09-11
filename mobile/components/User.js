@@ -105,14 +105,12 @@ export default function User({ user: inUser, mode }) {
           borderBottomWidth: 1,
         }}
       />
-      <View style={styles.transactionList}>
-        <ScrollView>
-          <UserTransactionList
-            user={user}
-            onUpdate={load}
-          />
-        </ScrollView>
-      </View>
+      <ScrollView style={styles.transactionList}>
+        <UserTransactionList
+          user={user}
+          onUpdate={load}
+        />
+      </ScrollView>
       {mode !== 'view' && isActive &&
         <View style={styles.addTaskButton}>
           <AddTaskToUser
@@ -139,6 +137,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
+    paddingTop: 8,
     height: 80,
   },
   headerRow: {
@@ -156,6 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.focused,
     fontWeight: 'bold',
+    marginTop: -2,
   },
   withdrawButton: {
     flex: 1,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   transactionList: {
-    height: Dimensions.get('window').height - 200, // Any better solution?
+    flex: 1,
   },
   addTaskButton: {
     position: 'absolute',
