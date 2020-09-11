@@ -87,8 +87,6 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
   const resetState = () => {
     setIsLoading(false);
     setVisible(false);
-    setOriginalUser({});
-    setUser({});
     setIsDirty(false);
     setErrors([]);
   };
@@ -188,13 +186,11 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
             <Icon
               name={'md-create'}
               type='ionicon'
-              color={Colors.dark }
-              containerStyle={{ paddingRight: 10 }}
+              color={'#fff'}
             />
           }
           type="clear"
-          title={'修改資料'}
-          titleStyle={{ color: Colors.dark }}
+
           onPress={()=>setVisible(true)}
         />:
         <AddButton

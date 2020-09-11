@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
 import { sortBy } from '../src/utils/sorting';
@@ -30,7 +31,7 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
 
   return (
     <View style={styles.container}>
-      {/* <Text h4 h4Style={styles.header}>交易紀錄</Text> */}
+      <Text style={styles.header}>交易紀錄</Text>
       {transactions.sort(sortBy('updatedAt', true)).map((tx, index) => (
         <TransactionListItem
           key={index}
@@ -49,9 +50,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    margin: 20,
-    textAlign: 'center',
-    color: Colors.light,
+    fontSize: 18,
+    marginLeft: 16,
+    marginTop: 16,
+    textAlign: 'left',
   },
   subtitle: {
     color: Colors.light,
