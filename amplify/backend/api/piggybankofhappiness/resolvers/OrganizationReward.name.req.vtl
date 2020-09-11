@@ -1,4 +1,4 @@
-#if( $util.isNullOrEmpty($ctx.result) )
+#if( $util.isNullOrEmpty($ctx.source) )
   #return
 #end
 ## [Start] Determine request authentication mode **
@@ -11,9 +11,9 @@
   ## [Start] Static Group Authorization Checks **
   #set($isStaticGroupAuthorized = $util.defaultIfNull(
             $isStaticGroupAuthorized, false))
-  ## Authorization rule: { allow: groups, groups: ["Users","OrgManagers"], groupClaim: "cognito:groups" } **
+  ## Authorization rule: { allow: groups, groups: ["OrgManagers"], groupClaim: "cognito:groups" } **
   #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
-  #set( $allowedGroups = ["Users", "OrgManagers"] )
+  #set( $allowedGroups = ["OrgManagers"] )
   #foreach( $userGroup in $userGroups )
     #if( $allowedGroups.contains($userGroup) )
       #set( $isStaticGroupAuthorized = true )
@@ -46,8 +46,7 @@
 #end
 ## [End] Check authMode and execute owner/group checks **
 
-#if( $ctx.error )
-$util.error($ctx.error.message, $ctx.error.type)
-#else
-$util.toJson($ctx.result)
-#end
+{
+  "version": "2018-05-29",
+  "payload": {}
+}

@@ -344,6 +344,14 @@ export default function Table({
             return (<Checkbox checked={isChecked} color="default" disabled={true} />);
           };
           break;
+        case 'point':
+        case 'points':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {!isNaN(val) ? new Intl.NumberFormat().format(val / 100) : 'N/A'}
+            </div>
+          );
+          break;
         case 'number':
           options.customBodyRender = (val) => (
             <div className={classes.numberContainer}>

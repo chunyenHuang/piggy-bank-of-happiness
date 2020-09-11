@@ -63,9 +63,9 @@ const columns = [
     name: 'requiredPoints',
     label: '所需點數',
     isTemplate: true,
-    type: 'number',
+    type: 'point',
     edit: {
-      type: 'numner',
+      type: 'point',
     },
     options: {
       filter: false,
@@ -167,6 +167,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
       const input = Object.assign(newRecord, {
         createdBy: username,
         updatedBy: username,
+        requiredPoints: +(parseFloat(newRecord.requiredPoints) * 100),
       });
       await request(createOrganizationReward, { input });
 
@@ -187,6 +188,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
           organizationId,
           id: uuidv1(),
           isActive: 1,
+          requiredPoints: +(parseFloat(item.requiredPoints) * 100),
           createdBy: username,
           updatedBy: username,
         });

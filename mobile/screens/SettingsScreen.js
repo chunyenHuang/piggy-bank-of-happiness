@@ -5,8 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ListItem } from 'react-native-elements';
 
 import SignOutButton from 'components/auth/SignOutButton';
-import Profile from 'components/Profile';
 import Version from 'components/Version';
+import routes from 'navigation/routes';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -16,38 +16,17 @@ export default function SettingsScreen() {
   useEffect(() => {
     (async () => {
       const userGroup = await AsyncStorage.getItem('app:group');
-      const menu = [
-        {
-          title: '註冊用戶列表',
-          onPress: () => {
-            navigation.navigate('Stacks', { screen: 'CognitoUserList', params: {} });
-          },
-          groups: ['AppAdmins'],
-        },
-        {
-          title: '任務類別',
-          onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Programs', params: {} });
-          },
-          groups: ['AppAdmins', 'OrgAdmins'],
-        },
-        {
-          title: '學生分組',
-          component: Profile,
-          onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Groups', params: {} });
-          },
-          groups: ['AppAdmins', 'OrgAdmins'],
-        },
-        {
-          title: '個人資料',
-          component: Profile,
-          onPress: () => {
-            navigation.navigate('Stacks', { screen: 'Profile', params: {} });
-          },
-          groups: ['All'],
-        },
-      ].filter(({ groups }) => groups.includes(userGroup) || groups.includes('All'));
+      const menu = routes
+        .filter(({ type, showInSettingsMenu }) => type === 'stack' && showInSettingsMenu)
+        .filter(({ groups }) => groups.includes(userGroup) || groups.includes('All'))
+        .map((route) => {
+          return {
+            title: route.title,
+            onPress() {
+              navigation.navigate('Stacks', { screen: route.name, params: {} });
+            },
+          };
+        });
 
       if (menu.length >= 1) {
         menu[0].isExpanded = true;

@@ -11,9 +11,9 @@
   ## [Start] Static Group Authorization Checks **
   #set($isStaticGroupAuthorized = $util.defaultIfNull(
             $isStaticGroupAuthorized, false))
-  ## Authorization rule: { allow: groups, groups: ["Users","OrgManagers"], groupClaim: "cognito:groups" } **
+  ## Authorization rule: { allow: groups, groups: ["OrgManagers"], groupClaim: "cognito:groups" } **
   #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
-  #set( $allowedGroups = ["Users", "OrgManagers"] )
+  #set( $allowedGroups = ["OrgManagers"] )
   #foreach( $userGroup in $userGroups )
     #if( $allowedGroups.contains($userGroup) )
       #set( $isStaticGroupAuthorized = true )
