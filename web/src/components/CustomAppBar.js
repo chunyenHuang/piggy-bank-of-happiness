@@ -15,15 +15,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Version from 'components/Version';
+import cognitoGroups from 'constants/cognitoGroups';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +47,12 @@ const useStyles = makeStyles((theme) => ({
   menuButtonHidden: {
     display: 'none',
   },
+  titleButton: {
+    fontSize: 16,
+    marginLeft: theme.spacing(2),
+  },
   title: {
+    // marginLeft: theme.spacing(2),
     marginRight: theme.spacing(4),
   },
   flexbox: {
@@ -70,13 +77,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomAppBar({ routes }) {
+export default function CustomAppBar({ user, routes }) {
   const classes = useStyles();
   const history = useHistory();
 
   const [open, setOpen] = useState(false);
+  const [orgName, setOrgName] = useState();
   const anchorRef = useRef(null);
   const prevOpen = useRef(open);
+
+  const userName = localStorage.getItem('app:name') || '';
+  const userCognitoGroupName = localStorage.getItem('app:cognitoGroup') || '';
+  const userCognitoGroupLabel = userCognitoGroupName ? cognitoGroups.find(({ value }) => value === userCognitoGroupName).label : '';
+
+  useEffect(() => {
+    setOrgName(localStorage.getItem('app:organizationName') || '幸福存摺');
+  }, [user]);
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -100,6 +116,7 @@ export default function CustomAppBar({ routes }) {
   async function handleSignOut(event) {
     handleCloseMenu(event);
     try {
+      localStorage.clear();
       await Auth.signOut();
       history.push('/');
     } catch (e) {
@@ -108,31 +125,73 @@ export default function CustomAppBar({ routes }) {
   }
 
   return (
-    <AppBar position="fixed" color="primary">
+    <AppBar position="fixed" color="primary" elevation={0}>
       <Toolbar className={classes.toolbar}>
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          <Link to="/dashboard" className={classes.unstyledHyperlink} data-test-id="title">
-            幸福存摺
+          <Link to="/" className={classes.unstyledHyperlink} data-test-id="title">
+            {orgName}
           </Link>
         </Typography>
-        {routes.filter((x) => !x.hideFromMenu).map((route) => (
-          <Typography key={route.path} component="p" color="inherit" noWrap className={classes.title}>
-            <Link to={route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
-              {route.title}
-            </Link>
-          </Typography>
+        {routes.filter((x) => !x.hideFromMenu).map((route, index) => (
+          // <Typography key={index} component="p" color="inherit" noWrap className={classes.title}>
+          //   <Link to={route.link || route.path} className={classes.unstyledHyperlink} data-test-id={route.title}>
+          //     {route.title}
+          //   </Link>
+          // </Typography>
+          <Button
+            key={index}
+            color="inherit"
+            component={Link}
+            to={route.link || route.path}
+            startIcon={route.icon ? <route.icon /> : null}
+            className={classes.titleButton}
+            data-test-id={route.title}
+          >
+            {route.title}
+          </Button>
         ))}
         <div className={classes.flexbox} />
-        <Version />
-        <IconButton
-          ref={anchorRef}
-          color="inherit"
-          aria-controls={open ? 'user-menu' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggleMenu}
-        >
-          <PersonIcon />
-        </IconButton>
+        {user ?
+          <Button
+            ref={anchorRef}
+            color="inherit"
+            aria-controls={open ? 'user-menu' : undefined}
+            aria-haspopup="true"
+            onClick={handleToggleMenu}
+            startIcon={<PersonIcon />}
+            className={classes.titleButton}
+          >
+            {userName}
+          </Button>:
+          <React.Fragment>
+            {/* <Typography component="p" color="inherit" noWrap className={classes.title}>
+              <Link
+                to={'/application'}
+                className={classes.unsty  ledHyperlink}
+              >
+                機構申請
+              </Link>
+            </Typography> */}
+            <Button
+              color="inherit"
+              component={Link}
+              to={'/app?state=signup'}
+              startIcon={<PersonAddIcon />}
+              className={classes.titleButton}
+            >
+              註冊
+            </Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to={'/app?state=signin'}
+              startIcon={<PersonIcon />}
+              className={classes.titleButton}
+            >
+              登入
+            </Button>
+          </React.Fragment>
+        }
         <Popper
           open={open}
           anchorEl={anchorRef.current}
@@ -146,6 +205,10 @@ export default function CustomAppBar({ routes }) {
                   handleCloseMenu(e);
                   history.push('/me');
                 }}>My Profile</MenuItem> */}
+                <MenuItem disabled={true}>
+                  <Version />
+                </MenuItem>
+                <MenuItem disabled={true}>{userCognitoGroupLabel}</MenuItem>
                 <MenuItem onClick={handleSignOut}>登出</MenuItem>
               </MenuList>
             </ClickAwayListener>
@@ -157,5 +220,6 @@ export default function CustomAppBar({ routes }) {
 }
 
 CustomAppBar.propTypes = {
+  user: PropTypes.object,
   routes: PropTypes.array.isRequired,
 };

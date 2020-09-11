@@ -6,7 +6,8 @@ import OrganizationTable from 'components/OrganizationTable';
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    padding: theme.spacing(2),
+    flex: 1,
+    // padding: theme.spacing(2),
   },
 }));
 

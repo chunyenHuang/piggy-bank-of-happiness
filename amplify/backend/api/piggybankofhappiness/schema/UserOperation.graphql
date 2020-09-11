@@ -1,0 +1,34 @@
+type Mutation {
+  userOperation(input: UserOperationRequest!): UserOperationResponse
+    @function(name: "userOperation-${env}")
+    @aws_cognito_user_pools
+    @auth(rules: [
+      {allow: groups, groups: ["AppAdmins", "OrgAdmins", "OrgManagers"]},
+  ])
+}
+
+input UserOperationRequest {
+  force: Boolean
+  users: [UserOperationUser!]
+}
+
+input UserOperationUser {
+  organizationId: ID!
+  username: String!
+  idNumber: String!
+  name: String!
+  role: RoleType!
+  email: AWSEmail!
+  groupId: ID
+}
+
+type UserOperationResponse {
+  errors: [String] @aws_cognito_user_pools
+  organizationUsers: [UserOperationResponseUser] @aws_cognito_user_pools
+}
+
+type UserOperationResponseUser {
+  organizationId: String @aws_cognito_user_pools
+  username: String @aws_cognito_user_pools
+  password: String @aws_cognito_user_pools
+}

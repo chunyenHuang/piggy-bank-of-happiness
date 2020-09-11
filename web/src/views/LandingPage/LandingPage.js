@@ -10,7 +10,8 @@ import AppleIcon from '@material-ui/icons/Apple';
 const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
+    // height: `calc(100vh - 64px)`,
   },
 }));
 
@@ -20,11 +21,11 @@ export default function LandingPage() {
   return (
     <Container maxWidth="sm">
       <Grid className={classes.content} container alignItems="center" justify="center" direction="column">
-        <Box component="div" className={classes.content}>
+        <Box component="div" p={4}>
           <img src="/images/logo-256.png" alt="Logo" width="256" />
         </Box>
 
-        <Grid container justify="space-around" alignItems="center" className={classes.content}>
+        <Grid container justify="space-around" alignItems="center">
           <Button
             variant="outlined"
             color="primary"

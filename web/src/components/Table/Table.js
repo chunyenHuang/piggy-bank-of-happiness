@@ -10,13 +10,37 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
+import SyncIcon from '@material-ui/icons/Sync';
+import AddIcon from '@material-ui/icons/Add';
+// import AddCircleIcon from '@material-ui/icons/AddCircle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Footer from './Footer';
 import EditField from './EditField';
 
 const useStyles = makeStyles((theme) => ({
-  number: {
+  container: {
+    position: 'relative',
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
+  numberContainer: {
     textAlign: 'right',
+    paddingRight: theme.spacing(1),
+  },
+  loadingContainer: {
+    position: 'absolute',
+    zIndex: 110,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: 'rgba(255,255,255,0.8)',
   },
 }));
 
@@ -25,6 +49,7 @@ const theme = (props = {}) => {
   const cellStyle = Object.assign({
 
   }, cell);
+
 
   return createMuiTheme({
     overrides: {
@@ -55,7 +80,20 @@ const theme = (props = {}) => {
 
 const NON_EDITABLE_FIELDS = ['actions', 'createdAt', 'updatedAt', 'username'];
 
-function Table({ title, description, data, columns, options, themeProps, onUpdateItem }) {
+export default function Table({
+  title,
+  description,
+  data,
+  columns,
+  options,
+  themeProps,
+  onUpdateItem,
+  onRefresh,
+  onAddItem,
+  isLoading,
+  nested = false,
+  hide,
+}) {
   const classes = useStyles();
 
   const [updatedColumns, setUpdatedColumns] = useState(columns);
@@ -66,7 +104,9 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
   const updatedOptions = Object.assign({
     enableNestedDataAccess: '.',
     pagination: true,
-    responsive: 'standard',
+    responsive: nested ? 'vertical' : 'standard',
+    tableBodyHeight: nested ? undefined : 'calc(100vh - 183px)',
+    // tableBodyMaxHeight
     rowsPerPageOptions: [10, 20, 100],
     rowsPerPage: 10,
     filterType: 'checkbox',
@@ -86,6 +126,27 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
       const item = data[rowMeta.dataIndex];
       console.log(item);
     },
+    customToolbar: () =>
+      <React.Fragment>
+        {onRefresh &&
+          <Tooltip title={'更新資料'}>
+            <IconButton
+              data-testid={'refresh-iconButton'}
+              aria-label={'refresh'}
+              onClick={onRefresh}>
+              <SyncIcon />
+            </IconButton>
+          </Tooltip>}
+        {onAddItem &&
+          <Tooltip title={'新增資料'}>
+            <IconButton
+              data-testid={'add-iconButton'}
+              aria-label={'add'}
+              onClick={onAddItem}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>}
+      </React.Fragment>,
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
       return (
         <Footer
@@ -179,84 +240,106 @@ function Table({ title, description, data, columns, options, themeProps, onUpdat
       });
     }
 
-    newColumns.map((column, index) => {
-      if (!Object.prototype.hasOwnProperty.call(column, 'options')) {
-        column.options = {};
-      }
-      return column;
-    }).forEach(({ name, edit, type, options = {} }) => {
-      switch (type) {
-      case 'actions':
-        break;
-      case 'datetime':
-        options.customBodyRender = (value) => value ? moment(value).format('YYYY/MM/DD h:mm a') : '';
-        break;
-      case 'checkbox':
-        options.customBodyRender = (value) => {
-          const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false;
-          return (<Checkbox checked={isChecked} />);
-        };
-        break;
-      case 'number':
-        options.customBodyRender = (val) => (
-          <div className={classes.number}>
-            {!isNaN(val) ? new Intl.NumberFormat().format(val) : 'N/A'}
-          </div>
-        );
-        break;
-      case 'currency':
-        options.customBodyRender = (val) => (
-          <div className={classes.number}>
-            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val / 100)}
-          </div>
-        );
-        break;
-      case 'boolean':
-        options.customBodyRender = (val) => val ? 'yes' : 'no';
-        break;
-      default:
-        options.customBodyRender = options.customBodyRender || ((val) => val ? val : null);
-        break;
-      }
+    newColumns
+      .map((column, index) => {
+        if (!Object.prototype.hasOwnProperty.call(column, 'options')) {
+          column.options = {};
+        }
+        return column;
+      })
+      .forEach(({ name, edit, type, options = {} }) => {
+        switch (type) {
+        case 'actions':
+          break;
+        case 'datetime':
+          options.customBodyRender = (value) => {
+            if (!value) return '';
+            return (
+              <div>
+                {moment(value).format('YYYY/MM/DD')} <br/>
+                {moment(value).format('HH:mm')}
+              </div>);
+          };
+          break;
+        case 'checkbox':
+          options.customBodyRender = (value) => {
+            const isChecked = (value == 'true' || value === 'yes' || value === true || value === 1) ? true : false; // eslint-disable-line eqeqeq
+            return (<Checkbox checked={isChecked} color="default" disabled={true} />);
+          };
+          break;
+        case 'number':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {!isNaN(val) ? new Intl.NumberFormat().format(val) : 'N/A'}
+            </div>
+          );
+          break;
+        case 'currency':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val / 100)}
+            </div>
+          );
+          break;
+        case 'boolean':
+          options.customBodyRender = (val) => val ? 'yes' : 'no';
+          break;
+        default:
+          options.customBodyRender = options.customBodyRender || ((val) => val ? val : null);
+          break;
+        }
 
-      if (editDataIndex !== -1 && edit && !NON_EDITABLE_FIELDS.includes(name)) {
-        options.display = true;
-        options.customBodyRenderLite = (dataIndex) => {
-          const defaultValue = data[dataIndex][name];
-          const currentValue = editItem[name];
+        if (editDataIndex !== -1 && edit && !NON_EDITABLE_FIELDS.includes(name)) {
+          options.display = true;
+          options.customBodyRenderLite = (dataIndex) => {
+            const defaultValue = data[dataIndex][name];
+            const currentValue = editItem[name];
 
-          return (dataIndex === editDataIndex) ?
-            <EditField
-              name={name}
-              data={editItem}
-              value={currentValue}
-              editIndex={dataIndex}
-              {...edit}
-              onUpdate={(value) => {
-                editItem[name] = value;
-                if (edit.rerenderAfterSelect) {
-                  // only reset the editItem if needed
-                  setEditItem({ ...editItem });
-                } else {
-                  setEditItem(editItem);
-                }
-              }} /> :
-            options.customBodyRender ? options.customBodyRender(defaultValue) : defaultValue;
-        };
-      }
-    });
+            return (dataIndex === editDataIndex) ?
+              <EditField
+                name={name}
+                data={editItem}
+                value={currentValue}
+                editIndex={dataIndex}
+                {...edit}
+                onUpdate={(value) => {
+                  editItem[name] = value;
+                  if (edit.rerenderAfterSelect) {
+                    // only reset the editItem if needed
+                    setEditItem({ ...editItem });
+                  } else {
+                    setEditItem(editItem);
+                  }
+                }} /> :
+              options.customBodyRender ? options.customBodyRender(defaultValue) : defaultValue;
+          };
+        }
+        // if (editDataIndex !== -1 && !edit && name !== 'actions') {
+        //   options.display = false;
+        // }
+
+        if (Array.isArray(hide) && hide.includes(name)) {
+          options.display = false;
+        }
+      });
 
     setUpdatedColumns(newColumns);
-  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.number]);
+  }, [columns, editDataIndex, data, editItem, onUpdateItem, classes.numberContainer, hide]);
 
   return (
     <MuiThemeProvider theme={theme(themeProps)}>
-      <MUIDataTable
-        title={title}
-        data={data}
-        columns={updatedColumns}
-        options={updatedOptions}
-      />
+      <div className={classes.container}>
+        {isLoading &&
+          <div className={classes.loadingContainer}>
+            <CircularProgress size={36} />
+          </div>}
+        <MUIDataTable
+          title={title}
+          data={data}
+          columns={updatedColumns}
+          options={updatedOptions}
+        />
+      </div>
     </MuiThemeProvider>
   );
 }
@@ -271,6 +354,8 @@ Table.propTypes = {
   themeProps: PropTypes.object,
   maxHeight: PropTypes.string,
   onUpdateItem: PropTypes.func,
+  onRefresh: PropTypes.func,
+  onAddItem: PropTypes.func,
+  isLoading: PropTypes.bool,
+  hide: PropTypes.array,
 };
-
-export default Table;

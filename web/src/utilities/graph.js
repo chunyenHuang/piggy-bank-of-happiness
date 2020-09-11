@@ -1,5 +1,9 @@
 import API, { graphqlOperation } from '@aws-amplify/api';
 import to from 'await-to-js';
+import { toastr } from 'react-redux-toastr';
+
+import apiErrorCodes from 'constants/apiErrorCodes';
+
 const THRESHOLD = 500;
 
 const __DEV__ = process.env.NODE_ENV === 'development';
@@ -22,11 +26,14 @@ export async function request(query, params, authMode) {
 
   if (err) {
     global.logger.error(err);
+
+    const msg = apiErrorCodes[err.errors[0].errorType] || err.errors[0].message;
+    toastr.error(msg);
+
     if (__DEV__) {
       global.logger.debug(query);
       global.logger.debug(JSON.stringify(params || {}, null, 2));
     }
-    global.logger.error(err);
     throw err;
   }
 

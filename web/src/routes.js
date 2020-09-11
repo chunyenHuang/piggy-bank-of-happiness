@@ -2,14 +2,30 @@ import { Route } from 'react-router-dom';
 
 import ProtectedRoute from 'components/ProtectedRoute';
 
+// User
 import UserDashboard from 'views/User/Dashboard/Dashboard';
+
+// AppAdmin
 // import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
 import Organizations from 'views/Admin/Organizations/Organizations';
-import Organization from 'views/Admin/Organization/Organization';
-import Users from 'views/Admin/Users/Users';
+// import Organization from 'views/Admin/Organization/Organization';
+import AppUsers from 'views/Admin/AppUsers/AppUsers';
 
-export const general = [
-].map((item) => {
+// OrgAdmin
+import OrganizationUsers from 'views/OrgAdmin/Users/Users';
+import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
+import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
+import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
+
+import ListIcon from '@material-ui/icons/List';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import PeopleIcon from '@material-ui/icons/People';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import PaymentIcon from '@material-ui/icons/Payment';
+import BusinessIcon from '@material-ui/icons/Business';
+import LockIcon from '@material-ui/icons/Lock';
+
+export const general = [].map((item) => {
   item.route = item.route || Route;
   return item;
 });
@@ -29,6 +45,112 @@ export const user = [
   return item;
 });
 
+export const orgManager = [
+  {
+    title: '班級',
+    icon: GroupWorkIcon,
+    paths: [
+      { path: '/groups', exact: true },
+    ],
+    component: OrganizationGroups,
+  },
+  {
+    title: '任務',
+    icon: ListIcon,
+    paths: [
+      { path: '/programs', exact: true },
+    ],
+    component: OrganizationPrograms,
+  },
+  {
+    title: '學生',
+    icon: PeopleIcon,
+    paths: [
+      {
+        path: '/users',
+        link: '/users?' + [
+          'title=學生',
+          'roles[]=User',
+          'hide[]=role',
+        ].join('&'),
+        exact: true,
+      },
+    ],
+    component: OrganizationUsers,
+  },
+].map((item) => {
+  item.route = item.route || ProtectedRoute;
+  item.roles = ['OrgManagers'];
+  return item;
+});
+
+export const orgAdmin = [
+  {
+    title: '班級',
+    icon: GroupWorkIcon,
+    paths: [
+      { path: '/groups', exact: true },
+    ],
+    component: OrganizationGroups,
+  },
+  {
+    title: '任務',
+    icon: ListIcon,
+    paths: [
+      { path: '/programs', exact: true },
+    ],
+    component: OrganizationPrograms,
+  },
+  {
+    title: '學生',
+    icon: PeopleIcon,
+    paths: [
+      {
+        path: '/users',
+        link: '/users?' + [
+          'title=學生',
+          'roles[]=User',
+          'hide[]=role',
+        ].join('&'),
+        exact: true,
+      },
+    ],
+    component: OrganizationUsers,
+  },
+  {
+    title: '職員',
+    icon: SupervisedUserCircleIcon,
+    paths: [
+      {
+        path: '/users',
+        link: '/users?' + [
+          'title=職員',
+          'roles[]=Admin',
+          'roles[]=Manager',
+          'hide[]=idNumber',
+          'hide[]=currentPoints',
+          'hide[]=earnedPoints',
+          'hide[]=groupId',
+        ].join('&'),
+        exact: true,
+      },
+    ],
+    component: OrganizationUsers,
+  },
+  {
+    title: '交易紀錄',
+    icon: PaymentIcon,
+    paths: [
+      { path: '/transactions', exact: true },
+    ],
+    component: OrganizationTransactions,
+  },
+].map((item) => {
+  item.route = item.route || ProtectedRoute;
+  item.roles = ['OrgAdmins', 'AppAdmins'];
+  return item;
+});
+
 export const admin = [
   // {
   //   title: '首頁',
@@ -41,37 +163,39 @@ export const admin = [
   // },
   {
     title: '機構',
+    icon: BusinessIcon,
     paths: [
       { path: '/organizations', exact: true },
     ],
     component: Organizations,
   },
-  {
-    title: '機構',
-    paths: [
-      { path: '/organization/:id', exact: true },
-    ],
-    component: Organization,
-    hideFromMenu: true,
-  },
+  // {
+  //   title: '機構',
+  //   paths: [
+  //     { path: '/organization/:id', exact: true },
+  //   ],
+  //   component: Organization,
+  //   hideFromMenu: true,
+  // },
   {
     title: '軟體用戶',
+    icon: LockIcon,
     paths: [
       { path: '/appUsers', exact: true },
     ],
-    component: Users,
+    component: AppUsers,
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
-  item.roles = ['OrgAdmins', 'AppAdmins'];
+  item.roles = ['AppAdmins'];
   return item;
 });
 
 export const appRoutes = [
-  ...general, ...user, ...admin,
+  ...general, ...admin, ...orgAdmin, ...orgManager, ...user,
 ].reduce((all, item) => {
-  item.paths.forEach(({ path, exact = true }) => {
-    all.push(Object.assign({ path, exact }, item));
+  item.paths.forEach(({ path, link, exact = true }) => {
+    all.push(Object.assign({ path, link, exact }, item));
   });
   return all;
 }, []);

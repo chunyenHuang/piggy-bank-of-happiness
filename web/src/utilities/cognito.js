@@ -148,3 +148,17 @@ export async function enableUser(username) {
   };
   return API.post(apiName, path, params);
 }
+
+export function getRoleByGroup(inGroup) {
+  switch (inGroup) {
+  case 'AppAdmins':
+  case 'OrgAdmins':
+    return 'Admin';
+  case 'OrgManagers':
+    return 'Manager';
+  case 'Users':
+  case 'N/A':
+  default:
+    return 'User';
+  }
+}
