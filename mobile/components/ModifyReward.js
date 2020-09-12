@@ -48,6 +48,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         id: uuidv1(),
         isActive: 1,
         requiredPoints: parseFloat(reward.requiredPoints) * 100,
+        total: parseInt(reward.total),
         createdBy: username,
         createdAt: now,
         updatedAt: now,
@@ -62,6 +63,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         name: reward.name,
         description: reward.description,
         requiredPoints: parseFloat(reward.requiredPoints) * 100,
+        total: parseInt(reward.total),
         updatedAt: now,
       };
 
@@ -170,6 +172,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
           errors={errors}
           defaultValue={reward}
           onUpdate={(data)=>{
+            console.log(data);
             setReward(data);
             setIsDirty(true);
           }}

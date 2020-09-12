@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import { asyncListAll } from 'src/utils/request';
@@ -115,14 +115,16 @@ export default function GroupList() {
       {groups.map((group, index)=>(
         <ListItem
           key={index}
-          title={group.name}
-          subtitle={group.description}
-          subtitleStyle={styles.subtitle}
           bottomDivider
-          chevron
           onPress={() => setGroup(group)}
-          badge={getBadge(group)}
-        />
+        >
+          <ListItem.Content>
+            <ListItem.Title>{group.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{group.description}</ListItem.Subtitle>
+          </ListItem.Content>
+          <Badge {...getBadge(group)} />
+          <ListItem.Chevron />
+        </ListItem>
       ))}
     </ScrollView>
   );

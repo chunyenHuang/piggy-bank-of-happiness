@@ -13,6 +13,7 @@ import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
+import AddRewardToUser from './AddRewardToUser';
 
 export default function User({ user: inUser, mode }) {
   const [user, setUser] = useState({
@@ -95,6 +96,10 @@ export default function User({ user: inUser, mode }) {
                 onUpdate={load}
               />
             </View>}
+            {isActive &&
+              <AddRewardToUser
+                user={user}
+                onUpdate={load}/>}
           </View>
         </View>
       </View>

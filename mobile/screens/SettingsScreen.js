@@ -41,11 +41,14 @@ export default function SettingsScreen() {
       {menu.map(({ title, onPress })=>(
         <ListItem
           key={title}
-          title={title}
           bottomDivider
-          chevron
           onPress={onPress}
-        />
+        >
+          <ListItem.Content>
+            <ListItem.Title>{title}</ListItem.Title>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       ))}
       <View style={{ height: 32 }}></View>
       <SignOutButton />

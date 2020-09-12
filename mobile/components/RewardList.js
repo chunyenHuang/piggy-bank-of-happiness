@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, AsyncStorage, RefreshControl, ScrollView } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
-import { List } from 'react-native-paper';
+import { StyleSheet, AsyncStorage, RefreshControl, ScrollView, Text } from 'react-native';
+import { ListItem, Badge } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
+import NumericInput from 'react-native-numeric-input';
 
 import { asyncListAll } from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
@@ -16,19 +16,15 @@ import check from 'src/permission/check';
 export default function RewardList({ mode = 'edit', onSelect, disabled = false }) {
   const [toModifyItem, setToModifyItem] = useState();
   const [rewards, setRewards] = useState([]);
-  const [refresh, setRefresh] = useState(Date.now());
   const [isLoading, setIsLoading] = useState(false);
 
-  global.logger.debug(refresh);
-
-  const handlerPress = (task) => {
-    if (mode === 'select') {
-      onSelect && onSelect(task);
-      setRefresh(Date.now());
-    }
+  const handlerPress = (reward, value) => {
+    reward.amount = value;
+    onSelect(reward);
   };
 
   const renderRefreshingControl = () => {
+    if (mode === 'select') return;
     return (
       <RefreshControl
         refreshing={isLoading}
@@ -41,7 +37,16 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     mode === 'select' && Hub.dispatch('app', { event: 'loading' });
 
     const organizationId = await AsyncStorage.getItem('app:organizationId');
-    const rewards = await asyncListAll(listOrganizationRewards, { organizationId });
+    const params = { organizationId };
+
+    if (mode === 'select') {
+      params.filter = {
+        isActive: { eq: 1 },
+        total: { gt: 1 },
+      };
+    }
+
+    const rewards = await asyncListAll(listOrganizationRewards, params);
     setRewards(rewards);
 
     mode === 'edit' && setIsLoading(false);
@@ -85,26 +90,9 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     };
   }, []);
 
-  const getBadge = (item) => {
-    if (item.isActive) {
-      return {
-        value: item.requiredPoints / 100,
-        textStyle: styles.badgeTextActive,
-        badgeStyle: styles.badgeActive,
-      };
-    } else {
-      return {
-        value: '停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.contentContainer}
       refreshControl={renderRefreshingControl()}
     >
       {mode === 'edit' &&
@@ -113,58 +101,78 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
           item={toModifyItem}
           onClose={() => setToModifyItem(undefined)}
         />}
-      <List.Section>
-        {rewards
-          .sort(sortBy('name', true))
-          .sort(sortBy('requiredPoints'))
-          .sort(sortBy('isActive', true))
-          .map((reward, index)=>(
-            <ListItem
-              key={index}
-              // leftAvatar={{ source: { uri: randomAvatarUrl } }}
-              containerStyle={{ backgroundColor: reward.isSelected? Colors.highlight : '#fff' }}
-              title={reward.name}
-              subtitle={reward.description}
-              subtitleStyle={styles.subtitle}
-              bottomDivider
-              disabled={disabled}
-              chevron={mode === 'edit'}
-              leftIcon={mode==='select' ?
-                <Icon
-                  name={reward.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
-                  // size={15}
-                  type='ionicon'
-                  containerStyle={{ paddingRight: 10 }}
-                /> : undefined}
-              badge={getBadge(reward)}
-              onPress={() => {
-                if (mode === 'select') {
-                  if (!reward.isSelected) {
-                    setToModifyItem(reward);
-                  } else {
-                    reward.isSelected = !reward.isSelected;
-                    handlerPress(reward);
-                  }
-                } else
-                if (mode === 'edit') {
-                  setToModifyItem(reward);
-                }
-              }}
+      {rewards
+        .sort(sortBy('name', true))
+        .sort(sortBy('requiredPoints'))
+        .sort(sortBy('isActive', true))
+        .map((reward, index)=>(
+          <ListItem
+            key={index}
+            bottomDivider
+            disabled={disabled}
+            containerStyle={{ backgroundColor: reward.amount > 0 ? Colors.highlight : '#fff' }}
+            onPress={mode === 'edit' ? () => {
+              setToModifyItem(reward);
+            }: undefined}
+          >
+            {/* {mode==='select' &&
+              <Icon
+                name={reward.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
+                // size={15}
+                type='ionicon'
+                containerStyle={{ paddingRight: 10 }}
+              />} */}
+            <ListItem.Content>
+              <ListItem.Title>{reward.name}</ListItem.Title>
+              <ListItem.Subtitle style={styles.subtitle}>{reward.description}</ListItem.Subtitle>
+            </ListItem.Content>
+
+            {!reward.isActive &&
+              <Badge
+                value={'停用中'}
+                textStyle={styles.badgeTextInactive}
+                badgeStyle={styles.badgeInactive}
+              />}
+            <Badge
+              value={reward.requiredPoints / 100}
+              textStyle={styles.badgeTextActive}
+              badgeStyle={styles.badgeActive}
             />
-          ))}
-      </List.Section>
+            {mode === 'select' &&
+              <NumericInput
+                totalWidth={120}
+                totalHeight={45}
+                minValue={0}
+                maxValue={reward.total}
+                disabled={isLoading}
+                // borderColor={'#fff'}
+                // textColor={'#2189DC'}
+                // leftButtonBackgroundColor={Colors.raised}
+                // rightButtonBackgroundColor={Colors.primary}
+                onChange={(value) => handlerPress(reward, value)} />
+            }
+            {mode === 'edit' &&
+              <Text style={styles.amountContainer}>x {reward.total}</Text>}
+            {mode === 'edit' &&
+              <ListItem.Chevron />}
+          </ListItem>
+        ))}
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   header: {
     marginTop: 12,
     padding: 12,
     fontSize: 18,
     color: Colors.light,
+  },
+  amountContainer: {
+    width: 40,
+    textAlign: 'right',
   },
   subtitle: {
     fontSize: 10,

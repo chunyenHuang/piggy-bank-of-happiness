@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage, RefreshControl, ScrollView } from 'react-native';
-import { ListItem, Text, Icon, Slider, Button } from 'react-native-elements';
+import { ListItem, Text, Icon, Slider, Button, Badge } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { Hub } from 'aws-amplify';
 import Modal from 'react-native-modal';
@@ -175,22 +175,9 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             {program.tasks.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((task)=>(
               <ListItem
                 key={task.name}
-                // leftAvatar={{ source: { uri: randomAvatarUrl } }}
                 containerStyle={{ backgroundColor: task.isSelected? Colors.highlight : '#fff' }}
-                title={task.name}
-                subtitle={task.description}
-                subtitleStyle={styles.subtitle}
                 bottomDivider
                 disabled={disabled}
-                chevron={mode === 'edit'}
-                leftIcon={mode==='select' ?
-                  <Icon
-                    name={task.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
-                    // size={15}
-                    type='ionicon'
-                    containerStyle={{ paddingRight: 10 }}
-                  /> : undefined}
-                badge={getBadge(task)}
                 onPress={() => {
                   if (mode === 'select') {
                     if (!task.isSelected && task.pointMin !== task.pointMax) {
@@ -205,7 +192,25 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                     setTask(task);
                   }
                 }}
-              />
+              >
+                {mode==='select' &&
+                  <Icon
+                    name={task.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
+                    // size={15}
+                    type='ionicon'
+                    containerStyle={{ paddingRight: 10 }}
+                  />}
+                <ListItem.Content>
+                  <ListItem.Title>{task.name}</ListItem.Title>
+                  {task.description &&
+                    <ListItem.Subtitle style={styles.subtitle}>{task.description}</ListItem.Subtitle>}
+                </ListItem.Content>
+                <Badge
+                  {...getBadge(task)}
+                />
+                {mode === 'edit' &&
+                  <ListItem.Chevron />}
+              </ListItem>
             ))}
           </List.Accordion>
         ))}

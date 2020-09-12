@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Avatar, Badge } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -156,7 +156,10 @@ export default function UserList() {
               {group.users.sort(sortBy('idNumber')).sort(sortBy('isActive', true)).map((user)=>(
                 <ListItem
                   key={user.username}
-                  leftAvatar={{
+                  bottomDivider
+                  onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
+                >
+                  <Avatar {...{
                     title: `${user.name.substring(0, 1)}`,
                     borderRadius: 25,
                     width: 50,
@@ -164,15 +167,14 @@ export default function UserList() {
                     color: 'red',
                     backgroundColor: Colors.light,
                     // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-                  }}
-                  title={user.name}
-                  subtitle={user.idNumber}
-                  subtitleStyle={styles.subtitle}
-                  bottomDivider
-                  chevron
-                  badge={getBadge(user)}
-                  onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
-                />
+                  }} />
+                  <ListItem.Content>
+                    <ListItem.Title>{user.name}</ListItem.Title>
+                    <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>
+                  </ListItem.Content>
+                  <Badge {...getBadge(group)} />
+                  <ListItem.Chevron />
+                </ListItem>
               ))}
             </List.Accordion>
           ))}

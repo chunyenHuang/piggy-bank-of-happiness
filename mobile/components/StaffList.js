@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
 
 import request from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
@@ -79,28 +79,22 @@ export default function StaffList() {
       {users.map((user, index)=>(
         <ListItem
           key={index}
-          leftAvatar={{
+          bottomDivider
+        >
+          <Avatar {...{
             title: `${user.name.substring(0, 1)}`,
             borderRadius: 25,
             width: 50,
             height: 50,
             backgroundColor: Colors.light,
             // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }}
-          title={user.name}
-          subtitle={user.username}
-          subtitleStyle={styles.subtitle}
-          rightTitle={getRoleDisplayName(user.role)}
-          bottomDivider
-          // chevron
-          // badge={{
-          //   // status: 'success',
-          //   value: user.currentPoints,
-          //   textStyle: styles.badgeText,
-          //   badgeStyle: styles.badge,
-          // }}
-          // onPress={() => navigation.navigate('User', user)}
-        />
+          }} />
+          <ListItem.Content>
+            <ListItem.Title>{user.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{user.username}</ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Title>{getRoleDisplayName(user.role)}</ListItem.Title>
+        </ListItem>
       ))}
     </ScrollView>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import { asyncListAll } from 'src/utils/request';
@@ -115,14 +115,16 @@ export default function ProgramList() {
       {programs.map((program, index)=>(
         <ListItem
           key={index}
-          title={program.name}
-          subtitle={program.description}
-          subtitleStyle={styles.subtitle}
           bottomDivider
-          chevron
           onPress={() => setProgram(program)}
-          badge={getBadge(program)}
-        />
+        >
+          <ListItem.Content>
+            <ListItem.Title>{program.name}</ListItem.Title>
+            {program.description && <ListItem.Subtitle style={styles.subtitle}>{program.description}</ListItem.Subtitle>}
+          </ListItem.Content>
+          <Badge {...getBadge(program)} />
+          <ListItem.Chevron />
+        </ListItem>
       ))}
     </ScrollView>
   );

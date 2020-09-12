@@ -118,7 +118,7 @@ function OrganizationUserTable({
       name: 'currentPoints',
       label: '目前點數',
       isTemplate: true,
-      type: 'number',
+      type: 'point',
       options: {
         display: true,
         filter: false,
@@ -129,7 +129,7 @@ function OrganizationUserTable({
       name: 'earnedPoints',
       label: '總點數',
       isTemplate: true,
-      type: 'number',
+      type: 'point',
       options: {
         display: true,
         filter: false,
@@ -199,6 +199,8 @@ function OrganizationUserTable({
       setIsLoading(true);
       const user = Object.assign(newRecord, {
         idNumber: newRecord.idNumber || 'N/A',
+        currentPoints: +(parseFloat(newRecord.currentPoints) * 100),
+        earnedPoints: +(parseFloat(newRecord.earnedPoints) * 100),
       });
       await request(userOperation, { input: { users: [user] } });
 
@@ -219,6 +221,8 @@ function OrganizationUserTable({
           organizationId,
           isActive: 1,
           idNumber: item.idNumber || 'N/A',
+          currentPoints: +(parseFloat(item.currentPoints) * 100),
+          earnedPoints: +(parseFloat(item.earnedPoints) * 100),
         });
       });
 
