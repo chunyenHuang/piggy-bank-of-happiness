@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
 import moment from 'moment';
-
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request, { asyncListAll } from 'src/utils/request';
-import Colors from 'constants/Colors';
 import { listOrganizationGroups } from 'src/graphql/queries';
 import { createOrganizationUser, updateOrganizationUser } from 'src/graphql/mutations';
 import check from 'src/permission/check';
@@ -20,9 +17,9 @@ const roles = [
   { name: '審核中', id: 'PendingApproval' },
 ];
 
-export default function ModifyUser({ user: inUser, button, isApproval = false }) {
+export default function ModifyUser({ user: inUser, button, isApproval = false, visible: inVisible, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(!!inVisible);
   const [isDirty, setIsDirty] = useState(false);
   const [groups, setGroups] = useState([]);
   const [originalUser, setOriginalUser] = useState({});
@@ -82,13 +79,12 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
     }
 
     resetState();
+    onClose && onClose();
   };
 
   const resetState = () => {
     setIsLoading(false);
     setVisible(false);
-    setOriginalUser({});
-    setUser({});
     setIsDirty(false);
     setErrors([]);
   };
@@ -105,7 +101,7 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
     },
     {
       key: 'role',
-      required: true,
+      // required: true, // TODO: when create new a user, there is no role
       type: 'select',
       options: roles.map((item) => {
         return { label: item.name, value: item.id };
@@ -173,6 +169,10 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
   }, [inUser]);
 
   useEffect(() => {
+    setVisible(inVisible);
+  }, [inVisible]);
+
+  useEffect(() => {
     (async () => {
       const organizationId = await AsyncStorage.getItem('app:organizationId');
       const groups = await asyncListAll(listOrganizationGroups, { organizationId });
@@ -182,21 +182,7 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
 
   return (
     <React.Fragment>
-      {button ?
-        <Button
-          icon={
-            <Icon
-              name={'md-create'}
-              type='ionicon'
-              color={Colors.dark }
-              containerStyle={{ paddingRight: 10 }}
-            />
-          }
-          type="clear"
-          title={'修改資料'}
-          titleStyle={{ color: Colors.dark }}
-          onPress={()=>setVisible(true)}
-        />:
+      { button &&
         <AddButton
           onPress={() => setVisible(true)}
         />}
@@ -210,6 +196,7 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
           setUser(cloneOrignalUser);
           setIsDirty(false);
           setErrors([]);
+          onClose && onClose();
         }}
         padding
         bottomButtonProps={{
