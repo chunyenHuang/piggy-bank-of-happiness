@@ -236,7 +236,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             }}
             style={{ marginTop: 30, marginBottom: 50 }}
             thumbTouchSize={{ width: 100, height: 100 }}
-            thumbTintColor={Colors.primary}
+            thumbTintColor={Colors.alternative}
             thumbStyle={styles.thumb}
           />
           <View style={styles.pointsRangeContainer}>
@@ -247,6 +247,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             <Button
               title="取消"
               type="clear"
+              titleStyle={{ color: Colors.alternative }}
               buttonStyle={styles.button}
               onPress={() => {
                 setTask(undefined);
@@ -254,7 +255,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             />
             <Button
               title="確認"
-              buttonStyle={styles.button}
+              buttonStyle={{ ...styles.button, backgroundColor: Colors.alternative }}
               onPress={() => {
                 task.point = newPoint;
                 task.isSelected = true;
@@ -297,6 +298,7 @@ const styles = StyleSheet.create({
   badgeActive: {
     height: 25,
     padding: 5,
+    backgroundColor: Colors.alternative,
   },
   badgeInactive: {
     height: 25,

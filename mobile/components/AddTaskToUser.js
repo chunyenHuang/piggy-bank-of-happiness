@@ -8,6 +8,7 @@ import request from '../src/utils/request';
 import { createOrganizationUserTask, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 import TaskList from './TaskList';
 import CustomModal from './CustomModal';
+import Colors from 'constants/Colors';
 
 export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onClose }) {
   const [visible, setVisible] = useState(!!inVisible);
@@ -127,6 +128,7 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
           onPress: ()=> handleSubmit(),
           disabled: tasks.length === 0 || isLoading,
         }}
+        bottomButtonStyle={{ backgroundColor: Colors.alternative }}
       >
         <TaskList
           mode="select"
