@@ -48,6 +48,7 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     }
 
     const rewards = await asyncListAll(listOrganizationRewards, params);
+    console.log(rewards);
     setRewards(rewards);
 
     mode === 'edit' && setIsLoading(false);
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
   badgeActive: {
     height: 25,
     padding: 5,
+    backgroundColor: Colors.accent,
   },
   badgeInactive: {
     height: 25,
