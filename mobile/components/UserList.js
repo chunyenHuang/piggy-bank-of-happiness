@@ -13,6 +13,7 @@ import { onCreateOrganizationUser, onUpdateOrganizationUser } from '../src/graph
 import CustomSearchBar from './CustomSearchBar';
 import check from '../src/permission/check';
 import UserAvatar from 'components/UserAvatar';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function UserList() {
   const navigation = useNavigation();
@@ -122,16 +123,6 @@ export default function UserList() {
     };
   }, [groups]);
 
-  const getBadge = (user) => {
-    if (!user.isActive) {
-      return {
-        value: '帳號停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <View style={styles.container}>
       <CustomSearchBar
@@ -170,7 +161,7 @@ export default function UserList() {
                     <ListItem.Title>{user.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>
                   </ListItem.Content>
-                  <Badge {...getBadge(group)} />
+                  {!user.isActive && <BadgeInactive />}
                   <ListItem.Chevron />
                 </ListItem>
               ))}

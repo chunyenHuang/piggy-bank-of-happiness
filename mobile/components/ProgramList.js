@@ -10,6 +10,7 @@ import Colors from 'constants/Colors';
 import ModifyProgram from 'components/ModifyProgram';
 import check from 'src/permission/check';
 import { onCreateOrganizationProgram, onUpdateOrganizationProgram } from 'src/graphql/subscriptions';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function ProgramList() {
   const [programs, setPrograms] = useState([]);
@@ -89,18 +90,6 @@ export default function ProgramList() {
     load();
   }, []);
 
-  const getBadge = (program) => {
-    if (program.isActive) {
-      return null;
-    } else {
-      return {
-        value: '停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
@@ -122,7 +111,7 @@ export default function ProgramList() {
             <ListItem.Title>{program.name}</ListItem.Title>
             {program.description && <ListItem.Subtitle style={styles.subtitle}>{program.description}</ListItem.Subtitle>}
           </ListItem.Content>
-          <Badge {...getBadge(program)} />
+          {!program.isActive && <BadgeInactive />}
           <ListItem.Chevron />
         </ListItem>
       ))}

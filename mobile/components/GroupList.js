@@ -9,6 +9,7 @@ import Colors from 'constants/Colors';
 import ModifyGroup from 'components/ModifyGroup';
 import check from 'src/permission/check';
 import { onCreateOrganizationGroup, onUpdateOrganizationGroup } from 'src/graphql/subscriptions';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function GroupList() {
   const [groups, setGroups] = useState([]);
@@ -89,18 +90,6 @@ export default function GroupList() {
     };
   }, [groups]);
 
-  const getBadge = (group) => {
-    if (group.isActive) {
-      return null;
-    } else {
-      return {
-        value: '停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
@@ -122,7 +111,7 @@ export default function GroupList() {
             <ListItem.Title>{group.name}</ListItem.Title>
             <ListItem.Subtitle style={styles.subtitle}>{group.description}</ListItem.Subtitle>
           </ListItem.Content>
-          <Badge {...getBadge(group)} />
+          {!group.isActive && <BadgeInactive />}
           <ListItem.Chevron />
         </ListItem>
       ))}
