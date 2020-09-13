@@ -8,9 +8,10 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-// import { useHeaderHeight } from '@react-navigation/stack';
+
 import PointsHandler from './PointsHandler';
 import ModifyUser from './ModifyUser';
+import { getHeaderProps } from 'src/utils/device';
 
 export default function UserScreenTopMenu({ user: inUser }) {
   const [adjustmentVisible, setAdjustmentVisible] = useState(false);
@@ -46,8 +47,8 @@ export default function UserScreenTopMenu({ user: inUser }) {
   const CustomMenu = (props) => {
     const { style, children, layouts, ...other } = props;
     const position = computePosition(layouts);
-    // const headerHeight = useHeaderHeight(); // TODO
-    position.top += 38;
+    const { paddingTop } = getHeaderProps();
+    position.top += paddingTop;
     return (
       <View {...other} style={[styles.customMenuStyles, style, position]}>
         {children}

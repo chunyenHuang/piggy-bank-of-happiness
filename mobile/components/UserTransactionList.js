@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
@@ -32,16 +32,18 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>交易紀錄</Text>
-      {transactions.sort(sortBy('updatedAt', true)).map((tx, index) => (
-        <TransactionListItem
-          key={index}
-          transaction={tx}
-          onUpdate={()=>{
-            load();
-            onUpdate();
-          }}
-        />
-      ))}
+      <ScrollView style={styles.container} scrollIndicatorInsets={{ right: 1 }}>
+        {transactions.sort(sortBy('updatedAt', true)).map((tx, index) => (
+          <TransactionListItem
+            key={index}
+            transaction={tx}
+            onUpdate={()=>{
+              load();
+              onUpdate();
+            }}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -51,8 +53,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 18,
-    marginLeft: 16,
-    marginTop: 16,
+    padding: 16,
     textAlign: 'left',
   },
   subtitle: {

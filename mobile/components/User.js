@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Avatar, Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -20,7 +20,7 @@ const FabActionIcon = ({ name }) => {
     name={name}
     type='font-awesome-5'
     color="#fff"
-    size={25}
+    size={20}
   />);
 };
 
@@ -38,8 +38,8 @@ const actions = [
     color: Colors.accent,
   },
   {
-    text: '新增',
-    icon: <FabActionIcon name='piggy-bank' />,
+    text: '指派任務',
+    icon: <FabActionIcon name='tasks' />,
     name: 'btAddTask',
   },
 ].map((item, index) => {
@@ -147,16 +147,10 @@ export default function User({ user: inUser, mode }) {
               <Text style={styles.pointValue}>{currency(user.currentPoints, false)}</Text>
               <Text style={styles.pointTitle}>點</Text>
             </View>
-            {isActive && <View style={styles.withdrawButton}>
-              <PointsHandler
-                user={user}
-                mode={'withdraw'}
-                onUpdate={load}
-              />
-            </View>}
           </View>
         </View>
       </View>
+
       <View // draw a line
         style={{
           width: Dimensions.get('window').width,
@@ -164,18 +158,18 @@ export default function User({ user: inUser, mode }) {
           borderBottomWidth: 1,
         }}
       />
-      <ScrollView style={styles.transactionList}>
-        <UserTransactionList
-          user={user}
-          onUpdate={load}
-        />
-      </ScrollView>
+
+      <UserTransactionList
+        user={user}
+      />
+
       {mode !== 'view' && isActive &&
         <FloatingAction
           actions={actions}
           onPressItem={onActionPressed}
           color={Colors.primary}
         />}
+
       <PointsHandler
         user={user}
         mode={'withdraw'}
@@ -183,6 +177,7 @@ export default function User({ user: inUser, mode }) {
         onClose={onWithdrawClose}
         onUpdate={load}
       />
+
       <AddTaskToUser
         user={user}
         visible={addTaskVisible}
@@ -199,8 +194,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    marginLeft: 16,
+    padding: 16,
   },
   headerColumn: {
     flex: 1,
@@ -227,11 +221,6 @@ const styles = StyleSheet.create({
     color: Colors.focused,
     fontWeight: 'bold',
     marginTop: -2,
-  },
-  withdrawButton: {
-    flex: 1,
-    alignItems: 'flex-end',
-    marginRight: 16,
   },
   transactionList: {
     flex: 1,

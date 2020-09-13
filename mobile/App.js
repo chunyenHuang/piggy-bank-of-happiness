@@ -98,7 +98,7 @@ function App({ authState, onStateChange }) {
   return (
     <PaperProvider theme={paperTheme}>
       <ThemeProvider theme={elementsTheme}>
-        <MenuProvider>
+        <MenuProvider customStyles={{ backdrop: styles.popupMenuBackdrop }}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
             {isReady &&
@@ -121,6 +121,10 @@ function App({ authState, onStateChange }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  popupMenuBackdrop: {
+    backgroundColor: '#000',
+    opacity: 0.35,
   },
 });
 
