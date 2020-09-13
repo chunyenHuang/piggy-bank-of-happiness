@@ -24,7 +24,6 @@ import elementsTheme from 'constants/Elements.theme';
 import Loading from 'components/Loading';
 import UserSetup from 'components/UserSetup';
 
-
 Amplify.configure(amplifyConfig);
 Analytics.disable();
 Storage.configure({ level: 'public' });
