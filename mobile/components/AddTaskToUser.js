@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
 import { Hub } from 'aws-amplify';
@@ -8,15 +7,12 @@ import { Hub } from 'aws-amplify';
 import request from '../src/utils/request';
 import { createOrganizationUserTask, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 import TaskList from './TaskList';
-import Colors from '../constants/Colors';
 import CustomModal from './CustomModal';
 
-export default function AddTaskToUser({ user, onUpdate }) {
-  const [visible, setVisible] = useState(false);
+export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onClose }) {
+  const [visible, setVisible] = useState(!!inVisible);
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
-
-  const color = Colors.focused;
 
   const handleSelect = (task) => {
     if (task.isSelected) {
@@ -99,6 +95,7 @@ export default function AddTaskToUser({ user, onUpdate }) {
     setIsLoading(false);
     setVisible(false);
     onUpdate && onUpdate();
+    onClose && onClose();
   };
 
   useEffect(() => {
@@ -107,25 +104,22 @@ export default function AddTaskToUser({ user, onUpdate }) {
     }
   }, [visible]);
 
+  useEffect(() => {
+    if (inVisible) {
+      setTasks([]);
+      setVisible(inVisible);
+    }
+  }, [inVisible]);
+
   return (
     <View>
-      <Button
-        icon={
-          <Icon
-            name="md-add-circle"
-            size={70}
-            type='ionicon'
-            color={color}
-          />
-        }
-        type="clear"
-        onPress={()=>setVisible(true)}
-      />
-
       <CustomModal
         title="指派任務"
         visible={visible}
-        onClose={()=>setVisible(false)}
+        onClose={()=> {
+          setVisible(false);
+          onClose && onClose();
+        }}
         bottomButtonProps={{
           title: `${tasks.length} 任務 ${tasks.reduce((sum, x) => {
             return sum += x.point;

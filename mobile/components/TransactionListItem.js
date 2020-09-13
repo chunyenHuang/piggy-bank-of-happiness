@@ -229,7 +229,7 @@ const getTypeColor = (type) => {
     return Colors.accent;
   case 'credits':
   default:
-    return Colors.focused;
+    return Colors.alternative;
   }
 };
 

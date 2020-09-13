@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
-import { Avatar, Text } from 'react-native-elements';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { Avatar, Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
+import { FloatingAction } from 'react-native-floating-action';
 
 import request from '../src/utils/request';
 import { getOrganizationUser } from '../src/graphql/queries';
@@ -15,12 +16,48 @@ import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 import AddRewardToUser from './AddRewardToUser';
 
+const FabActionIcon = ({ name }) => {
+  return (<Icon
+    name={name}
+    type='font-awesome-5'
+    color="#fff"
+    size={20}
+  />);
+};
+
+const actions = [
+  {
+    text: '提取',
+    icon: <FabActionIcon name='credit-card' />,
+    name: 'btWithdraw',
+    color: Colors.raised,
+  },
+  {
+    text: '兌換',
+    icon: <FabActionIcon name='gift' />,
+    name: 'btExchange',
+    color: Colors.accent,
+  },
+  {
+    text: '指派任務',
+    icon: <FabActionIcon name='tasks' />,
+    name: 'btAddTask',
+  },
+].map((item, index) => {
+  item.buttonSize = 50;
+  item.margin = 3;
+  item.position = index + 1;
+  return item;
+});
+
 export default function User({ user: inUser, mode }) {
   const [user, setUser] = useState({
     currentPoints: 0,
     tasks: { items: [] },
     transactions: { items: [] },
   });
+  const [withdrawVisible, setWithdrawVisible] = useState(false);
+  const [addTaskVisible, setAddTaskVisible] = useState(false);
 
   const load = async () => {
     Hub.dispatch('app', { event: 'loading' });
@@ -66,6 +103,28 @@ export default function User({ user: inUser, mode }) {
     };
   }, [inUser]);
 
+  const onActionPressed = (button) => {
+    switch (button) {
+    case 'btAddTask':
+      setAddTaskVisible(true);
+      return;
+    case 'btExchange':
+
+      return;
+    case 'btWithdraw':
+      setWithdrawVisible(true);
+      return;
+    }
+  };
+
+  const onWithdrawClose = () => {
+    setWithdrawVisible(false);
+  };
+
+  const onAddTaskClose = () => {
+    setAddTaskVisible(false);
+  };
+
   const isActive = user.isActive ? true : false;
 
   return (
@@ -89,20 +148,10 @@ export default function User({ user: inUser, mode }) {
               <Text style={styles.pointValue}>{currency(user.currentPoints, false)}</Text>
               <Text style={styles.pointTitle}>點</Text>
             </View>
-            {isActive && <View style={styles.withdrawButton}>
-              <PointsHandler
-                user={user}
-                mode={'withdraw'}
-                onUpdate={load}
-              />
-            </View>}
-            {isActive &&
-              <AddRewardToUser
-                user={user}
-                onUpdate={load}/>}
           </View>
         </View>
       </View>
+
       <View // draw a line
         style={{
           width: Dimensions.get('window').width,
@@ -110,19 +159,32 @@ export default function User({ user: inUser, mode }) {
           borderBottomWidth: 1,
         }}
       />
-      <ScrollView style={styles.transactionList}>
-        <UserTransactionList
-          user={user}
-          onUpdate={load}
-        />
-      </ScrollView>
+
+      <UserTransactionList
+        user={user}
+      />
+
       {mode !== 'view' && isActive &&
-        <View style={styles.addTaskButton}>
-          <AddTaskToUser
-            user={user}
-            onUpdate={load}
-          />
-        </View>}
+        <FloatingAction
+          actions={actions}
+          onPressItem={onActionPressed}
+          color={Colors.primary}
+        />}
+
+      <PointsHandler
+        user={user}
+        mode={'withdraw'}
+        visible={withdrawVisible}
+        onClose={onWithdrawClose}
+        onUpdate={load}
+      />
+
+      <AddTaskToUser
+        user={user}
+        visible={addTaskVisible}
+        onClose={onAddTaskClose}
+        onUpdate={load}
+      />
     </View>
   );
 }
@@ -133,8 +195,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
-    marginLeft: 16,
+    padding: 16,
   },
   headerColumn: {
     flex: 1,
@@ -161,11 +222,6 @@ const styles = StyleSheet.create({
     color: Colors.focused,
     fontWeight: 'bold',
     marginTop: -2,
-  },
-  withdrawButton: {
-    flex: 1,
-    alignItems: 'flex-end',
-    marginRight: 16,
   },
   transactionList: {
     flex: 1,
