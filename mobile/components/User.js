@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
-import { Avatar, Text, Icon } from 'react-native-elements';
+import { Avatar, Text } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 import { FloatingAction } from 'react-native-floating-action';
