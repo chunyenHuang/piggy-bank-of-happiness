@@ -26,6 +26,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Version from 'components/Version';
 import cognitoGroups from 'constants/cognitoGroups';
+import UserAvatar from 'components/UserAvatar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +87,7 @@ export default function CustomAppBar({ user, routes }) {
   const anchorRef = useRef(null);
   const prevOpen = useRef(open);
 
+  const username = localStorage.getItem('app:username') || '';
   const userName = localStorage.getItem('app:name') || '';
   const userCognitoGroupName = localStorage.getItem('app:cognitoGroup') || '';
   const userCognitoGroupLabel = userCognitoGroupName ? cognitoGroups.find(({ value }) => value === userCognitoGroupName).label : '';
@@ -158,7 +160,8 @@ export default function CustomAppBar({ user, routes }) {
             aria-controls={open ? 'user-menu' : undefined}
             aria-haspopup="true"
             onClick={handleToggleMenu}
-            startIcon={<PersonIcon />}
+            // startIcon={<PersonIcon />}
+            startIcon={<UserAvatar username={username} />}
             className={classes.titleButton}
           >
             {userName}

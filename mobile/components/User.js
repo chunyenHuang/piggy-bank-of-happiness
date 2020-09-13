@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
-import { Avatar, Text, Icon } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 import { FloatingAction } from 'react-native-floating-action';
@@ -15,6 +15,7 @@ import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 import AddRewardToUser from './AddRewardToUser';
+import UserAvatar from 'components/UserAvatar';
 
 const FabActionIcon = ({ name }) => {
   return (<Icon
@@ -131,12 +132,11 @@ export default function User({ user: inUser, mode }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Avatar
-          rounded
+        <UserAvatar
+          username={user.username}
+          name={user.name}
           size="large"
-          title={user.name && user.name.substring(0, 1)}
-          overlayContainerStyle={{ backgroundColor: Colors.light }}
-          // source={{ uri: `https://i.pravatar.cc/100?u=${inUser.username}` }}
+          editable
         />
         <View style={styles.headerColumn}>
           <View style={styles.headerRow}>

@@ -12,6 +12,7 @@ import Colors from 'constants/Colors';
 import { onCreateOrganizationReward, onUpdateOrganizationReward } from 'src/graphql/subscriptions';
 import ModifyReward from './ModifyReward';
 import check from 'src/permission/check';
+import RewardAvatar from 'components/RewardAvatar';
 
 export default function RewardList({ mode = 'edit', onSelect, disabled = false }) {
   const [toModifyItem, setToModifyItem] = useState();
@@ -116,13 +117,11 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
               setToModifyItem(reward);
             }: undefined}
           >
-            {/* {mode==='select' &&
-              <Icon
-                name={reward.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
-                // size={15}
-                type='ionicon'
-                containerStyle={{ paddingRight: 10 }}
-              />} */}
+            <RewardAvatar
+              organizationId={reward.organizationId}
+              id={reward.id}
+              editable={mode === 'edit'}
+            />
             <ListItem.Content>
               <ListItem.Title>{reward.name}</ListItem.Title>
               <ListItem.Subtitle style={styles.subtitle}>{reward.description}</ListItem.Subtitle>

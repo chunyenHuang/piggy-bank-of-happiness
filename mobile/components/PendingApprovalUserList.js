@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
 
@@ -9,6 +9,7 @@ import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
 import { getOrgUsersByRoleByOrg } from 'src/graphql/queries';
 import { onCreateOrganizationUser, onUpdateOrganizationUser } from 'src/graphql/subscriptions';
+import UserAvatar from 'components/UserAvatar';
 
 export default function PendingApprovalUserList() {
   const navigation = useNavigation();
@@ -80,15 +81,10 @@ export default function PendingApprovalUserList() {
           bottomDivider
           onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
         >
-          <Avatar {...{
-            title: `${user.name.substring(0, 1)}`,
-            borderRadius: 25,
-            width: 50,
-            height: 50,
-            color: 'red',
-            backgroundColor: Colors.light,
-            // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }} />
+          <UserAvatar
+            username={user.username}
+            name={`${user.name}`}
+          />
           <ListItem.Content>
             <ListItem.Title>{user.name}</ListItem.Title>
             <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>

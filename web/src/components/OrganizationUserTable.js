@@ -9,7 +9,7 @@ import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 import rolesMenu from 'constants/roles';
 import DetailFormDialog from 'components/DetailFormDialog';
-
+import UserAvatar from 'components/UserAvatar';
 import formMetadata from 'forms/UserOperation';
 
 function OrganizationUserTable({
@@ -30,6 +30,18 @@ function OrganizationUserTable({
   const options = {};
 
   const columns = [
+    {
+      name: 'username',
+      label: ' ',
+      options: {
+        display: true,
+        filter: false,
+        sort: false,
+        customBodyRender(item) {
+          return (<UserAvatar username={item} />);
+        },
+      },
+    },
     {
       name: 'isActive',
       label: '使用中',
