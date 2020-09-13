@@ -15,7 +15,7 @@ import { sortBy } from 'src/utils/sorting';
 //   { name: '審核中', id: 'PendingApproval' },
 // ];
 
-export default function ModifyUser({ user: inUser, button, isApproval = false, visible: inVisible, onClose }) {
+export default function ModifyUser({ user: inUser, button, visible: inVisible, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(!!inVisible);
   const [isDirty, setIsDirty] = useState(false);
