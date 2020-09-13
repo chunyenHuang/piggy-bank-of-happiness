@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
-import { Avatar, Text } from 'react-native-elements';
+import { Avatar, Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 import { FloatingAction } from 'react-native-floating-action';
@@ -15,26 +15,39 @@ import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 
+const FabActionIcon = ({ name }) => {
+  return (<Icon
+    name={name}
+    type='font-awesome-5'
+    color="#fff"
+    size={25}
+  />);
+};
+
 const actions = [
   {
     text: '提取',
-    icon: require('../assets/images/card.png'),
+    icon: <FabActionIcon name='credit-card' />,
     name: 'btWithdraw',
-    position: 1,
+    color: Colors.raised,
   },
   {
     text: '兌換',
-    icon: require('../assets/images/gift.png'),
+    icon: <FabActionIcon name='gift' />,
     name: 'btExchange',
-    position: 2,
+    color: Colors.accent,
   },
   {
     text: '新增',
-    icon: require('../assets/images/money.png'),
+    icon: <FabActionIcon name='piggy-bank' />,
     name: 'btAddTask',
-    position: 3,
   },
-];
+].map((item, index) => {
+  item.buttonSize = 50;
+  item.margin = 3;
+  item.position = index + 1;
+  return item;
+});
 
 export default function User({ user: inUser, mode }) {
   const [user, setUser] = useState({
@@ -90,7 +103,6 @@ export default function User({ user: inUser, mode }) {
   }, [inUser]);
 
   const onActionPressed = (button) => {
-    console.log(`selected button: ${button}`);
     switch (button) {
     case 'btAddTask':
       setAddTaskVisible(true);
@@ -162,6 +174,7 @@ export default function User({ user: inUser, mode }) {
         <FloatingAction
           actions={actions}
           onPressItem={onActionPressed}
+          color={Colors.primary}
         />}
       <PointsHandler
         user={user}
