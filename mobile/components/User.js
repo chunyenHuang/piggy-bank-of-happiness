@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
-import { Avatar, Text } from 'react-native-elements';
+import { Avatar, Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
+import { FloatingAction } from 'react-native-floating-action';
 
 import request from '../src/utils/request';
 import { getOrganizationUser } from '../src/graphql/queries';
@@ -14,12 +15,35 @@ import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 
+const actions = [
+  {
+    text: '提取',
+    icon: require('../assets/images/card.png'),
+    name: 'btWithdraw',
+    position: 1,
+  },
+  {
+    text: '兌換',
+    icon: require('../assets/images/gift.png'),
+    name: 'btExchange',
+    position: 2,
+  },
+  {
+    text: '新增',
+    icon: require('../assets/images/money.png'),
+    name: 'btAddTask',
+    position: 3,
+  },
+];
+
 export default function User({ user: inUser, mode }) {
   const [user, setUser] = useState({
     currentPoints: 0,
     tasks: { items: [] },
     transactions: { items: [] },
   });
+  const [withdrawVisible, setWithdrawVisible] = useState(false);
+  const [addTaskVisible, setAddTaskVisible] = useState(false);
 
   const load = async () => {
     Hub.dispatch('app', { event: 'loading' });
@@ -64,6 +88,29 @@ export default function User({ user: inUser, mode }) {
       subscription && subscription.unsubscribe();
     };
   }, [inUser]);
+
+  const onActionPressed = (button) => {
+    console.log(`selected button: ${button}`);
+    switch (button) {
+    case 'btAddTask':
+      setAddTaskVisible(true);
+      return;
+    case 'btExchange':
+
+      return;
+    case 'btWithdraw':
+      setWithdrawVisible(true);
+      return;
+    }
+  };
+
+  const onWithdrawClose = () => {
+    setWithdrawVisible(false);
+  };
+
+  const onAddTaskClose = () => {
+    setAddTaskVisible(false);
+  };
 
   const isActive = user.isActive ? true : false;
 
@@ -112,12 +159,23 @@ export default function User({ user: inUser, mode }) {
         />
       </ScrollView>
       {mode !== 'view' && isActive &&
-        <View style={styles.addTaskButton}>
-          <AddTaskToUser
-            user={user}
-            onUpdate={load}
-          />
-        </View>}
+        <FloatingAction
+          actions={actions}
+          onPressItem={onActionPressed}
+        />}
+      <PointsHandler
+        user={user}
+        mode={'withdraw'}
+        visible={withdrawVisible}
+        onClose={onWithdrawClose}
+        onUpdate={load}
+      />
+      <AddTaskToUser
+        user={user}
+        visible={addTaskVisible}
+        onClose={onAddTaskClose}
+        onUpdate={load}
+      />
     </View>
   );
 }
