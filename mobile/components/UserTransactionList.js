@@ -43,6 +43,7 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
             }}
           />
         ))}
+        <View style={styles.extraItem} />
       </ScrollView>
     </View>
   );
@@ -50,6 +51,9 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  extraItem: {
+    height: 100,
   },
   header: {
     fontSize: 18,

@@ -18,6 +18,7 @@ export default {
   accent,
   raised,
   focused,
+  alternative: '#2189DC',
 
   // text
   primaryText: dark,
