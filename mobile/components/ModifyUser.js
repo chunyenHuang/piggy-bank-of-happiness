@@ -7,20 +7,18 @@ import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request, { asyncListAll } from 'src/utils/request';
-import Colors from 'constants/Colors';
+
 import { listOrganizationGroups } from 'src/graphql/queries';
-import { createOrganizationUser, updateOrganizationUser } from 'src/graphql/mutations';
+import { userOperation, updateOrganizationUser } from 'src/graphql/mutations';
 import check from 'src/permission/check';
 import { sortBy } from 'src/utils/sorting';
 
-// TODO: Use api or constants
-// TODO: Cognito User Group
-const roles = [
-  { name: '學生', id: 'User' },
-  { name: '審核中', id: 'PendingApproval' },
-];
+// const roles = [
+//   { name: '學生', id: 'User' },
+//   { name: '審核中', id: 'PendingApproval' },
+// ];
 
-export default function ModifyUser({ user: inUser, button, isApproval = false }) {
+export default function ModifyUser({ user: inUser, button }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -49,39 +47,44 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
       return;
     }
 
-    setIsLoading(true);
-    const organizationId = await AsyncStorage.getItem('app:organizationId');
+    try {
+      setIsLoading(true);
+      const organizationId = await AsyncStorage.getItem('app:organizationId');
 
-    const now = moment().toISOString();
+      const now = moment().toISOString();
 
-    if (!isEditMode) {
-      const data = Object.assign(user, {
-        organizationId,
-        isActive: 1,
-        role: 'User',
-        currentPoints: 0,
-        earnedPoints: 0,
-        createdAt: now,
-        updatedAt: now,
-      });
+      if (!isEditMode) {
+        const data = {
+          organizationId,
+          role: 'User',
+          username: user.username,
+          idNumber: user.idNumber,
+          name: user.name,
+          email: user.email,
+          groupId: user.groupId,
+        };
 
-      await request(createOrganizationUser, { input: data });
-    } else {
-      const data = Object.assign({
-        organizationId,
-        username: user.username,
-        role: user.role,
-        groupId: user.groupId,
-        name: user.name,
-        idNumber: user.idNumber,
-        updatedAt: now,
-        isActive: user.isActive ? 1 : 0,
-      });
+        await request(userOperation, { input: { users: [data] } });
+      } else {
+        const data = {
+          organizationId,
+          username: user.username,
+          role: user.role,
+          groupId: user.groupId,
+          name: user.name,
+          idNumber: user.idNumber,
+          updatedAt: now,
+          isActive: user.isActive ? 1 : 0,
+        };
 
-      await request(updateOrganizationUser, { input: data });
+        await request(updateOrganizationUser, { input: data });
+      }
+      resetState();
+    } catch (err) {
+      global.logger.error(err);
+    } finally {
+      setIsLoading(false);
     }
-
-    resetState();
   };
 
   const resetState = () => {
@@ -101,22 +104,22 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
       },
       type: 'switch',
     },
-    {
-      key: 'role',
-      required: true,
-      type: 'select',
-      options: roles.map((item) => {
-        return { label: item.name, value: item.id };
-      }),
-      props: {
-        label: '身份',
-        disabled: !isActiveUser,
-        hidden: !isApproval,
-      },
-    },
+    // {
+    //   key: 'role',
+    //   required: true,
+    //   type: 'select',
+    //   options: roles.map((item) => {
+    //     return { label: item.name, value: item.id };
+    //   }),
+    //   props: {
+    //     label: '身份',
+    //     disabled: !isActiveUser,
+    //     hidden: false,
+    //   },
+    // },
     {
       key: 'groupId',
-      required: !isApproval,
+      required: true,
       type: 'select',
       options: groups.sort(sortBy('name')).sort(sortBy('isActive', true)).map((item) => {
         const appendix = item.isActive === 0 ? '(停用中)' : '';
@@ -151,7 +154,17 @@ export default function ModifyUser({ user: inUser, button, isApproval = false })
       key: 'username',
       required: true,
       props: {
-        label: '帳號',
+        label: '登入帳號',
+        autoCorrect: false,
+        autoCapitalize: 'none',
+        disabled: isEditMode ? true : false,
+      },
+    },
+    {
+      key: 'email',
+      required: true,
+      props: {
+        label: 'Email',
         autoCorrect: false,
         autoCapitalize: 'none',
         disabled: isEditMode ? true : false,
