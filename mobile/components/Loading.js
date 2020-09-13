@@ -3,7 +3,7 @@ import { StyleSheet, View, ActivityIndicator, Dimensions } from 'react-native';
 
 import Colors from '../constants/Colors';
 
-export default function Loading({ active = false, mode = 'fullscreen' }) {
+export default function Loading({ active = false, mode = 'fullscreen', color = Colors.primary }) {
   if (!active) return null;
 
   if (mode === 'fullscreen') {
@@ -15,19 +15,25 @@ export default function Loading({ active = false, mode = 'fullscreen' }) {
       >
         <ActivityIndicator
           style={styles.fullscreen}
-          color={Colors.primary}
+          color={color}
           size={'large'}
           animating={true}
         />
       </View>);
   }
   return (
-    <ActivityIndicator
+    <View
       style={styles.default}
-      color={Colors.primary}
-      size={'small'}
-      animating={true}
-    />);
+      alignItems="center"
+      justifyContent="center"
+    >
+      <ActivityIndicator
+        color={color}
+        size={'small'}
+        animating={true}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -37,8 +43,12 @@ const styles = StyleSheet.create({
   },
   default: {
     position: 'absolute',
-    top: 35,
-    right: 20,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
+    opacity: 0.3,
     zIndex: 9999999,
   },
   fullscreenContainer: {

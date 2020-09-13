@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
-import { ListItem, Avatar, Badge } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
 import { sortBy } from 'src/utils/sorting';
 import { listUsers, listUsersInGroup } from 'src/admin/services';
 import { getGroupNames, getGroupDisplayName } from 'src/admin/utils';
 import Colors from 'constants/Colors';
-
+import UserAvatar from 'components/UserAvatar';
 import ModifyCognitoUser from './ModifyCognitoUser';
 
 const groupNames = getGroupNames();
@@ -91,16 +91,9 @@ export default function CognitoUserList() {
                   bottomDivider
                   onPress={() => setSelectedUser(user)}
                 >
-                  <Avatar
-                    {...{
-                      title: `${user.name.substring(0, 1)}`,
-                      borderRadius: 25,
-                      width: 50,
-                      height: 50,
-                      color: 'red',
-                      backgroundColor: Colors.light,
-                      // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-                    }}
+                  <UserAvatar
+                    username={user.username}
+                    name={`${user.name}`}
                   />
                   <ListItem.Content>
                     <ListItem.Title>{user.name}</ListItem.Title>

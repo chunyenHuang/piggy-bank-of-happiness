@@ -9,6 +9,7 @@ import Form from './Form';
 import request from '../src/utils/request';
 import { createOrganizationReward, updateOrganizationReward } from '../src/graphql/mutations';
 import check from '../src/permission/check';
+// import RewardAvatar from 'components/RewardAvatar';
 
 export default function ModifyTask({ item: inItem, hideButton, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -178,6 +179,11 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
           }}
           onSubmit={()=>handleSubmit()}
         />
+        {/* <RewardAvatar
+          organizationId={reward.organizationId}
+          id={reward.id}
+          editable={true}
+        /> */}
       </CustomModal>
     </React.Fragment>
 
