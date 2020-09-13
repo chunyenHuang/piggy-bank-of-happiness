@@ -10,6 +10,7 @@ import StaffListScreen from 'screens/StaffListScreen';
 import PendingApprovalUserListScreen from 'screens/PendingApprovalUserListScreen';
 // import Colors from 'constants/Colors';
 import ModifyUser from 'components/ModifyUser';
+import UserScreenTopMenu from 'components/UserScreenTopMenu';
 import ModifyTask from 'components/ModifyTask';
 import CognitoUserListScreen from 'screens/CognitoUserListScreen';
 import ProgramList from 'components/ProgramList';
@@ -49,7 +50,7 @@ export default [
     name: 'UserList',
     component: UserListScreen,
     title: '學生列表',
-    rightComponent: <ModifyUser />,
+    rightComponent: <ModifyUser button />,
     options: {
       title: '學生',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-people" />,
@@ -116,10 +117,8 @@ export default [
     type: 'stack',
     name: 'User',
     component: UserScreen,
-    rightComponent: ((user) => user ? <ModifyUser
+    rightComponent: ((user) => user ? <UserScreenTopMenu
       user={user}
-      button
-      isApproval={user.role === 'PendingApproval'}
     /> : null),
     title: '學生',
     groups: ['All'],

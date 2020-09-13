@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProvider } from 'react-native-elements';
+import { MenuProvider } from 'react-native-popup-menu';
 // amplify
 import Amplify, { Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -97,19 +98,21 @@ function App({ authState, onStateChange }) {
   return (
     <PaperProvider theme={paperTheme}>
       <ThemeProvider theme={elementsTheme}>
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-          {isReady &&
-            <NavigationContainer linking={LinkingConfiguration}>
-              <Stack.Navigator>
-                <Stack.Screen name="Root" component={BottomTabNavigator} />
-                <Stack.Screen name="Stacks" component={StackNavigator} hea/>
-              </Stack.Navigator>
-            </NavigationContainer>}
-          <Loading
-            active={spinner}
-          />
-        </View>
+        <MenuProvider>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+            {isReady &&
+              <NavigationContainer linking={LinkingConfiguration}>
+                <Stack.Navigator>
+                  <Stack.Screen name="Root" component={BottomTabNavigator} />
+                  <Stack.Screen name="Stacks" component={StackNavigator} hea/>
+                </Stack.Navigator>
+              </NavigationContainer>}
+            <Loading
+              active={spinner}
+            />
+          </View>
+        </MenuProvider>
       </ThemeProvider>
     </PaperProvider>
   );
