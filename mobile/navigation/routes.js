@@ -5,6 +5,7 @@ import HomeScreen from 'screens/HomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
 import UserListScreen from 'screens/UserListScreen';
 import TaskListScreen from 'screens/TaskListScreen';
+import RewardListScreen from 'screens/RewardListScreen';
 import UserTransactionListScreen from 'screens/UserTransactionListScreen';
 import StaffListScreen from 'screens/StaffListScreen';
 import PendingApprovalUserListScreen from 'screens/PendingApprovalUserListScreen';
@@ -19,6 +20,7 @@ import Profile from 'components/Profile';
 import GroupList from 'components/GroupList';
 import ModifyProgram from 'components/ModifyProgram';
 import ModifyGroup from 'components/ModifyGroup';
+import ModifyReward from 'components/ModifyReward';
 import Blank from 'components/Blank';
 
 export default [
@@ -65,34 +67,46 @@ export default [
     rightComponent: <ModifyTask />,
     options: {
       title: '任務',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-list-box" />,
+    },
+    groups: ['All'],
+  },
+  {
+    type: 'bottom-tab',
+    name: 'RewardList',
+    component: RewardListScreen,
+    title: '獎品列表',
+    rightComponent: <ModifyReward />,
+    options: {
+      title: '獎品',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
     },
-    groups: ['AppAdmins', 'OrgAdmins', 'OrgManagers', 'Users'],
+    groups: ['All'],
   },
-  {
-    type: 'bottom-tab',
-    name: 'StaffList',
-    component: StaffListScreen,
-    rightComponent: null,
-    title: '職員列表',
-    options: {
-      title: '職員',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
-    },
-    groups: ['AppAdmins', 'OrgAdmins'],
-  },
-  {
-    type: 'bottom-tab',
-    name: 'PendingApprovalUserList',
-    component: PendingApprovalUserListScreen,
-    rightComponent: null,
-    title: '申請列表',
-    options: {
-      title: '審核',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
-    },
-    groups: ['AppAdmins', 'OrgAdmins'],
-  },
+  // {
+  //   type: 'bottom-tab',
+  //   name: 'StaffList',
+  //   component: StaffListScreen,
+  //   rightComponent: null,
+  //   title: '職員列表',
+  //   options: {
+  //     title: '職員',
+  //     tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
+  //   },
+  //   groups: ['AppAdmins', 'OrgAdmins'],
+  // },
+  // {
+  //   type: 'bottom-tab',
+  //   name: 'PendingApprovalUserList',
+  //   component: PendingApprovalUserListScreen,
+  //   rightComponent: null,
+  //   title: '申請列表',
+  //   options: {
+  //     title: '審核',
+  //     tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
+  //   },
+  //   groups: ['AppAdmins', 'OrgAdmins'],
+  // },
   {
     type: 'bottom-tab',
     name: 'Settings',
@@ -125,10 +139,38 @@ export default [
   },
   {
     type: 'stack',
+    name: 'StaffList',
+    component: StaffListScreen,
+    rightComponent: null,
+    title: '職員列表',
+    showInSettingsMenu: true,
+    groups: ['AppAdmins', 'OrgAdmins'],
+  },
+  {
+    type: 'stack',
+    name: 'PendingApprovalUserList',
+    component: PendingApprovalUserListScreen,
+    rightComponent: null,
+    title: '申請列表',
+    showInSettingsMenu: true,
+    groups: ['AppAdmins', 'OrgAdmins'],
+  },
+  {
+    type: 'stack',
+    name: 'CognitoUserList',
+    component: CognitoUserListScreen,
+    rightComponent: null,
+    title: '註冊用戶列表',
+    showInSettingsMenu: true,
+    groups: ['AppAdmins'],
+  },
+  {
+    type: 'stack',
     name: 'Programs',
     component: ProgramList,
     rightComponent: <ModifyProgram />,
     title: '任務類別列表',
+    showInSettingsMenu: true,
     groups: ['AppAdmins', 'OrgAdmins'],
   },
   {
@@ -137,6 +179,7 @@ export default [
     component: GroupList,
     rightComponent: <ModifyGroup />,
     title: '學生分組列表',
+    showInSettingsMenu: true,
     groups: ['AppAdmins', 'OrgAdmins'],
   },
   {
@@ -145,14 +188,7 @@ export default [
     component: Profile,
     rightComponent: null,
     title: '個人資料',
+    showInSettingsMenu: true,
     groups: ['All'],
-  },
-  {
-    type: 'stack',
-    name: 'CognitoUserList',
-    component: CognitoUserListScreen,
-    rightComponent: null,
-    title: '註冊用戶列表',
-    groups: ['AppAdmins'],
   },
 ];

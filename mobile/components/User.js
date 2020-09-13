@@ -14,6 +14,7 @@ import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
+import AddRewardToUser from './AddRewardToUser';
 
 const FabActionIcon = ({ name }) => {
   return (<Icon
@@ -56,6 +57,7 @@ export default function User({ user: inUser, mode }) {
     transactions: { items: [] },
   });
   const [withdrawVisible, setWithdrawVisible] = useState(false);
+  const [addRewardVisible, setAddRewardVisible] = useState(false);
   const [addTaskVisible, setAddTaskVisible] = useState(false);
 
   const load = async () => {
@@ -108,7 +110,7 @@ export default function User({ user: inUser, mode }) {
       setAddTaskVisible(true);
       return;
     case 'btExchange':
-
+      setAddRewardVisible(true);
       return;
     case 'btWithdraw':
       setWithdrawVisible(true);
@@ -175,14 +177,21 @@ export default function User({ user: inUser, mode }) {
         mode={'withdraw'}
         visible={withdrawVisible}
         onClose={onWithdrawClose}
-        onUpdate={load}
+        // onUpdate={load}
+      />
+
+      <AddRewardToUser
+        user={user}
+        visible={addRewardVisible}
+        onClose={() => setAddRewardVisible(false)}
+        // onUpdate={load}
       />
 
       <AddTaskToUser
         user={user}
         visible={addTaskVisible}
         onClose={onAddTaskClose}
-        onUpdate={load}
+        // onUpdate={load}
       />
     </View>
   );

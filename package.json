@@ -4,6 +4,7 @@
   "description": "設計給非營利事業組織兒少陪伴單位的電子資訊系統，讓孩子們透過執行任務獲得點數，累積的點數可向機構換取獎品或是客製化的需求（例如：修鞋，修車）。",
   "main": "index.js",
   "scripts": {
+    "push": "npm run amplify:push",
     "amplify:push": "amplify push -y && npm run amplify:update:schema && npm run amplify:update:resolvers",
     "amplify:update:schema": "amplify codegen && rm -rf mobile/src/graphql && cp -r src/graphql web/src && mv src/graphql mobile/src",
     "amplify:update:resolvers": "rm -rf amplify/backend/api/piggybankofhappiness/resolvers && amplify api gql-compile && mv amplify/backend/api/piggybankofhappiness/build/resolvers amplify/backend/api/piggybankofhappiness/resolvers"

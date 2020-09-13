@@ -1,0 +1,35 @@
+## [Start] Determine request authentication mode **
+#if( $util.isNullOrEmpty($authMode) && !$util.isNull($ctx.identity) && !$util.isNull($ctx.identity.sub) && !$util.isNull($ctx.identity.issuer) && !$util.isNull($ctx.identity.username) && !$util.isNull($ctx.identity.claims) && !$util.isNull($ctx.identity.sourceIp) && !$util.isNull($ctx.identity.defaultAuthStrategy) )
+  #set( $authMode = "userPools" )
+#end
+## [End] Determine request authentication mode **
+## [Start] Check authMode and execute owner/group checks **
+#if( $authMode == "userPools" )
+  ## [Start] Static Group Authorization Checks **
+  #set($userOperation_isStaticGroupAuthorized = $util.defaultIfNull(
+            $userOperation_isStaticGroupAuthorized, false))
+  ## Authorization rule: { allow: groups, groups: ["AppAdmins","OrgAdmins","OrgManagers"], groupClaim: "cognito:groups" } **
+  #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
+  #set( $allowedGroups = ["AppAdmins", "OrgAdmins", "OrgManagers"] )
+  #foreach( $userGroup in $userGroups )
+    #if( $allowedGroups.contains($userGroup) )
+      #set( $userOperation_isStaticGroupAuthorized = true )
+      #break
+    #end
+  #end
+  ## [End] Static Group Authorization Checks **
+
+
+  ## [Start] Throw if unauthorized **
+  #if( $userOperation_isStaticGroupAuthorized == false )
+    $util.unauthorized()
+  #end
+  ## [End] Throw if unauthorized **
+#end
+## [End] Check authMode and execute owner/group checks **
+
+## [Start] Stash resolver specific context.. **
+$util.qr($ctx.stash.put("typeName", "Mutation"))
+$util.qr($ctx.stash.put("fieldName", "userOperation"))
+{}
+## [End] Stash resolver specific context.. **

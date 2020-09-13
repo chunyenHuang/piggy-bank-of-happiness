@@ -49,8 +49,6 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
       return;
     });
 
-    errors.push('stop');
-
     if (errors.filter((x) => x).length !== 0) {
       setErrors([...errors]);
       return;

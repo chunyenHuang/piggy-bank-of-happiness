@@ -108,16 +108,16 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
     <View style={styles.container}>
       <ListItem
         key={transaction.id}
-        title={shortString(transaction.note, 50)}
-        titleStyle={styles.title}
-        subtitle={`${date} 經手人 ${transaction.createdBy}`}
-        subtitleStyle={styles.subtitle}
         bottomDivider
-        rightTitle={amount}
-        rightTitleStyle={{ ...styles.rightTitle, color }}
         onPress={() => setVisible(true)}
-        chevron
-      />
+      >
+        <ListItem.Content>
+          <ListItem.Title style={styles.title}>{transaction.note ? shortString(transaction.note, 50) : transaction.type}</ListItem.Title>
+          <ListItem.Subtitle style={styles.subtitle}>{`${date} 經手人 ${transaction.createdBy}`}</ListItem.Subtitle>
+        </ListItem.Content>
+        <ListItem.Title style={{ ...styles.rightTitle, color }}>{amount}</ListItem.Title>
+        <ListItem.Chevron />
+      </ListItem>
       <CustomModal
         title="交易紀錄"
         visible={visible}
@@ -130,7 +130,9 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         }}
       >
         <View style={styles.headerContainer}>
-          {transaction.type !== 'cancel' && !transaction.isCancelled &&
+          {transaction.type !== 'cancel' &&
+           transaction.type !== 'reward' &&
+           !transaction.isCancelled &&
           <Button
             color={Colors.error}
             compact={true}
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
 const getTypeColor = (type) => {
   switch (type) {
   case 'withdraw':
+  case 'reward':
     return Colors.error;
   case 'cancel':
     return Colors.dark;
@@ -234,6 +237,8 @@ const getTypeName = (type) => {
   switch (type) {
   case 'withdraw':
     return '提款';
+  case 'reward':
+    return '兌換';
   case 'adjustment':
     return '調整';
   case 'cancel':

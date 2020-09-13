@@ -46,6 +46,7 @@ function OrganizationUserTable({
     {
       name: 'role',
       label: '職位',
+      isTemplate: true,
       edit: {
         type: 'select',
         menu: rolesMenu,
@@ -80,6 +81,7 @@ function OrganizationUserTable({
     {
       name: 'username',
       label: '帳號',
+      isTemplate: true,
       options: {
         display: true,
         filter: false,
@@ -89,6 +91,7 @@ function OrganizationUserTable({
     {
       name: 'idNumber',
       label: '學號',
+      isTemplate: true,
       edit: {
         type: 'text',
       },
@@ -101,6 +104,7 @@ function OrganizationUserTable({
     {
       name: 'name',
       label: '名字',
+      isTemplate: true,
       edit: {
         type: 'text',
       },
@@ -113,7 +117,8 @@ function OrganizationUserTable({
     {
       name: 'currentPoints',
       label: '目前點數',
-      type: 'number',
+      isTemplate: true,
+      type: 'point',
       options: {
         display: true,
         filter: false,
@@ -123,7 +128,8 @@ function OrganizationUserTable({
     {
       name: 'earnedPoints',
       label: '總點數',
-      type: 'number',
+      isTemplate: true,
+      type: 'point',
       options: {
         display: true,
         filter: false,
@@ -193,10 +199,34 @@ function OrganizationUserTable({
       setIsLoading(true);
       const user = Object.assign(newRecord, {
         idNumber: newRecord.idNumber || 'N/A',
+        currentPoints: +(parseFloat(newRecord.currentPoints) * 100),
+        earnedPoints: +(parseFloat(newRecord.earnedPoints) * 100),
       });
       await request(userOperation, { input: { users: [user] } });
 
       setOpen(false);
+      setLastUpdatedAt(Date.now());
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onBatchAdd = async (items) => {
+    try {
+      setIsLoading(true);
+      const users = items.map((item) => {
+        return Object.assign(item, {
+          organizationId,
+          isActive: 1,
+          idNumber: item.idNumber || 'N/A',
+          currentPoints: +(parseFloat(item.currentPoints) * 100),
+          earnedPoints: +(parseFloat(item.earnedPoints) * 100),
+        });
+      });
+
+      await request(userOperation, { input: users });
       setLastUpdatedAt(Date.now());
     } catch (e) {
       console.log(e);
@@ -273,6 +303,7 @@ function OrganizationUserTable({
         options={options}
         nested={nested}
         onAddItem={() => setOpen(true)}
+        onBatchAdd={onBatchAdd}
         onUpdateItem={onUpate}
         onRefresh={() => setLastUpdatedAt(Date.now())}
       />

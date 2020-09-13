@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
 
@@ -77,7 +77,10 @@ export default function PendingApprovalUserList() {
       {users.map((user, index) => (
         <ListItem
           key={index}
-          leftAvatar={{
+          bottomDivider
+          onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
+        >
+          <Avatar {...{
             title: `${user.name.substring(0, 1)}`,
             borderRadius: 25,
             width: 50,
@@ -85,20 +88,13 @@ export default function PendingApprovalUserList() {
             color: 'red',
             backgroundColor: Colors.light,
             // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }}
-          title={user.name}
-          subtitle={user.idNumber}
-          subtitleStyle={styles.subtitle}
-          bottomDivider
-          chevron
-          // badge={{
-          //   // status: 'success',
-          //   value: user.currentPoints/100,
-          //   textStyle: styles.badgeText,
-          //   badgeStyle: styles.badge,
-          // }}
-          onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
-        />
+          }} />
+          <ListItem.Content>
+            <ListItem.Title>{user.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       ))
       }
     </ScrollView>

@@ -31,7 +31,7 @@ module.exports = {
           organizationId,
           name,
           email,
-          role,
+          role: inRoleOrGroup,
           idNumber,
           groupId,
         } = user;
@@ -52,7 +52,8 @@ module.exports = {
         }
 
         const { name: organizationName } = await getOrganization(organizationId);
-        const groupName = getGroupByRole(role);
+        const role = getRoleByGroup(inRoleOrGroup);
+        const groupName = getGroupByRole(inRoleOrGroup);
         await Promise.all([
           addToGroup(username, groupName),
           updateOrg(username, organizationId, organizationName),
@@ -101,13 +102,41 @@ module.exports = {
   },
 };
 
+function getRoleByGroup(inGroup) {
+  switch (inGroup) {
+  case 'AppAdmins':
+  case 'OrgAdmins':
+  case '管理員':
+  case 'Admin':
+    return 'Admin';
+  case 'OrgManagers':
+  case '職員':
+  case 'Manager':
+    return 'Manager';
+  case 'Users':
+  case 'User':
+  case 'N/A':
+  case '學生':
+  default:
+    return 'User';
+  }
+}
+
 function getGroupByRole(inRole) {
   switch (inRole) {
+  case 'AppAdmins':
+    return 'AppAdmins';
   case 'Admin':
+  case 'OrgAdmins':
+  case '管理員':
     return 'OrgAdmins';
   case 'Manager':
+  case 'OrgManagers':
+  case '職員':
     return 'OrgManagers';
   case 'User':
+  case 'Users':
+  case '學生':
   case 'PendingApproval':
   default:
     return 'Users';
