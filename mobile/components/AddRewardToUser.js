@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
 import { Hub } from 'aws-amplify';
@@ -8,11 +7,10 @@ import { Hub } from 'aws-amplify';
 import request from '../src/utils/request';
 import { updateOrganizationReward, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 import RewardList from './RewardList';
-import Colors from '../constants/Colors';
 import CustomModal from './CustomModal';
+import Colors from 'constants/Colors';
 
-export default function AddRewardToUser({ user, onUpdate }) {
-  const [visible, setVisible] = useState(false);
+export default function AddRewardToUser({ user, visible, onUpdate, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [rewards, setRewards] = useState([]);
   const [summary, setSummary] = useState({});
@@ -120,8 +118,8 @@ export default function AddRewardToUser({ user, onUpdate }) {
 
     Hub.dispatch('app', { event: 'loading-complete' });
     setIsLoading(false);
-    setVisible(false);
     onUpdate && onUpdate();
+    onClose && onClose();
   };
 
   useEffect(() => {
@@ -133,30 +131,16 @@ export default function AddRewardToUser({ user, onUpdate }) {
 
   return (
     <View>
-      <Button
-        icon={
-          <Icon
-            name={'md-sync'}
-            type='ionicon'
-            color={Colors.accent}
-            containerStyle={{ paddingRight: 10 }}
-          />
-        }
-        type="clear"
-        title="兌換"
-        titleStyle={{ color: Colors.accent }}
-        onPress={()=>setVisible(true)}
-      />
-
       <CustomModal
         title="兌換獎品"
         visible={visible}
-        onClose={()=>setVisible(false)}
+        onClose={() => onClose && onClose()}
         bottomButtonProps={{
           title: `${summary.count} 獎品 ${summary.totalPoints} 點 確認`,
           onPress: ()=> handleSubmit(),
           disabled: summary.count === 0 || isLoading,
         }}
+        bottomButtonStyle={{ backgroundColor: Colors.accent }}
       >
         <RewardList
           mode="select"

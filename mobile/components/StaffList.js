@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 
 import request from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
 import { getRoleDisplayName } from 'src/admin/utils';
+import UserAvatar from 'components/UserAvatar';
 
 export default function StaffList() {
   const [users, setUsers] = useState([]);
@@ -81,14 +82,10 @@ export default function StaffList() {
           key={index}
           bottomDivider
         >
-          <Avatar {...{
-            title: `${user.name.substring(0, 1)}`,
-            borderRadius: 25,
-            width: 50,
-            height: 50,
-            backgroundColor: Colors.light,
-            // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }} />
+          <UserAvatar
+            username={user.username}
+            name={user.name}
+          />
           <ListItem.Content>
             <ListItem.Title>{user.name}</ListItem.Title>
             <ListItem.Subtitle style={styles.subtitle}>{user.username}</ListItem.Subtitle>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
-import { ListItem, Avatar, Badge } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -12,6 +12,8 @@ import { listOrganizationGroups, getOrgUsersByGroupByActive } from '../src/graph
 import { onCreateOrganizationUser, onUpdateOrganizationUser } from '../src/graphql/subscriptions';
 import CustomSearchBar from './CustomSearchBar';
 import check from '../src/permission/check';
+import UserAvatar from 'components/UserAvatar';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function UserList() {
   const navigation = useNavigation();
@@ -30,6 +32,8 @@ export default function UserList() {
 
   const load = async () => {
     setIsLoading(true);
+
+    setGroups([]);
 
     const organizationId = await AsyncStorage.getItem('app:organizationId');
 
@@ -119,16 +123,6 @@ export default function UserList() {
     };
   }, [groups]);
 
-  const getBadge = (user) => {
-    if (!user.isActive) {
-      return {
-        value: '帳號停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <View style={styles.container}>
       <CustomSearchBar
@@ -159,20 +153,15 @@ export default function UserList() {
                   bottomDivider
                   onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
                 >
-                  <Avatar {...{
-                    title: `${user.name.substring(0, 1)}`,
-                    borderRadius: 25,
-                    width: 50,
-                    height: 50,
-                    color: 'red',
-                    backgroundColor: Colors.light,
-                    // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-                  }} />
+                  <UserAvatar
+                    username={user.username}
+                    name={`${user.name}`}
+                  />
                   <ListItem.Content>
                     <ListItem.Title>{user.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>
                   </ListItem.Content>
-                  <Badge {...getBadge(group)} />
+                  {!user.isActive && <BadgeInactive />}
                   <ListItem.Chevron />
                 </ListItem>
               ))}

@@ -13,6 +13,75 @@ export const userOperation = /* GraphQL */ `
     }
   }
 `;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createOrganization = /* GraphQL */ `
   mutation CreateOrganization(
     $input: CreateOrganizationInput!

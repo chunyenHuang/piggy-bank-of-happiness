@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
 import { Input } from 'react-native-elements';
 import { v1 as uuidv1 } from 'uuid';
 import moment from 'moment';
@@ -10,8 +9,8 @@ import request from '../src/utils/request';
 import CustomModal from './CustomModal';
 import { createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
 
-export default function PointsHandler({ mode, user, onUpdate }) {
-  const [visible, setVisible] = useState(false);
+export default function PointsHandler({ mode, user, onUpdate, visible: inVisible, onClose }) {
+  const [visible, setVisible] = useState(!!inVisible);
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
@@ -93,6 +92,7 @@ export default function PointsHandler({ mode, user, onUpdate }) {
     }
 
     onUpdate && onUpdate();
+    onClose && onClose();
     setIsLoading(false);
     setVisible(false);
   };
@@ -105,6 +105,15 @@ export default function PointsHandler({ mode, user, onUpdate }) {
       setNote('');
     }
   }, [visible]);
+
+  useEffect(() => {
+    if (inVisible) {
+      setIsLoading(false);
+      setAmount('');
+      setNote('');
+      setVisible(inVisible);
+    }
+  }, [inVisible]);
 
   useEffect(() => {
     let button;
@@ -129,26 +138,13 @@ export default function PointsHandler({ mode, user, onUpdate }) {
 
   return (
     <View>
-      <Button
-        icon={
-          <Icon
-            name={button.icon}
-            // size={15}
-            type='ionicon'
-            color={button.color}
-            containerStyle={{ paddingRight: 10 }}
-          />
-        }
-        type="clear"
-        title={button.title}
-        titleStyle={{ color: button.color }}
-        onPress={()=>setVisible(true)}
-      />
-
       <CustomModal
         title={button.title}
         visible={visible}
-        onClose={()=>setVisible(false)}
+        onClose={ () => {
+          setVisible(false);
+          onClose && onClose();
+        }}
         padding
         bottomButtonProps={{
           title: '確認',

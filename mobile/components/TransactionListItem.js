@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
-import { ListItem, Input } from 'react-native-elements';
+import { ListItem, Input, Icon } from 'react-native-elements';
 import moment from 'moment';
 import { Button } from 'react-native-paper';
 import { v1 as uuidv1 } from 'uuid';
@@ -11,6 +11,7 @@ import { currency, shortString } from '../src/utils/format';
 import request from '../src/utils/request';
 import { createOrganizationTransaction, updateOrganizationUser, updateOrganizationTransaction } from '../src/graphql/mutations';
 import check from '../src/permission/check';
+import { getPropsByType } from 'constants/Transaction';
 
 export default function TransactionListItem({ transaction: inData, onUpdate }) {
   const [transaction, setTransaction] = useState(undefined);
@@ -100,7 +101,12 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
 
   if (!transaction) return null;
 
-  const color = getTypeColor(transaction.type);
+  const {
+    label,
+    color,
+    icon,
+    iconType,
+  } = getPropsByType(transaction.type);
   const amount = currency(transaction.points);
   const date = moment(transaction.updatedAt).format('MM/DD/YYYY hh:mm');
 
@@ -111,6 +117,13 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         bottomDivider
         onPress={() => setVisible(true)}
       >
+        <Icon
+          name={icon}
+          type={iconType}
+          color={color}
+          reverse
+          size={15}
+        />
         <ListItem.Content>
           <ListItem.Title style={styles.title}>{transaction.note ? shortString(transaction.note, 50) : transaction.type}</ListItem.Title>
           <ListItem.Subtitle style={styles.subtitle}>{`${date} 經手人 ${transaction.createdBy}`}</ListItem.Subtitle>
@@ -160,7 +173,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
         </View>
         <Input
           label="類別"
-          value={getTypeName(transaction.type)}
+          value={label}
           disabled={true}
         />
         <Input
@@ -217,34 +230,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-const getTypeColor = (type) => {
-  switch (type) {
-  case 'withdraw':
-  case 'reward':
-    return Colors.error;
-  case 'cancel':
-    return Colors.dark;
-  case 'adjustment':
-    return Colors.accent;
-  case 'credits':
-  default:
-    return Colors.focused;
-  }
-};
-
-const getTypeName = (type) => {
-  switch (type) {
-  case 'withdraw':
-    return '提款';
-  case 'reward':
-    return '兌換';
-  case 'adjustment':
-    return '調整';
-  case 'cancel':
-    return '取消';
-  case 'credits':
-  default:
-    return '新增';
-  }
-};

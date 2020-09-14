@@ -13,6 +13,7 @@ import Colors from 'constants/Colors';
 import { onCreateOrganizationTask, onUpdateOrganizationTask } from 'src/graphql/subscriptions';
 import ModifyTask from './ModifyTask';
 import check from 'src/permission/check';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function TaskList({ mode = 'edit', onSelect, disabled = false }) {
   const [programs, setPrograms] = useState([]);
@@ -131,22 +132,6 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     };
   }, [programs]);
 
-  const getBadge = (task) => {
-    if (task.isActive) {
-      return {
-        value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point / 100),
-        textStyle: styles.badgeTextActive,
-        badgeStyle: styles.badgeActive,
-      };
-    } else {
-      return {
-        value: '停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
@@ -205,8 +190,13 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                   {task.description &&
                     <ListItem.Subtitle style={styles.subtitle}>{task.description}</ListItem.Subtitle>}
                 </ListItem.Content>
+                {!task.isActive && <BadgeInactive />}
                 <Badge
-                  {...getBadge(task)}
+                  {...{
+                    value: (task.pointMin !== task.pointMax && !task.isSelected ? `${task.pointMin/100} - ${task.pointMax/100}` : task.point / 100),
+                    textStyle: styles.badgeTextActive,
+                    badgeStyle: styles.badgeActive,
+                  }}
                 />
                 {mode === 'edit' &&
                   <ListItem.Chevron />}
@@ -236,7 +226,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             }}
             style={{ marginTop: 30, marginBottom: 50 }}
             thumbTouchSize={{ width: 100, height: 100 }}
-            thumbTintColor={Colors.primary}
+            thumbTintColor={Colors.alternative}
             thumbStyle={styles.thumb}
           />
           <View style={styles.pointsRangeContainer}>
@@ -247,6 +237,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             <Button
               title="取消"
               type="clear"
+              titleStyle={{ color: Colors.alternative }}
               buttonStyle={styles.button}
               onPress={() => {
                 setTask(undefined);
@@ -254,7 +245,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
             />
             <Button
               title="確認"
-              buttonStyle={styles.button}
+              buttonStyle={{ ...styles.button, backgroundColor: Colors.alternative }}
               onPress={() => {
                 task.point = newPoint;
                 task.isSelected = true;
@@ -289,19 +280,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
   },
-  badgeTextInactive: {
-    color: '#ffffff',
-    fontSize: 14,
-    lineHeight: 16,
-  },
   badgeActive: {
     height: 25,
     padding: 5,
-  },
-  badgeInactive: {
-    height: 25,
-    padding: 5,
-    backgroundColor: '#767577',
+    backgroundColor: Colors.alternative,
   },
   modal: {
     flex: 1,
