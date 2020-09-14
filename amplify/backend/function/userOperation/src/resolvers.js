@@ -67,6 +67,7 @@ module.exports = {
             username,
             idNumber,
             name,
+            email,
             role,
             groupId,
             isActive: 1,
@@ -77,6 +78,7 @@ module.exports = {
           });
         } else {
           toUpdateOrgUsers.push(Object.assign(existingOrgUser, {
+            email,
             role,
             groupId: groupId || existingOrgUser.groupId,
             updatedAt: now,

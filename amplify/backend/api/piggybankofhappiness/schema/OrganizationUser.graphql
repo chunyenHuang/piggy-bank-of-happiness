@@ -15,6 +15,7 @@ type OrganizationUser
   username: String!
   idNumber: String! # ex:學號
   name: String!
+  email: AWSEmail
   role: RoleType!
   groupId: ID
   isActive: Int!
