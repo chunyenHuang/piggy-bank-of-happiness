@@ -1,6 +1,66 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent {
+    onCreateEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent {
+    onUpdateEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent {
+    onDeleteEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {

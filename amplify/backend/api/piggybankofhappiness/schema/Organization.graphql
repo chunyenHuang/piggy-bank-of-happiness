@@ -12,4 +12,6 @@ type Organization
   isActive: Int!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
+  createdBy: String
+  updatedBy: String
 }

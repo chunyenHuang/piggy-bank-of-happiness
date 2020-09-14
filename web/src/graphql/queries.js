@@ -1,6 +1,63 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getEvent = /* GraphQL */ `
+  query GetEvent($key: String!, $timestamp: AWSDateTime!) {
+    getEvent(key: $key, timestamp: $timestamp) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEvents = /* GraphQL */ `
+  query ListEvents(
+    $key: String
+    $timestamp: ModelStringKeyConditionInput
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listEvents(
+      key: $key
+      timestamp: $timestamp
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        key
+        timestamp
+        organizationId
+        updatedBy
+        eventId
+        eventName
+        diff {
+          key
+          old
+          new
+        }
+        note
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganization = /* GraphQL */ `
   query GetOrganization($id: ID!) {
     getOrganization(id: $id) {
@@ -607,6 +664,43 @@ export const listTests = /* GraphQL */ `
       items {
         id
         name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEventsByOrgByTimestamp = /* GraphQL */ `
+  query GetEventsByOrgByTimestamp(
+    $organizationId: ID
+    $timestamp: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getEventsByOrgByTimestamp(
+      organizationId: $organizationId
+      timestamp: $timestamp
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        key
+        timestamp
+        organizationId
+        updatedBy
+        eventId
+        eventName
+        diff {
+          key
+          old
+          new
+        }
+        note
         createdAt
         updatedAt
       }
