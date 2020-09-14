@@ -16,6 +16,7 @@ import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 import AddRewardToUser from './AddRewardToUser';
 import UserAvatar from 'components/UserAvatar';
+import { isIOS } from 'src/utils/device';
 
 const FabActionIcon = ({ name }) => {
   return (<Icon
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.focused,
     fontWeight: 'bold',
-    marginTop: -2,
+    marginTop: isIOS ? -2 : 0,
   },
   transactionList: {
     flex: 1,
