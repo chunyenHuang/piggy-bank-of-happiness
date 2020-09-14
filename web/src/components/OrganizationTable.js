@@ -122,6 +122,7 @@ function OrganizationTable() {
   const onUpate = async (item, dataIndex) => {
     const input = {
       id: item.id,
+      updatedBy: username,
     };
     columns.forEach(({ name, edit }) => {
       if (edit) {
@@ -140,7 +141,10 @@ function OrganizationTable() {
   const onCreate = async (newRecord) => {
     try {
       setIsLoading(true);
-      const input = Object.assign(newRecord, {});
+      const input = Object.assign(newRecord, {
+        createdBy: username,
+        updatedBy: username,
+      });
       await request(createOrganization, { input });
 
       setLastUpdatedAt(Date.now());

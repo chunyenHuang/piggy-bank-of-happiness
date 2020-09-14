@@ -48,7 +48,7 @@ export default function RewardAvatar({ organizationId, id, name = '', size = 'la
       overlayContainerStyle={{ backgroundColor: Colors.light }}
       icon={{ name: 'barcode', type: 'font-awesome' }}
       source={{ uri: avatarUri }}
-      onPress={selectImage}
+      onPress={editable ? selectImage : undefined }
     >
       {editable &&
       <Accessory
