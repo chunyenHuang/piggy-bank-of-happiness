@@ -14,9 +14,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Events() {
   const classes = useStyles();
 
+  const organizationId = localStorage.getItem('app:organizationId');
+
   return (
     <div className={classes.content}>
-      <EventTable />
+      <EventTable organizationId={organizationId} />
     </div>
   );
 }
