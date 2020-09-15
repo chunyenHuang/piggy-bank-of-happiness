@@ -8,9 +8,9 @@
   ## [Start] Static Group Authorization Checks **
   #set($isStaticGroupAuthorized = $util.defaultIfNull(
             $isStaticGroupAuthorized, false))
-  ## Authorization rule: { allow: groups, groups: ["OrgAdmins","AppAdmins"], groupClaim: "cognito:groups" } **
+  ## Authorization rule: { allow: groups, groups: ["AppAdmins"], groupClaim: "cognito:groups" } **
   #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
-  #set( $allowedGroups = ["OrgAdmins", "AppAdmins"] )
+  #set( $allowedGroups = ["AppAdmins"] )
   #foreach( $userGroup in $userGroups )
     #if( $allowedGroups.contains($userGroup) )
       #set( $isStaticGroupAuthorized = true )
@@ -88,15 +88,7 @@
 ## [End] Check authMode and execute owner/group checks **
 
 
-
-## [Start] Set the primary @key. **
-#set( $modelObjectKey = {
-  "key": $util.dynamodb.toDynamoDB($ctx.args.input.key),
-  "timestamp": $util.dynamodb.toDynamoDB($ctx.args.input.timestamp)
-} )
-## [End] Set the primary @key. **
-
-#if( $authCondition && $authCondition.expression != "" )
+#if( $authCondition )
   #set( $condition = $authCondition )
   #if( $modelObjectKey )
     #foreach( $entry in $modelObjectKey.entrySet() )
@@ -111,8 +103,7 @@
   #if( $modelObjectKey )
     #set( $condition = {
   "expression": "",
-  "expressionNames": {},
-  "expressionValues": {}
+  "expressionNames": {}
 } )
     #foreach( $entry in $modelObjectKey.entrySet() )
       #if( $velocityCount == 1 )
@@ -127,24 +118,24 @@
   "expression": "attribute_exists(#id)",
   "expressionNames": {
       "#id": "id"
-  },
-  "expressionValues": {}
+  }
 } )
   #end
 #end
-## Automatically set the updatedAt timestamp. **
-$util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.input.updatedAt, $util.time.nowISO8601())))
-$util.qr($context.args.input.put("__typename", "Event"))
-## Update condition if type is @versioned **
 #if( $versionedCondition )
   $util.qr($condition.put("expression", "($condition.expression) AND $versionedCondition.expression"))
   $util.qr($condition.expressionNames.putAll($versionedCondition.expressionNames))
-  $util.qr($condition.expressionValues.putAll($versionedCondition.expressionValues))
+  #set( $expressionValues = $util.defaultIfNull($condition.expressionValues, {}) )
+  $util.qr($expressionValues.putAll($versionedCondition.expressionValues))
+  #set( $condition.expressionValues = $expressionValues )
 #end
 #if( $context.args.condition )
   #set( $conditionFilterExpressions = $util.parseJson($util.transform.toDynamoDBConditionExpression($context.args.condition)) )
   $util.qr($condition.put("expression", "($condition.expression) AND $conditionFilterExpressions.expression"))
   $util.qr($condition.expressionNames.putAll($conditionFilterExpressions.expressionNames))
+  #set( $conditionExpressionValues = $util.defaultIfNull($condition.expressionValues, {}) )
+  $util.qr($conditionExpressionValues.putAll($conditionFilterExpressions.expressionValues))
+  #set( $condition.expressionValues = $conditionExpressionValues )
   $util.qr($condition.expressionValues.putAll($conditionFilterExpressions.expressionValues))
 #end
 #if( $condition.expressionValues && $condition.expressionValues.size() == 0 )
@@ -153,78 +144,11 @@ $util.qr($context.args.input.put("__typename", "Event"))
   "expressionNames": $condition.expressionNames
 } )
 #end
-#set( $expNames = {} )
-#set( $expValues = {} )
-#set( $expSet = {} )
-#set( $expAdd = {} )
-#set( $expRemove = [] )
-#if( $modelObjectKey )
-  #set( $keyFields = [] )
-  #foreach( $entry in $modelObjectKey.entrySet() )
-    $util.qr($keyFields.add("$entry.key"))
-  #end
-#else
-  #set( $keyFields = ["id"] )
-#end
-#foreach( $entry in $util.map.copyAndRemoveAllKeys($context.args.input, $keyFields).entrySet() )
-  #if( !$util.isNull($dynamodbNameOverrideMap) && $dynamodbNameOverrideMap.containsKey("$entry.key") )
-    #set( $entryKeyAttributeName = $dynamodbNameOverrideMap.get("$entry.key") )
-  #else
-    #set( $entryKeyAttributeName = $entry.key )
-  #end
-  #if( $util.isNull($entry.value) )
-    #set( $discard = $expRemove.add("#$entryKeyAttributeName") )
-    $util.qr($expNames.put("#$entryKeyAttributeName", "$entry.key"))
-  #else
-    $util.qr($expSet.put("#$entryKeyAttributeName", ":$entryKeyAttributeName"))
-    $util.qr($expNames.put("#$entryKeyAttributeName", "$entry.key"))
-    $util.qr($expValues.put(":$entryKeyAttributeName", $util.dynamodb.toDynamoDB($entry.value)))
-  #end
-#end
-#set( $expression = "" )
-#if( !$expSet.isEmpty() )
-  #set( $expression = "SET" )
-  #foreach( $entry in $expSet.entrySet() )
-    #set( $expression = "$expression $entry.key = $entry.value" )
-    #if( $foreach.hasNext() )
-      #set( $expression = "$expression," )
-    #end
-  #end
-#end
-#if( !$expAdd.isEmpty() )
-  #set( $expression = "$expression ADD" )
-  #foreach( $entry in $expAdd.entrySet() )
-    #set( $expression = "$expression $entry.key $entry.value" )
-    #if( $foreach.hasNext() )
-      #set( $expression = "$expression," )
-    #end
-  #end
-#end
-#if( !$expRemove.isEmpty() )
-  #set( $expression = "$expression REMOVE" )
-  #foreach( $entry in $expRemove )
-    #set( $expression = "$expression $entry" )
-    #if( $foreach.hasNext() )
-      #set( $expression = "$expression," )
-    #end
-  #end
-#end
-#set( $update = {} )
-$util.qr($update.put("expression", "$expression"))
-#if( !$expNames.isEmpty() )
-  $util.qr($update.put("expressionNames", $expNames))
-#end
-#if( !$expValues.isEmpty() )
-  $util.qr($update.put("expressionValues", $expValues))
-#end
 {
   "version": "2018-05-29",
-  "operation": "UpdateItem",
+  "operation": "DeleteItem",
   "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
-  "id": {
-      "S": $util.toJson($context.args.input.id)
-  }
+  "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
 } #end,
-  "update": $util.toJson($update),
   "condition": $util.toJson($condition)
 }

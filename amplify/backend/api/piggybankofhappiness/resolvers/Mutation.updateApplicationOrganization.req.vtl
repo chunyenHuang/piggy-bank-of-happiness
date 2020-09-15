@@ -8,9 +8,9 @@
   ## [Start] Static Group Authorization Checks **
   #set($isStaticGroupAuthorized = $util.defaultIfNull(
             $isStaticGroupAuthorized, false))
-  ## Authorization rule: { allow: groups, groups: ["OrgAdmins","AppAdmins"], groupClaim: "cognito:groups" } **
+  ## Authorization rule: { allow: groups, groups: ["AppAdmins"], groupClaim: "cognito:groups" } **
   #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
-  #set( $allowedGroups = ["OrgAdmins", "AppAdmins"] )
+  #set( $allowedGroups = ["AppAdmins"] )
   #foreach( $userGroup in $userGroups )
     #if( $allowedGroups.contains($userGroup) )
       #set( $isStaticGroupAuthorized = true )
@@ -89,13 +89,6 @@
 
 
 
-## [Start] Set the primary @key. **
-#set( $modelObjectKey = {
-  "key": $util.dynamodb.toDynamoDB($ctx.args.input.key),
-  "timestamp": $util.dynamodb.toDynamoDB($ctx.args.input.timestamp)
-} )
-## [End] Set the primary @key. **
-
 #if( $authCondition && $authCondition.expression != "" )
   #set( $condition = $authCondition )
   #if( $modelObjectKey )
@@ -134,7 +127,7 @@
 #end
 ## Automatically set the updatedAt timestamp. **
 $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.input.updatedAt, $util.time.nowISO8601())))
-$util.qr($context.args.input.put("__typename", "Event"))
+$util.qr($context.args.input.put("__typename", "ApplicationOrganization"))
 ## Update condition if type is @versioned **
 #if( $versionedCondition )
   $util.qr($condition.put("expression", "($condition.expression) AND $versionedCondition.expression"))
