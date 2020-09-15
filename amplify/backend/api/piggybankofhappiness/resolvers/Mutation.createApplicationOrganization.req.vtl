@@ -1,4 +1,5 @@
 ## [Start] Set default values. **
+$util.qr($context.args.input.put("id", $util.defaultIfNull($ctx.args.input.id, $util.autoId())))
 #set( $createdAt = $util.time.nowISO8601() )
 ## Automatically set the createdAt timestamp. **
 $util.qr($context.args.input.put("createdAt", $util.defaultIfNull($ctx.args.input.createdAt, $createdAt)))
@@ -15,9 +16,9 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
   ## [Start] Static Group Authorization Checks **
   #set($isStaticGroupAuthorized = $util.defaultIfNull(
             $isStaticGroupAuthorized, false))
-  ## Authorization rule: { allow: groups, groups: ["OrgAdmins","AppAdmins"], groupClaim: "cognito:groups" } **
+  ## Authorization rule: { allow: groups, groups: ["AppAdmins"], groupClaim: "cognito:groups" } **
   #set( $userGroups = $util.defaultIfNull($ctx.identity.claims.get("cognito:groups"), []) )
-  #set( $allowedGroups = ["OrgAdmins", "AppAdmins"] )
+  #set( $allowedGroups = ["AppAdmins"] )
   #foreach( $userGroup in $userGroups )
     #if( $allowedGroups.contains($userGroup) )
       #set( $isStaticGroupAuthorized = true )
@@ -43,15 +44,8 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
 
 
 
-## [Start] Set the primary @key. **
-#set( $modelObjectKey = {
-  "key": $util.dynamodb.toDynamoDB($ctx.args.input.key),
-  "timestamp": $util.dynamodb.toDynamoDB($ctx.args.input.timestamp)
-} )
-## [End] Set the primary @key. **
-
 ## [Start] Prepare DynamoDB PutItem Request. **
-$util.qr($context.args.input.put("__typename", "Event"))
+$util.qr($context.args.input.put("__typename", "ApplicationOrganization"))
 #set( $condition = {
   "expression": "attribute_not_exists(#id)",
   "expressionNames": {
