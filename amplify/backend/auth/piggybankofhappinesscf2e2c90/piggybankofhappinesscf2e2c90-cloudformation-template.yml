@@ -240,7 +240,7 @@ Resources:
     
   
       AdminCreateUserConfig:
-          AllowAdminCreateUserOnly: True
+          AllowAdminCreateUserOnly: false
           InviteMessageTemplate:
               EmailMessage: |
                 [幸福存摺] 開發測試登入資訊

@@ -3,8 +3,17 @@ import PropTypes from 'prop-types';
 import { Storage } from 'aws-amplify';
 
 import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  avatar: {
+    border: '1px solid rgba(255,255,255,0.3)',
+  },
+}));
 
 export default function UserAvatar({ username }) {
+  const classes = useStyles();
+
   const [uri, setUri] = useState();
   const [s3Key, setS3Key] = useState();
 
@@ -19,7 +28,12 @@ export default function UserAvatar({ username }) {
   }, [username]);
 
   return (
-    <Avatar alt={''} src={uri} />
+    <Avatar
+      alt={''}
+      src={uri}
+      variant="circle"
+      className={classes.avatar}
+    />
   );
 }
 
