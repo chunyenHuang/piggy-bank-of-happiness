@@ -11,7 +11,7 @@ https://github.com/aws-amplify/amplify-cli/issues/2187
     Properties:
       # Add this to make admin only
       AdminCreateUserConfig:
-          AllowAdminCreateUserOnly: True
+          AllowAdminCreateUserOnly: false
           InviteMessageTemplate:
               EmailMessage: |
                 [幸福存摺] 開發測試登入資訊
