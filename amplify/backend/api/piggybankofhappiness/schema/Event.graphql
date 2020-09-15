@@ -3,7 +3,7 @@ type Event
   @key(fields: ["key", "timestamp"])
   @key(name: "byOrgByTimestamp", fields: ["organizationId", "timestamp"], queryField: "getEventsByOrgByTimestamp")
   @auth(rules: [
-    {allow: groups, groups: ["OrgAdmins"]},
+    {allow: groups, groups: ["OrgAdmins", "AppAdmins"]},
   ])
 {
   key: String! # Combination of {tableName}___{partitionKey}___{sortKey}
