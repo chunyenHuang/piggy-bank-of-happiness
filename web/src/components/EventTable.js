@@ -100,8 +100,8 @@ export default function EventTable({ organizationId }) {
                 .map((diff, index)=>(
                   <tr key={index}>
                     <td>{diff.key}</td>
-                    <td>{diff.old.replace(/"/g, '')}</td>
-                    <td>{diff.new.replace(/"/g, '')}</td>
+                    {diff.old && <td>{diff.old.replace(/"/g, '')}</td>}
+                    {diff.new && <td>{diff.new.replace(/"/g, '')}</td>}
                   </tr>
                 ))}
             </tbody>
