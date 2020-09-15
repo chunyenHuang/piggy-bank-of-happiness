@@ -23,6 +23,6 @@ type Event
 
 type EventDiffItem {
   key: String!
-  old: String!
-  new: String!
+  old: String
+  new: String
 }
