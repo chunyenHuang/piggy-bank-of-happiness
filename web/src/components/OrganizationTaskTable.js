@@ -79,9 +79,9 @@ const columns = [
   {
     name: 'point',
     label: '點數',
-    type: 'number',
+    type: 'point',
     edit: {
-      type: 'number',
+      type: 'point',
     },
     options: {
       filter: false,
@@ -91,9 +91,9 @@ const columns = [
   {
     name: 'pointMin',
     label: '最低點數',
-    type: 'number',
+    type: 'point',
     edit: {
-      type: 'number',
+      type: 'point',
     },
     options: {
       filter: false,
@@ -103,9 +103,9 @@ const columns = [
   {
     name: 'pointMax',
     label: '最高點數',
-    type: 'number',
+    type: 'point',
     edit: {
-      type: 'number',
+      type: 'point',
     },
     options: {
       filter: false,
@@ -179,7 +179,11 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
   const onCreate = async (newRecord) => {
     try {
       setIsLoading(true);
-      const input = Object.assign(newRecord, {});
+      const input = Object.assign(newRecord, {
+        point: +(parseFloat(newRecord.point) * 100),
+        pointMin: +(parseFloat(newRecord.pointMin) * 100),
+        pointMax: +(parseFloat(newRecord.pointMax) * 100),
+      });
       await request(createOrganizationTask, { input });
 
       setLastUpdatedAt(Date.now());

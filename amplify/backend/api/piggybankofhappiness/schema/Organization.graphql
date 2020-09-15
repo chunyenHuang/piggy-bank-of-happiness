@@ -9,7 +9,16 @@ type Organization
   id: ID!
   name: String!
   description: String!
+  # from application
+  registeredName: String
+  taxIdNumber: String
+  phoneNumber: String
+  email: String
+  address: Address
+
   isActive: Int!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
+  createdBy: String
+  updatedBy: String
 }

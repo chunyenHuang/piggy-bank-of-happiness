@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
 import moment from 'moment';
 import deepcopy from 'deepcopy';
+import csv from 'csv';
+import { CSVLink } from 'react-csv';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -14,6 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import SyncIcon from '@material-ui/icons/Sync';
 import AddIcon from '@material-ui/icons/Add';
 // import AddCircleIcon from '@material-ui/icons/AddCircle';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import QueueIcon from '@material-ui/icons/Queue';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Footer from './Footer';
@@ -90,6 +94,8 @@ export default function Table({
   onUpdateItem,
   onRefresh,
   onAddItem,
+  onBatchAdd,
+  batchTemplateFields,
   isLoading,
   nested = false,
   hide,
@@ -99,6 +105,45 @@ export default function Table({
   const [updatedColumns, setUpdatedColumns] = useState(columns);
   const [editDataIndex, setEditDataIndex] = useState(-1);
   const [editItem, setEditItem] = useState(null);
+
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const options = {
+        columns: true,
+      };
+      csv.parse(reader.result, options, (err, data) => {
+        if (err) {
+          console.log(err);
+        } else
+        if (onBatchAdd) {
+          const updatedData = data.map((item) => {
+            const newItem = {};
+            columns
+              .filter(({ isTemplate }) => isTemplate)
+              .forEach(({ name, label, type }) => {
+                newItem[name] = item[label];
+                switch (type) {
+                case 'number':
+                  newItem[name] = parseInt(item[label]);
+                  break;
+                default:
+                  newItem[name] = item[label];
+                }
+              });
+
+            return newItem;
+          });
+          onBatchAdd(updatedData);
+        }
+      });
+    };
+
+    reader.readAsText(file, { encoding: 'utf8' });
+  };
 
   // overwrite options
   const updatedOptions = Object.assign({
@@ -137,6 +182,38 @@ export default function Table({
               <SyncIcon />
             </IconButton>
           </Tooltip>}
+        {onBatchAdd &&
+          <React.Fragment>
+            <Tooltip title={'下載批量模板 CSV'}>
+              <IconButton
+                data-testid={'batch-template-icon'}
+                aria-label={'batch-teamplate'}
+                data={[columns.filter(({ isTemplate })=>isTemplate).map(({ label }) => label)]}
+                filename={`${title}-批量模板.csv`}
+                component={CSVLink}
+              >
+                <GetAppIcon />
+              </IconButton>
+            </Tooltip>
+          </React.Fragment>
+        }
+        {onBatchAdd &&
+          <Tooltip title={'批量新增 (上傳CSV)'}>
+            <IconButton
+              data-testid={'batch-add-icon'}
+              aria-label={'batch-add'}
+              component="label"
+            >
+              <QueueIcon />
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                accept=".csv"
+                onChange={handleUpload}
+              />
+            </IconButton>
+          </Tooltip>
+        }
         {onAddItem &&
           <Tooltip title={'新增資料'}>
             <IconButton
@@ -267,6 +344,14 @@ export default function Table({
             return (<Checkbox checked={isChecked} color="default" disabled={true} />);
           };
           break;
+        case 'point':
+        case 'points':
+          options.customBodyRender = (val) => (
+            <div className={classes.numberContainer}>
+              {!isNaN(val) ? new Intl.NumberFormat().format(val / 100) : 'N/A'}
+            </div>
+          );
+          break;
         case 'number':
           options.customBodyRender = (val) => (
             <div className={classes.numberContainer}>
@@ -356,6 +441,8 @@ Table.propTypes = {
   onUpdateItem: PropTypes.func,
   onRefresh: PropTypes.func,
   onAddItem: PropTypes.func,
+  onBatchAdd: PropTypes.func,
+  batchTemplateFields: PropTypes.array,
   isLoading: PropTypes.bool,
   hide: PropTypes.array,
 };

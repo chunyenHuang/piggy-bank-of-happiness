@@ -6,6 +6,7 @@ import CustomHeader from 'components/CustomHeader';
 
 import routes from './routes';
 import Colors from 'constants/Colors';
+import { isIphoneX } from 'src/utils/device';
 
 const filterRoutes = routes.filter((x) => x.type === 'bottom-tab');
 
@@ -39,6 +40,8 @@ export default function BottomTabNavigator({ navigation, route }) {
 
   const tabBarOptions = {
     activeTintColor: Colors.primary,
+    style: isIphoneX ? undefined : { height: 60 },
+    tabStyle: isIphoneX ? undefined : { paddingBottom: 8 },
   };
 
   if (!menu) return null;

@@ -17,7 +17,7 @@ input UserOperationUser {
   username: String!
   idNumber: String!
   name: String!
-  role: RoleType!
+  role: String!
   email: AWSEmail!
   groupId: ID
 }

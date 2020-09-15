@@ -1,6 +1,66 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateEvent = /* GraphQL */ `
+  subscription OnCreateEvent {
+    onCreateEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateEvent = /* GraphQL */ `
+  subscription OnUpdateEvent {
+    onUpdateEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteEvent = /* GraphQL */ `
+  subscription OnDeleteEvent {
+    onDeleteEvent {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {
@@ -169,6 +229,57 @@ export const onDeleteOrganizationProgram = /* GraphQL */ `
     }
   }
 `;
+export const onCreateOrganizationReward = /* GraphQL */ `
+  subscription OnCreateOrganizationReward {
+    onCreateOrganizationReward {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
+export const onUpdateOrganizationReward = /* GraphQL */ `
+  subscription OnUpdateOrganizationReward {
+    onUpdateOrganizationReward {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
+export const onDeleteOrganizationReward = /* GraphQL */ `
+  subscription OnDeleteOrganizationReward {
+    onDeleteOrganizationReward {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
 export const onCreateOrganizationTask = /* GraphQL */ `
   subscription OnCreateOrganizationTask {
     onCreateOrganizationTask {
@@ -262,6 +373,7 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -300,6 +412,7 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -338,6 +451,7 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -484,6 +598,7 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -573,6 +688,7 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -662,6 +778,7 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points

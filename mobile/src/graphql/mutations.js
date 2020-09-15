@@ -13,6 +13,75 @@ export const userOperation = /* GraphQL */ `
     }
   }
 `;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      key
+      timestamp
+      organizationId
+      updatedBy
+      eventId
+      eventName
+      diff {
+        key
+        old
+        new
+      }
+      note
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createOrganization = /* GraphQL */ `
   mutation CreateOrganization(
     $input: CreateOrganizationInput!
@@ -208,6 +277,66 @@ export const deleteOrganizationProgram = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationReward = /* GraphQL */ `
+  mutation CreateOrganizationReward(
+    $input: CreateOrganizationRewardInput!
+    $condition: ModelOrganizationRewardConditionInput
+  ) {
+    createOrganizationReward(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
+export const updateOrganizationReward = /* GraphQL */ `
+  mutation UpdateOrganizationReward(
+    $input: UpdateOrganizationRewardInput!
+    $condition: ModelOrganizationRewardConditionInput
+  ) {
+    updateOrganizationReward(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
+export const deleteOrganizationReward = /* GraphQL */ `
+  mutation DeleteOrganizationReward(
+    $input: DeleteOrganizationRewardInput!
+    $condition: ModelOrganizationRewardConditionInput
+  ) {
+    deleteOrganizationReward(input: $input, condition: $condition) {
+      organizationId
+      id
+      name
+      description
+      requiredPoints
+      isActive
+      total
+      createdBy
+      createdAt
+      updatedBy
+      updatedAt
+    }
+  }
+`;
 export const createOrganizationTask = /* GraphQL */ `
   mutation CreateOrganizationTask(
     $input: CreateOrganizationTaskInput!
@@ -313,6 +442,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -354,6 +484,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -395,6 +526,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
       organizationId
       id
       username
+      rewardId
       refTransactionId
       isCancelled
       points
@@ -553,6 +685,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -645,6 +778,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points
@@ -737,6 +871,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
         organizationId
         id
         username
+        rewardId
         refTransactionId
         isCancelled
         points

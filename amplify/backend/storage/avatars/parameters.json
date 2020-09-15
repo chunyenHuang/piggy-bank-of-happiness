@@ -13,16 +13,22 @@
         "s3:ListBucket"
     ],
     "selectedAuthenticatedPermissions": [
+        "s3:PutObject",
         "s3:GetObject",
         "s3:ListBucket"
     ],
     "s3PermissionsGuestPublic": "DISALLOW",
     "s3PermissionsGuestUploads": "DISALLOW",
     "GuestAllowList": "DISALLOW",
-    "s3PermissionsAuthenticatedPublic": "DISALLOW",
-    "s3PermissionsAuthenticatedProtected": "DISALLOW",
-    "s3PermissionsAuthenticatedPrivate": "DISALLOW",
-    "s3PermissionsAuthenticatedUploads": "DISALLOW",
-    "AuthenticatedAllowList": "DISALLOW",
-    "triggerFunction": "NONE"
+    "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject",
+    "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject",
+    "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject",
+    "s3PermissionsAuthenticatedUploads": "s3:PutObject",
+    "AuthenticatedAllowList": "ALLOW",
+    "triggerFunction": "NONE",
+    "s3PublicPolicy": "Public_policy_bbdbc660",
+    "s3UploadsPolicy": "Uploads_policy_bbdbc660",
+    "s3ProtectedPolicy": "Protected_policy_bbdbc660",
+    "s3PrivatePolicy": "Private_policy_bbdbc660",
+    "s3ReadPolicy": "read_policy_bbdbc660"
 }

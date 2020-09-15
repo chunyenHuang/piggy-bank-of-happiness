@@ -6,6 +6,7 @@ import request from 'src/utils/request';
 import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
 import { getRoleDisplayName } from 'src/admin/utils';
+import UserAvatar from 'components/UserAvatar';
 
 export default function StaffList() {
   const [users, setUsers] = useState([]);
@@ -79,28 +80,18 @@ export default function StaffList() {
       {users.map((user, index)=>(
         <ListItem
           key={index}
-          leftAvatar={{
-            title: `${user.name.substring(0, 1)}`,
-            borderRadius: 25,
-            width: 50,
-            height: 50,
-            backgroundColor: Colors.light,
-            // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }}
-          title={user.name}
-          subtitle={user.username}
-          subtitleStyle={styles.subtitle}
-          rightTitle={getRoleDisplayName(user.role)}
           bottomDivider
-          // chevron
-          // badge={{
-          //   // status: 'success',
-          //   value: user.currentPoints,
-          //   textStyle: styles.badgeText,
-          //   badgeStyle: styles.badge,
-          // }}
-          // onPress={() => navigation.navigate('User', user)}
-        />
+        >
+          <UserAvatar
+            username={user.username}
+            name={user.name}
+          />
+          <ListItem.Content>
+            <ListItem.Title>{user.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{user.username}</ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Title>{getRoleDisplayName(user.role)}</ListItem.Title>
+        </ListItem>
       ))}
     </ScrollView>
   );

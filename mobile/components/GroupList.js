@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl, AsyncStorage } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Badge } from 'react-native-elements';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import { asyncListAll } from 'src/utils/request';
@@ -9,6 +9,7 @@ import Colors from 'constants/Colors';
 import ModifyGroup from 'components/ModifyGroup';
 import check from 'src/permission/check';
 import { onCreateOrganizationGroup, onUpdateOrganizationGroup } from 'src/graphql/subscriptions';
+import BadgeInactive from 'components/BadgeInactive';
 
 export default function GroupList() {
   const [groups, setGroups] = useState([]);
@@ -89,18 +90,6 @@ export default function GroupList() {
     };
   }, [groups]);
 
-  const getBadge = (group) => {
-    if (group.isActive) {
-      return null;
-    } else {
-      return {
-        value: '停用中',
-        textStyle: styles.badgeTextInactive,
-        badgeStyle: styles.badgeInactive,
-      };
-    }
-  };
-
   return (
     <ScrollView
       style={styles.container}
@@ -115,14 +104,16 @@ export default function GroupList() {
       {groups.map((group, index)=>(
         <ListItem
           key={index}
-          title={group.name}
-          subtitle={group.description}
-          subtitleStyle={styles.subtitle}
           bottomDivider
-          chevron
           onPress={() => setGroup(group)}
-          badge={getBadge(group)}
-        />
+        >
+          <ListItem.Content>
+            <ListItem.Title>{group.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{group.description}</ListItem.Subtitle>
+          </ListItem.Content>
+          {!group.isActive && <BadgeInactive />}
+          <ListItem.Chevron />
+        </ListItem>
       ))}
     </ScrollView>
   );

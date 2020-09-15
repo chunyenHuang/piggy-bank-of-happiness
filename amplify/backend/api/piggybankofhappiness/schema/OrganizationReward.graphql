@@ -1,35 +1,36 @@
-# Not in the current scope
-# type OrganizationReward
-#   @model(subscriptions: null)
-#   @key(fields: ["organizationId", "id"])
-#   @auth(rules: [
-#     {allow: groups, groups: ["OrgManagers"], operations: [read, update]},
-#     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-#   ])
-# {
-#   organizationId: ID!
-#   organization: Organization @connection(fields:["organizationId"])
-#   id: ID!
-#   name: String! @auth(rules: [
-#     {allow: groups, groups: ["OrgManagers"], operations: [read]},
-#     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-#   ])
-#   description: String! @auth(rules: [
-#     {allow: groups, groups: ["OrgManagers"], operations: [read]},
-#     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-#   ])
-#   requiredPoints: Int! @auth(rules: [
-#     {allow: groups, groups: ["OrgManagers"], operations: [read]},
-#     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-#   ])
-#   isActive: Int! @auth(rules: [
-#     {allow: groups, groups: ["OrgManagers"], operations: [read]},
-#     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-#   ])
-#   useCount: Int! 
-#   createdBy: String
-#   createdAt: AWSDateTime!
-#   updatedAt: AWSDateTime!
-#   # relationship
-#   # transactions: [OrganizationTransaction] @connection(keyName: "byRewardByCreatedAt", fields: ["id"])
-# }
+type OrganizationReward
+  @model (subscriptions: { level: public })
+  @key(fields: ["organizationId", "id"])
+  @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read, update]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  organizationId: ID!
+  id: ID!
+  name: String! @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+  description: String! @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+  requiredPoints: Int! @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+  isActive: Int! @auth(rules: [
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+  total: Int! 
+
+  createdBy: String
+  createdAt: AWSDateTime!
+  updatedBy: String
+  updatedAt: AWSDateTime!
+  # relationship
+  # transactions: [OrganizationTransaction] @connection(keyName: "byRewardByCreatedAt", fields: ["id"])
+  # organization: Organization @connection(fields:["organizationId"])
+}

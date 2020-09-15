@@ -10,3 +10,12 @@ export const isIphoneX = Platform.OS === 'ios' &&
 
 export const isIOS = Platform.OS == 'ios';
 export const isAndroid = Platform.OS !== 'ios';
+
+export const getHeaderProps = () => {
+  return {
+    height: Platform.OS == 'ios' ?
+      (isIphoneX ? 80 : 60) : 60,
+    paddingTop: Platform.OS == 'ios' ?
+      (isIphoneX ? 40 : 20) : 20,
+  };
+};

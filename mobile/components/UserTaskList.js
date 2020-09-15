@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ListItem, Text } from 'react-native-elements';
+import { ListItem, Text, Badge } from 'react-native-elements';
 import moment from 'moment';
 
 import { sortBy } from '../src/utils/sorting';
@@ -13,19 +13,21 @@ export default function UserTaskList({ tasks = [] }) {
       {tasks.sort(sortBy('updatedAt', true)).map((task)=>(
         <ListItem
           key={task.id}
-          // leftAvatar={{ source: { uri: randomAvatarUrl } }}
           title={task.taskName}
-          subtitle={`${task.status} ${moment(task.updatedAt).format('MM/DD/YYYY hh:mm ')}`}
-          subtitleStyle={styles.subtitle}
           bottomDivider
-          // chevron
-          badge={{
+        >
+          <ListItem.Content>
+            <ListItem.Title>{task.taskName}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{`${task.status} ${moment(task.updatedAt).format('MM/DD/YYYY hh:mm ')}`}</ListItem.Subtitle>
+          </ListItem.Content>
+          <Badge {...{
             // status: 'success',
             value: task.points,
             textStyle: styles.badgeText,
             badgeStyle: styles.badge,
-          }}
-        />
+          }} />
+          <ListItem.Chevron />
+        </ListItem>
       ))}
     </View>
   );

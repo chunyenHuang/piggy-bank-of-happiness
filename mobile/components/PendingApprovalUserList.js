@@ -9,6 +9,7 @@ import { sortBy } from 'src/utils/sorting';
 import Colors from 'constants/Colors';
 import { getOrgUsersByRoleByOrg } from 'src/graphql/queries';
 import { onCreateOrganizationUser, onUpdateOrganizationUser } from 'src/graphql/subscriptions';
+import UserAvatar from 'components/UserAvatar';
 
 export default function PendingApprovalUserList() {
   const navigation = useNavigation();
@@ -77,28 +78,19 @@ export default function PendingApprovalUserList() {
       {users.map((user, index) => (
         <ListItem
           key={index}
-          leftAvatar={{
-            title: `${user.name.substring(0, 1)}`,
-            borderRadius: 25,
-            width: 50,
-            height: 50,
-            color: 'red',
-            backgroundColor: Colors.light,
-            // source: { uri: `https://i.pravatar.cc/100?u=${user.username}` }
-          }}
-          title={user.name}
-          subtitle={user.idNumber}
-          subtitleStyle={styles.subtitle}
           bottomDivider
-          chevron
-          // badge={{
-          //   // status: 'success',
-          //   value: user.currentPoints/100,
-          //   textStyle: styles.badgeText,
-          //   badgeStyle: styles.badge,
-          // }}
           onPress={() => navigation.navigate('Stacks', { screen: 'User', params: user })}
-        />
+        >
+          <UserAvatar
+            username={user.username}
+            name={`${user.name}`}
+          />
+          <ListItem.Content>
+            <ListItem.Title>{user.name}</ListItem.Title>
+            <ListItem.Subtitle style={styles.subtitle}>{user.idNumber}</ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       ))
       }
     </ScrollView>

@@ -16,6 +16,8 @@ import OrganizationUsers from 'views/OrgAdmin/Users/Users';
 import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
 import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
 import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
+import OrganizationRewards from 'views/OrgAdmin/Rewards/Rewards';
+import Events from 'views/OrgAdmin/Events/Events';
 
 import ListIcon from '@material-ui/icons/List';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
@@ -24,6 +26,8 @@ import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import PaymentIcon from '@material-ui/icons/Payment';
 import BusinessIcon from '@material-ui/icons/Business';
 import LockIcon from '@material-ui/icons/Lock';
+import RedeemIcon from '@material-ui/icons/Redeem';
+import EventNote from '@material-ui/icons/EventNote';
 
 export const general = [].map((item) => {
   item.route = item.route || Route;
@@ -102,6 +106,14 @@ export const orgAdmin = [
     component: OrganizationPrograms,
   },
   {
+    title: '獎品',
+    icon: RedeemIcon,
+    paths: [
+      { path: '/rewards', exact: true },
+    ],
+    component: OrganizationRewards,
+  },
+  {
     title: '學生',
     icon: PeopleIcon,
     paths: [
@@ -144,6 +156,14 @@ export const orgAdmin = [
       { path: '/transactions', exact: true },
     ],
     component: OrganizationTransactions,
+  },
+  {
+    title: '系統紀錄',
+    icon: EventNote,
+    paths: [
+      { path: '/events', exact: true },
+    ],
+    component: Events,
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;

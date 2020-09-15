@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from 'react-native-elements';
 
-import { isIphoneX } from 'src/utils/device';
+import { getHeaderProps } from 'src/utils/device';
 import Colors from 'constants/Colors';
 
 export default function CustomHeader({ title, leftComponent, rightComponent }) {
@@ -9,12 +9,7 @@ export default function CustomHeader({ title, leftComponent, rightComponent }) {
     <Header
       barStyle={'light-content'}
       backgroundColor={Colors.primary}
-      containerStyle={{
-        height: Platform.OS == 'ios' ?
-          (isIphoneX ? 80: 60) : 40,
-        paddingTop: Platform.OS == 'ios' ?
-          (isIphoneX ? 40: 20): 0,
-      }}
+      containerStyle={getHeaderProps()}
       leftComponent={leftComponent}
       centerComponent={{
         text: title,

@@ -66,6 +66,23 @@ export default function EditField({ data: inDataObject, type, name, value, editI
         }}
       />
     );
+  case 'point':
+  case 'points':
+    return (
+      <TextField
+        value={parseFloat(data)}
+        onChange={onChange}
+        name={name}
+        id={name}
+        inputProps={{
+          'className': classes.input,
+          'data-test-id': `${name}-${editIndex}`,
+        }}
+        InputProps={{
+          inputComponent: numberFormatCustom(),
+        }}
+      />
+    );
   case 'currency':
     return (
       <TextField
@@ -78,7 +95,7 @@ export default function EditField({ data: inDataObject, type, name, value, editI
           'data-test-id': `${name}-${editIndex}`,
         }}
         InputProps={{
-          inputComponent: NumberFormatCustom,
+          inputComponent: numberFormatCustom('$'),
         }}
       />
     );
@@ -136,30 +153,38 @@ EditField.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-function NumberFormatCustom({ inputRef, onChange, name, value, ...other }) {
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      value={value}
-      onValueChange={(values) => {
-        onChange({
-          target: {
-            name: name,
-            value: values.floatValue,
-          },
-        });
-      }}
-      format={(val) => {
-        return `$ ${(parseFloat(val || 0) / 100).toFixed(2)}`;
-      }}
-    />
-  );
+function numberFormatCustom(prefix) {
+  const func = ({ inputRef, onChange, name, value, ...other }) => {
+    return (
+      <NumberFormat
+        {...other}
+        getInputRef={inputRef}
+        value={value}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              name: name,
+              value: values.floatValue,
+            },
+          });
+        }}
+        format={(val) => {
+          return `${prefix?` ${prefix} ` : ''}${(parseFloat(val || 0) / 100).toFixed(2)}`;
+        }}
+      />
+    );
+  };
+
+  func.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  return func;
 }
 
-NumberFormatCustom.propTypes = {
-  inputRef: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+numberFormatCustom.propTypes = {
+  prefix: PropTypes.string,
 };
