@@ -1,0 +1,59 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - npm i
+        - node scripts/fetch-team-provider-info.js
+        - cat amplify/team-provider-info.json
+        - '# Execute Amplify CLI with the helper script'
+        - node scripts/updateTags.js
+        - node scripts/deploy.js
+        - amplify status
+        # - amplifyPush --simple
+        
+# frontend:
+#   phases:
+#     preBuild:
+#       commands:
+#         - yarn install
+#         - nvm use 10
+#         - npm install --silent --global expo-cli
+#         - |-
+#           if [ -f yarn.lock ]; then
+#            yarn
+#           elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+#            npm ci
+#           else
+#            npm install
+#           fi
+#     build:
+#       commands:
+#         - 'expo build:web'
+#   artifacts:
+#     baseDirectory: web-build
+#     files:
+#       - '**/*'
+#   cache:
+#     paths:
+#       - node_modules/**/*
+#       - $(npm root --global)/**/*
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd web && npm i && cd ..
+    build:
+      commands:
+        - ls -al
+        - cp aws-exports.js web/src/aws-exports.js
+        - cd web && npm run build && mv build/ ../build && cd ..
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - web/node_modules/**/*
+
