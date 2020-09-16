@@ -8,7 +8,7 @@
     "amplify:push": "amplify push -y && npm run amplify:update:schema && npm run amplify:update:resolvers && npm run amplify:update:config",
     "amplify:update:schema": "amplify codegen && rm -rf mobile/src/graphql && cp -r src/graphql web/src && mv src/graphql mobile/src",
     "amplify:update:resolvers": "rm -rf amplify/backend/api/piggybankofhappiness/resolvers && amplify api gql-compile && mv amplify/backend/api/piggybankofhappiness/build/resolvers amplify/backend/api/piggybankofhappiness/resolvers",
-    "amplify:update:config": "cp aws-exports.js web/aws-exports.js && mv aws-exports.js mobile/aws-exports.js"
+    "amplify:update:config": "cp aws-exports.js web/src/aws-exports.js && mv aws-exports.js mobile/aws-exports.js"
   },
   "repository": {
     "type": "git",
