@@ -1,0 +1,10 @@
+[
+    {
+      "Key": "Environment",
+      "Value": "{project-env}"
+    },
+    {
+      "Key": "Product",
+      "Value": "{project-name}"
+    }
+  ]
