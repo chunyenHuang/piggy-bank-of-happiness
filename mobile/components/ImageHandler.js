@@ -64,9 +64,11 @@ export default function ImageHandler({
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      if (status !== 'granted') {
-        return onClose();
+      if (visible) {
+        const { status } = await Camera.requestPermissionsAsync();
+        if (status !== 'granted') {
+          return onClose();
+        }
       }
 
       setIsBusy(!visible);
