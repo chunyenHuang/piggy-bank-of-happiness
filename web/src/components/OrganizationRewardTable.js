@@ -3,124 +3,14 @@ import PropTypes from 'prop-types';
 import { v1 as uuidv1 } from 'uuid';
 
 import Table from 'components/Table/Table';
-
 import DetailFormDialog from 'components/DetailFormDialog';
-
+import RewardAvatar from 'components/RewardAvatar';
 import { listOrganizationRewards } from 'graphql/queries';
 import { createOrganizationReward, updateOrganizationReward } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 
 import formMetadata from 'forms/OrganizationReward';
-
-const columns = [
-  {
-    name: 'isActive',
-    label: '使用中',
-    type: 'checkbox',
-    edit: {
-      type: 'checkbox',
-    },
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'id',
-    label: 'ID',
-    options: {
-      display: false,
-      filter: false,
-      sort: false,
-    },
-  },
-  {
-    name: 'name',
-    label: '名稱',
-    isTemplate: true,
-    edit: {
-      type: 'text',
-    },
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'description',
-    label: '描述',
-    isTemplate: true,
-    edit: {
-      type: 'text',
-    },
-    options: {
-      filter: false,
-      sort: false,
-    },
-  },
-  {
-    name: 'requiredPoints',
-    label: '所需點數',
-    isTemplate: true,
-    type: 'point',
-    edit: {
-      type: 'point',
-    },
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'total',
-    label: '數量',
-    isTemplate: true,
-    type: 'number',
-    edit: {
-      type: 'number',
-    },
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'createdBy',
-    label: '創立者',
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'updatedBy',
-    label: '更新者',
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'createdAt',
-    label: '創立於',
-    type: 'datetime',
-    options: {
-      display: false,
-      filter: false,
-      sort: true,
-    },
-  },
-  {
-    name: 'updatedAt',
-    label: '更新於',
-    type: 'datetime',
-    options: {
-      filter: false,
-      sort: true,
-    },
-  },
-];
 
 export default function OrganizationRewardTable({ title = '獎品', description, organizationId }) {
   const [data, setData] = useState([]);
@@ -131,6 +21,128 @@ export default function OrganizationRewardTable({ title = '獎品', description,
   const username = localStorage.getItem('app:username');
 
   const options = {};
+
+  const columns = [
+    {
+      name: 'id',
+      label: ' ',
+      options: {
+        display: true,
+        filter: false,
+        sort: false,
+        customBodyRender(id) {
+          return (<RewardAvatar organizationId={organizationId} id={id} />);
+        },
+      },
+    },
+    {
+      name: 'isActive',
+      label: '使用中',
+      type: 'checkbox',
+      edit: {
+        type: 'checkbox',
+      },
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'id',
+      label: 'ID',
+      options: {
+        display: false,
+        filter: false,
+        sort: false,
+      },
+    },
+    {
+      name: 'name',
+      label: '名稱',
+      isTemplate: true,
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'description',
+      label: '描述',
+      isTemplate: true,
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: false,
+      },
+    },
+    {
+      name: 'requiredPoints',
+      label: '所需點數',
+      isTemplate: true,
+      type: 'point',
+      edit: {
+        type: 'point',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'total',
+      label: '數量',
+      isTemplate: true,
+      type: 'number',
+      edit: {
+        type: 'number',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'createdBy',
+      label: '創立者',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'updatedBy',
+      label: '更新者',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'createdAt',
+      label: '創立於',
+      type: 'datetime',
+      options: {
+        display: false,
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'updatedAt',
+      label: '更新於',
+      type: 'datetime',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+  ];
+  
 
   const onUpate = async (item, dataIndex) => {
     try {

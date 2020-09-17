@@ -9,7 +9,7 @@ import Form from './Form';
 import request from '../src/utils/request';
 import { createOrganizationReward, updateOrganizationReward } from '../src/graphql/mutations';
 import check from '../src/permission/check';
-// import RewardAvatar from 'components/RewardAvatar';
+import RewardAvatar from 'components/RewardAvatar';
 
 export default function ModifyTask({ item: inItem, hideButton, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,14 +39,13 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
     }
 
     setIsLoading(true);
-    const organizationId = await AsyncStorage.getItem('app:organizationId');
     const username = await AsyncStorage.getItem('app:username');
     const now = moment().toISOString();
 
     if (!isEditMode) {
       const data = Object.assign(reward, {
-        organizationId,
-        id: uuidv1(),
+        organizationId: reward.organizationId,
+        id: reward.id,
         isActive: 1,
         requiredPoints: parseFloat(reward.requiredPoints) * 100,
         total: parseInt(reward.total),
@@ -58,7 +57,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
       await request(createOrganizationReward, { input: data });
     } else {
       const data = {
-        organizationId,
+        organizationId: reward.organizationId,
         id: reward.id,
         isActive: reward.isActive ? 1 : 0,
         name: reward.name,
@@ -141,6 +140,14 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         isActive: inItem.isActive === 1,
       }));
       setVisible(true);
+    } else {
+      (async () => {
+        const organizationId = await AsyncStorage.getItem('app:organizationId');
+        setReward({
+          organizationId,
+          id: uuidv1(),
+        });
+      })();
     }
   }, [inItem]);
 
@@ -173,17 +180,19 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
           errors={errors}
           defaultValue={reward}
           onUpdate={(data)=>{
-            console.log(data);
-            setReward(data);
+            console.log({ ...reward, ...data });
+            setReward({ ...reward, ...data });
             setIsDirty(true);
           }}
-          onSubmit={()=>handleSubmit()}
+          onSubmit={() => handleSubmit()}
         />
-        {/* <RewardAvatar
+        <RewardAvatar
           organizationId={reward.organizationId}
           id={reward.id}
           editable={true}
-        /> */}
+          size="large"
+          onUpdate={() => setIsDirty(true)}
+        />
       </CustomModal>
     </React.Fragment>
 

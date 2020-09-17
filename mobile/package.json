@@ -17,7 +17,7 @@
     "build:android:dev": "node -r esm publish-check.js develop && node build-version.js android && expo build:android --release-channel develop",
     "upload:ios": "expo upload:ios",
     "upload:android": "expo upload:android --latest",
-    "publish": "node -r esm publish-check.js prd && expo publish", 
+    "publish": "node -r esm publish-check.js prd && expo publish",
     "publish:dev": "node -r esm publish-check.js develop && expo publish --release-channel develop"
   },
   "jest": {
@@ -36,6 +36,7 @@
     "aws-amplify-react-native": "^4.2.0",
     "expo": "~37.0.9",
     "expo-asset": "~8.1.0",
+    "expo-camera": "^8.3.1",
     "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
     "expo-image-manipulator": "^8.2.1",

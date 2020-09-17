@@ -37,6 +37,8 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     mode === 'edit' && setIsLoading(true);
     mode === 'select' && Hub.dispatch('app', { event: 'loading' });
 
+    setRewards([]);
+
     const organizationId = await AsyncStorage.getItem('app:organizationId');
     const params = { organizationId };
 
@@ -48,7 +50,7 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     }
 
     const rewards = await asyncListAll(listOrganizationRewards, params);
-    console.log(rewards);
+    // console.log(rewards);
     setRewards(rewards);
 
     mode === 'edit' && setIsLoading(false);
@@ -120,7 +122,9 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
             <RewardAvatar
               organizationId={reward.organizationId}
               id={reward.id}
-              editable={mode === 'edit'}
+              name={reward.name}
+              editable={false}
+              // editable={mode === 'edit'}
             />
             <ListItem.Content>
               <ListItem.Title>{reward.name}</ListItem.Title>
@@ -140,8 +144,8 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
             />
             {mode === 'select' &&
               <NumericInput
-                totalWidth={120}
-                totalHeight={45}
+                totalWidth={80}
+                totalHeight={40}
                 minValue={0}
                 maxValue={reward.total}
                 disabled={isLoading}
