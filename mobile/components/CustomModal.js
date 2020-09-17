@@ -35,7 +35,7 @@ export default function CustomModal({
       </View>
       {/* TODO: close button */}
       <KeyboardAwareScrollView
-        style={{ ...styles.modalContainer, ...containerStyle, padding: 12, paddingTop: 0 }}
+        style={{ ...styles.modalContainer, ...containerStyle, padding: padding ? 12 : 0, paddingTop: 0 }}
         scrollEnabled={true}
         enableAutomaticScroll={true}
         alwaysBounceVertical={false}

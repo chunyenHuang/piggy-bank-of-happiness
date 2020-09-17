@@ -4,23 +4,41 @@ import { Storage } from 'aws-amplify';
 
 import Colors from 'constants/Colors';
 import Loading from 'components/Loading';
-import { selectAndUpload } from 'src/utils/image';
+import ImageHandler from 'components/ImageHandler';
+import ImageViewer from 'components/ImageViewer';
+import { upload, getAccessorySize, getResizeProps } from 'src/utils/image';
 
 export default function UserAvatar({ username, name = '', size = 'medium', editable = false }) {
   const [avatarUri, setAvatarUri] = useState();
+  const [imageUri, setImageUri] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [s3Key, setS3Key] = useState();
+  const [s3KeyOriginalImage, setS3KeyOriginalImage] = useState();
+  const [showEditor, setShowEditor] = useState(false);
+  const [showViewer, setShowViewer] = useState(false);
 
-  const selectImage = async () => {
+  const handleView = () => {
+    setShowViewer(true);
+  };
+
+  const handleModify = async () => {
+    setShowEditor(true);
+  };
+
+  const handleImage = async ({ uri, width, height }) => {
+    setShowEditor(false);
     try {
       setIsLoading(true);
 
-      const options = {
-        aspect: [1, 1],
-        quality: 0,
-        resize: { width: 80, height: 80 },
-      };
-      await selectAndUpload(s3Key, options);
+      await Promise.all([
+        // thumbnail
+        upload(uri, s3Key, {
+          resize: getResizeProps(width, height, 80),
+        }),
+        upload(uri, s3KeyOriginalImage, {
+          resize: getResizeProps(width, height, 480),
+        }),
+      ]);
 
       setAvatarUri(await Storage.get(s3Key));
     } catch (err) {
@@ -37,7 +55,15 @@ export default function UserAvatar({ username, name = '', size = 'medium', edita
   }, [s3Key]);
 
   useEffect(() => {
-    setS3Key(`users/${username}/avatar.jpeg`);
+    (async () => {
+      setImageUri(await Storage.get(s3KeyOriginalImage));
+    })();
+  }, [s3KeyOriginalImage]);
+
+  useEffect(() => {
+    const prefix = `users/${username}`;
+    setS3Key(`${prefix}/avatar.jpeg`);
+    setS3KeyOriginalImage(`${prefix}/image.jpeg`);
   }, [username]);
 
   return (
@@ -47,14 +73,26 @@ export default function UserAvatar({ username, name = '', size = 'medium', edita
       rounded
       overlayContainerStyle={{ backgroundColor: Colors.light }}
       source={{ uri: avatarUri }}
-      onPress={selectImage}
+      onPress={handleView}
     >
       {editable &&
       <Accessory
-        onPress={selectImage}
-        size={23}
+        onPress={handleModify}
+        size={getAccessorySize(size)}
       />}
-      <Loading active={isLoading} mode="contained"/>
+      <Loading active={isLoading} mode="contained" />
+      <ImageHandler
+        visible={showEditor}
+        selectOptions={{}}
+        onClose={() => setShowEditor(false)}
+        onUpdate={handleImage}
+      />
+      <ImageViewer
+        visible={showViewer}
+        title={name}
+        uri={imageUri}
+        onClose={() => setShowViewer(false)}
+      />
     </Avatar>
   );
 }

@@ -17,22 +17,23 @@ export const select = async (options = {}) => {
     return;
   }
 
-  const { aspect = [1, 1], quality = 0 } = options;
+  const { allowsEditing, aspect, quality } = options;
 
   const launchParams = {
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
+    allowsEditing,
     aspect,
     quality,
     exif: false,
   };
-  const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(launchParams);
+
+  const { cancelled, uri, width, height } = await ImagePicker.launchImageLibraryAsync(launchParams);
 
   if (cancelled) {
     return;
   }
 
-  return uri;
+  return { uri, width, height };
 };
 
 export const upload = async (uri, s3Key, options = {}) => {
@@ -70,5 +71,22 @@ export const getAccessorySize = (inImageSize) => {
     return 23;
   default:
     return 10;
+  }
+};
+
+export const getResizeProps = (width, height, target) => {
+  const isPortrait = width < height;
+  const ratio = isPortrait ? height / width : width / height;
+
+  if (isPortrait) {
+    return {
+      width: target,
+      height: target * ratio,
+    };
+  } else {
+    return {
+      width: target * ratio,
+      height: target,
+    };
   }
 };

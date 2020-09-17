@@ -156,6 +156,7 @@ export default function UserList() {
                   <UserAvatar
                     username={user.username}
                     name={`${user.name}`}
+                    editable={false}
                   />
                   <ListItem.Content>
                     <ListItem.Title>{user.name}</ListItem.Title>

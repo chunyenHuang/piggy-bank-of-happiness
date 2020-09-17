@@ -11,10 +11,14 @@
     "test": "jest --watchAll",
     "lint": "eslint .",
     "graphql:compile": "amplify api gql-compile",
-    "build:ios": "node build-version.js ios && expo build:ios -t archive",
-    "build:android": "node build-version.js android && expo build:android",
+    "build:ios": "node -r esm publish-check.js prd && node build-version.js ios && expo build:ios -t archive",
+    "build:ios:dev": "node -r esm publish-check.js develop && node build-version.js ios && expo build:ios -t archive --release-channel develop",
+    "build:android": "node -r esm publish-check.js prd && node build-version.js android && expo build:android",
+    "build:android:dev": "node -r esm publish-check.js develop && node build-version.js android && expo build:android --release-channel develop",
     "upload:ios": "expo upload:ios",
-    "upload:android": "expo upload:android --latest"
+    "upload:android": "expo upload:android --latest",
+    "publish": "node -r esm publish-check.js prd && expo publish",
+    "publish:dev": "node -r esm publish-check.js develop && expo publish --release-channel develop"
   },
   "jest": {
     "preset": "jest-expo"
@@ -32,6 +36,7 @@
     "aws-amplify-react-native": "^4.2.0",
     "expo": "~37.0.9",
     "expo-asset": "~8.1.0",
+    "expo-camera": "^8.3.1",
     "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
     "expo-image-manipulator": "^8.2.1",
@@ -72,6 +77,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-native": "^3.8.1",
+    "esm": "^3.2.25",
     "jest-expo": "~37.0.0",
     "metro-config": "^0.59.0"
   },
