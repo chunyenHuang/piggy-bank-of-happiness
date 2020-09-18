@@ -1,5 +1,6 @@
 import React from 'react';
-import { Platform, View, Text, StyleSheet } from 'react-native';
+import { Platform, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import * as Updates from 'expo-updates';
 
 import amplifyConfig from '../amplify.config';
 import appConfig from '../app.json';
@@ -17,12 +18,22 @@ export default function Version() {
   Platform.OS === 'ios';
   const build = isPrd ? '' : buildNumber;
 
+  const checkUpdates = async () => {
+    const { isAvailable } = await Updates.checkForUpdateAsync();
+    if (isAvailable) {
+      await Updates.fetchUpdateAsync();
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={checkUpdates}
+    >
       <Text style={styles.text}>
         {env.toUpperCase()} v{version} {build ? `(${build})` : ''}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

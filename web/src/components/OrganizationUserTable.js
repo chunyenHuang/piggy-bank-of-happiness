@@ -129,7 +129,6 @@ function OrganizationUserTable({
     {
       name: 'currentPoints',
       label: '目前點數',
-      isTemplate: true,
       type: 'point',
       options: {
         display: true,
@@ -140,7 +139,6 @@ function OrganizationUserTable({
     {
       name: 'earnedPoints',
       label: '總點數',
-      isTemplate: true,
       type: 'point',
       options: {
         display: true,
@@ -317,7 +315,7 @@ function OrganizationUserTable({
         options={options}
         nested={nested}
         onAddItem={() => setOpen(true)}
-        onBatchAdd={onBatchAdd}
+        // onBatchAdd={onBatchAdd}
         onUpdateItem={onUpate}
         onRefresh={() => setLastUpdatedAt(Date.now())}
       />

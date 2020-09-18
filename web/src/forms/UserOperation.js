@@ -24,8 +24,8 @@ export default {
     {
       key: 'password',
       type: 'String',
-      label: '密碼',
-      isRequired: false,
+      label: '密碼 （至少8碼）',
+      isRequired: true,
     },
     {
       key: 'idNumber',

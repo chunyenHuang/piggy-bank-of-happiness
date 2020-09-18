@@ -59,6 +59,7 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
           name: user.name,
           email: user.email,
           groupId: user.groupId,
+          password: user.password,
         };
 
         await request(userOperation, { input: { users: [data] } });
@@ -161,8 +162,18 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
       },
     },
     {
+      key: 'password',
+      required: !isEditMode,
+      props: {
+        label: '密碼',
+        autoCorrect: false,
+        autoCapitalize: 'none',
+        disabled: isEditMode ? true : false,
+      },
+    },
+    {
       key: 'email',
-      required: true,
+      required: !isEditMode,
       props: {
         label: 'Email',
         autoCorrect: false,
