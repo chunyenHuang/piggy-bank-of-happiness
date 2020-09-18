@@ -22,6 +22,12 @@ export default {
       isRequired: true,
     },
     {
+      key: 'password',
+      type: 'String',
+      label: '密碼',
+      isRequired: false,
+    },
+    {
       key: 'idNumber',
       type: 'String',
       label: '學號',

@@ -52,6 +52,7 @@ const columns = [
   {
     name: 'points',
     label: '點數',
+    type: 'point',
     options: {
       filter: false,
       sort: true,
