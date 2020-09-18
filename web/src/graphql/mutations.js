@@ -8,7 +8,6 @@ export const userOperation = /* GraphQL */ `
       organizationUsers {
         organizationId
         username
-        password
       }
     }
   }

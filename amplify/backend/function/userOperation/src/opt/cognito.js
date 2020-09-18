@@ -62,7 +62,7 @@ module.exports = {
         Username: username,
         Password: password,
         Permanent: true,
-      });
+      }).promise();
     }
   },
 
