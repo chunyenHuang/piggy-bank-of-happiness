@@ -20,6 +20,7 @@ input UserOperationUser {
   role: String!
   email: AWSEmail!
   groupId: ID
+  password: String
 }
 
 type UserOperationResponse {
@@ -30,5 +31,4 @@ type UserOperationResponse {
 type UserOperationResponseUser {
   organizationId: String @aws_cognito_user_pools
   username: String @aws_cognito_user_pools
-  password: String @aws_cognito_user_pools
 }

@@ -23,8 +23,6 @@ module.exports = {
 
       const promises = users.map(async (user) => {
         const now = new Date().toISOString();
-        let password;
-
         console.log(user);
         const {
           username,
@@ -34,14 +32,14 @@ module.exports = {
           role: inRoleOrGroup,
           idNumber,
           groupId,
+          password,
         } = user;
         // check if user exists
         const existingUser = await getUser(username);
         console.log(`existingUser`, existingUser);
 
         if (!existingUser) {
-          const user = await createUser(username, name, email);
-          password = user.password;
+          await createUser(username, name, email, password);
         } else {
           const userOrgId = (existingUser.UserAttributes.find(({ Name }) => Name === 'custom:organizationId') || {}).Value;
           if (!force && userOrgId && userOrgId !== organizationId) {
@@ -88,7 +86,6 @@ module.exports = {
         results.push({
           organizationId,
           username,
-          password,
         });
       });
 

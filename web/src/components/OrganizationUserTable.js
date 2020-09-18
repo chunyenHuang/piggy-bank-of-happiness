@@ -211,9 +211,11 @@ function OrganizationUserTable({
       setIsLoading(true);
       const user = Object.assign(newRecord, {
         idNumber: newRecord.idNumber || 'N/A',
-        currentPoints: +(parseFloat(newRecord.currentPoints) * 100),
-        earnedPoints: +(parseFloat(newRecord.earnedPoints) * 100),
+        // currentPoints: +(parseFloat(newRecord.currentPoints || 0) * 100),
+        // earnedPoints: +(parseFloat(newRecord.earnedPoints || 0) * 100),
       });
+      console.log(user);
+      // yawen2015 蕭雅文 yawen.shiua@grassbookhouse.org.tw
       await request(userOperation, { input: { users: [user] } });
 
       setOpen(false);
@@ -233,8 +235,8 @@ function OrganizationUserTable({
           organizationId,
           isActive: 1,
           idNumber: item.idNumber || 'N/A',
-          currentPoints: +(parseFloat(item.currentPoints) * 100),
-          earnedPoints: +(parseFloat(item.earnedPoints) * 100),
+          // currentPoints: +(parseFloat(item.currentPoints || 0) * 100),
+          // earnedPoints: +(parseFloat(item.earnedPoints || 0) * 100),
         });
       });
 

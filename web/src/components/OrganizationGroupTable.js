@@ -38,7 +38,7 @@ const columns = [
   },
   {
     name: 'name',
-    label: '任務類別名稱',
+    label: '班級名稱',
     edit: {
       type: 'text',
     },

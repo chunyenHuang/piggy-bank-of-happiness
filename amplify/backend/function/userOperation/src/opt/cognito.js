@@ -32,13 +32,13 @@ module.exports = {
     return cognitoidentityserviceprovider.adminDeleteUser(params).promise();
   },
 
-  async createUser(username, name, email) {
+  async createUser(username, name, email, password) {
     const tmpPassword = randomString();
     const params = {
       UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
       Username: username,
       DesiredDeliveryMediums: ['EMAIL'],
-      TemporaryPassword: tmpPassword,
+      TemporaryPassword: password || tmpPassword,
       UserAttributes: [
         {
           Name: 'name',
@@ -55,7 +55,15 @@ module.exports = {
       ],
     };
     await cognitoidentityserviceprovider.adminCreateUser(params).promise();
-    return { password: tmpPassword };
+
+    if (password) {
+      await cognitoidentityserviceprovider.adminSetUserPassword({
+        UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
+        Username: username,
+        Password: password,
+        Permanent: true,
+      });
+    }
   },
 
   async updateOrg(username, organizationId, organizationName) {
