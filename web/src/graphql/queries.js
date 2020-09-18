@@ -1,6 +1,73 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getApplicationOrganization = /* GraphQL */ `
+  query GetApplicationOrganization($id: ID!) {
+    getApplicationOrganization(id: $id) {
+      id
+      username
+      name
+      registeredName
+      taxIdNumber
+      description
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
+      comments {
+        createdAt
+        createdBy
+        comment
+      }
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listApplicationOrganizations = /* GraphQL */ `
+  query ListApplicationOrganizations(
+    $filter: ModelApplicationOrganizationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listApplicationOrganizations(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        name
+        registeredName
+        taxIdNumber
+        description
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
+        comments {
+          createdAt
+          createdBy
+          comment
+        }
+        status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getEvent = /* GraphQL */ `
   query GetEvent($key: String!, $timestamp: AWSDateTime!) {
     getEvent(key: $key, timestamp: $timestamp) {
@@ -64,9 +131,21 @@ export const getOrganization = /* GraphQL */ `
       id
       name
       description
+      registeredName
+      taxIdNumber
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
       isActive
       createdAt
       updatedAt
+      createdBy
+      updatedBy
     }
   }
 `;
@@ -81,9 +160,21 @@ export const listOrganizations = /* GraphQL */ `
         id
         name
         description
+        registeredName
+        taxIdNumber
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
         isActive
         createdAt
         updatedAt
+        createdBy
+        updatedBy
       }
       nextToken
     }
@@ -106,6 +197,7 @@ export const getOrganizationGroup = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -344,6 +436,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -355,9 +448,15 @@ export const getOrganizationTransaction = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
     }
@@ -398,6 +497,7 @@ export const listOrganizationTransactions = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -418,6 +518,7 @@ export const getOrganizationUser = /* GraphQL */ `
       username
       idNumber
       name
+      email
       role
       groupId
       isActive
@@ -429,9 +530,21 @@ export const getOrganizationUser = /* GraphQL */ `
         id
         name
         description
+        registeredName
+        taxIdNumber
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
         isActive
         createdAt
         updatedAt
+        createdBy
+        updatedBy
       }
     }
   }
@@ -458,6 +571,7 @@ export const listOrganizationUsers = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -469,9 +583,15 @@ export const listOrganizationUsers = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       nextToken
@@ -497,6 +617,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -508,9 +629,15 @@ export const getOrganizationUserTask = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       transaction {
@@ -531,6 +658,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -602,6 +730,7 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -664,6 +793,51 @@ export const listTests = /* GraphQL */ `
       items {
         id
         name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getApplicationByStatusByUpdate = /* GraphQL */ `
+  query GetApplicationByStatusByUpdate(
+    $status: ApplicationOrganizationStatus
+    $updatedAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelApplicationOrganizationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getApplicationByStatusByUpdate(
+      status: $status
+      updatedAt: $updatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        username
+        name
+        registeredName
+        taxIdNumber
+        description
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
+        comments {
+          createdAt
+          createdBy
+          comment
+        }
+        status
         createdAt
         updatedAt
       }
@@ -789,6 +963,7 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -837,6 +1012,7 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -885,6 +1061,7 @@ export const getTransactionsByRewardByDate = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -920,6 +1097,7 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -931,9 +1109,15 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       nextToken
@@ -962,6 +1146,7 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -973,9 +1158,15 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       nextToken
@@ -1016,6 +1207,7 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -1092,6 +1284,7 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive

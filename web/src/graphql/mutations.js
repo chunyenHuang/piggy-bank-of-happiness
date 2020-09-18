@@ -13,6 +13,99 @@ export const userOperation = /* GraphQL */ `
     }
   }
 `;
+export const createApplicationOrganization = /* GraphQL */ `
+  mutation CreateApplicationOrganization(
+    $input: CreateApplicationOrganizationInput!
+    $condition: ModelApplicationOrganizationConditionInput
+  ) {
+    createApplicationOrganization(input: $input, condition: $condition) {
+      id
+      username
+      name
+      registeredName
+      taxIdNumber
+      description
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
+      comments {
+        createdAt
+        createdBy
+        comment
+      }
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateApplicationOrganization = /* GraphQL */ `
+  mutation UpdateApplicationOrganization(
+    $input: UpdateApplicationOrganizationInput!
+    $condition: ModelApplicationOrganizationConditionInput
+  ) {
+    updateApplicationOrganization(input: $input, condition: $condition) {
+      id
+      username
+      name
+      registeredName
+      taxIdNumber
+      description
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
+      comments {
+        createdAt
+        createdBy
+        comment
+      }
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteApplicationOrganization = /* GraphQL */ `
+  mutation DeleteApplicationOrganization(
+    $input: DeleteApplicationOrganizationInput!
+    $condition: ModelApplicationOrganizationConditionInput
+  ) {
+    deleteApplicationOrganization(input: $input, condition: $condition) {
+      id
+      username
+      name
+      registeredName
+      taxIdNumber
+      description
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
+      comments {
+        createdAt
+        createdBy
+        comment
+      }
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createEvent = /* GraphQL */ `
   mutation CreateEvent(
     $input: CreateEventInput!
@@ -91,9 +184,21 @@ export const createOrganization = /* GraphQL */ `
       id
       name
       description
+      registeredName
+      taxIdNumber
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
       isActive
       createdAt
       updatedAt
+      createdBy
+      updatedBy
     }
   }
 `;
@@ -106,9 +211,21 @@ export const updateOrganization = /* GraphQL */ `
       id
       name
       description
+      registeredName
+      taxIdNumber
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
       isActive
       createdAt
       updatedAt
+      createdBy
+      updatedBy
     }
   }
 `;
@@ -121,9 +238,21 @@ export const deleteOrganization = /* GraphQL */ `
       id
       name
       description
+      registeredName
+      taxIdNumber
+      phoneNumber
+      email
+      address {
+        county
+        district
+        street
+        zipCode
+      }
       isActive
       createdAt
       updatedAt
+      createdBy
+      updatedBy
     }
   }
 `;
@@ -147,6 +276,7 @@ export const createOrganizationGroup = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -180,6 +310,7 @@ export const updateOrganizationGroup = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -213,6 +344,7 @@ export const deleteOrganizationGroup = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -456,6 +588,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -467,9 +600,15 @@ export const createOrganizationTransaction = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
     }
@@ -498,6 +637,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -509,9 +649,15 @@ export const updateOrganizationTransaction = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
     }
@@ -540,6 +686,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -551,9 +698,15 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
     }
@@ -569,6 +722,7 @@ export const createOrganizationUser = /* GraphQL */ `
       username
       idNumber
       name
+      email
       role
       groupId
       isActive
@@ -580,9 +734,21 @@ export const createOrganizationUser = /* GraphQL */ `
         id
         name
         description
+        registeredName
+        taxIdNumber
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
         isActive
         createdAt
         updatedAt
+        createdBy
+        updatedBy
       }
     }
   }
@@ -597,6 +763,7 @@ export const updateOrganizationUser = /* GraphQL */ `
       username
       idNumber
       name
+      email
       role
       groupId
       isActive
@@ -608,9 +775,21 @@ export const updateOrganizationUser = /* GraphQL */ `
         id
         name
         description
+        registeredName
+        taxIdNumber
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
         isActive
         createdAt
         updatedAt
+        createdBy
+        updatedBy
       }
     }
   }
@@ -625,6 +804,7 @@ export const deleteOrganizationUser = /* GraphQL */ `
       username
       idNumber
       name
+      email
       role
       groupId
       isActive
@@ -636,9 +816,21 @@ export const deleteOrganizationUser = /* GraphQL */ `
         id
         name
         description
+        registeredName
+        taxIdNumber
+        phoneNumber
+        email
+        address {
+          county
+          district
+          street
+          zipCode
+        }
         isActive
         createdAt
         updatedAt
+        createdBy
+        updatedBy
       }
     }
   }
@@ -665,6 +857,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -676,9 +869,15 @@ export const createOrganizationUserTask = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       transaction {
@@ -699,6 +898,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -758,6 +958,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -769,9 +970,15 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       transaction {
@@ -792,6 +999,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
@@ -851,6 +1059,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
         username
         idNumber
         name
+        email
         role
         groupId
         isActive
@@ -862,9 +1071,15 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           id
           name
           description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
           isActive
           createdAt
           updatedAt
+          createdBy
+          updatedBy
         }
       }
       transaction {
@@ -885,6 +1100,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           username
           idNumber
           name
+          email
           role
           groupId
           isActive
