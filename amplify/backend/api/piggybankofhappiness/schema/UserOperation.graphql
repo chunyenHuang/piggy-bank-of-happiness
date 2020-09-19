@@ -13,14 +13,18 @@ input UserOperationRequest {
 }
 
 input UserOperationUser {
+  # create
+  password: String
+  # update
   organizationId: ID!
   username: String!
+  email: AWSEmail!
+  # org user
   idNumber: String!
   name: String!
   role: String!
-  email: AWSEmail!
   groupId: ID
-  password: String
+  isActive: Int
 }
 
 type UserOperationResponse {

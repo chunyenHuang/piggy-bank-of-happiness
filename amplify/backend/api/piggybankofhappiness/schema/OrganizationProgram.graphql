@@ -12,7 +12,8 @@ type OrganizationProgram
   name: String!
   isActive: Int!
   description: String
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
 }

@@ -142,7 +142,6 @@ export default function OrganizationRewardTable({ title = '獎品', description,
       },
     },
   ];
-  
 
   const onUpate = async (item, dataIndex) => {
     try {
@@ -150,6 +149,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: username,
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -161,9 +161,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
 
       await request(updateOrganizationReward, { input });
 
-      Object.assign(data[dataIndex], input, {
-        updatedBy: username,
-      });
+      Object.assign(data[dataIndex], input);
 
       setData([...data]);
     } catch (e) {

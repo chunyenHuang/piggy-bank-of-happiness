@@ -10,7 +10,9 @@ import { sortBy } from 'utilities/sorting';
 const title = '系統紀錄';
 const description = '';
 
-const ignoreDiffKey = ['createdAt', 'updatedAt'];
+const ignoreDiffKey = [
+  'createdAt', 'updatedAt', 'updatedBy', 'createdBy',
+];
 
 export default function EventTable({ organizationId }) {
   const [data, setData] = useState([]);
@@ -84,8 +86,11 @@ export default function EventTable({ organizationId }) {
       options: {
         filter: false,
         sort: false,
-        customBodyRender(diffs = []) {
+        customBodyRender(value = []) {
+          const diffs = value.filter(({ key }) => !ignoreDiffKey.includes(key));
+
           if (diffs.length === 0) return null;
+
           return (<table>
             <thead>
               <tr>
@@ -95,15 +100,13 @@ export default function EventTable({ organizationId }) {
               </tr>
             </thead>
             <tbody>
-              {diffs
-                .filter(({ key })=>!ignoreDiffKey.includes(key))
-                .map((diff, index)=>(
-                  <tr key={index}>
-                    <td>{diff.key}</td>
-                    {diff.old && <td>{diff.old.replace(/"/g, '')}</td>}
-                    {diff.new && <td>{diff.new.replace(/"/g, '')}</td>}
-                  </tr>
-                ))}
+              {diffs.map((diff, index)=>(
+                <tr key={index}>
+                  <td>{diff.key}</td>
+                  {diff.old && <td>{diff.old.replace(/"/g, '')}</td>}
+                  {diff.new && <td>{diff.new.replace(/"/g, '')}</td>}
+                </tr>
+              ))}
             </tbody>
           </table>);
         },

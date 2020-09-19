@@ -62,6 +62,15 @@ const columns = [
     name: 'createdBy',
     label: '創立者',
     options: {
+      display: false,
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updatedBy',
+    label: '更新者',
+    options: {
       filter: false,
       sort: true,
     },
@@ -114,6 +123,7 @@ export default function OrganizationProgramTable({ title = '任務', description
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: localStorage.getItem('app:username'),
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -137,7 +147,10 @@ export default function OrganizationProgramTable({ title = '任務', description
   const onCreate = async (newRecord) => {
     try {
       setIsLoading(true);
-      const input = Object.assign(newRecord, {});
+      const input = Object.assign(newRecord, {
+        createdBy: localStorage.getItem('app:username'),
+        updatedBy: localStorage.getItem('app:username'),
+      });
       await request(createOrganizationProgram, { input });
 
       setLastUpdatedAt(Date.now());

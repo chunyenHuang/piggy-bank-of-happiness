@@ -53,7 +53,7 @@ module.exports = {
 
       // organizationId?
       const organizationId = (parsedOldData || parsedNewData).organizationId;
-      const updatedBy = (parsedOldData || parsedNewData).updatedBy;
+      const updatedBy = (parsedNewData || {}).updatedBy;
 
       const now = new Date().toISOString();
 

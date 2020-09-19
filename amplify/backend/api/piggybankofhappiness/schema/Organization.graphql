@@ -2,7 +2,7 @@ type Organization
   @model (subscriptions: { level: public })
   @auth(rules: [
     {allow: private, operations: [read]},
-    {allow: owner, ownerField: "id", identityField:"custom:organizationId", operations: [read]},
+    # {allow: owner, ownerField: "id", identityField:"custom:organizationId", operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
 {
@@ -18,7 +18,7 @@ type Organization
 
   isActive: Int!
   createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
   createdBy: String
+  updatedAt: AWSDateTime!
   updatedBy: String
 }

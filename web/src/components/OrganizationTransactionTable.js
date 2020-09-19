@@ -75,11 +75,18 @@ const columns = [
     },
   },
   {
+    name: 'updatedBy',
+    label: '更新者',
+    options: {
+      filter: false,
+      sort: true,
+    },
+  },
+  {
     name: 'createdAt',
     label: '創立於',
     type: 'datetime',
     options: {
-      display: false,
       filter: false,
       sort: true,
     },
@@ -117,6 +124,7 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
     const input = {
       organizationId: item.organizationId,
       username: item.username,
+      updatedBy: localStorage.getItem('app:username'),
     };
     columns.forEach(({ name, edit }) => {
       if (edit) {
