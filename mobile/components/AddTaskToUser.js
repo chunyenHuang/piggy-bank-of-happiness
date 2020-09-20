@@ -50,6 +50,8 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
       });
       global.logger.debug({ currentPoints, earnedPoints });
 
+      const currentUsername = await AsyncStorage.getItem('app:username');
+
       // For now, assign and complete the task immediately and then create the transaction for user
       const transactionId = uuidv1();
       const points = task.point;
@@ -65,7 +67,9 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
         transactionId,
         points,
         createdAt: now,
+        createdBy: currentUsername,
         updatedAt: now,
+        updatedBy: currentUsername,
       };
       const transaction = {
         organizationId,
@@ -74,9 +78,10 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
         points,
         type: 'credits',
         note: task.name,
-        createdBy: await AsyncStorage.getItem('app:username'),
         createdAt: now,
+        createdBy: currentUsername,
         updatedAt: now,
+        updatedBy: currentUsername,
       };
       const updatedUser = {
         organizationId,
@@ -84,6 +89,7 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
         currentPoints: currentPoints + points,
         earnedPoints: earnedPoints + points,
         updatedAt: now,
+        updatedBy: currentUsername,
       };
       await Promise.all([
         request(createOrganizationUserTask, { input: userTask }),

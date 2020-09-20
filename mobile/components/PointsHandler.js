@@ -40,6 +40,8 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
     const now = moment().toISOString();
     const points = parseFloat(amount) * 100;
 
+    const currentUsername = await AsyncStorage.getItem('app:username');
+
     if (mode === 'withdraw') {
       const transaction = {
         organizationId,
@@ -48,8 +50,9 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         points: -points,
         type: 'withdraw',
         note,
-        createdBy: await AsyncStorage.getItem('app:username'),
+        createdBy: currentUsername,
         createdAt: now,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
       const updatedUser = {
@@ -57,6 +60,7 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         username,
         currentPoints: currentPoints - points,
         earnedPoints: earnedPoints - points,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
 
@@ -73,8 +77,9 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         points: points,
         type: 'adjustment',
         note,
-        createdBy: await AsyncStorage.getItem('app:username'),
+        createdBy: currentUsername,
         createdAt: now,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
       const updatedUser = {
@@ -82,6 +87,7 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         username,
         currentPoints: currentPoints + points,
         earnedPoints: earnedPoints + points,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
 

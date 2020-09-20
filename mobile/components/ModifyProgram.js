@@ -49,6 +49,7 @@ export default function ModifyProgram({ program: inProgram, hideButton, onClose 
         isActive: 1,
         createdBy: username,
         createdAt: now,
+        updatedBy: username,
         updatedAt: now,
       });
 
@@ -60,6 +61,7 @@ export default function ModifyProgram({ program: inProgram, hideButton, onClose 
         isActive: program.isActive ? 1 : 0,
         name: program.name,
         description: program.description,
+        updatedBy: username,
         updatedAt: now,
       };
 

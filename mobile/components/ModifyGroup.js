@@ -49,6 +49,7 @@ export default function ModifyGroup({ group: inGroup, hideButton, onClose }) {
         isActive: 1,
         createdBy: username,
         createdAt: now,
+        updatedBy: username,
         updatedAt: now,
       });
 
@@ -60,6 +61,7 @@ export default function ModifyGroup({ group: inGroup, hideButton, onClose }) {
         isActive: group.isActive ? 1 : 0,
         name: group.name,
         description: group.description,
+        updatedBy: username,
         updatedAt: now,
       };
 

@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { Alert, Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StatusBar, StyleSheet, View, Clipboard } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProvider } from 'react-native-elements';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -32,6 +32,12 @@ Analytics.disable();
 Storage.configure({ level: 'public' });
 
 const Stack = createStackNavigator();
+
+// https://github.com/expo/expo/issues/9089
+// HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+if (__DEV__) {
+  Clipboard.setString('');
+}
 
 function App({ authState, onStateChange }) {
   const [spinner, setSpinner] = useState(false);

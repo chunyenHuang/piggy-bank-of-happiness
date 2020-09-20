@@ -69,6 +69,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         pointMax: parseInt(task.pointMax || task.point) * 100,
         createdBy: username,
         createdAt: now,
+        updatedBy: username,
         updatedAt: now,
       });
 
@@ -84,6 +85,7 @@ export default function ModifyTask({ task: inTask, hideButton, onClose }) {
         point: parseInt(task.point) * 100,
         pointMin: parseInt(task.pointMin || task.point) * 100,
         pointMax: parseInt(task.pointMax || task.point) * 100,
+        updatedBy: username,
         updatedAt: now,
       };
 

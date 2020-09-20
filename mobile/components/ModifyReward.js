@@ -51,6 +51,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         total: parseInt(reward.total),
         createdBy: username,
         createdAt: now,
+        updatedBy: username,
         updatedAt: now,
       });
 
@@ -65,6 +66,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         requiredPoints: parseFloat(reward.requiredPoints) * 100,
         total: parseInt(reward.total),
         updatedAt: now,
+        updatedBy: username,
       };
 
       await request(updateOrganizationReward, { input: data });

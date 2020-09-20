@@ -81,6 +81,8 @@ export default function AddRewardToUser({ user, visible, onUpdate, onClose }) {
       });
       global.logger.debug({ rewardTotal });
 
+      const currentUsername = await AsyncStorage.getItem('app:username');
+
       // For now, assign and complete the task immediately and then create the transaction for user
       const transactionId = uuidv1();
       const amount = reward.amount;
@@ -94,20 +96,24 @@ export default function AddRewardToUser({ user, visible, onUpdate, onClose }) {
         points: -points,
         type: 'reward',
         note: `${reward.name} 點數 ${reward.requiredPoints / 100} x 數量 ${amount}`,
-        createdBy: await AsyncStorage.getItem('app:username'),
+        createdBy: currentUsername,
         createdAt: now,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
       const updatedUser = {
         organizationId,
         username,
         currentPoints: currentPoints - points,
+        updatedBy: currentUsername,
         updatedAt: now,
       };
       const toUpdateReward = {
         organizationId,
         id: reward.id,
         total: rewardTotal - amount,
+        updatedBy: currentUsername,
+        updatedAt: now,
       };
       await Promise.all([
         request(updateOrganizationReward, { input: toUpdateReward }),

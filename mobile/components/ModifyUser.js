@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
-import moment from 'moment';
+// import moment from 'moment';
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request, { asyncListAll } from 'src/utils/request';
 import { listOrganizationGroups } from 'src/graphql/queries';
-import { userOperation, updateOrganizationUser } from 'src/graphql/mutations';
+import { userOperation } from 'src/graphql/mutations';
 import check from 'src/permission/check';
 import { sortBy } from 'src/utils/sorting';
 
@@ -48,13 +48,13 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
       setIsLoading(true);
       const organizationId = await AsyncStorage.getItem('app:organizationId');
 
-      const now = moment().toISOString();
+      // const now = moment().toISOString();
 
       if (!isEditMode) {
         const data = {
           organizationId,
-          role: 'User',
           username: user.username,
+          role: 'User',
           idNumber: user.idNumber,
           name: user.name,
           email: user.email,
@@ -68,14 +68,15 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
           organizationId,
           username: user.username,
           role: user.role,
-          groupId: user.groupId,
-          name: user.name,
           idNumber: user.idNumber,
-          updatedAt: now,
+          name: user.name,
+          email: user.email,
+          groupId: user.groupId,
           isActive: user.isActive ? 1 : 0,
         };
 
-        await request(updateOrganizationUser, { input: data });
+        // await request(updateOrganizationUser, { input: data });
+        await request(userOperation, { input: { users: [data] } });
       }
       resetState();
     } catch (err) {
@@ -152,6 +153,15 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
       },
     },
     {
+      key: 'email',
+      required: true,
+      props: {
+        label: 'Email',
+        autoCorrect: false,
+        autoCapitalize: 'none',
+      },
+    },
+    {
       key: 'username',
       required: true,
       props: {
@@ -166,16 +176,6 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
       required: !isEditMode,
       props: {
         label: '密碼',
-        autoCorrect: false,
-        autoCapitalize: 'none',
-        disabled: isEditMode ? true : false,
-      },
-    },
-    {
-      key: 'email',
-      required: !isEditMode,
-      props: {
-        label: 'Email',
         autoCorrect: false,
         autoCapitalize: 'none',
         disabled: isEditMode ? true : false,

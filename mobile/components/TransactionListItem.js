@@ -37,6 +37,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
       username,
     });
 
+    const currentUsername = await AsyncStorage.getItem('app:username');
     const now = moment().toISOString();
     const transaction = {
       organizationId,
@@ -46,14 +47,16 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
       points: -points,
       type: 'cancel',
       note: `取消 ${note}`,
-      createdBy: await AsyncStorage.getItem('app:username'),
+      createdBy: currentUsername,
       createdAt: now,
+      updatedBy: currentUsername,
       updatedAt: now,
     };
     const updatedTransaction = {
       organizationId,
       id,
       isCancelled: 1,
+      updatedBy: currentUsername,
       updatedAt: now,
     };
     const updatedUser = {
@@ -61,6 +64,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
       username,
       currentPoints: currentPoints - points,
       earnedPoints: earnedPoints - points,
+      updatedBy: currentUsername,
       updatedAt: now,
     };
 
@@ -80,10 +84,13 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
     setIsLoading(true);
     const { id, organizationId } = transaction;
 
+    const currentUsername = await AsyncStorage.getItem('app:username');
+
     const updatedTransaction = {
       organizationId,
       id,
       note,
+      updatedBy: currentUsername,
       updatedAt: moment().toISOString(),
     };
     await request(updateOrganizationTransaction, { input: updatedTransaction });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, AsyncStorage, RefreshControl } from 'react-native';
-import { ListItem, Badge } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { API, graphqlOperation } from 'aws-amplify';
