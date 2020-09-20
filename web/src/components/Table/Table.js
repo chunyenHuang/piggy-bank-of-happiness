@@ -151,7 +151,6 @@ export default function Table({
     pagination: true,
     responsive: nested ? 'vertical' : 'standard',
     tableBodyHeight: nested ? undefined : 'calc(100vh - 183px)',
-    // tableBodyMaxHeight
     rowsPerPageOptions: [10, 20, 100],
     rowsPerPage: 10,
     filterType: 'checkbox',

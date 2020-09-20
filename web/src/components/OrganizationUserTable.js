@@ -17,6 +17,7 @@ function OrganizationUserTable({
   description,
   organizationId,
   groupId,
+  username: inQueryUsername,
   roles,
   nested,
   hide = [],
@@ -297,7 +298,11 @@ function OrganizationUserTable({
             });
             await Promise.all(promises);
           } else {
-            records = (await asyncListAll(listOrganizationUsers, { organizationId }));
+            const params = { organizationId };
+            if (inQueryUsername) {
+              params.username = { eq: inQueryUsername };
+            }
+            records = (await asyncListAll(listOrganizationUsers, params));
           }
         }
 
@@ -312,7 +317,7 @@ function OrganizationUserTable({
         setIsLoading(false);
       }
     })();
-  }, [organizationId, groupId, roles, lastUpdatedAt]);
+  }, [organizationId, groupId, roles, inQueryUsername, lastUpdatedAt]);
 
   useEffect(() => {
     if (!organizationId && !groupId) return;
@@ -358,7 +363,7 @@ function OrganizationUserTable({
             role: roles ? roles[0] : undefined,
             groupId,
           }}
-          metadata={formMetadata}
+          metadata={formMetadata(groupsMenu)}
           isLoading={isLoading}
           onSubmit={onCreate}
         />}
@@ -369,6 +374,7 @@ function OrganizationUserTable({
 OrganizationUserTable.propTypes = {
   organizationId: PropTypes.string,
   groupId: PropTypes.string,
+  username: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   nested: PropTypes.bool,

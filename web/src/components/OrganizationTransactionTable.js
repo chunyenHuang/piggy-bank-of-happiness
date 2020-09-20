@@ -102,7 +102,7 @@ const columns = [
   },
 ];
 
-export default function OrganizationTransactionTable({ title = '交易紀錄', description, organizationId }) {
+export default function OrganizationTransactionTable({ title = '交易紀錄', description, organizationId, id, nested }) {
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -144,7 +144,11 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
     (async () => {
       try {
         setIsLoading(true);
-        const records = (await asyncListAll(listOrganizationTransactions, { organizationId }));
+        const params = { organizationId };
+        if (id) {
+          params.id = { eq: id };
+        }
+        const records = (await asyncListAll(listOrganizationTransactions, params));
         setData(records.sort(sortBy('createdAt', true)));
       } catch (e) {
         console.log(e);
@@ -152,7 +156,7 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
         setIsLoading(false);
       }
     })();
-  }, [organizationId, lastUpdatedAt]);
+  }, [organizationId, id, lastUpdatedAt]);
 
   return (
     <Table
@@ -160,6 +164,7 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
       description={description}
       isLoading={isLoading}
       data={data}
+      nested={nested}
       columns={columns}
       options={options}
       onUpdateItem={onUpate}
@@ -170,6 +175,8 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
 
 OrganizationTransactionTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  nested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
 };

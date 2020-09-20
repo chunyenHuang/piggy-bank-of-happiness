@@ -6,6 +6,13 @@ import Table from 'components/Table/Table';
 import { listEvents, getEventsByOrgByTimestamp } from 'graphql/queries';
 import { request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
+import NestedTableContainer from 'components/Table/NestedTableContainer';
+import OrganizationGroupTable from 'components/OrganizationGroupTable';
+import OrganizationProgramTable from 'components/OrganizationProgramTable';
+import OrganizationUserTable from 'components/OrganizationUserTable';
+// import OrganizationUserTask from 'components/OrganizationUserTask';
+import OrganizationTransactionTable from 'components/OrganizationTransactionTable';
+import OrganizationRewardTable from 'components/OrganizationRewardTable';
 
 const title = '系統紀錄';
 const description = '';
@@ -13,15 +20,94 @@ const description = '';
 const ignoreDiffKey = [
   'createdAt', 'updatedAt', 'updatedBy', 'createdBy',
 ];
+const tableNames = {
+  OrganizationGroup: '班級',
+  OrganizationProgram: '任務類別',
+  OrganizationUser: '使用者',
+  OrganizationUserTask: '使用者任務',
+  OrganizationTransaction: '交易紀錄',
+  OrganizationReward: '獎品',
+};
 
 export default function EventTable({ organizationId }) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState();
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
 
-  const options = {};
+  const options = {
+    expandableRows: true,
+    isRowExpandable: () => true,
+    renderExpandableRow(rowData, rowMeta) {
+      const { table, partitionKey, sortKey } = data[rowMeta.dataIndex];
+      let component;
+      const title = tableNames[table] || table;
+      switch (table) {
+      case 'OrganizationGroup':
+        component =
+          <OrganizationGroupTable
+            title={title}
+            organizationId={partitionKey}
+            id={sortKey}
+            nested={true}
+          />;
+        break;
+      case 'OrganizationProgram':
+        component =
+          <OrganizationProgramTable
+            title={title}
+            organizationId={partitionKey}
+            id={sortKey}
+            nested={true}
+          />;
+        break;
+      case 'OrganizationUser':
+        component =
+          <OrganizationUserTable
+            title={title}
+            organizationId={partitionKey}
+            username={sortKey}
+            nested={true}
+          />;
+        break;
+      case 'OrganizationTransaction':
+        component =
+          <OrganizationTransactionTable
+            title={title}
+            organizationId={partitionKey}
+            id={sortKey}
+            nested={true}
+          />;
+        break;
+      case 'OrganizationReward':
+        component =
+          <OrganizationRewardTable
+            title={title}
+            organizationId={partitionKey}
+            id={sortKey}
+            nested={true}
+          />;
+        break;
+      default:
+        component = (<div />);
+      }
+      return (
+        <NestedTableContainer columns={columns}>
+          {component}
+        </NestedTableContainer>
+      );
+    },
+  };
 
   const columns = [
+    {
+      name: 'timestamp',
+      label: '紀錄時間',
+      type: 'datetime',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
     {
       name: 'key',
       label: 'Key',
@@ -37,12 +123,16 @@ export default function EventTable({ organizationId }) {
       options: {
         filter: true,
         sort: true,
+        customBodyRender(value) {
+          return tableNames[value] || value;
+        },
       },
     },
     {
       name: 'partitionKey',
       label: 'ID',
       options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -51,15 +141,7 @@ export default function EventTable({ organizationId }) {
       name: 'sortKey',
       label: 'Sort Key',
       options: {
-        filter: false,
-        sort: true,
-      },
-    },
-    {
-      name: 'timestamp',
-      label: '紀錄時間',
-      type: 'datetime',
-      options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -70,6 +152,16 @@ export default function EventTable({ organizationId }) {
       options: {
         filter: true,
         sort: true,
+        customBodyRender(value) {
+          switch (value) {
+          case 'INSERT':
+            return '新增';
+          case 'MODIFY':
+            return '更新';
+          case 'REMOVE':
+            return '刪除';
+          }
+        },
       },
     },
     {
@@ -82,7 +174,7 @@ export default function EventTable({ organizationId }) {
     },
     {
       name: 'diff',
-      label: '內容',
+      label: '變更內容',
       options: {
         filter: false,
         sort: false,

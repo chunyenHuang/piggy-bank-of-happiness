@@ -1,6 +1,6 @@
 import roles from 'constants/roles';
 
-export default {
+export default (groupsMenu = []) => ({
   fields: [
     {
       key: 'organizationId',
@@ -12,8 +12,10 @@ export default {
     {
       key: 'groupId',
       type: 'String',
-      label: '班級 ID',
+      label: '班級',
       isRequired: false,
+      formType: 'select',
+      formOptions: groupsMenu,
     },
     {
       key: 'username',
@@ -54,4 +56,4 @@ export default {
       formOptions: roles,
     },
   ],
-};
+});
