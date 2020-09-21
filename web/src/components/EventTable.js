@@ -160,6 +160,7 @@ export default function EventTable({ organizationId }) {
             return '更新';
           case 'REMOVE':
             return '刪除';
+          default:
           }
         },
       },

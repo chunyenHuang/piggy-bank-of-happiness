@@ -180,7 +180,7 @@ export default function OrganizationProgramTable({ title = '任務類別', descr
         setIsLoading(false);
       }
     })();
-  }, [organizationId, lastUpdatedAt]);
+  }, [organizationId, id, lastUpdatedAt]);
 
   return (
     <React.Fragment>
