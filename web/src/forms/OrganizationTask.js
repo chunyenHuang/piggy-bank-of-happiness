@@ -1,16 +1,9 @@
-export default {
+export default (programsMenu) => ({
   fields: [
     {
       key: 'organizationId',
       type: 'String',
       label: '機構 ID',
-      isRequired: true,
-      isDisabled: true,
-    },
-    {
-      key: 'programId',
-      type: 'String',
-      label: '任務類別 ID',
       isRequired: true,
       isDisabled: true,
     },
@@ -27,6 +20,15 @@ export default {
       label: '創立者',
       isRequired: true,
       isDisabled: true,
+    },
+    {
+      key: 'programId',
+      type: 'String',
+      label: '任務類別',
+      isRequired: true,
+      isDisabled: false,
+      formType: 'select',
+      formOptions: programsMenu,
     },
     {
       key: 'name',
@@ -70,4 +72,4 @@ export default {
       isRequired: true,
     },
   ],
-};
+});

@@ -4,7 +4,7 @@ import { v1 as uuidv1 } from 'uuid';
 
 import Table from 'components/Table/Table';
 import DetailFormDialog from 'components/DetailFormDialog';
-import { listOrganizationTasks, getOrgTasksByProgramByActive } from 'graphql/queries';
+import { listOrganizationPrograms, listOrganizationTasks, getOrgTasksByProgramByActive } from 'graphql/queries';
 import { createOrganizationTask, updateOrganizationTask } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
@@ -37,7 +37,6 @@ const columns = [
     name: 'program.name',
     label: '類別',
     options: {
-      display: false,
       filter: true,
       sort: true,
     },
@@ -152,6 +151,7 @@ const columns = [
 
 function OrganizationTaskTable({ title = '任務列表', description, organizationId, programId, nested }) {
   const [data, setData] = useState([]);
+  const [programsMenu, setProgramsMenu] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -209,6 +209,16 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
 
   useEffect(() => {
     (async () => {
+      const organizationId = localStorage.getItem('app:organizationId');
+      const data = (await asyncListAll(listOrganizationPrograms, { organizationId }));
+      setProgramsMenu(data.sort(sortBy('name')).map(({ id, name }) => {
+        return { value: id, label: name };
+      }));
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       try {
         setIsLoading(true);
         let records;
@@ -257,7 +267,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
             createdBy: username,
             isActive: 1,
           }}
-          metadata={formMetadata}
+          metadata={formMetadata(programsMenu)}
           isLoading={isLoading}
           onSubmit={onCreate}
         />}

@@ -96,7 +96,7 @@ const columns = [
   },
 ];
 
-export default function OrganizationProgramTable({ title = '任務', description, organizationId, id, nested }) {
+export default function OrganizationProgramTable({ title = '任務類別', description, organizationId, id, nested }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();

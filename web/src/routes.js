@@ -17,6 +17,7 @@ import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
 import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
 import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
 import OrganizationRewards from 'views/OrgAdmin/Rewards/Rewards';
+import OrganizationTasks from 'views/OrgAdmin/Tasks/Tasks';
 import Events from 'views/OrgAdmin/Events/Events';
 
 import ListIcon from '@material-ui/icons/List';
@@ -98,12 +99,20 @@ export const orgAdmin = [
     component: OrganizationGroups,
   },
   {
-    title: '任務',
+    title: '任務類別',
     icon: ListIcon,
     paths: [
       { path: '/programs', exact: true },
     ],
     component: OrganizationPrograms,
+  },
+  {
+    title: '任務',
+    icon: ListIcon,
+    paths: [
+      { path: '/tasks', exact: true },
+    ],
+    component: OrganizationTasks,
   },
   {
     title: '獎品',
@@ -118,8 +127,8 @@ export const orgAdmin = [
     icon: PeopleIcon,
     paths: [
       {
-        path: '/users',
-        link: '/users?' + [
+        path: '/students',
+        link: '/students?' + [
           'title=學生',
           'roles[]=User',
           'hide[]=role',
@@ -134,8 +143,9 @@ export const orgAdmin = [
     icon: SupervisedUserCircleIcon,
     paths: [
       {
-        path: '/users',
-        link: '/users?' + [
+        path: '/staffs',
+        pathTitle: '職員',
+        link: '/staffs?' + [
           'title=職員',
           'roles[]=Admin',
           'roles[]=Manager',
