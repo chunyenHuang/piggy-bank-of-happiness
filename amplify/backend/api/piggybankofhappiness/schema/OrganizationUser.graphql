@@ -22,7 +22,9 @@ type OrganizationUser
   currentPoints: Int!
   earnedPoints: Int!
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   organization: Organization @connection(fields:["organizationId"])
   # group: OrganizationGroup @connection(fields:["organization", "groupId"])

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Table from 'components/Table/Table';
 // import LinkButton from 'components/Table/LinkButton';
 import { listOrganizationGroups, listOrganizationUsers, getOrgUsersByGroupByActive, getOrgUsersByRoleByOrg } from 'graphql/queries';
-import { updateOrganizationUser, userOperation } from 'graphql/mutations';
+import { userOperation } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
 import rolesMenu from 'constants/roles';
@@ -17,6 +17,7 @@ function OrganizationUserTable({
   description,
   organizationId,
   groupId,
+  username: inQueryUsername,
   roles,
   nested,
   hide = [],
@@ -127,9 +128,19 @@ function OrganizationUserTable({
       },
     },
     {
+      name: 'email',
+      label: 'Email',
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: 'currentPoints',
       label: '目前點數',
-      isTemplate: true,
       type: 'point',
       options: {
         display: true,
@@ -140,10 +151,27 @@ function OrganizationUserTable({
     {
       name: 'earnedPoints',
       label: '總點數',
-      isTemplate: true,
       type: 'point',
       options: {
         display: true,
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'createdBy',
+      label: '創立者',
+      options: {
+        display: false,
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'updatedBy',
+      label: '更新者',
+      options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -188,21 +216,24 @@ function OrganizationUserTable({
   ];
 
   const onUpate = async (item, dataIndex) => {
-    const input = {
+    const user = {
       organizationId: item.organizationId,
       username: item.username,
     };
     columns.forEach(({ name, edit }) => {
       if (edit) {
-        input[name] = item[name];
+        user[name] = item[name];
       }
     });
 
-    input.isActive = input.isActive ? 1 : 0;
+    user.isActive = user.isActive ? 1 : 0;
 
-    await request(updateOrganizationUser, { input });
+    console.log(user);
 
-    Object.assign(data[dataIndex], input);
+    // await request(updateOrganizationUser, { input });
+    await request(userOperation, { input: { users: [user] } });
+
+    Object.assign(data[dataIndex], user);
     setData([...data]);
   };
 
@@ -211,11 +242,7 @@ function OrganizationUserTable({
       setIsLoading(true);
       const user = Object.assign(newRecord, {
         idNumber: newRecord.idNumber || 'N/A',
-        // currentPoints: +(parseFloat(newRecord.currentPoints || 0) * 100),
-        // earnedPoints: +(parseFloat(newRecord.earnedPoints || 0) * 100),
       });
-      console.log(user);
-      // yawen2015 蕭雅文 yawen.shiua@grassbookhouse.org.tw
       await request(userOperation, { input: { users: [user] } });
 
       setOpen(false);
@@ -227,27 +254,27 @@ function OrganizationUserTable({
     }
   };
 
-  const onBatchAdd = async (items) => {
-    try {
-      setIsLoading(true);
-      const users = items.map((item) => {
-        return Object.assign(item, {
-          organizationId,
-          isActive: 1,
-          idNumber: item.idNumber || 'N/A',
-          // currentPoints: +(parseFloat(item.currentPoints || 0) * 100),
-          // earnedPoints: +(parseFloat(item.earnedPoints || 0) * 100),
-        });
-      });
+  // const onBatchAdd = async (items) => {
+  //   try {
+  //     setIsLoading(true);
+  //     const users = items.map((item) => {
+  //       return Object.assign(item, {
+  //         organizationId,
+  //         isActive: 1,
+  //         idNumber: item.idNumber || 'N/A',
+  //         // currentPoints: +(parseFloat(item.currentPoints || 0) * 100),
+  //         // earnedPoints: +(parseFloat(item.earnedPoints || 0) * 100),
+  //       });
+  //     });
 
-      await request(userOperation, { input: users });
-      setLastUpdatedAt(Date.now());
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     await request(userOperation, { input: users });
+  //     setLastUpdatedAt(Date.now());
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (!organizationId && !groupId) return;
@@ -271,7 +298,11 @@ function OrganizationUserTable({
             });
             await Promise.all(promises);
           } else {
-            records = (await asyncListAll(listOrganizationUsers, { organizationId }));
+            const params = { organizationId };
+            if (inQueryUsername) {
+              params.username = { eq: inQueryUsername };
+            }
+            records = (await asyncListAll(listOrganizationUsers, params));
           }
         }
 
@@ -286,7 +317,7 @@ function OrganizationUserTable({
         setIsLoading(false);
       }
     })();
-  }, [organizationId, groupId, roles, lastUpdatedAt]);
+  }, [organizationId, groupId, roles, inQueryUsername, lastUpdatedAt]);
 
   useEffect(() => {
     if (!organizationId && !groupId) return;
@@ -317,7 +348,7 @@ function OrganizationUserTable({
         options={options}
         nested={nested}
         onAddItem={() => setOpen(true)}
-        onBatchAdd={onBatchAdd}
+        // onBatchAdd={onBatchAdd}
         onUpdateItem={onUpate}
         onRefresh={() => setLastUpdatedAt(Date.now())}
       />
@@ -332,7 +363,7 @@ function OrganizationUserTable({
             role: roles ? roles[0] : undefined,
             groupId,
           }}
-          metadata={formMetadata}
+          metadata={formMetadata(groupsMenu)}
           isLoading={isLoading}
           onSubmit={onCreate}
         />}
@@ -343,6 +374,7 @@ function OrganizationUserTable({
 OrganizationUserTable.propTypes = {
   organizationId: PropTypes.string,
   groupId: PropTypes.string,
+  username: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   nested: PropTypes.bool,

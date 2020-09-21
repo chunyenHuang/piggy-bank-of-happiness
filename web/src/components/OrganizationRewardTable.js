@@ -12,7 +12,7 @@ import { sortBy } from 'utilities/sorting';
 
 import formMetadata from 'forms/OrganizationReward';
 
-export default function OrganizationRewardTable({ title = '獎品', description, organizationId }) {
+export default function OrganizationRewardTable({ title = '獎品', description, organizationId, id, nested }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
@@ -142,7 +142,6 @@ export default function OrganizationRewardTable({ title = '獎品', description,
       },
     },
   ];
-  
 
   const onUpate = async (item, dataIndex) => {
     try {
@@ -150,6 +149,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: username,
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -161,9 +161,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
 
       await request(updateOrganizationReward, { input });
 
-      Object.assign(data[dataIndex], input, {
-        updatedBy: username,
-      });
+      Object.assign(data[dataIndex], input);
 
       setData([...data]);
     } catch (e) {
@@ -223,7 +221,11 @@ export default function OrganizationRewardTable({ title = '獎品', description,
     (async () => {
       try {
         setIsLoading(true);
-        const records = (await asyncListAll(listOrganizationRewards, { organizationId }));
+        const params = { organizationId };
+        if (id) {
+          params.id = { eq: id };
+        }
+        const records = (await asyncListAll(listOrganizationRewards, params));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
@@ -231,7 +233,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
         setIsLoading(false);
       }
     })();
-  }, [organizationId, lastUpdatedAt]);
+  }, [organizationId, id, lastUpdatedAt]);
 
   return (
     <React.Fragment>
@@ -240,6 +242,7 @@ export default function OrganizationRewardTable({ title = '獎品', description,
         isLoading={isLoading}
         description={description}
         data={data}
+        nested={nested}
         columns={columns}
         options={options}
         onAddItem={() => setOpen(true)}
@@ -268,6 +271,8 @@ export default function OrganizationRewardTable({ title = '獎品', description,
 
 OrganizationRewardTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  nested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
 };

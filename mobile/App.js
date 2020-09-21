@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StatusBar, StyleSheet, View, Clipboard } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProvider } from 'react-native-elements';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -9,6 +9,8 @@ import { MenuProvider } from 'react-native-popup-menu';
 import Amplify, { Hub, Storage } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
 import Analytics from '@aws-amplify/analytics';
+// expo
+import * as Updates from 'expo-updates';
 
 import './global';
 import useCachedResources from './hooks/useCachedResources';
@@ -30,6 +32,12 @@ Analytics.disable();
 Storage.configure({ level: 'public' });
 
 const Stack = createStackNavigator();
+
+// https://github.com/expo/expo/issues/9089
+// HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+if (__DEV__) {
+  Clipboard.setString('');
+}
 
 function App({ authState, onStateChange }) {
   const [spinner, setSpinner] = useState(false);
@@ -75,9 +83,29 @@ function App({ authState, onStateChange }) {
     setIsReady(true);
     setSpinner(false);
 
+    const expoUpdatesListener = Updates.addListener((updateEvent) => {
+      console.log('expo-update-event', updateEvent);
+      const { type, manifest } = updateEvent;
+      if (type === Updates.UpdateEventType.UPDATE_AVAILABLE) {
+        Alert.alert(
+          `偵測到新版本`,
+          `${manifest.version || ''}`,
+          [
+            {
+              text: '馬上體驗',
+              onPress: async () => {
+                await Updates.reloadAsync();
+              },
+            },
+          ], { cancelable: false },
+        );
+      }
+    });
+
     return () => {
       Hub.remove('auth', authListener);
       Hub.remove('app', appListener);
+      expoUpdatesListener.remove();
     };
   }, []);
 

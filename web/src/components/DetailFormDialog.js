@@ -14,6 +14,7 @@ import DetailForm from 'react-material-final-form';
 const useStyles = makeStyles((theme) => ({
   content: {
     padding: theme.spacing(3),
+    paddingTop: theme.spacing(1),
   },
   closeButton: {
     position: 'absolute',

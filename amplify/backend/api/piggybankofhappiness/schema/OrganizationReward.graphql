@@ -26,10 +26,10 @@ type OrganizationReward
   ])
   total: Int! 
 
-  createdBy: String
   createdAt: AWSDateTime!
-  updatedBy: String
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   # transactions: [OrganizationTransaction] @connection(keyName: "byRewardByCreatedAt", fields: ["id"])
   # organization: Organization @connection(fields:["organizationId"])

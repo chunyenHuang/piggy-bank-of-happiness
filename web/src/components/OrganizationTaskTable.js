@@ -116,6 +116,15 @@ const columns = [
     name: 'createdBy',
     label: '創立者',
     options: {
+      display: false,
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updatedBy',
+    label: '更新者',
+    options: {
       filter: false,
       sort: true,
     },
@@ -156,6 +165,7 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: localStorage.getItem('app:username'),
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -183,6 +193,8 @@ function OrganizationTaskTable({ title = '任務列表', description, organizati
         point: +(parseFloat(newRecord.point) * 100),
         pointMin: +(parseFloat(newRecord.pointMin) * 100),
         pointMax: +(parseFloat(newRecord.pointMax) * 100),
+        createdBy: localStorage.getItem('app:username'),
+        updatedBy: localStorage.getItem('app:username'),
       });
       await request(createOrganizationTask, { input });
 

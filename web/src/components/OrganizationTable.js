@@ -80,6 +80,22 @@ function OrganizationTable() {
       },
     },
     {
+      name: 'createdBy',
+      label: '創立者',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'updatedBy',
+      label: '更新者',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: 'createdAt',
       label: '創立於',
       type: 'datetime',
@@ -132,7 +148,7 @@ function OrganizationTable() {
 
     input.isActive = input.isActive ? 1 : 0;
 
-    await request(updateOrganization, { input }, {});
+    await request(updateOrganization, { input });
 
     Object.assign(data[dataIndex], input);
     setData([...data]);

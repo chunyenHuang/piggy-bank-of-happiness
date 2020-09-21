@@ -66,7 +66,7 @@ module.exports = {
     }
   },
 
-  async updateOrg(username, organizationId, organizationName) {
+  async updateAttributes(username, organizationId, organizationName, email) {
     const params = {
       UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
       Username: username,
@@ -79,14 +79,41 @@ module.exports = {
           Name: 'custom:organizationName',
           Value: organizationName,
         },
+        {
+          Name: 'email',
+          Value: email,
+        },
       ],
     };
+
     await cognitoidentityserviceprovider.adminUpdateUserAttributes(params).promise();
   },
 
-  async addToGroup(username, groupName) {
+  async addToGroup(username, inGroupName) {
+    // check if user belongs to the group already
+    const listGroupsParams = {
+      UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
+      Username: username,
+    };
+    const { Groups } = await cognitoidentityserviceprovider.adminListGroupsForUser(listGroupsParams).promise();
+
+    const matched = Groups.find(({ GroupName }) => GroupName === inGroupName);
+    if (matched) return;
+
+    // remove all groups
+    const promises = Groups.map(({ GroupName }) => {
+      const params = {
+        GroupName,
+        UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
+        Username: username,
+      };
+      return cognitoidentityserviceprovider.adminRemoveUserFromGroup(params).promise();
+    });
+    await Promise.all(promises);
+
+    // add to group
     const addUserParams = {
-      GroupName: groupName,
+      GroupName: inGroupName,
       UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
       Username: username,
     };

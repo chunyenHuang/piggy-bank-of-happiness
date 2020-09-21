@@ -163,8 +163,8 @@ export const onCreateOrganization = /* GraphQL */ `
       }
       isActive
       createdAt
-      updatedAt
       createdBy
+      updatedAt
       updatedBy
     }
   }
@@ -187,8 +187,8 @@ export const onUpdateOrganization = /* GraphQL */ `
       }
       isActive
       createdAt
-      updatedAt
       createdBy
+      updatedAt
       updatedBy
     }
   }
@@ -211,8 +211,8 @@ export const onDeleteOrganization = /* GraphQL */ `
       }
       isActive
       createdAt
-      updatedAt
       createdBy
+      updatedAt
       updatedBy
     }
   }
@@ -225,9 +225,10 @@ export const onCreateOrganizationGroup = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       users {
         items {
           organizationId
@@ -241,7 +242,9 @@ export const onCreateOrganizationGroup = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         nextToken
       }
@@ -256,9 +259,10 @@ export const onUpdateOrganizationGroup = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       users {
         items {
           organizationId
@@ -272,7 +276,9 @@ export const onUpdateOrganizationGroup = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         nextToken
       }
@@ -287,9 +293,10 @@ export const onDeleteOrganizationGroup = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       users {
         items {
           organizationId
@@ -303,7 +310,9 @@ export const onDeleteOrganizationGroup = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         nextToken
       }
@@ -318,9 +327,10 @@ export const onCreateOrganizationProgram = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -332,9 +342,10 @@ export const onUpdateOrganizationProgram = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -346,9 +357,10 @@ export const onDeleteOrganizationProgram = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -362,10 +374,10 @@ export const onCreateOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
-      createdBy
       createdAt
-      updatedBy
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -379,10 +391,10 @@ export const onUpdateOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
-      createdBy
       createdAt
-      updatedBy
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -396,10 +408,10 @@ export const onDeleteOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
-      createdBy
       createdAt
-      updatedBy
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -416,18 +428,20 @@ export const onCreateOrganizationTask = /* GraphQL */ `
       point
       pointMin
       pointMax
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       program {
         organizationId
         id
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
     }
   }
@@ -445,18 +459,20 @@ export const onUpdateOrganizationTask = /* GraphQL */ `
       point
       pointMin
       pointMax
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       program {
         organizationId
         id
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
     }
   }
@@ -474,18 +490,20 @@ export const onDeleteOrganizationTask = /* GraphQL */ `
       point
       pointMin
       pointMax
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       program {
         organizationId
         id
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
     }
   }
@@ -502,9 +520,10 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
       points
       type
       note
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -517,7 +536,9 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -528,8 +549,8 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -548,9 +569,10 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
       points
       type
       note
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -563,7 +585,9 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -574,8 +598,8 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -594,9 +618,10 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
       points
       type
       note
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -609,7 +634,9 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -620,8 +647,8 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -642,7 +669,9 @@ export const onCreateOrganizationUser = /* GraphQL */ `
       currentPoints
       earnedPoints
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       organization {
         id
         name
@@ -659,8 +688,8 @@ export const onCreateOrganizationUser = /* GraphQL */ `
         }
         isActive
         createdAt
-        updatedAt
         createdBy
+        updatedAt
         updatedBy
       }
     }
@@ -680,7 +709,9 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
       currentPoints
       earnedPoints
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       organization {
         id
         name
@@ -697,8 +728,8 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
         }
         isActive
         createdAt
-        updatedAt
         createdBy
+        updatedAt
         updatedBy
       }
     }
@@ -718,7 +749,9 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
       currentPoints
       earnedPoints
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       organization {
         id
         name
@@ -735,8 +768,8 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
         }
         isActive
         createdAt
-        updatedAt
         createdBy
+        updatedAt
         updatedBy
       }
     }
@@ -755,7 +788,9 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
       transactionId
       points
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -768,7 +803,9 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -779,8 +816,8 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -794,9 +831,10 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -809,7 +847,9 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       task {
@@ -823,18 +863,20 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
     }
@@ -853,7 +895,9 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
       transactionId
       points
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -866,7 +910,9 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -877,8 +923,8 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -892,9 +938,10 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -907,7 +954,9 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       task {
@@ -921,18 +970,20 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
     }
@@ -951,7 +1002,9 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
       transactionId
       points
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -964,7 +1017,9 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -975,8 +1030,8 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -990,9 +1045,10 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -1005,7 +1061,9 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       task {
@@ -1019,18 +1077,20 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
     }

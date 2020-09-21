@@ -38,7 +38,7 @@ const columns = [
   },
   {
     name: 'name',
-    label: '班級名稱',
+    label: '名稱',
     edit: {
       type: 'text',
     },
@@ -61,6 +61,15 @@ const columns = [
   {
     name: 'createdBy',
     label: '創立者',
+    options: {
+      display: false,
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updatedBy',
+    label: '更新者',
     options: {
       filter: false,
       sort: true,
@@ -87,13 +96,11 @@ const columns = [
   },
 ];
 
-export default function OrganizationGroupTable({ title = '班級', description, organizationId }) {
+export default function OrganizationGroupTable({ title = '班級', description, organizationId, id, nested }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [isLoading, setIsLoading] = useState(false);
-
-  const username = localStorage.getItem('app:username');
 
   const options = {
     expandableRows: true,
@@ -120,6 +127,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: localStorage.getItem('app:username'),
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -131,8 +139,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
 
       await request(updateOrganizationGroup, { input });
 
-      Object.assign(data[dataIndex], input);
-      setData([...data]);
+      setLastUpdatedAt(Date.now());
     } catch (e) {
       console.log(e);
     } finally {
@@ -143,12 +150,17 @@ export default function OrganizationGroupTable({ title = '班級', description, 
   const onCreate = async (newRecord) => {
     try {
       setIsLoading(true);
-      const input = Object.assign(newRecord, {});
+      const username = localStorage.getItem('app:username');
+      const input = Object.assign(newRecord, {
+        organizationId,
+        id: uuidv1(),
+        createdBy: username,
+        updatedBy: username,
+      });
       await request(createOrganizationGroup, { input });
 
-      data.unshift(input);
-      setData([...data]);
       setOpen(false);
+      setLastUpdatedAt(Date.now());
     } catch (e) {
       console.log(e);
     } finally {
@@ -162,7 +174,11 @@ export default function OrganizationGroupTable({ title = '班級', description, 
     (async () => {
       try {
         setIsLoading(true);
-        const records = (await asyncListAll(listOrganizationGroups, { organizationId }));
+        const params = { organizationId };
+        if (id) {
+          params.id = { eq: id };
+        }
+        const records = (await asyncListAll(listOrganizationGroups, params));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
@@ -170,7 +186,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
         setIsLoading(false);
       }
     })();
-  }, [organizationId, lastUpdatedAt]);
+  }, [organizationId, id, lastUpdatedAt]);
 
   return (
     <React.Fragment>
@@ -179,6 +195,7 @@ export default function OrganizationGroupTable({ title = '班級', description, 
         isLoading={isLoading}
         description={description}
         data={data}
+        nested={nested}
         columns={columns}
         options={options}
         onAddItem={() => setOpen(true)}
@@ -192,9 +209,6 @@ export default function OrganizationGroupTable({ title = '班級', description, 
           onClose={() => setOpen(false)}
           // details form props
           data={{
-            organizationId,
-            id: uuidv1(),
-            createdBy: username,
             isActive: 1,
           }}
           metadata={formMetadata}
@@ -207,6 +221,8 @@ export default function OrganizationGroupTable({ title = '班級', description, 
 
 OrganizationGroupTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  id: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  nested: PropTypes.bool,
 };

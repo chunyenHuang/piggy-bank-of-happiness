@@ -49,6 +49,7 @@ export default function OrganizationProfile({ id, data: inData }) {
 
     const now = moment().toISOString();
     newData.updatedAt = now;
+    newData.updatedBy = localStorage.getItem('app:username');
 
     await request(updateOrganization, { input: newData });
 

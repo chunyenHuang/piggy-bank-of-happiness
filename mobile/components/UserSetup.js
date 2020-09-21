@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { Linking } from 'expo';
+import { StyleSheet, View, AsyncStorage, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-elements';
 import moment from 'moment';
 
@@ -9,13 +10,14 @@ import {
 } from 'react-native-paper';
 
 import Form from './Form';
-
+import Loading from 'components/Loading';
 import request from 'src/utils/request';
 import { listOrganizations } from 'src/graphql/queries';
 import { createOrganizationUser } from 'src/graphql/mutations';
 import Colors from 'constants/Colors';
 import { errorAlert } from 'src/utils/alert';
 import SignOutButton from './auth/SignOutButton';
+import { sortBy } from 'src/utils/sorting';
 
 export default function UserSetup({ onComplete }) {
   const [showApplication, setShowApplication] = useState(false);
@@ -56,7 +58,7 @@ export default function UserSetup({ onComplete }) {
     if (showApplication) {
       (async () => {
         const { data: { listOrganizations: { items: organizations } } } = await request(listOrganizations, { limit: 100 });
-        setOrganizations(organizations);
+        setOrganizations(organizations.sort(sortBy('name')));
       })();
     }
   }, [showApplication]);
@@ -120,6 +122,13 @@ export default function UserSetup({ onComplete }) {
     }
   };
 
+  if (organizations.length === 0) {
+    return (
+      <Loading
+        active={true}
+      />);
+  }
+
   return (
     <View style={styles.container}>
       <Text h4 style={{ marginBottom: 16 }}>歡迎</Text>
@@ -145,9 +154,22 @@ export default function UserSetup({ onComplete }) {
         dark={Colors.useDark}
         disabled={!selectedOrganizationId || isSubmitting}
         onPress={submit}>
-        申請加入
+        申請加入此機構
       </Button>
-      <View style={{ height: 100 }} />
+      <View style={{ height: 30 }} />
+      <Text style={styles.hint}>
+        欲申請新機構請至
+      </Text>
+      <TouchableOpacity
+        onPress={()=>{
+          Linking.openURL('https://www.happinessbankbook.org/application');
+        }}
+      >
+        <Text style={{ color: Colors.dark, margin: 8 }}>
+          幸福存摺官網
+        </Text>
+      </TouchableOpacity>
+      <View style={{ height: 30 }} />
       <SignOutButton />
     </View>
   );

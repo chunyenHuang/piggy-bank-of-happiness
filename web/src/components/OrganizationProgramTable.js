@@ -62,6 +62,15 @@ const columns = [
     name: 'createdBy',
     label: '創立者',
     options: {
+      display: false,
+      filter: false,
+      sort: true,
+    },
+  },
+  {
+    name: 'updatedBy',
+    label: '更新者',
+    options: {
       filter: false,
       sort: true,
     },
@@ -87,7 +96,7 @@ const columns = [
   },
 ];
 
-export default function OrganizationProgramTable({ title = '任務', description, organizationId }) {
+export default function OrganizationProgramTable({ title = '任務', description, organizationId, id, nested }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
@@ -114,6 +123,7 @@ export default function OrganizationProgramTable({ title = '任務', description
       const input = {
         organizationId: item.organizationId,
         id: item.id,
+        updatedBy: localStorage.getItem('app:username'),
       };
       columns.forEach(({ name, edit }) => {
         if (edit) {
@@ -137,7 +147,10 @@ export default function OrganizationProgramTable({ title = '任務', description
   const onCreate = async (newRecord) => {
     try {
       setIsLoading(true);
-      const input = Object.assign(newRecord, {});
+      const input = Object.assign(newRecord, {
+        createdBy: localStorage.getItem('app:username'),
+        updatedBy: localStorage.getItem('app:username'),
+      });
       await request(createOrganizationProgram, { input });
 
       setLastUpdatedAt(Date.now());
@@ -155,7 +168,11 @@ export default function OrganizationProgramTable({ title = '任務', description
     (async () => {
       try {
         setIsLoading(true);
-        const records = (await asyncListAll(listOrganizationPrograms, { organizationId }));
+        const params = { organizationId };
+        if (id) {
+          params.id = { eq: id };
+        }
+        const records = (await asyncListAll(listOrganizationPrograms, params));
         setData(records.sort(sortBy('name')).sort(sortBy('isActive', true)));
       } catch (e) {
         console.log(e);
@@ -172,6 +189,7 @@ export default function OrganizationProgramTable({ title = '任務', description
         isLoading={isLoading}
         description={description}
         data={data}
+        nested={nested}
         columns={columns}
         options={options}
         onAddItem={() => setOpen(true)}
@@ -200,6 +218,8 @@ export default function OrganizationProgramTable({ title = '任務', description
 
 OrganizationProgramTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
+  id: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  nested: PropTypes.bool,
 };

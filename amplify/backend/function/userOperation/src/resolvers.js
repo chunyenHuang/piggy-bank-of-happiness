@@ -8,13 +8,16 @@ const {
   getUser,
   createUser,
   addToGroup,
-  removeUserGroups,
-  updateOrg,
+  updateAttributes,
 } = require('./opt/cognito');
 
 module.exports = {
   Mutation: {
-    userOperation: async ({ arguments: { input } }) => {
+    userOperation: async ({
+      arguments: { input },
+      identity,
+    }) => {
+      const currentUsername = identity.username;
       const { force, users } = input;
       const results = [];
       const toUpdateOrgUsers = [];
@@ -33,6 +36,7 @@ module.exports = {
           idNumber,
           groupId,
           password,
+          isActive = 1,
         } = user;
         // check if user exists
         const existingUser = await getUser(username);
@@ -42,10 +46,11 @@ module.exports = {
           await createUser(username, name, email, password);
         } else {
           const userOrgId = (existingUser.UserAttributes.find(({ Name }) => Name === 'custom:organizationId') || {}).Value;
-          if (!force && userOrgId && userOrgId !== organizationId) {
+          if (!force && // app admin only
+            password && // params for creation
+            userOrgId && userOrgId !== organizationId // only allow to edit within the same organization
+          ) {
             throw new Error(`${username} already exists`);
-          } else {
-            await removeUserGroups(username);
           }
         }
 
@@ -54,7 +59,7 @@ module.exports = {
         const groupName = getGroupByRole(inRoleOrGroup);
         await Promise.all([
           addToGroup(username, groupName),
-          updateOrg(username, organizationId, organizationName),
+          updateAttributes(username, organizationId, organizationName, email),
         ]);
 
         const existingOrgUser = await getOrganizationUser(organizationId, username);
@@ -68,18 +73,24 @@ module.exports = {
             email,
             role,
             groupId,
-            isActive: 1,
+            isActive,
             currentPoints: 0,
             earnedPoints: 0,
             createdAt: now,
+            createdBy: currentUsername,
             updatedAt: now,
+            updatedBy: currentUsername,
           });
         } else {
           toUpdateOrgUsers.push(Object.assign(existingOrgUser, {
             email,
+            name,
+            idNumber,
+            isActive,
             role,
             groupId: groupId || existingOrgUser.groupId,
             updatedAt: now,
+            updatedBy: currentUsername,
           }));
         }
 

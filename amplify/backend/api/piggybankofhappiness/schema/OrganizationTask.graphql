@@ -18,9 +18,10 @@ type OrganizationTask
   point: Int!
   pointMin: Int!
   pointMax: Int!
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   program: OrganizationProgram @connection(fields:["organizationId", "programId"])
 }

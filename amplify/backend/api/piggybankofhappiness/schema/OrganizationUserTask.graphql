@@ -20,7 +20,9 @@ type OrganizationUserTask
   points: Int!
   # deadline: AWSDateTime
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   # organization: Organization @connection(fields:["organizationId"])
   user: OrganizationUser @connection(fields:["organizationId", "username"])

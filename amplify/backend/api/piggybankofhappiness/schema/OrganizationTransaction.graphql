@@ -19,9 +19,10 @@ type OrganizationTransaction
   points: Int!
   type: TransactionType!
   note: String
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   # organization: Organization @connection(fields:["organizationId"])
   user: OrganizationUser @connection(fields:["organizationId", "username"])

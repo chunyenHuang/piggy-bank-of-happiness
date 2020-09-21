@@ -143,8 +143,8 @@ export const getOrganization = /* GraphQL */ `
       }
       isActive
       createdAt
-      updatedAt
       createdBy
+      updatedAt
       updatedBy
     }
   }
@@ -172,8 +172,8 @@ export const listOrganizations = /* GraphQL */ `
         }
         isActive
         createdAt
-        updatedAt
         createdBy
+        updatedAt
         updatedBy
       }
       nextToken
@@ -188,9 +188,10 @@ export const getOrganizationGroup = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       users {
         items {
           organizationId
@@ -204,7 +205,9 @@ export const getOrganizationGroup = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         nextToken
       }
@@ -234,9 +237,10 @@ export const listOrganizationGroups = /* GraphQL */ `
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         users {
           nextToken
         }
@@ -253,9 +257,10 @@ export const getOrganizationProgram = /* GraphQL */ `
       name
       isActive
       description
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -282,9 +287,10 @@ export const listOrganizationPrograms = /* GraphQL */ `
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
       nextToken
     }
@@ -300,10 +306,10 @@ export const getOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
-      createdBy
       createdAt
-      updatedBy
+      createdBy
       updatedAt
+      updatedBy
     }
   }
 `;
@@ -332,10 +338,10 @@ export const listOrganizationRewards = /* GraphQL */ `
         requiredPoints
         isActive
         total
-        createdBy
         createdAt
-        updatedBy
+        createdBy
         updatedAt
+        updatedBy
       }
       nextToken
     }
@@ -354,18 +360,20 @@ export const getOrganizationTask = /* GraphQL */ `
       point
       pointMin
       pointMax
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       program {
         organizationId
         id
         name
         isActive
         description
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
       }
     }
   }
@@ -398,18 +406,20 @@ export const listOrganizationTasks = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -428,9 +438,10 @@ export const getOrganizationTransaction = /* GraphQL */ `
       points
       type
       note
-      createdBy
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -443,7 +454,9 @@ export const getOrganizationTransaction = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -454,8 +467,8 @@ export const getOrganizationTransaction = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -489,9 +502,10 @@ export const listOrganizationTransactions = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -504,7 +518,9 @@ export const listOrganizationTransactions = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -525,7 +541,9 @@ export const getOrganizationUser = /* GraphQL */ `
       currentPoints
       earnedPoints
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       organization {
         id
         name
@@ -542,8 +560,8 @@ export const getOrganizationUser = /* GraphQL */ `
         }
         isActive
         createdAt
-        updatedAt
         createdBy
+        updatedAt
         updatedBy
       }
     }
@@ -578,7 +596,9 @@ export const listOrganizationUsers = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -589,8 +609,8 @@ export const listOrganizationUsers = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -611,7 +631,9 @@ export const getOrganizationUserTask = /* GraphQL */ `
       transactionId
       points
       createdAt
+      createdBy
       updatedAt
+      updatedBy
       user {
         organizationId
         username
@@ -624,7 +646,9 @@ export const getOrganizationUserTask = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -635,8 +659,8 @@ export const getOrganizationUserTask = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -650,9 +674,10 @@ export const getOrganizationUserTask = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -665,7 +690,9 @@ export const getOrganizationUserTask = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       task {
@@ -679,18 +706,20 @@ export const getOrganizationUserTask = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
     }
@@ -724,7 +753,9 @@ export const listOrganizationUserTasks = /* GraphQL */ `
         transactionId
         points
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -737,7 +768,9 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         transaction {
           organizationId
@@ -749,9 +782,10 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           points
           type
           note
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         task {
           organizationId
@@ -764,9 +798,10 @@ export const listOrganizationUserTasks = /* GraphQL */ `
           point
           pointMin
           pointMax
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -910,18 +945,20 @@ export const getOrgTasksByProgramByActive = /* GraphQL */ `
         point
         pointMin
         pointMax
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         program {
           organizationId
           id
           name
           isActive
           description
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -955,9 +992,10 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -970,7 +1008,9 @@ export const getTransactionsByUserByCreatedAt = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -1004,9 +1044,10 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -1019,7 +1060,9 @@ export const getTransactionsByUserByOrganization = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -1053,9 +1096,10 @@ export const getTransactionsByRewardByDate = /* GraphQL */ `
         points
         type
         note
-        createdBy
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -1068,7 +1112,9 @@ export const getTransactionsByRewardByDate = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -1104,7 +1150,9 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -1115,8 +1163,8 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -1153,7 +1201,9 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
         currentPoints
         earnedPoints
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         organization {
           id
           name
@@ -1164,8 +1214,8 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
           email
           isActive
           createdAt
-          updatedAt
           createdBy
+          updatedAt
           updatedBy
         }
       }
@@ -1201,7 +1251,9 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
         transactionId
         points
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -1214,7 +1266,9 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         transaction {
           organizationId
@@ -1226,9 +1280,10 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           points
           type
           note
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         task {
           organizationId
@@ -1241,9 +1296,10 @@ export const getTasksByUserByCreatedAt = /* GraphQL */ `
           point
           pointMin
           pointMax
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken
@@ -1278,7 +1334,9 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
         transactionId
         points
         createdAt
+        createdBy
         updatedAt
+        updatedBy
         user {
           organizationId
           username
@@ -1291,7 +1349,9 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           currentPoints
           earnedPoints
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         transaction {
           organizationId
@@ -1303,9 +1363,10 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           points
           type
           note
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
         task {
           organizationId
@@ -1318,9 +1379,10 @@ export const getTasksByUserByOrganization = /* GraphQL */ `
           point
           pointMin
           pointMax
-          createdBy
           createdAt
+          createdBy
           updatedAt
+          updatedBy
         }
       }
       nextToken

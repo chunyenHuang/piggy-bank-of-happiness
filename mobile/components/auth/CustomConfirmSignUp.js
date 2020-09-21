@@ -13,6 +13,7 @@ import {
 } from 'react-native-paper';
 import { Auth } from 'aws-amplify';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Colors from 'constants/Colors';
 
 import { errorAlert } from '../../src/utils/alert';
 import Form from '../Form';
@@ -126,7 +127,8 @@ export default function CustomSignUp({ authState, onStateChange }) {
 
           <Button
             mode="contained"
-            style={{ ...styles.button }}
+            dark={Colors.useDark}
+            style={styles.button}
             disabled={isSubmitting}
             onPress={handleSubmit}>
             完成註冊
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   button: {
-    color: '#000',
+    color: '#fff',
     margin: 8,
   },
   textButton: {

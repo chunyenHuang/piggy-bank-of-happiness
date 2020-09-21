@@ -43,6 +43,7 @@
     "expo-image-picker": "~8.1.0",
     "expo-linking": "^1.0.1",
     "expo-splash-screen": "^0.2.3",
+    "expo-updates": "^0.2.14",
     "expo-web-browser": "~8.2.0",
     "intl": "^1.2.5",
     "lodash.debounce": "^4.0.8",
