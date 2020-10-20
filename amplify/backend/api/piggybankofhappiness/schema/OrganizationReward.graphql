@@ -2,7 +2,8 @@ type OrganizationReward
   @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
-    {allow: groups, groups: ["OrgManagers", "Users"], operations: [read]},
+    {allow: groups, groups: ["Users"], operations: [read]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
 {
@@ -13,6 +14,7 @@ type OrganizationReward
   requiredPoints: Int!
   isActive: Int!
   total: Int! 
+  note: String
 
   createdAt: AWSDateTime!
   createdBy: String
