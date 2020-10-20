@@ -2,6 +2,7 @@ type OrganizationReward
   @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
+    {allow: groups, groups: ["Users"], operations: [read]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, update]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
