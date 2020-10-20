@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "push": "npm run amplify_push",
-    "amplify_push": "npm run amplify_update_config && npm run amplify_update_resolvers && amplify push -y && npm run amplify_update_schema",
+    "amplify_push": "amplify api gql-compile && npm run amplify_update_config && amplify push -y && npm run amplify_update_schema",
     "amplify_update_schema": "amplify codegen && rm -rf mobile/src/graphql && cp -r src/graphql web/src && mv src/graphql mobile/src",
-    "amplify_update_resolvers": "rm -rf amplify/backend/api/piggybankofhappiness/resolvers && amplify api gql-compile && mv amplify/backend/api/piggybankofhappiness/build/resolvers amplify/backend/api/piggybankofhappiness/resolvers",
     "amplify_update_config": "cp aws-exports.js web/src/aws-exports.js && cp aws-exports.js mobile/aws-exports.js",
     "amplify_checkout_dev": "amplify env checkout develop && npm run amplify_update_config",
     "amplify_checkout_prd": "amplify env checkout prd && npm run amplify_update_config"
