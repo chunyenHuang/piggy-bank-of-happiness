@@ -2,28 +2,16 @@ type OrganizationReward
   @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
-    {allow: groups, groups: ["OrgManagers"], operations: [read, update]},
+    {allow: groups, groups: ["OrgManagers", "Users"], operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
 {
   organizationId: ID!
   id: ID!
-  name: String! @auth(rules: [
-    {allow: groups, groups: ["OrgManagers"], operations: [read]},
-    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-  ])
-  description: String! @auth(rules: [
-    {allow: groups, groups: ["OrgManagers"], operations: [read]},
-    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-  ])
-  requiredPoints: Int! @auth(rules: [
-    {allow: groups, groups: ["OrgManagers"], operations: [read]},
-    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-  ])
-  isActive: Int! @auth(rules: [
-    {allow: groups, groups: ["OrgManagers"], operations: [read]},
-    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
-  ])
+  name: String!
+  description: String!
+  requiredPoints: Int!
+  isActive: Int!
   total: Int! 
 
   createdAt: AWSDateTime!
