@@ -433,6 +433,7 @@ export const createOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
+      note
       createdAt
       createdBy
       updatedAt
@@ -453,6 +454,7 @@ export const updateOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
+      note
       createdAt
       createdBy
       updatedAt
@@ -473,6 +475,7 @@ export const deleteOrganizationReward = /* GraphQL */ `
       requiredPoints
       isActive
       total
+      note
       createdAt
       createdBy
       updatedAt
