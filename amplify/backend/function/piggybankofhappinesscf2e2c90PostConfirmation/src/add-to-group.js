@@ -1,9 +1,11 @@
 const aws = require('aws-sdk');
 
+const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
+
 const GROUPNAME = process.env.GROUP || 'Users';
 
 exports.handler = async (event, context, callback) => {
-  const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
+  console.log(event);
   // const groupParams = {
   //   GroupName: GROUPNAME,
   //   UserPoolId: event.userPoolId,
@@ -16,14 +18,9 @@ exports.handler = async (event, context, callback) => {
   // }
 
   try {
-    const getGroupsParams = {
-      UserPoolId: event.userPoolId,
-      Username: event.userName,
-    };
-
-    const { Groups } = await cognitoidentityserviceprovider.adminListGroupsForUser(getGroupsParams).promise();
-
-    if (Groups.length === 0) {
+    const { userAttributes } = event.request;
+    // first time user
+    if (!userAttributes['custom:organizationId']) {
       const addUserParams = {
         GroupName: GROUPNAME,
         UserPoolId: event.userPoolId,
