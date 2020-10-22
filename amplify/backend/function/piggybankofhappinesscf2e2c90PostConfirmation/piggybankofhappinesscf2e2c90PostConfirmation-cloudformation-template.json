@@ -101,8 +101,8 @@
         "Runtime": "nodejs10.x",
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "S3Key": "amplify-builds/piggybankofhappinesscf2e2c90PostConfirmation-44684563726a65306f50-build.zip"
+          "S3Bucket": "amplify-piggybankofhappiness-prd-170807-deployment",
+          "S3Key": "amplify-builds/piggybankofhappinesscf2e2c90PostConfirmation-684f3846335964335650-build.zip"
         }
       }
     },
