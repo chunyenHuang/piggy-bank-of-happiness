@@ -264,7 +264,7 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-piggybankofhappiness-prd-170807-deployment",
+          "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
           "S3Key": "amplify-builds/userOperation-644f314d4776734f387a-build.zip"
         }
       }
