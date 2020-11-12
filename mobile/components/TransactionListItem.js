@@ -17,6 +17,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
   const [transaction, setTransaction] = useState(undefined);
 
   const [visible, setVisible] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [note, setNote] = useState('');
 
@@ -102,6 +103,12 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
   };
 
   useEffect(() => {
+    if (visible) {
+      setIsDirty(false);
+    }
+  }, [visible]);
+
+  useEffect(() => {
     setTransaction(inData);
     setNote(inData.note);
   }, [inData]);
@@ -115,7 +122,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
     iconType,
   } = getPropsByType(transaction.type);
   const amount = currency(transaction.points);
-  const date = moment(transaction.updatedAt).format('MM/DD/YYYY hh:mm');
+  const date = moment(transaction.createdAt).format('MM/DD/YYYY hh:mm');
 
   return (
     <View style={styles.container}>
@@ -141,12 +148,12 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
       <CustomModal
         title="交易紀錄"
         visible={visible}
-        onClose={()=>setVisible(false)}
+        onClose={() => setVisible(false)}
         padding
         bottomButtonProps={{
           title: `確認`,
           onPress: ()=> updateNote(),
-          disabled: isLoading,
+          disabled: isLoading || !isDirty,
         }}
       >
         <View style={styles.headerContainer}>
@@ -204,7 +211,10 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
           multiline={true}
           numberOfLines={5}
           value={note}
-          onChangeText={setNote}
+          onChangeText={(value)=>{
+            setIsDirty(true);
+            setNote(value);
+          }}
           disabled={isLoading}
         />
       </CustomModal>

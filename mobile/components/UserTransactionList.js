@@ -22,7 +22,7 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
       limit: 20,
     });
 
-    setTransactions(items);
+    setTransactions(items.sort(sortBy('createdAt', true)));
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
     <View style={styles.container}>
       <Text style={styles.header}>交易紀錄</Text>
       <ScrollView style={styles.container} scrollIndicatorInsets={{ right: 1 }}>
-        {transactions.sort(sortBy('updatedAt', true)).map((tx, index) => (
+        {transactions.map((tx, index) => (
           <TransactionListItem
             key={index}
             transaction={tx}
