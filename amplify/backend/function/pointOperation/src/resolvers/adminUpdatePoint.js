@@ -11,12 +11,6 @@ const {
   updateOrgReward,
 } = require('../lib/db');
 
-/**
- * Admin Update Point Actions
- * 1. AddTaskToUser
- * 2. AddRewardToUser
- */
-
 module.exports = async ({
   arguments: { input },
   identity,
@@ -127,7 +121,7 @@ module.exports = async ({
       };
       toCreateTransactions.push(transaction);
     } else
-    if (type && points) {
+    if (type) {
       let calculatedPoints = points;
 
       if (type === 'cancel' && refTransactionId) {
@@ -142,17 +136,15 @@ module.exports = async ({
 
         calculatedPoints = -refTransaction.points;
         toUpdatePoints += calculatedPoints;
-        toUpdateEarnedPoints += calculatedPoints;
-      }
-
-      switch (type) {
-      case 'cancel':
-        break;
-      case 'withdraw':
+        if (refTransaction.points > 0) {
+          toUpdateEarnedPoints += calculatedPoints;
+        }
+      } else
+      if (type === 'withdraw') {
         calculatedPoints = -Math.abs(calculatedPoints);
         toUpdatePoints += calculatedPoints;
-        break;
-      default:
+      } else
+      if (type === 'adjustment') {
         calculatedPoints = Math.abs(calculatedPoints);
         toUpdatePoints += calculatedPoints;
         toUpdateEarnedPoints += calculatedPoints;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Input } from 'react-native-elements';
+import { Hub } from 'aws-amplify';
 
 import Colors from '../constants/Colors';
 import request from '../src/utils/request';
@@ -40,8 +41,12 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
 
     await request(adminUpdatePoint, payload);
 
-    onUpdate && onUpdate();
-    onClose && onClose();
+    if (onUpdate) {
+      onUpdate();
+    } else {
+      Hub.dispatch('user', { event: 'reload' });
+    }
+    if (onClose) onClose();
     setIsLoading(false);
     setVisible(false);
   };
@@ -92,7 +97,7 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         visible={visible}
         onClose={ () => {
           setVisible(false);
-          onClose && onClose();
+          if (onClose) onClose();
         }}
         padding
         bottomButtonProps={{

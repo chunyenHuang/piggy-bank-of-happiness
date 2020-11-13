@@ -284,7 +284,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "S3Key": "amplify-builds/pointOperation-6345714968673337706d-build.zip"
+          "S3Key": "amplify-builds/pointOperation-757a557367316b5a4730-build.zip"
         }
       }
     },

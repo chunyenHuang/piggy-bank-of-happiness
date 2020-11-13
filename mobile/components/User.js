@@ -62,6 +62,15 @@ export default function User({ user: inUser, mode }) {
   const [addRewardVisible, setAddRewardVisible] = useState(false);
   const [addTaskVisible, setAddTaskVisible] = useState(false);
 
+  const userListener = ({ payload: { event, data } }) => {
+    global.logger.debug('Hub: user', event);
+    switch (event) {
+    case 'reload':
+      load();
+      break;
+    }
+  };
+
   const load = async () => {
     Hub.dispatch('app', { event: 'loading' });
 
@@ -104,6 +113,13 @@ export default function User({ user: inUser, mode }) {
     //   subscription && subscription.unsubscribe();
     // };
   }, [inUser]);
+
+  useEffect(() => {
+    Hub.listen('user', userListener);
+    return () => {
+      Hub.remove('user', userListener);
+    };
+  }, []);
 
   const onActionPressed = (button) => {
     switch (button) {
@@ -178,7 +194,7 @@ export default function User({ user: inUser, mode }) {
         mode={'withdraw'}
         visible={withdrawVisible}
         onClose={onWithdrawClose}
-        onUpdate={load}
+        // onUpdate={load}
       />
 
       <AddRewardToUser

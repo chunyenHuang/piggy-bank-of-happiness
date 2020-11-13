@@ -54,7 +54,7 @@ function App({ authState, onStateChange }) {
       break;
     case 'signOut':
       // setUser(null);
-      onStateChange && onStateChange('signedOut');
+      if (onStateChange) onStateChange('signedOut');
       break;
     case 'loading':
       return <Loading active={true} />;
