@@ -102,7 +102,15 @@ const columns = [
   },
 ];
 
-export default function OrganizationTransactionTable({ title = '交易紀錄', description, organizationId, id, nested }) {
+export default function OrganizationTransactionTable({
+  title = '交易紀錄',
+  description,
+  organizationId,
+  id,
+  nested,
+  data: inData,
+  onRefresh,
+}) {
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -158,6 +166,12 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
     })();
   }, [organizationId, id, lastUpdatedAt]);
 
+  useEffect(() => {
+    if (!inData) return;
+
+    setData(inData);
+  }, [inData]);
+
   return (
     <Table
       title={title}
@@ -168,7 +182,10 @@ export default function OrganizationTransactionTable({ title = '交易紀錄', d
       columns={columns}
       options={options}
       onUpdateItem={onUpate}
-      onRefresh={() => setLastUpdatedAt(Date.now())}
+      onRefresh={() => {
+        if (onRefresh) onRefresh();
+        setLastUpdatedAt(Date.now());
+      }}
     />
   );
 }
@@ -179,4 +196,6 @@ OrganizationTransactionTable.propTypes = {
   nested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
+  onRefresh: PropTypes.func,
+  data: PropTypes.array,
 };

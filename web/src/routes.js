@@ -3,7 +3,8 @@ import { Route } from 'react-router-dom';
 import ProtectedRoute from 'components/ProtectedRoute';
 
 // User
-import UserDashboard from 'views/User/Dashboard/Dashboard';
+// import UserDashboard from 'views/User/Dashboard/Dashboard';
+import MyTransactions from 'views/User/MyTransactions/MyTransactions';
 
 // AppAdmin
 // import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
@@ -36,13 +37,20 @@ export const general = [].map((item) => {
 });
 
 export const user = [
+  // {
+  //   title: '幸福存摺',
+  //   paths: [
+  //     { path: '/', exact: true },
+  //     { path: '/dashboard', exact: true },
+  //   ],
+  //   component: UserDashboard,
+  // },
   {
-    title: '幸福存摺',
+    title: '我的存摺',
     paths: [
-      { path: '/', exact: true },
-      { path: '/dashboard', exact: true },
+      { path: '/transactions', exact: true },
     ],
-    component: UserDashboard,
+    component: MyTransactions,
   },
 ].map((item) => {
   item.route = item.route || ProtectedRoute;
