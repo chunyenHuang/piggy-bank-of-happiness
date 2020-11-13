@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, AsyncStorage } from 'react-native';
-import { v1 as uuidv1 } from 'uuid';
-import moment from 'moment';
+import { View } from 'react-native';
 import { Hub } from 'aws-amplify';
 
 import request from '../src/utils/request';
-import { createOrganizationUserTask, createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
+import { adminUpdatePoint } from '../src/graphql/mutations';
 import TaskList from './TaskList';
 import CustomModal from './CustomModal';
 import Colors from 'constants/Colors';
@@ -32,77 +30,31 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
 
     const { organizationId, username } = user;
 
-    // TODO: Optimize the process
-    await tasks.reduce(async (chain, task) => {
-      await chain;
+    console.log(tasks);
 
-      // pull the latest user record
-      const { data: { getOrganizationUser: { currentPoints, earnedPoints } } } = await request( /* GraphQL */ `
-      query GetOrganizationUser($organizationId: ID!, $username: String!) {
-        getOrganizationUser(organizationId: $organizationId, username: $username) {
-          currentPoints
-          earnedPoints
-        }
-      }
-    `, {
+    const payload = {
+      input: {
         organizationId,
         username,
-      });
-      global.logger.debug({ currentPoints, earnedPoints });
+        actions: tasks.map(({ id, name, point }) => {
+          return {
+            taskId: id,
+            taskName: name,
+            taskPoints: point,
+          };
+        }),
+      },
+    };
 
-      const currentUsername = await AsyncStorage.getItem('app:username');
+    console.log(payload);
 
-      // For now, assign and complete the task immediately and then create the transaction for user
-      const transactionId = uuidv1();
-      const points = task.point;
-      const now = moment().toISOString();
-      const userTask = {
-        organizationId,
-        id: uuidv1(),
-        taskId: task.id,
-        taskName: task.name,
-        username,
-        status: 'Completed',
-        note: 'N/A',
-        transactionId,
-        points,
-        createdAt: now,
-        createdBy: currentUsername,
-        updatedAt: now,
-        updatedBy: currentUsername,
-      };
-      const transaction = {
-        organizationId,
-        id: transactionId,
-        username,
-        points,
-        type: 'credits',
-        note: task.name,
-        createdAt: now,
-        createdBy: currentUsername,
-        updatedAt: now,
-        updatedBy: currentUsername,
-      };
-      const updatedUser = {
-        organizationId,
-        username,
-        currentPoints: currentPoints + points,
-        earnedPoints: earnedPoints + points,
-        updatedAt: now,
-        updatedBy: currentUsername,
-      };
-      await Promise.all([
-        request(createOrganizationUserTask, { input: userTask }),
-        request(createOrganizationTransaction, { input: transaction }),
-        request(updateOrganizationUser, { input: updatedUser }),
-      ]);
-    }, Promise.resolve());
+    await request(adminUpdatePoint, payload);
 
     Hub.dispatch('app', { event: 'loading-complete' });
     setIsLoading(false);
     setVisible(false);
-    onUpdate && onUpdate();
-    onClose && onClose();
+    if (onUpdate) onUpdate();
+    if (onClose) onClose();
   };
 
   useEffect(() => {
@@ -125,7 +77,7 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
         visible={visible}
         onClose={()=> {
           setVisible(false);
-          onClose && onClose();
+          if (onClose) onClose();
         }}
         bottomButtonProps={{
           title: `${tasks.length} 任務 ${tasks.reduce((sum, x) => {

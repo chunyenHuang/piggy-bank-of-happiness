@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Input } from 'react-native-elements';
-import { v1 as uuidv1 } from 'uuid';
-import moment from 'moment';
 
 import Colors from '../constants/Colors';
 import request from '../src/utils/request';
 import CustomModal from './CustomModal';
-import { createOrganizationTransaction, updateOrganizationUser } from '../src/graphql/mutations';
+import { adminUpdatePoint } from 'src/graphql/mutations';
 
 export default function PointsHandler({ mode, user, onUpdate, visible: inVisible, onClose }) {
   const [visible, setVisible] = useState(!!inVisible);
@@ -24,78 +22,23 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
     setIsLoading(true);
     const { organizationId, username } = user;
 
-    // pull the latest user record
-    const { data: { getOrganizationUser: { currentPoints, earnedPoints } } } = await request( /* GraphQL */ `
-          query GetOrganizationUser($organizationId: ID!, $username: String!) {
-            getOrganizationUser(organizationId: $organizationId, username: $username) {
-              currentPoints
-              earnedPoints
-            }
-          }
-        `, {
-      organizationId,
-      username,
-    });
-
-    const now = moment().toISOString();
     const points = parseFloat(amount) * 100;
 
-    const currentUsername = await AsyncStorage.getItem('app:username');
+    const payload = {
+      input: {
+        organizationId,
+        username,
+        actions: [{
+          type: mode,
+          points,
+          note,
+        }],
+      },
+    };
 
-    if (mode === 'withdraw') {
-      const transaction = {
-        organizationId,
-        id: uuidv1(),
-        username,
-        points: -points,
-        type: 'withdraw',
-        note,
-        createdBy: currentUsername,
-        createdAt: now,
-        updatedBy: currentUsername,
-        updatedAt: now,
-      };
-      const updatedUser = {
-        organizationId,
-        username,
-        currentPoints: currentPoints - points,
-        earnedPoints: earnedPoints - points,
-        updatedBy: currentUsername,
-        updatedAt: now,
-      };
+    console.log(payload);
 
-      await Promise.all([
-        request(createOrganizationTransaction, { input: transaction }),
-        request(updateOrganizationUser, { input: updatedUser }),
-      ]);
-    } else
-    if (mode === 'adjustment') {
-      const transaction = {
-        organizationId,
-        id: uuidv1(),
-        username,
-        points: points,
-        type: 'adjustment',
-        note,
-        createdBy: currentUsername,
-        createdAt: now,
-        updatedBy: currentUsername,
-        updatedAt: now,
-      };
-      const updatedUser = {
-        organizationId,
-        username,
-        currentPoints: currentPoints + points,
-        earnedPoints: earnedPoints + points,
-        updatedBy: currentUsername,
-        updatedAt: now,
-      };
-
-      await Promise.all([
-        request(createOrganizationTransaction, { input: transaction }),
-        request(updateOrganizationUser, { input: updatedUser }),
-      ]);
-    }
+    await request(adminUpdatePoint, payload);
 
     onUpdate && onUpdate();
     onClose && onClose();

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
-import { API, graphqlOperation } from 'aws-amplify';
+// import { API, graphqlOperation } from 'aws-amplify';
 import { FloatingAction } from 'react-native-floating-action';
 
 import request from '../src/utils/request';
@@ -10,8 +10,8 @@ import { getOrganizationUser } from '../src/graphql/queries';
 import AddTaskToUser from './AddTaskToUser';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
-import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
-import check from '../src/permission/check';
+// import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
+// import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 import AddRewardToUser from './AddRewardToUser';
@@ -72,7 +72,7 @@ export default function User({ user: inUser, mode }) {
         username,
       });
 
-      userData && setUser(userData);
+      if (userData) setUser(userData);
     } else {
       setUser(inUser);
     }
@@ -83,27 +83,26 @@ export default function User({ user: inUser, mode }) {
   useEffect(() => {
     if (!inUser) return;
 
-    let subscription;
+    // let subscription;
     (async () => {
       await load();
 
-      if (await check('ORG_USER__SUBSCRIPTION')) {
-        subscription = API
-          .graphql(graphqlOperation(onUpdateOrganizationUser))
-          .subscribe({
-            next: (event) => {
-              if (event) {
-                const updatedUser = event.value.data.onUpdateOrganizationUser;
-                setUser(updatedUser);
-              }
-            },
-          });
-      }
+      // if (await check('ORG_USER__SUBSCRIPTION')) {
+      //   subscription = API
+      //     .graphql(graphqlOperation(onUpdateOrganizationUser))
+      //     .subscribe({
+      //       next: (event) => {
+      //         if (event) {
+      //           const updatedUser = event.value.data.onUpdateOrganizationUser;
+      //           setUser(updatedUser);
+      //         }
+      //       },
+      //     });
+      // }
     })();
-
-    return () => {
-      subscription && subscription.unsubscribe();
-    };
+    // return () => {
+    //   subscription && subscription.unsubscribe();
+    // };
   }, [inUser]);
 
   const onActionPressed = (button) => {
@@ -164,6 +163,7 @@ export default function User({ user: inUser, mode }) {
 
       <UserTransactionList
         user={user}
+        onUpdate={load}
       />
 
       {mode !== 'view' && isActive &&
@@ -178,21 +178,21 @@ export default function User({ user: inUser, mode }) {
         mode={'withdraw'}
         visible={withdrawVisible}
         onClose={onWithdrawClose}
-        // onUpdate={load}
+        onUpdate={load}
       />
 
       <AddRewardToUser
         user={user}
         visible={addRewardVisible}
         onClose={() => setAddRewardVisible(false)}
-        // onUpdate={load}
+        onUpdate={load}
       />
 
       <AddTaskToUser
         user={user}
         visible={addTaskVisible}
         onClose={onAddTaskClose}
-        // onUpdate={load}
+        onUpdate={load}
       />
     </View>
   );

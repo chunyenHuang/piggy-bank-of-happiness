@@ -3,13 +3,12 @@ import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { ListItem, Input, Icon } from 'react-native-elements';
 import moment from 'moment';
 import { Button } from 'react-native-paper';
-import { v1 as uuidv1 } from 'uuid';
 import CustomModal from './CustomModal';
 
 import Colors from '../constants/Colors';
 import { currency, shortString } from '../src/utils/format';
 import request from '../src/utils/request';
-import { createOrganizationTransaction, updateOrganizationUser, updateOrganizationTransaction } from '../src/graphql/mutations';
+import { adminUpdatePoint, updateOrganizationTransaction } from '../src/graphql/mutations';
 import check from '../src/permission/check';
 import { getPropsByType } from 'constants/Transaction';
 
@@ -25,59 +24,26 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
     setIsLoading(true);
     // Create a new tx to balance the current transaction
 
-    // pull the latest user record
-    const { data: { getOrganizationUser: { currentPoints, earnedPoints } } } = await request( /* GraphQL */ `
-        query GetOrganizationUser($organizationId: ID!, $username: String!) {
-          getOrganizationUser(organizationId: $organizationId, username: $username) {
-            currentPoints
-            earnedPoints
-          }
-        }
-      `, {
-      organizationId,
-      username,
-    });
-
-    const currentUsername = await AsyncStorage.getItem('app:username');
-    const now = moment().toISOString();
-    const transaction = {
-      organizationId,
-      id: uuidv1(),
-      refTransactionId: id,
-      username,
-      points: -points,
-      type: 'cancel',
-      note: `取消 ${note}`,
-      createdBy: currentUsername,
-      createdAt: now,
-      updatedBy: currentUsername,
-      updatedAt: now,
-    };
-    const updatedTransaction = {
-      organizationId,
-      id,
-      isCancelled: 1,
-      updatedBy: currentUsername,
-      updatedAt: now,
-    };
-    const updatedUser = {
-      organizationId,
-      username,
-      currentPoints: currentPoints - points,
-      earnedPoints: earnedPoints - points,
-      updatedBy: currentUsername,
-      updatedAt: now,
+    const payload = {
+      input: {
+        organizationId,
+        username,
+        actions: [{
+          type: 'cancel',
+          points,
+          note: `取消 ${note}`,
+          refTransactionId: id,
+        }],
+      },
     };
 
-    await Promise.all([
-      request(updateOrganizationTransaction, { input: updatedTransaction }),
-      request(createOrganizationTransaction, { input: transaction }),
-      request(updateOrganizationUser, { input: updatedUser }),
-    ]);
+    console.log(payload);
+
+    await request(adminUpdatePoint, payload);
 
     setIsLoading(false);
     setVisible(false);
-    onUpdate && onUpdate();
+    if (onUpdate) onUpdate();
   };
 
   const updateNote = async () => {
@@ -98,7 +64,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
 
     setVisible(false);
 
-    onUpdate && onUpdate();
+    if (onUpdate) onUpdate();
     setIsLoading(false);
   };
 

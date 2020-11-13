@@ -12,6 +12,14 @@ export const userOperation = /* GraphQL */ `
     }
   }
 `;
+export const adminUpdatePoint = /* GraphQL */ `
+  mutation AdminUpdatePoint($input: AdminUpdatePointRequest!) {
+    adminUpdatePoint(input: $input) {
+      errors
+      message
+    }
+  }
+`;
 export const createApplicationOrganization = /* GraphQL */ `
   mutation CreateApplicationOrganization(
     $input: CreateApplicationOrganizationInput!
