@@ -10,7 +10,6 @@
     "eject": "expo eject",
     "test": "jest --watchAll",
     "lint": "eslint .",
-    "graphql:compile": "amplify api gql-compile",
     "build:ios": "node -r esm publish-check.js prd && node build-version.js ios && expo build:ios -t archive",
     "build:ios:dev": "node -r esm publish-check.js develop && node build-version.js ios && expo build:ios -t archive --release-channel develop",
     "build:android": "node -r esm publish-check.js prd && node build-version.js android && expo build:android",

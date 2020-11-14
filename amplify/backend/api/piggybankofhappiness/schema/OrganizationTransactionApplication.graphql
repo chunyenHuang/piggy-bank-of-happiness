@@ -1,0 +1,35 @@
+# #137 學生可以申請任務/獎品/客製化獎品，老師確認後交易成功，扣除點數。
+type OrganizationTransactionApplication
+  @model (subscriptions: { level: public })
+  @key(name: "byOrganizationByStatus", fields: ["organizationId", "status"], queryField: "getTransactionApplicationsByOrganizationByStatus")
+  @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTransactionApplicationsByUserByCreatedAt")
+  @auth(rules: [
+    {allow: owner, ownerField: "username", operations: [read, create]},
+    {allow: groups, groups: ["OrgManagers"], operations: [read, create]},
+    {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+{
+  id: ID!
+  organizationId: ID!
+  username: String!
+  status: TransactionApplicationStatus!
+  type: TransactionType!
+
+  # optional
+  rewardId: ID
+  taskId: ID
+  points: Int
+  
+  summary: String!
+  description: String!
+
+  createdAt: AWSDateTime!
+  createdBy: String
+  updatedAt: AWSDateTime!
+  updatedBy: String
+
+  # relationship
+  # organization: Organization @connection(fields:["organizationId"])
+  user: OrganizationUser @connection(fields:["organizationId", "username"])
+  # reward: OrganizationReward @connection(fields:["organizationId", "rewardId"])
+}

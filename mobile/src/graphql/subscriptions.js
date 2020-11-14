@@ -658,6 +658,156 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
     }
   }
 `;
+export const onCreateOrganizationTransactionApplication = /* GraphQL */ `
+  subscription OnCreateOrganizationTransactionApplication {
+    onCreateOrganizationTransactionApplication {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
+export const onUpdateOrganizationTransactionApplication = /* GraphQL */ `
+  subscription OnUpdateOrganizationTransactionApplication {
+    onUpdateOrganizationTransactionApplication {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
+export const onDeleteOrganizationTransactionApplication = /* GraphQL */ `
+  subscription OnDeleteOrganizationTransactionApplication {
+    onDeleteOrganizationTransactionApplication {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
 export const onCreateOrganizationUser = /* GraphQL */ `
   subscription OnCreateOrganizationUser {
     onCreateOrganizationUser {

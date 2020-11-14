@@ -529,6 +529,103 @@ export const listOrganizationTransactions = /* GraphQL */ `
     }
   }
 `;
+export const getOrganizationTransactionApplication = /* GraphQL */ `
+  query GetOrganizationTransactionApplication($id: ID!) {
+    getOrganizationTransactionApplication(id: $id) {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
+export const listOrganizationTransactionApplications = /* GraphQL */ `
+  query ListOrganizationTransactionApplications(
+    $filter: ModelOrganizationTransactionApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrganizationTransactionApplications(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        organizationId
+        username
+        status
+        type
+        rewardId
+        taskId
+        points
+        summary
+        description
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getOrganizationUser = /* GraphQL */ `
   query GetOrganizationUser($organizationId: ID!, $username: String!) {
     getOrganizationUser(organizationId: $organizationId, username: $username) {
@@ -1098,6 +1195,112 @@ export const getTransactionsByRewardByDate = /* GraphQL */ `
         points
         type
         note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
+  query GetTransactionApplicationsByOrganizationByStatus(
+    $organizationId: ID
+    $status: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTransactionApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getTransactionApplicationsByOrganizationByStatus(
+      organizationId: $organizationId
+      status: $status
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        organizationId
+        username
+        status
+        type
+        rewardId
+        taskId
+        points
+        summary
+        description
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
+  query GetTransactionApplicationsByUserByCreatedAt(
+    $username: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTransactionApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getTransactionApplicationsByUserByCreatedAt(
+      username: $username
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        organizationId
+        username
+        status
+        type
+        rewardId
+        taskId
+        points
+        summary
+        description
         createdAt
         createdBy
         updatedAt

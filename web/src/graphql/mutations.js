@@ -749,6 +749,174 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationTransactionApplication = /* GraphQL */ `
+  mutation CreateOrganizationTransactionApplication(
+    $input: CreateOrganizationTransactionApplicationInput!
+    $condition: ModelOrganizationTransactionApplicationConditionInput
+  ) {
+    createOrganizationTransactionApplication(
+      input: $input
+      condition: $condition
+    ) {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
+export const updateOrganizationTransactionApplication = /* GraphQL */ `
+  mutation UpdateOrganizationTransactionApplication(
+    $input: UpdateOrganizationTransactionApplicationInput!
+    $condition: ModelOrganizationTransactionApplicationConditionInput
+  ) {
+    updateOrganizationTransactionApplication(
+      input: $input
+      condition: $condition
+    ) {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
+export const deleteOrganizationTransactionApplication = /* GraphQL */ `
+  mutation DeleteOrganizationTransactionApplication(
+    $input: DeleteOrganizationTransactionApplicationInput!
+    $condition: ModelOrganizationTransactionApplicationConditionInput
+  ) {
+    deleteOrganizationTransactionApplication(
+      input: $input
+      condition: $condition
+    ) {
+      id
+      organizationId
+      username
+      status
+      type
+      rewardId
+      taskId
+      points
+      summary
+      description
+      createdAt
+      createdBy
+      updatedAt
+      updatedBy
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          name
+          description
+          registeredName
+          taxIdNumber
+          phoneNumber
+          email
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+  }
+`;
 export const createOrganizationUser = /* GraphQL */ `
   mutation CreateOrganizationUser(
     $input: CreateOrganizationUserInput!
