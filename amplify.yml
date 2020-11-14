@@ -7,7 +7,7 @@ backend:
         - node scripts/fetch-team-provider-info.js
         - cat amplify/team-provider-info.json
         - '# Execute Amplify CLI with the helper script'
-        - node scripts/updateTags.js
+        # - node scripts/updateTags.js
         - node scripts/deploy.js
         - amplify status
         # - amplifyPush --simple

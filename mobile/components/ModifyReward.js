@@ -11,7 +11,7 @@ import { createOrganizationReward, updateOrganizationReward } from '../src/graph
 import check from '../src/permission/check';
 import RewardAvatar from 'components/RewardAvatar';
 
-export default function ModifyTask({ item: inItem, hideButton, onClose }) {
+export default function ModifyReward({ item: inItem, hideButton, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -43,9 +43,10 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
     const now = moment().toISOString();
 
     if (!isEditMode) {
+      const organizationId = await AsyncStorage.getItem('app:organizationId');
       const data = Object.assign(reward, {
-        organizationId: reward.organizationId,
-        id: reward.id,
+        organizationId,
+        id: uuidv1(),
         isActive: 1,
         requiredPoints: parseFloat(reward.requiredPoints) * 100,
         total: parseInt(reward.total),
@@ -73,7 +74,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
     }
 
     resetState();
-    onClose && onClose();
+    if (onClose) onClose();
   };
 
   const resetState = () => {
@@ -143,13 +144,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
       }));
       setVisible(true);
     } else {
-      (async () => {
-        const organizationId = await AsyncStorage.getItem('app:organizationId');
-        setReward({
-          organizationId,
-          id: uuidv1(),
-        });
-      })();
+      setReward({});
     }
   }, [inItem]);
 
@@ -167,7 +162,7 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
         visible={visible}
         onClose={() => {
           resetState();
-          onClose && onClose();
+          if (onClose) onClose();
         }}
         padding
         autoFocus={false}
@@ -182,7 +177,6 @@ export default function ModifyTask({ item: inItem, hideButton, onClose }) {
           errors={errors}
           defaultValue={reward}
           onUpdate={(data)=>{
-            console.log({ ...reward, ...data });
             setReward({ ...reward, ...data });
             setIsDirty(true);
           }}

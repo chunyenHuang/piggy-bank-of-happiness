@@ -1,12 +1,3 @@
-type Mutation {
-  userOperation(input: UserOperationRequest!): UserOperationResponse
-    @function(name: "userOperation-${env}")
-    @aws_cognito_user_pools
-    @auth(rules: [
-      {allow: groups, groups: ["AppAdmins", "OrgAdmins", "OrgManagers"]},
-  ])
-}
-
 input UserOperationRequest {
   force: Boolean
   users: [UserOperationUser!]

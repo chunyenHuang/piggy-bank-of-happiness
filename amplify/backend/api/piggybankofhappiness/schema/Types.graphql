@@ -8,6 +8,13 @@ enum TransactionType {
   reward # use for reward
 }
 
+enum TransactionApplicationStatus {
+  Pending
+  Approved
+  Rejected
+  Cancelled
+}
+
 enum RoleType {
   Admin
   Manager

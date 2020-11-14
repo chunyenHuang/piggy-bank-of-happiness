@@ -63,9 +63,11 @@ export default function RewardAvatar({ organizationId, id, name = '', size = 'me
   }, [s3KeyOriginalImage]);
 
   useEffect(() => {
-    const prefix = `organizations/${organizationId}/rewards/${id}`;
-    setS3Key(`${prefix}/avatar.jpeg`);
-    setS3KeyOriginalImage(`${prefix}/image.jpeg`);
+    if (organizationId && id) {
+      const prefix = `organizations/${organizationId}/rewards/${id}`;
+      setS3Key(`${prefix}/avatar.jpeg`);
+      setS3KeyOriginalImage(`${prefix}/image.jpeg`);
+    }
   }, [organizationId, id]);
 
   return (

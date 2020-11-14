@@ -7,6 +7,7 @@ type OrganizationUser
   @key(name: "byRoleByOrg", fields: ["role", "organizationId"], queryField: "getOrgUsersByRoleByOrg")
   @auth(rules: [
     {allow: owner, ownerField: "username", operations: [read, create]},
+    {allow: groups, groups: ["Users"], operations: [read]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
