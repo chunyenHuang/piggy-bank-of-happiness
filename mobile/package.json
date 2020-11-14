@@ -17,7 +17,7 @@
     "upload:ios": "expo upload:ios",
     "upload:android": "expo upload:android --latest",
     "publish": "node -r esm publish-check.js prd && expo publish",
-    "publish:dev": "node -r esm publish-check.js develop && expo publish --release-channel develop"
+    "publish:dev": "node -r esm publish-check.js develop && node build-version.js && expo publish --release-channel develop"
   },
   "jest": {
     "preset": "jest-expo"
