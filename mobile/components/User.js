@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
-// import { API, graphqlOperation } from 'aws-amplify';
 import { FloatingAction } from 'react-native-floating-action';
 
 import request from '../src/utils/request';
@@ -10,8 +9,6 @@ import { getOrganizationUser } from '../src/graphql/queries';
 import AddTaskToUser from './AddTaskToUser';
 import UserTransactionList from './UserTransactionList';
 import PointsHandler from './PointsHandler';
-// import { onUpdateOrganizationUser } from '../src/graphql/subscriptions';
-// import check from '../src/permission/check';
 import Colors from '../constants/Colors';
 import { currency } from '../src/utils/format';
 import AddRewardToUser from './AddRewardToUser';
@@ -92,26 +89,9 @@ export default function User({ user: inUser, mode }) {
   useEffect(() => {
     if (!inUser) return;
 
-    // let subscription;
     (async () => {
       await load();
-
-      // if (await check('ORG_USER__SUBSCRIPTION')) {
-      //   subscription = API
-      //     .graphql(graphqlOperation(onUpdateOrganizationUser))
-      //     .subscribe({
-      //       next: (event) => {
-      //         if (event) {
-      //           const updatedUser = event.value.data.onUpdateOrganizationUser;
-      //           setUser(updatedUser);
-      //         }
-      //       },
-      //     });
-      // }
     })();
-    // return () => {
-    //   subscription && subscription.unsubscribe();
-    // };
   }, [inUser]);
 
   useEffect(() => {
