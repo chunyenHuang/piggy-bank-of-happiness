@@ -47,7 +47,7 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
 
   const renderFooter = () => (
     <View style={styles.extraItem}>
-      {!nextToken &&
+      {nextToken === null &&
         <Text style={{ textAlign: 'center', padding: 16, color: Colors.light }}>
           已顯示全部資料
         </Text>}
