@@ -10,6 +10,7 @@ backend:
         # - node scripts/updateTags.js
         - node scripts/deploy.js
         - amplify status
+        - amplify push -y
         # - amplifyPush --simple
         
 # frontend:
