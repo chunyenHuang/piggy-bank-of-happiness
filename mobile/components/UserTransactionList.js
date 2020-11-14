@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, RefreshControl, FlatList } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import Colors from '../constants/Colors';
@@ -10,20 +10,49 @@ import { getTransactionsByUserByCreatedAt } from '../src/graphql/queries';
 
 export default function UserTransactionList({ user = {}, onUpdate }) {
   const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [nextToken, setNextToken] = useState(undefined);
 
-  const load = async () => {
+  const load = async (inNextToken) => {
     const { username } = user;
 
     if (!username) return;
 
-    const { data: { getTransactionsByUserByCreatedAt: { items } } } = await request(getTransactionsByUserByCreatedAt, {
+    setIsLoading(true);
+    const { data: { getTransactionsByUserByCreatedAt: { items, nextToken } } } = await request(getTransactionsByUserByCreatedAt, {
       username,
       sortDirection: 'DESC',
-      limit: 20,
+      nextToken: inNextToken,
+      limit: 10,
     });
+    if (inNextToken) {
+      setTransactions([...transactions, ...items.sort(sortBy('createdAt', true))]);
+    } else {
+      setTransactions(items.sort(sortBy('createdAt', true)));
+    }
 
-    setTransactions(items.sort(sortBy('createdAt', true)));
+    setNextToken(nextToken);
+    setIsLoading(false);
   };
+
+  const renderItem = ({ item }) => (
+    <TransactionListItem
+      transaction={item}
+      onUpdate={()=>{
+        load();
+        onUpdate();
+      }}
+    />
+  );
+
+  const renderFooter = () => (
+    <View style={styles.extraItem}>
+      {!nextToken &&
+        <Text style={{ textAlign: 'center', padding: 16, color: Colors.light }}>
+          已顯示全部資料
+        </Text>}
+    </View>
+  );
 
   useEffect(() => {
     load();
@@ -32,19 +61,26 @@ export default function UserTransactionList({ user = {}, onUpdate }) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>交易紀錄</Text>
-      <ScrollView style={styles.container} scrollIndicatorInsets={{ right: 1 }}>
-        {transactions.map((tx, index) => (
-          <TransactionListItem
-            key={index}
-            transaction={tx}
-            onUpdate={()=>{
+      <FlatList
+        ListFooterComponent={renderFooter}
+        scrollIndicatorInsets={{ right: 1 }}
+        data={transactions}
+        renderItem={renderItem}
+        keyExtractor={({ id }) => id}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={()=>{
               load();
-              onUpdate();
-            }}
-          />
-        ))}
-        <View style={styles.extraItem} />
-      </ScrollView>
+            }} />
+        }
+        onEndReached={({ distanceFromEnd })=>{
+          if (!isLoading && distanceFromEnd < 0 && nextToken) {
+            load(nextToken);
+          }
+        }}
+        onEndReachedThreshold={0}
+      />
     </View>
   );
 }
@@ -54,6 +90,7 @@ const styles = StyleSheet.create({
   },
   extraItem: {
     height: 100,
+    textAlign: 'center',
   },
   header: {
     fontSize: 18,
