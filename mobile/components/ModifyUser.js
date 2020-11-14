@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
-// import moment from 'moment';
+import { Hub } from 'aws-amplify';
+
 import AddButton from './AddButton';
 import CustomModal from './CustomModal';
 import Form from './Form';
 import request, { asyncListAll } from 'src/utils/request';
-import { listOrganizationGroups } from 'src/graphql/queries';
+import { listOrganizationGroups, getOrganizationUser } from 'src/graphql/queries';
 import { userOperation } from 'src/graphql/mutations';
 import check from 'src/permission/check';
 import { sortBy } from 'src/utils/sorting';
@@ -20,7 +21,6 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
   const [visible, setVisible] = useState(!!inVisible);
   const [isDirty, setIsDirty] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [originalUser, setOriginalUser] = useState({});
   const [user, setUser] = useState({});
   const [errors, setErrors] = useState([]);
 
@@ -78,7 +78,6 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
         // await request(updateOrganizationUser, { input: data });
         await request(userOperation, { input: { users: [data] } });
       }
-      resetState();
     } catch (err) {
       global.logger.error(err);
     } finally {
@@ -86,14 +85,20 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
     }
 
     resetState();
-    onClose && onClose();
   };
 
   const resetState = () => {
     setIsLoading(false);
     setVisible(false);
     setIsDirty(false);
+    if (!inUser) {
+      setUser({});
+    }
     setErrors([]);
+
+    Hub.dispatch('user', { event: 'reload' });
+
+    if (onClose) onClose();
   };
 
   const fields = [
@@ -184,14 +189,15 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
   ];
 
   useEffect(() => {
-    if (inUser) {
-      setOriginalUser(Object.assign({}, inUser, {
-        isActive: inUser.isActive === 1,
-      }));
-      setUser(Object.assign({}, inUser, {
-        isActive: inUser.isActive === 1,
-      }));
-    }
+    (async () => {
+      if (inUser) {
+        const { organizationId, username } = inUser;
+        const { data: { getOrganizationUser: user } } = await request(getOrganizationUser, { organizationId, username });
+        setUser(Object.assign({}, user, {
+          isActive: inUser.isActive === 1,
+        }));
+      }
+    })();
   }, [inUser]);
 
   useEffect(() => {
@@ -215,15 +221,7 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
       <CustomModal
         title={`${isEditMode ? '修改':'新增'}個人資料`}
         visible={visible}
-        onClose={() => {
-          // restore user data
-          setVisible(false);
-          const cloneOrignalUser = JSON.parse(JSON.stringify(originalUser));
-          setUser(cloneOrignalUser);
-          setIsDirty(false);
-          setErrors([]);
-          onClose && onClose();
-        }}
+        onClose={resetState}
         padding
         bottomButtonProps={{
           title: `確認`,

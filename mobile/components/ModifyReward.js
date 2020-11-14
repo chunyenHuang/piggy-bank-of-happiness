@@ -74,7 +74,7 @@ export default function ModifyReward({ item: inItem, hideButton, onClose }) {
     }
 
     resetState();
-    onClose && onClose();
+    if (onClose) onClose();
   };
 
   const resetState = () => {
@@ -162,7 +162,7 @@ export default function ModifyReward({ item: inItem, hideButton, onClose }) {
         visible={visible}
         onClose={() => {
           resetState();
-          onClose && onClose();
+          if (onClose) onClose();
         }}
         padding
         autoFocus={false}
