@@ -7,6 +7,7 @@ import UserListScreen from 'screens/UserListScreen';
 import TaskListScreen from 'screens/TaskListScreen';
 import RewardListScreen from 'screens/RewardListScreen';
 import UserTransactionListScreen from 'screens/UserTransactionListScreen';
+import UserTransactionApplicationListScreen from 'screens/UserTransactionApplicationListScreen';
 import StaffListScreen from 'screens/StaffListScreen';
 import PendingApprovalUserListScreen from 'screens/PendingApprovalUserListScreen';
 // import Colors from 'constants/Colors';
@@ -44,6 +45,17 @@ export default [
     options: {
       title: '存摺',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-card" />,
+    },
+    groups: ['Users', 'N/A'],
+  },
+  {
+    type: 'bottom-tab',
+    name: 'UserTransactionApplicationList',
+    component: UserTransactionApplicationListScreen,
+    title: '我的申請列表',
+    options: {
+      title: '申請',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
     },
     groups: ['Users', 'N/A'],
   },

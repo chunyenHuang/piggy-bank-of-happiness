@@ -763,11 +763,12 @@ export const createOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
       taskId
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -796,6 +797,37 @@ export const createOrganizationTransactionApplication = /* GraphQL */ `
           phoneNumber
           email
           isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt
@@ -819,11 +851,12 @@ export const updateOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
       taskId
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -858,6 +891,37 @@ export const updateOrganizationTransactionApplication = /* GraphQL */ `
           updatedBy
         }
       }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
     }
   }
 `;
@@ -875,11 +939,12 @@ export const deleteOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
       taskId
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -908,6 +973,37 @@ export const deleteOrganizationTransactionApplication = /* GraphQL */ `
           phoneNumber
           email
           isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt

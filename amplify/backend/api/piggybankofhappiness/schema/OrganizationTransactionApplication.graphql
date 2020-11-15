@@ -14,14 +14,15 @@ type OrganizationTransactionApplication
   username: String!
   status: TransactionApplicationStatus!
   type: TransactionType!
+  transactionId: ID!
 
   # optional
   rewardId: ID
   taskId: ID
   points: Int
   
-  summary: String!
   description: String!
+  note: String
 
   createdAt: AWSDateTime!
   createdBy: String
@@ -31,5 +32,5 @@ type OrganizationTransactionApplication
   # relationship
   # organization: Organization @connection(fields:["organizationId"])
   user: OrganizationUser @connection(fields:["organizationId", "username"])
-  # reward: OrganizationReward @connection(fields:["organizationId", "rewardId"])
+  transaction: OrganizationTransaction @connection(fields:["organizationId", "transactionId"])
 }

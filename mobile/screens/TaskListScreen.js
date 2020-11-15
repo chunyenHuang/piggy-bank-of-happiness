@@ -1,12 +1,24 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { a } from 'aws-amplify';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 
 import TaskList from '../components/TaskList';
 
 export default function TaskListScreen() {
+  const [mode, setMode] = useState('edit');
+
+  useEffect(() => {
+    (async () => {
+      const group = await AsyncStorage.getItem('app:group');
+      if (group === 'Users') {
+        setMode('none');
+      }
+    })();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <TaskList />
+      <TaskList mode={mode}/>
     </View>
   );
 }

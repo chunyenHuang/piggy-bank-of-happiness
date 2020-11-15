@@ -537,11 +537,12 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
       taskId
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -576,6 +577,37 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
           updatedBy
         }
       }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
     }
   }
 `;
@@ -596,11 +628,12 @@ export const listOrganizationTransactionApplications = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
         taskId
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -616,6 +649,21 @@ export const listOrganizationTransactionApplications = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
@@ -1243,11 +1291,12 @@ export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
         taskId
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -1263,6 +1312,21 @@ export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
@@ -1296,11 +1360,12 @@ export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
         taskId
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -1316,6 +1381,21 @@ export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
