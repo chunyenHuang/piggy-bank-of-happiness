@@ -24,16 +24,32 @@ export const select = async (options = {}) => {
     allowsEditing,
     aspect,
     quality,
-    exif: false,
+    exif: true,
   };
 
-  const { cancelled, uri, width, height } = await ImagePicker.launchImageLibraryAsync(launchParams);
+  const { cancelled, uri, width, height, exif } = await ImagePicker.launchImageLibraryAsync(launchParams);
+
+  let updatedWidth = width;
+  let updatedHeight = height;
+  if (exif) {
+    const { Orientation, ImageWidth, ImageLength } = exif;
+    switch (Orientation) {
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      updatedWidth = ImageLength;
+      updatedHeight = ImageWidth;
+      break;
+    default:
+    }
+  }
 
   if (cancelled) {
     return;
   }
 
-  return { uri, width, height };
+  return { uri, width: updatedWidth, height: updatedHeight };
 };
 
 export const upload = async (uri, s3Key, options = {}) => {

@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.1.7",
+    "version": "1.1.8",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -25,13 +25,13 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "buildNumber": "53",
+      "buildNumber": "54",
       "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
       "infoPlist": {}
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 35
+      "versionCode": 36
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
