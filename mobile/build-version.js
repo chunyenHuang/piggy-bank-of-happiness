@@ -5,6 +5,11 @@ const appJson = require(appJsonFilePath);
 
 const target = process.argv[2];
 
+const bumpAppVersion = () => {
+  const [major, minor, patch] = appJson.expo.version.split('.');
+  appJson.expo.version = `${major}.${minor}.${parseInt(patch) + 1}`;
+};
+
 const bumpIos = () => {
   appJson.expo.ios.buildNumber = `${parseInt(appJson.expo.ios.buildNumber) + 1}`;
 };
@@ -21,6 +26,7 @@ if (target === 'android') {
 } else {
   bumpIos();
   bumpAndroid();
+  bumpAppVersion();
 }
 
 fs.writeFileSync(appJsonFilePath, JSON.stringify(appJson, null, 2));
