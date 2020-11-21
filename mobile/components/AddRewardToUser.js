@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Hub } from 'aws-amplify';
+import { v1 as uuidv1 } from 'uuid';
 
 import request from '../src/utils/request';
-import { adminUpdatePoint } from '../src/graphql/mutations';
+import { adminUpdatePoint, createOrganizationTransactionApplication } from '../src/graphql/mutations';
 import RewardList from './RewardList';
 import CustomModal from './CustomModal';
 import Colors from 'constants/Colors';
 
-export default function AddRewardToUser({ user, visible, onUpdate, onClose }) {
+export default function AddRewardToUser({ user, isApplication = false, visible, onUpdate, onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const [rewards, setRewards] = useState([]);
   const [summary, setSummary] = useState({});
@@ -49,30 +50,53 @@ export default function AddRewardToUser({ user, visible, onUpdate, onClose }) {
     Hub.dispatch('app', { event: 'loading' });
 
     const { organizationId, username } = user;
-
     console.log(rewards);
 
-    const payload = {
-      input: {
-        organizationId,
-        username,
-        actions: rewards.map(({ id, amount }) => {
-          return {
+    if (isApplication) {
+      await Promise.all(rewards.map(async (reward) => {
+        const { requiredPoints, id, amount, name } = reward;
+
+        const payload = {
+          input: {
+            organizationId,
+            username,
+            status: 'Pending',
+            type: 'reward',
+            transactionId: uuidv1(),
             rewardId: id,
             rewardAmount: amount,
-          };
-        }),
-      },
-    };
+            points: -(requiredPoints * amount),
+            description: `${name} 點數 ${requiredPoints / 100} x 數量 ${amount}`,
+            createdBy: username,
+            updatedBy: username,
+          },
+        };
 
-    console.log(payload);
+        await request(createOrganizationTransactionApplication, payload);
+      }));
+    } else {
+      const payload = {
+        input: {
+          organizationId,
+          username,
+          actions: rewards.map(({ id, amount }) => {
+            return {
+              rewardId: id,
+              rewardAmount: amount,
+            };
+          }),
+        },
+      };
 
-    await request(adminUpdatePoint, payload);
+      console.log(payload);
+
+      await request(adminUpdatePoint, payload);
+    }
 
     Hub.dispatch('app', { event: 'loading-complete' });
     setIsLoading(false);
-    onUpdate && onUpdate();
-    onClose && onClose();
+    if (onUpdate) onUpdate();
+    if (onClose) onClose();
   };
 
   useEffect(() => {

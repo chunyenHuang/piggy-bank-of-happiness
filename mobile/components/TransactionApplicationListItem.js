@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { ListItem, Input, Icon } from 'react-native-elements';
 import moment from 'moment';
 import { Button } from 'react-native-paper';
@@ -8,70 +8,88 @@ import CustomModal from './CustomModal';
 import Colors from '../constants/Colors';
 import { currency, shortString } from '../src/utils/format';
 import request from '../src/utils/request';
-import { adminUpdatePoint, updateOrganizationTransaction } from '../src/graphql/mutations';
-import check from '../src/permission/check';
-import { getPropsByType } from 'constants/Transaction';
+import { adminUpdatePoint, updateOrganizationTransactionApplication } from '../src/graphql/mutations';
+import { getPropsByStatus, getPropsByType } from 'constants/Transaction';
 
-export default function TransactionApplicationListItem({ transaction: inData, onUpdate }) {
+export default function TransactionApplicationListItem({ transaction: inData, mode = 'user', onUpdate }) {
   const [transaction, setTransaction] = useState(undefined);
 
   const [visible, setVisible] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [note, setNote] = useState('');
 
-  const cancel = async ({ points, id, organizationId, username, note }) => {
+  const update = async (status) => {
     setIsLoading(true);
-    // Create a new tx to balance the current transaction
-
-    const payload = {
-      input: {
-        organizationId,
-        username,
-        actions: [{
-          type: 'cancel',
-          points,
-          note: `取消 ${note}`,
-          refTransactionId: id,
-        }],
-      },
-    };
-
-    console.log(payload);
-
-    await request(adminUpdatePoint, payload);
-
-    setIsLoading(false);
-    setVisible(false);
-    if (onUpdate) onUpdate();
-  };
-
-  const updateNote = async () => {
-    setIsLoading(true);
-    const { id, organizationId } = transaction;
 
     const currentUsername = await AsyncStorage.getItem('app:username');
 
-    const updatedTransaction = {
-      organizationId,
-      id,
-      note,
-      updatedBy: currentUsername,
-      updatedAt: moment().toISOString(),
+    const payload = {
+      input: {
+        id: transaction.id,
+        status,
+        note,
+        updatedBy: currentUsername,
+      },
     };
-    await request(updateOrganizationTransaction, { input: updatedTransaction });
 
-    setVisible(false);
+    await request(updateOrganizationTransactionApplication, payload);
+
+    // create real transaction
+    const {
+      organizationId,
+      username,
+      transactionId,
+      type,
+      taskId,
+      taskName,
+      points,
+      rewardId,
+      rewardAmount,
+      description,
+    } = transaction;
+    let action;
+    switch (type) {
+    case 'credits':
+    case 'tasks':
+      action = {
+        transactionId,
+        taskId,
+        taskName,
+        taskPoints: points,
+      };
+      break;
+    case 'reward':
+      action = {
+        transactionId,
+        rewardId,
+        rewardAmount,
+      };
+      break;
+    case 'withdraw':
+      action = {
+        transactionId,
+        type,
+        points,
+        note: description,
+      };
+      break;
+    }
+    const pointPayload = {
+      input: {
+        organizationId,
+        username,
+        actions: [action],
+      },
+    };
+
+    console.log(pointPayload);
+
+    await request(adminUpdatePoint, pointPayload);
 
     if (onUpdate) onUpdate();
+
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    if (visible) {
-      setIsDirty(false);
-    }
-  }, [visible]);
 
   useEffect(() => {
     setTransaction(inData);
@@ -86,6 +104,9 @@ export default function TransactionApplicationListItem({ transaction: inData, on
     icon,
     iconType,
   } = getPropsByType(transaction.type);
+  const {
+    label: statusLabel,
+  } = getPropsByStatus(transaction.status);
   const amount = currency(transaction.points);
   const date = moment(transaction.createdAt).format('MM/DD/YYYY hh:mm');
 
@@ -94,7 +115,11 @@ export default function TransactionApplicationListItem({ transaction: inData, on
       <ListItem
         key={transaction.id}
         bottomDivider
-        onPress={() => setVisible(true)}
+        onPress={() => {
+          if (mode === 'admin') {
+            setVisible(true);
+          }
+        }}
       >
         <Icon
           name={icon}
@@ -104,52 +129,35 @@ export default function TransactionApplicationListItem({ transaction: inData, on
           size={15}
         />
         <ListItem.Content>
-          <ListItem.Title style={styles.title}>{transaction.note ? shortString(transaction.note, 50) : transaction.type}</ListItem.Title>
-          <ListItem.Subtitle style={styles.subtitle}>{`${date} 經手人 ${transaction.createdBy}`}</ListItem.Subtitle>
+          {mode === 'user' && <ListItem.Title style={styles.title}>
+            {label} ({statusLabel})
+          </ListItem.Title>}
+          {mode === 'admin' && <ListItem.Title style={styles.title}>
+            {transaction.user.name} ({label})
+          </ListItem.Title>}
+          <React.Fragment>
+            <ListItem.Subtitle style={styles.subtitle}>
+              {shortString(transaction.description, 100)}
+            </ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.subtitle}>
+              {date}
+            </ListItem.Subtitle>
+          </React.Fragment>
         </ListItem.Content>
         <ListItem.Title style={{ ...styles.rightTitle, color }}>{amount}</ListItem.Title>
-        <ListItem.Chevron />
+        {mode === 'admin' && <ListItem.Chevron />}
       </ListItem>
       <CustomModal
-        title="交易紀錄"
+        title="申請細項"
         visible={visible}
         onClose={() => setVisible(false)}
         padding
-        bottomButtonProps={{
-          title: `確認`,
-          onPress: ()=> updateNote(),
-          disabled: isLoading || !isDirty,
-        }}
+        // bottomButtonProps={{
+        //   title: `確認`,
+        //   onPress: ()=> updateNote(),
+        //   disabled: isLoading || !isDirty,
+        // }}
       >
-        <View style={styles.headerContainer}>
-          {transaction.type !== 'cancel' &&
-           transaction.type !== 'reward' &&
-           !transaction.isCancelled &&
-          <Button
-            color={Colors.error}
-            compact={true}
-            onPress={async ()=> {
-              if (!await check('ORG_TX__CANCEL', true)) return;
-
-              Alert.alert(
-                '取消交易亦會修正使用者餘額',
-                '',
-                [
-                  {
-                    text: '放棄',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                  { text: '確認取消交易', onPress: () => cancel(transaction) },
-                ],
-                { cancelable: false },
-              );
-            }}
-            disabled={isLoading}
-          >
-            取消交易
-          </Button>}
-        </View>
         <Input
           label="類別"
           value={label}
@@ -166,22 +174,51 @@ export default function TransactionApplicationListItem({ transaction: inData, on
           disabled={true}
         />
         <Input
-          label="經手人"
-          value={transaction.createdBy}
+          label="申請人"
+          value={`${transaction.user.name} (${transaction.createdBy})`}
+          disabled={true}
+        />
+        <Input
+          label="用途"
+          placeholder='用途'
+          multiline={true}
+          numberOfLines={5}
+          value={transaction.description}
           disabled={true}
         />
         <Input
           label="備註"
-          placeholder='原因/用途...'
+          placeholder='原因'
           multiline={true}
           numberOfLines={5}
           value={note}
           onChangeText={(value)=>{
-            setIsDirty(true);
             setNote(value);
           }}
           disabled={isLoading}
         />
+        {transaction.status === 'Pending' &&
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+          <Button
+            color={Colors.error}
+            dark={true}
+            mode="contained"
+            disabled={isLoading}
+            onPress={() => update('Rejected')}
+          >
+            拒絕
+          </Button>
+          <View style={{ flex: 1 }} />
+          <Button
+            color={Colors.primary}
+            dark={true}
+            mode="contained"
+            disabled={isLoading}
+            onPress={() => update('Approved')}
+          >
+            批准
+          </Button>
+        </View>}
       </CustomModal>
     </View>
   );

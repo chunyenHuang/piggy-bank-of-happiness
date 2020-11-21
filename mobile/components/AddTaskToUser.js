@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Hub } from 'aws-amplify';
+import { v1 as uuidv1 } from 'uuid';
 
 import request from '../src/utils/request';
-import { adminUpdatePoint } from '../src/graphql/mutations';
+import { adminUpdatePoint, createOrganizationTransactionApplication } from '../src/graphql/mutations';
 import TaskList from './TaskList';
 import CustomModal from './CustomModal';
 import Colors from 'constants/Colors';
 
-export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onClose }) {
+export default function AddTaskToUser({ user, isApplication, onUpdate, visible: inVisible, onClose }) {
   const [visible, setVisible] = useState(!!inVisible);
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
@@ -32,23 +33,46 @@ export default function AddTaskToUser({ user, onUpdate, visible: inVisible, onCl
 
     console.log(tasks);
 
-    const payload = {
-      input: {
-        organizationId,
-        username,
-        actions: tasks.map(({ id, name, point }) => {
-          return {
+    if (isApplication) {
+      await Promise.all(tasks.map(async (task) => {
+        const { id, name, point } = task;
+
+        const payload = {
+          input: {
+            organizationId,
+            username,
+            status: 'Pending',
+            type: 'credits',
+            transactionId: uuidv1(),
             taskId: id,
-            taskName: name,
-            taskPoints: point,
-          };
-        }),
-      },
-    };
+            points: point,
+            description: `任務 ${name}`,
+            createdBy: username,
+            updatedBy: username,
+          },
+        };
 
-    console.log(payload);
+        await request(createOrganizationTransactionApplication, payload);
+      }));
+    } else {
+      const payload = {
+        input: {
+          organizationId,
+          username,
+          actions: tasks.map(({ id, name, point }) => {
+            return {
+              taskId: id,
+              taskName: name,
+              taskPoints: point,
+            };
+          }),
+        },
+      };
 
-    await request(adminUpdatePoint, payload);
+      console.log(payload);
+
+      await request(adminUpdatePoint, payload);
+    }
 
     Hub.dispatch('app', { event: 'loading-complete' });
     setIsLoading(false);

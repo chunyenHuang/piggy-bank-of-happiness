@@ -36,6 +36,7 @@ module.exports = async ({
 
   const checkPromises = actions.map(async (action) => {
     const {
+      transactionId: inTransactionId,
       taskId,
       taskName,
       taskPoints,
@@ -46,7 +47,7 @@ module.exports = async ({
       note,
       refTransactionId,
     } = action;
-    const transactionId = uuidv1();
+    const transactionId = inTransactionId || uuidv1();
 
     if (taskId && taskName && taskPoints) {
       toUpdatePoints += taskPoints;

@@ -50,17 +50,6 @@ export default [
   },
   {
     type: 'bottom-tab',
-    name: 'UserTransactionApplicationList',
-    component: UserTransactionApplicationListScreen,
-    title: '我的申請列表',
-    options: {
-      title: '申請',
-      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
-    },
-    groups: ['Users', 'N/A'],
-  },
-  {
-    type: 'bottom-tab',
     name: 'UserList',
     component: UserListScreen,
     title: '學生列表',
@@ -92,6 +81,17 @@ export default [
     options: {
       title: '獎品',
       tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-star" />,
+    },
+    groups: ['All'],
+  },
+  {
+    type: 'bottom-tab',
+    name: 'UserTransactionApplicationList',
+    component: UserTransactionApplicationListScreen,
+    title: '申請列表',
+    options: {
+      title: '申請',
+      tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-checkmark-circle-outline" />,
     },
     groups: ['All'],
   },

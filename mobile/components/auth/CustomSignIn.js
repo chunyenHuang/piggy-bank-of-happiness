@@ -111,7 +111,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
   }, []);
 
   const goto = (state) => {
-    onStateChange && onStateChange(state, {});
+    if (onStateChange) onStateChange(state, {});
   };
 
   const submit = async () => {

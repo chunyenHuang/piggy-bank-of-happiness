@@ -1,31 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, RefreshControl, FlatList } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, ButtonGroup } from 'react-native-elements';
 
 import Colors from 'constants/Colors';
 import { sortBy } from 'src/utils/sorting';
 import request from 'src/utils/request';
-import { getTransactionApplicationsByUserByCreatedAt } from 'src/graphql/queries';
+import {
+  getTransactionApplicationsByUserByStatus,
+  getTransactionApplicationsByOrganizationByStatus,
+} from 'src/graphql/queries';
 import TransactionApplicationListItem from './TransactionApplicationListItem';
+import { getPropsByStatus } from 'constants/Transaction';
 
-export default function TransactionApplicationList({ username, onUpdate }) {
+const statusButtons = ['Pending', 'Approved', 'Rejected'].map((key) => {
+  return getPropsByStatus(key);
+});
+
+export default function TransactionApplicationList({ organizationId, username, onUpdate, lastUpdatedAt }) {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [nextToken, setNextToken] = useState(undefined);
 
   const load = async (inNextToken) => {
-    if (!username) return;
-
     setIsLoading(true);
 
     if (username) {
-      const { data: { getTransactionApplicationsByUserByCreatedAt: { items, nextToken } } } = await request(getTransactionApplicationsByUserByCreatedAt, {
+      const { data: { getTransactionApplicationsByUserByStatus: { items, nextToken } } } = await request(getTransactionApplicationsByUserByStatus, {
         username,
+        status: {
+          eq: statusButtons[selectedIndex].key,
+        },
         sortDirection: 'DESC',
         nextToken: inNextToken,
         limit: 10,
       });
-      console.log(items);
+
+      if (inNextToken) {
+        setTransactions([...transactions, ...items.sort(sortBy('createdAt', true))]);
+      } else {
+        setTransactions(items.sort(sortBy('createdAt', true)));
+      }
+
+      setNextToken(nextToken);
+    } else
+    if (organizationId) {
+      // Admins
+      const {
+        data: {
+          getTransactionApplicationsByOrganizationByStatus: { items, nextToken },
+        },
+      } = await request(getTransactionApplicationsByOrganizationByStatus, {
+        organizationId,
+        status: {
+          eq: statusButtons[selectedIndex].key,
+        },
+        sortDirection: 'DESC',
+        nextToken: inNextToken,
+        limit: 10,
+      });
+
       if (inNextToken) {
         setTransactions([...transactions, ...items.sort(sortBy('createdAt', true))]);
       } else {
@@ -40,10 +74,11 @@ export default function TransactionApplicationList({ username, onUpdate }) {
 
   const renderItem = ({ item }) => (
     <TransactionApplicationListItem
+      mode={username ? 'user' : 'admin'}
       transaction={item}
       onUpdate={()=>{
         load();
-        onUpdate();
+        if (onUpdate) onUpdate();
       }}
     />
   );
@@ -59,11 +94,16 @@ export default function TransactionApplicationList({ username, onUpdate }) {
 
   useEffect(() => {
     load();
-  }, [username]);
+  }, [organizationId, username, selectedIndex, lastUpdatedAt]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>申請紀錄</Text>
+      {/* <Text style={styles.header}>申請紀錄</Text> */}
+      <ButtonGroup
+        onPress={setSelectedIndex}
+        selectedIndex={selectedIndex}
+        buttons={statusButtons.map(({ label }) => label)}
+      />
       <FlatList
         ListFooterComponent={renderFooter}
         scrollIndicatorInsets={{ right: 1 }}

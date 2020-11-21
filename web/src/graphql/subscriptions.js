@@ -668,7 +668,9 @@ export const onCreateOrganizationTransactionApplication = /* GraphQL */ `
       type
       transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
       description
       note
@@ -750,7 +752,9 @@ export const onUpdateOrganizationTransactionApplication = /* GraphQL */ `
       type
       transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
       description
       note
@@ -832,7 +836,9 @@ export const onDeleteOrganizationTransactionApplication = /* GraphQL */ `
       type
       transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
       description
       note

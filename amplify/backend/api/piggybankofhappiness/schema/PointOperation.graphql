@@ -15,6 +15,8 @@ input AdminUpdatePointRequest {
 }
 
 input PointOperationRequestAdminUpdatePointAction {
+  transactionId: ID
+
   # credit
   taskId: ID # optional: for creating task and complete
   taskName: String

@@ -37,6 +37,8 @@ export default function PointsHandler({
     const points = parseFloat(amount) * 100;
 
     if (isApplication) {
+      const calculatedPoints = mode === 'withdraw' ? -points : points;
+
       const payload = {
         input: {
           organizationId,
@@ -44,7 +46,7 @@ export default function PointsHandler({
           status: 'Pending',
           type: mode,
           transactionId: uuidv1(),
-          points,
+          points: calculatedPoints,
           description: note,
           createdBy: username,
           updatedBy: username,

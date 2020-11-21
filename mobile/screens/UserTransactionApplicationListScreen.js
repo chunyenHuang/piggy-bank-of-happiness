@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Text, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { FloatingAction } from 'react-native-floating-action';
-import { Hub } from 'aws-amplify';
 
-import request, { asyncListAll } from 'src/utils/request';
-import { getOrganizationUser } from 'src/graphql/queries';
 import Colors from 'constants/Colors';
 import AddRewardToUser from 'components/AddRewardToUser';
 import AddTaskToUser from 'components/AddTaskToUser';
@@ -48,11 +45,12 @@ const actions = [
 
 export default function UserTransactionApplicationListScreen() {
   const [user, setUser] = useState({});
-  const [data, setData] = useState([]);
 
   const [withdrawVisible, setWithdrawVisible] = useState(false);
   const [addRewardVisible, setAddRewardVisible] = useState(false);
   const [addTaskVisible, setAddTaskVisible] = useState(false);
+
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(Date.now());
 
   const onWithdrawClose = () => {
     setWithdrawVisible(false);
@@ -77,50 +75,65 @@ export default function UserTransactionApplicationListScreen() {
 
     if (!username) return;
 
-    // Hub.dispatch('app', { event: 'loading' });
-
-    // const data = await asyncListAll(getTransactionApplicationsByUserByCreatedAt, { username, sortDirection: 'DESC' });
-    // console.log(data);
-    // setData(data);
-
-    // Hub.dispatch('app', { event: 'loading-complete' });
+    setLastUpdatedAt(Date.now());
   };
 
   useEffect(() => {
-    (async () => {
-      await load();
-    })();
+    load();
   }, [user]);
 
   useEffect(() => {
     (async () => {
-      const [organizationId, username] = await Promise.all([
+      const [organizationId, username, group] = await Promise.all([
         AsyncStorage.getItem('app:organizationId'),
         AsyncStorage.getItem('app:username'),
+        AsyncStorage.getItem('app:group'),
       ]);
-      setUser({ organizationId, username });
+
+      setUser({ organizationId, username, group });
     })();
   }, []);
 
+  if (user.group === 'Users') {
+    return (
+      <View style={styles.container}>
+        <TransactionApplicationList username={user.username} lastUpdatedAt={lastUpdatedAt} />
+
+        <FloatingAction
+          actions={actions}
+          onPressItem={onActionPressed}
+          color={Colors.primary}
+        />
+        <PointsHandler
+          user={user}
+          isApplication={true}
+          mode={'withdraw'}
+          visible={withdrawVisible}
+          onClose={onWithdrawClose}
+          onUpdate={load}
+        />
+        <AddRewardToUser
+          user={user}
+          isApplication={true}
+          visible={addRewardVisible}
+          onClose={() => setAddRewardVisible(false)}
+          onUpdate={load}
+        />
+        <AddTaskToUser
+          user={user}
+          isApplication={true}
+          visible={addTaskVisible}
+          onClose={() => setAddTaskVisible(false)}
+          onUpdate={load}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <FloatingAction
-        actions={actions}
-        onPressItem={onActionPressed}
-        color={Colors.primary}
-      />
-      <PointsHandler
-        user={user}
-        isApplication={true}
-        mode={'withdraw'}
-        visible={withdrawVisible}
-        onClose={onWithdrawClose}
-        onUpdate={load}
-      />
-
-      <TransactionApplicationList username={user.username} />
-    </View>
-  );
+      <TransactionApplicationList organizationId={user.organizationId}/>
+    </View>);
 }
 
 UserTransactionApplicationListScreen.navigationOptions = {

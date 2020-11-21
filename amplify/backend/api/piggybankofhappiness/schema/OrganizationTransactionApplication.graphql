@@ -3,6 +3,7 @@ type OrganizationTransactionApplication
   @model (subscriptions: { level: public })
   @key(name: "byOrganizationByStatus", fields: ["organizationId", "status"], queryField: "getTransactionApplicationsByOrganizationByStatus")
   @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTransactionApplicationsByUserByCreatedAt")
+  @key(name: "byUserByStatus", fields: ["username","status"], queryField: "getTransactionApplicationsByUserByStatus")
   @auth(rules: [
     {allow: owner, ownerField: "username", operations: [read, create]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, create]},
@@ -18,7 +19,9 @@ type OrganizationTransactionApplication
 
   # optional
   rewardId: ID
+  rewardAmount: Int
   taskId: ID
+  taskName: String
   points: Int
   
   description: String!

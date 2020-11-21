@@ -539,7 +539,9 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
       type
       transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
       description
       note
@@ -630,7 +632,9 @@ export const listOrganizationTransactionApplications = /* GraphQL */ `
         type
         transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
         points
         description
         note
@@ -1293,7 +1297,9 @@ export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
         type
         transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
         points
         description
         note
@@ -1362,7 +1368,80 @@ export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
         type
         transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
+        points
+        description
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransactionApplicationsByUserByStatus = /* GraphQL */ `
+  query GetTransactionApplicationsByUserByStatus(
+    $username: String
+    $status: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTransactionApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getTransactionApplicationsByUserByStatus(
+      username: $username
+      status: $status
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        organizationId
+        username
+        status
+        type
+        transactionId
+        rewardId
+        rewardAmount
+        taskId
+        taskName
         points
         description
         note
