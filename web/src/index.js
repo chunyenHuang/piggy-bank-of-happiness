@@ -93,8 +93,8 @@ function ReactApp() {
 
     localStorage.setItem('app:username', user.username);
     localStorage.setItem('app:name', user.attributes.name);
-    localStorage.setItem('app:organizationId', user.attributes['custom:organizationId']);
-    localStorage.setItem('app:organizationName', user.attributes['custom:organizationName']);
+    localStorage.setItem('app:organizationId', user.attributes['custom:organizationId'] || '');
+    localStorage.setItem('app:organizationName', user.attributes['custom:organizationName'] || '');
     localStorage.setItem('app:cognitoGroup', userGroups[0]);
 
     setFilteredRoutes(filteredRoutes);

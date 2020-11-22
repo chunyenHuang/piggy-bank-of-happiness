@@ -123,13 +123,6 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput"
           ]
-        },
-        {
-          "category": "api",
-          "resourceName": "piggybankofhappiness",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
         }
       ]
     },

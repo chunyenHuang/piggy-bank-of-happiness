@@ -7,19 +7,27 @@ type ApplicationOrganization
   ])
 {
   id: ID!
-  username: String! # 機構負責人帳號
+  username: String! # 機構申請/負責人帳號
 
   name: String! # 機構名稱
   registeredName: String! # 政府立案名稱
-  taxIdNumber: String! # 統一編號
   description: String! #  描述
+  taxIdNumber: String! # 統一編號
   phoneNumber: String!
-  email: String!
+  faxNumber: String
+  email: AWSEmail!
   address: Address!
 
-  comments: [ApplicationOrganizationComment]
+  principal: OrganizationContact! # 負責人
+  contact: OrganizationContact! # 主要聯絡人
+
+  # comments: [ApplicationOrganizationComment]
 
   status: ApplicationOrganizationStatus!
+
+  # S3 立案字號
+  # S3 法人立案字號
+
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -31,8 +39,15 @@ enum ApplicationOrganizationStatus {
   Rejected
 }
 
-type ApplicationOrganizationComment {
-  createdAt: AWSDateTime!
-  createdBy: String!
-  comment: String!
+type OrganizationContact {
+  name: String!
+  title: String!
+  phoneNumber: String!
+  email: AWSEmail!
 }
+
+# type ApplicationOrganizationComment {
+#   createdAt: AWSDateTime!
+#   createdBy: String!
+#   comment: String!
+# }

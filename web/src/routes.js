@@ -16,6 +16,7 @@ import AppUsers from 'views/Admin/AppUsers/AppUsers';
 import OrganizationUsers from 'views/OrgAdmin/Users/Users';
 import OrganizationPrograms from 'views/OrgAdmin/Programs/Programs';
 import OrganizationTransactions from 'views/OrgAdmin/Transactions/Transactions';
+import OrganizationTransactionApplications from 'views/OrgAdmin/TransactionApplications/TransactionApplications';
 import OrganizationGroups from 'views/OrgAdmin/Groups/Groups';
 import OrganizationRewards from 'views/OrgAdmin/Rewards/Rewards';
 import OrganizationTasks from 'views/OrgAdmin/Tasks/Tasks';
@@ -29,6 +30,7 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import BusinessIcon from '@material-ui/icons/Business';
 import LockIcon from '@material-ui/icons/Lock';
 import RedeemIcon from '@material-ui/icons/Redeem';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import EventNote from '@material-ui/icons/EventNote';
 
 export const general = [].map((item) => {
@@ -129,6 +131,14 @@ export const orgAdmin = [
       { path: '/rewards', exact: true },
     ],
     component: OrganizationRewards,
+  },
+  {
+    title: '點數申請',
+    icon: CheckCircleOutlineIcon,
+    paths: [
+      { path: '/transactionApplications', exact: true },
+    ],
+    component: OrganizationTransactionApplications,
   },
   {
     title: '學生',

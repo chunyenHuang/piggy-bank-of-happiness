@@ -167,14 +167,14 @@ export default function CustomAppBar({ user, routes }) {
             {userName}
           </Button>:
           <React.Fragment>
-            {/* <Typography component="p" color="inherit" noWrap className={classes.title}>
+            <Typography component="p" color="inherit" noWrap className={classes.title}>
               <Link
                 to={'/application'}
-                className={classes.unsty  ledHyperlink}
+                className={classes.unstyledHyperlink}
               >
                 機構申請
               </Link>
-            </Typography> */}
+            </Typography>
             <Button
               color="inherit"
               component={Link}

@@ -30,20 +30,17 @@ export const createApplicationOrganization = /* GraphQL */ `
       username
       name
       registeredName
-      taxIdNumber
       description
+      taxIdNumber
       phoneNumber
+      faxNumber
       email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
+      address
+      contact {
+        name
+        title
+        phoneNumber
+        email
       }
       status
       createdAt
@@ -61,20 +58,17 @@ export const updateApplicationOrganization = /* GraphQL */ `
       username
       name
       registeredName
-      taxIdNumber
       description
+      taxIdNumber
       phoneNumber
+      faxNumber
       email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
+      address
+      contact {
+        name
+        title
+        phoneNumber
+        email
       }
       status
       createdAt
@@ -92,20 +86,17 @@ export const deleteApplicationOrganization = /* GraphQL */ `
       username
       name
       registeredName
-      taxIdNumber
       description
+      taxIdNumber
       phoneNumber
+      faxNumber
       email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
+      address
+      contact {
+        name
+        title
+        phoneNumber
+        email
       }
       status
       createdAt

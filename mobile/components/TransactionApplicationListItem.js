@@ -187,8 +187,8 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
           disabled={true}
         />
         <Input
-          label="備註"
-          placeholder='原因'
+          label="拒絕原因"
+          placeholder='...'
           multiline={true}
           numberOfLines={5}
           value={note}
