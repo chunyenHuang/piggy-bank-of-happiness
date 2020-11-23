@@ -88,7 +88,9 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
 
     if (onUpdate) onUpdate();
 
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   };
 
   useEffect(() => {

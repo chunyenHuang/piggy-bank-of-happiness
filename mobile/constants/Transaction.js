@@ -74,7 +74,7 @@ export const getPropsByStatus = (status) => {
   default:
     props = {
       key: status,
-      label: '已通過',
+      label: '已批准',
       color: Colors.alternative,
       icon: 'check',
       iconType: 'font-awesome-5',

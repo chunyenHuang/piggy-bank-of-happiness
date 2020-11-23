@@ -25,13 +25,13 @@
     "ios": {
       "usesAppleSignIn": true,
       "supportsTablet": true,
-      "buildNumber": "55",
+      "buildNumber": "56",
       "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
       "infoPlist": {}
     },
     "android": {
       "package": "cloud.goldax.piggy_bank_of_happiness",
-      "versionCode": 37
+      "versionCode": 38
     },
     "androidStatusBarColor": "#68b386",
     "androidStatusBar": {
