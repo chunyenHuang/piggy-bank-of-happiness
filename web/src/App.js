@@ -15,6 +15,7 @@ import DocumentTitle from 'react-document-title';
 import querystring from 'query-string';
 import { Hub } from 'aws-amplify';
 import { toastr } from 'react-redux-toastr';
+import { useHistory } from 'react-router-dom';
 
 // import CustomAppBar from 'components/CustomAppBar';
 import APP from 'constants/app.js';
@@ -49,14 +50,20 @@ const authListener = ({ payload: { event, data } }) => {
 
 function App({ location }) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [authState, setAuthState] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [filteredRoutes, setFilteredRoutes] = React.useState(appRoutes);
   const [initialAuthState, setInitialAuthState] = React.useState(AuthState.SignIn);
+  const [redirect, setRedirect] = React.useState();
 
   React.useEffect(() => {
-    const { state } = querystring.parse(location.search);
+    const { state, redirect } = querystring.parse(location.search);
+    if (redirect) {
+      setRedirect(redirect);
+    }
+
     if (state) {
       console.log('change state?', state);
       setInitialAuthState(null);
@@ -69,13 +76,20 @@ function App({ location }) {
   React.useEffect(() => {
     if (!user || !user.signInUserSession || !user.attributes) return;
 
+    const organizationId = user.attributes['custom:organizationId'] || '';
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    const filteredRoutes = appRoutes.filter(({ roles }) => {
-      return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
-    });
+    const filteredRoutes = appRoutes
+      .filter(({ roles }) => roles ? (organizationId ? true : false) : true)
+      .filter(({ roles }) => {
+        return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
+      });
 
     setFilteredRoutes(filteredRoutes);
-  }, [user]);
+
+    if (redirect) {
+      history.push(redirect);
+    }
+  }, [user, redirect, history]);
 
   React.useEffect(() => {
     Hub.listen('auth', authListener);
@@ -102,7 +116,7 @@ function App({ location }) {
               </DocumentTitle>)
             }/>
         ))}
-        <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : '/'} />
+        <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : user.attributes['custom:organizationId'] ? '/' : '/application'} />
       </Switch>
     </div>
   ) : <div className="amplify-authenticator" >

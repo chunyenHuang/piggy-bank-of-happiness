@@ -1,81 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateApplicationOrganization = /* GraphQL */ `
-  subscription OnCreateApplicationOrganization($username: String) {
-    onCreateApplicationOrganization(username: $username) {
-      id
-      username
-      name
-      registeredName
-      description
-      taxIdNumber
-      phoneNumber
-      faxNumber
-      email
-      address
-      contact {
-        name
-        title
-        phoneNumber
-        email
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateApplicationOrganization = /* GraphQL */ `
-  subscription OnUpdateApplicationOrganization($username: String) {
-    onUpdateApplicationOrganization(username: $username) {
-      id
-      username
-      name
-      registeredName
-      description
-      taxIdNumber
-      phoneNumber
-      faxNumber
-      email
-      address
-      contact {
-        name
-        title
-        phoneNumber
-        email
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteApplicationOrganization = /* GraphQL */ `
-  subscription OnDeleteApplicationOrganization($username: String) {
-    onDeleteApplicationOrganization(username: $username) {
-      id
-      username
-      name
-      registeredName
-      description
-      taxIdNumber
-      phoneNumber
-      faxNumber
-      email
-      address
-      contact {
-        name
-        title
-        phoneNumber
-        email
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateEvent = /* GraphQL */ `
   subscription OnCreateEvent {
     onCreateEvent {
@@ -140,11 +65,13 @@ export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -152,7 +79,47 @@ export const onCreateOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -164,11 +131,13 @@ export const onUpdateOrganization = /* GraphQL */ `
   subscription OnUpdateOrganization {
     onUpdateOrganization {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -176,7 +145,47 @@ export const onUpdateOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -188,11 +197,13 @@ export const onDeleteOrganization = /* GraphQL */ `
   subscription OnDeleteOrganization {
     onDeleteOrganization {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -200,7 +211,47 @@ export const onDeleteOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -535,12 +586,15 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -584,12 +638,15 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -633,12 +690,15 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -686,12 +746,15 @@ export const onCreateOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -770,12 +833,15 @@ export const onUpdateOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -854,12 +920,15 @@ export const onDeleteOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -920,11 +989,13 @@ export const onCreateOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -932,7 +1003,30 @@ export const onCreateOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -960,11 +1054,13 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -972,7 +1068,30 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -1000,11 +1119,13 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -1012,7 +1133,30 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -1054,12 +1198,15 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -1161,12 +1308,15 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy
@@ -1268,12 +1418,15 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
           createdAt
           createdBy

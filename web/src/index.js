@@ -86,14 +86,17 @@ function ReactApp() {
       return;
     }
     // console.log(user);
+    const organizationId = user.attributes['custom:organizationId'] || '';
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    const filteredRoutes = appRoutes.filter(({ roles }) => {
-      return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
-    });
+    const filteredRoutes = appRoutes
+      .filter(({ roles }) => roles ? (organizationId ? true : false) : true)
+      .filter(({ roles }) => {
+        return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
+      });
 
     localStorage.setItem('app:username', user.username);
     localStorage.setItem('app:name', user.attributes.name);
-    localStorage.setItem('app:organizationId', user.attributes['custom:organizationId'] || '');
+    localStorage.setItem('app:organizationId', organizationId);
     localStorage.setItem('app:organizationName', user.attributes['custom:organizationName'] || '');
     localStorage.setItem('app:cognitoGroup', userGroups[0]);
 
@@ -115,10 +118,13 @@ function ReactApp() {
       <div className={classes.content}>
         <Switch>
           <Route path="/app" component={App} />
+          <Route path="/application" exact component={OrgApplication} />
+
           {user ?
-            <Route path="/" component={App} />:
             <React.Fragment>
-              <Route path="/application" exact component={OrgApplication} />
+              <Route path="/" component={App} />
+            </React.Fragment>:
+            <React.Fragment>
               <Route path="/" exact component={LandingPage} />
               <Redirect to="/" />
             </React.Fragment>}
