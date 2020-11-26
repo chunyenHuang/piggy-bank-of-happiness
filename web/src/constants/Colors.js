@@ -26,6 +26,11 @@ export default {
   dark,
   highlight,
 
+  // background
+  background: {
+    light: '#ebebeb',
+  },
+
   tintColor: primary,
   tabIconDefault: light,
   tabIconSelected: focused,

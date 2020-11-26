@@ -22,6 +22,9 @@ import LandingPage from 'views/LandingPage/LandingPage';
 import OrgApplication from 'views/OrgApplication/OrgApplication';
 import CustomAppBar from 'components/CustomAppBar';
 import Loading from 'components/Loading';
+import { getOrganization } from 'graphql/queries';
+import { request } from 'utilities/graph';
+import ProtectedRoute from 'components/ProtectedRoute';
 
 import store from './App.reducer';
 import './index.css';
@@ -88,21 +91,42 @@ function ReactApp() {
     // console.log(user);
     const organizationId = user.attributes['custom:organizationId'] || '';
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    const filteredRoutes = appRoutes
-      .filter(({ roles }) => roles ? (organizationId ? true : false) : true)
-      .filter(({ roles }) => {
-        return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
-      });
 
     localStorage.setItem('app:username', user.username);
     localStorage.setItem('app:name', user.attributes.name);
     localStorage.setItem('app:organizationId', organizationId);
-    localStorage.setItem('app:organizationName', user.attributes['custom:organizationName'] || '');
     localStorage.setItem('app:cognitoGroup', userGroups[0]);
 
-    setFilteredRoutes(filteredRoutes);
+    (async () => {
+      const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
 
-    history.push(initialPath);
+      const isActive = organization ? organization.isActive : 0;
+      const organizationName = (organization ? organization.name : user.attributes['custom:organizationName']) || '';
+
+      localStorage.setItem('app:organizationName', organizationName);
+
+      const filteredRoutes = appRoutes
+        .filter(({ roles }) => roles ? isActive === 1 : true)
+        .filter(({ roles }) => {
+          return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
+        });
+
+      filteredRoutes.push({
+        title: '機構申請',
+        path: '/application',
+        exact: true,
+        component: OrgApplication,
+        roles: ['AppAdmins', 'OrgAdmins', 'Users'],
+        hideFromMenu: true,
+        route: ProtectedRoute,
+      });
+
+      setFilteredRoutes(filteredRoutes);
+
+      setTimeout(() => {
+        history.push(initialPath);
+      });
+    })();
   }, [user]);
 
   if (isLoading) {
@@ -117,14 +141,18 @@ function ReactApp() {
       />
       <div className={classes.content}>
         <Switch>
-          <Route path="/app" component={App} />
-          <Route path="/application" exact component={OrgApplication} />
+          <Route path="/app" render={(props) => (
+            <App routes={filteredRoutes} {...props} />
+          )} />
 
           {user ?
             <React.Fragment>
-              <Route path="/" component={App} />
+              <Route path="/" render={(props) => (
+                <App routes={filteredRoutes} {...props} />
+              )} />
             </React.Fragment>:
             <React.Fragment>
+              <Route path="/application" exact component={OrgApplication} />
               <Route path="/" exact component={LandingPage} />
               <Redirect to="/" />
             </React.Fragment>}

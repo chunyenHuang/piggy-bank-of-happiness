@@ -1,20 +1,20 @@
-export const formatAddress = (inAddressObject) => {
-  if (!inAddressObject) return '';
+export const formatAddress = (inAddressObject = {}) => {
+  if (typeof inAddressObject === 'string') return inAddressObject;
   const {
-    address1,
-    address2,
-    city,
-    state,
-    postalCode,
-    extendedPostalCode,
+    country,
+    county,
+    district,
+    street,
+    zipCode,
   } = inAddressObject;
+  if (!county) return null;
 
-  return [
-    `${address1 ? address1 : ''}`,
-    `${address2 ? ` ${address2}` : ''}`,
-    `${city ? `, ${city}` : ''}`,
-    `${state ? `, ${state}` : ''}`,
-    `${postalCode ? ` ${postalCode}` : ''}`,
-    `${extendedPostalCode ? `-${extendedPostalCode}` : ''}`,
-  ].join('');
+  return `${country ? `${country} ` : ''}${zipCode || ''} ${county || ''}${district || ''}${street || ''}`;
+};
+
+export const renderFromMenu = (inMenu = []) => {
+  return (inValue) => {
+    const matched = inMenu.find(({ value }) => value === inValue);
+    return matched ? matched.label : inValue;
+  };
 };

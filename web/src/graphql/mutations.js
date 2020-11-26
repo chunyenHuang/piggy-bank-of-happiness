@@ -20,6 +20,16 @@ export const adminUpdatePoint = /* GraphQL */ `
     }
   }
 `;
+export const createOrganizationApplication = /* GraphQL */ `
+  mutation CreateOrganizationApplication(
+    $input: CreateOrganizationApplicationRequest!
+  ) {
+    createOrganizationApplication(input: $input) {
+      errors
+      message
+    }
+  }
+`;
 export const createEvent = /* GraphQL */ `
   mutation CreateEvent(
     $input: CreateEventInput!
@@ -118,6 +128,7 @@ export const createOrganization = /* GraphQL */ `
       }
       status
       isActive
+      note
       user {
         organizationId
         username
@@ -145,6 +156,7 @@ export const createOrganization = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -187,6 +199,7 @@ export const updateOrganization = /* GraphQL */ `
       }
       status
       isActive
+      note
       user {
         organizationId
         username
@@ -214,6 +227,7 @@ export const updateOrganization = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -256,6 +270,7 @@ export const deleteOrganization = /* GraphQL */ `
       }
       status
       isActive
+      note
       user {
         organizationId
         username
@@ -283,6 +298,7 @@ export const deleteOrganization = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -672,6 +688,7 @@ export const createOrganizationTransaction = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -727,6 +744,7 @@ export const updateOrganizationTransaction = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -782,6 +800,7 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -844,6 +863,7 @@ export const createOrganizationTransactionApplication = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -937,6 +957,7 @@ export const updateOrganizationTransactionApplication = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1030,6 +1051,7 @@ export const deleteOrganizationTransactionApplication = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1114,6 +1136,7 @@ export const createOrganizationUser = /* GraphQL */ `
         }
         status
         isActive
+        note
         user {
           organizationId
           username
@@ -1182,6 +1205,7 @@ export const updateOrganizationUser = /* GraphQL */ `
         }
         status
         isActive
+        note
         user {
           organizationId
           username
@@ -1250,6 +1274,7 @@ export const deleteOrganizationUser = /* GraphQL */ `
         }
         status
         isActive
+        note
         user {
           organizationId
           username
@@ -1320,6 +1345,7 @@ export const createOrganizationUserTask = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1433,6 +1459,7 @@ export const updateOrganizationUserTask = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1546,6 +1573,7 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt

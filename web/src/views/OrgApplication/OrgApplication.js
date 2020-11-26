@@ -1,14 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import { toastr } from 'react-redux-toastr';
 
+import { Auth } from 'aws-amplify';
 import DetailForm from 'react-material-final-form';
 import { v1 as uuidv1 } from 'uuid';
+import { useDropzone } from 'react-dropzone';
+import prettyBytes from 'pretty-bytes';
+
+import { getOrganization } from 'graphql/queries';
+import { createOrganizationApplication } from 'graphql/mutations';
+import { request } from 'utilities/graph';
 
 import formMetadata from 'forms/Organization';
+import { upload } from 'utilities/file';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -19,6 +35,13 @@ const useStyles = makeStyles((theme) => ({
   titleButton: {
     fontSize: 16,
     marginTop: theme.spacing(2),
+  },
+  dropZone: {
+    padding: theme.spacing(2),
+    border: '1px dashed rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
+    cursor: 'pointer',
+    textAlign: 'center',
   },
 }));
 
@@ -32,30 +55,102 @@ export default function OrgApplication() {
   const classes = useStyles();
   const [organizationId, setOrganizationId] = useState();
   const [username, setUsername] = useState();
-  const [defaultData, setDefaultData] = useState({});
-
+  const [toUploadFiles, setToUploadFiles] = useState([]);
+  const [organization, setOrganization] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const [message, setMessage] = useState();
+
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log(acceptedFiles);
+    setToUploadFiles(acceptedFiles);
+  }, []);
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: [
+      '.doc', '.docx',
+      'application/msword',
+      'image/*',
+      '.pdf',
+    ],
+  });
+
   const onCompleteForm = async (data) => {
+    if (toUploadFiles.length === 0) {
+      toastr.error('請上傳機構證明文件');
+      return;
+    }
+
+    setIsLoading(true);
+
     console.log(data);
+
     Object.assign(data, {
-      id: data.id || uuidv1(),
+      id: organizationId,
       username,
     });
     localStorage.setItem(cacheKey, JSON.stringify(data));
 
-    // go to upload file
+    await Promise.all([
+      request(createOrganizationApplication, { input: data }),
+      ...toUploadFiles.map(async (file) => {
+        const s3Key = `organizations/${organizationId}/documents/${file.name}`;
+        await upload(s3Key, file, file.type);
+      }),
+    ]);
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    const cache = localStorage.getItem(cacheKey);
-    if (cache) {
-      setDefaultData(JSON.parse(cache));
-    }
-
     setUsername(localStorage.getItem('app:username'));
-    setOrganizationId(localStorage.getItem('app:organizationId'));
+
+    (async () => {
+      const organizationId = localStorage.getItem('app:organizationId');
+      if (organizationId) {
+        const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
+
+        if (organization) {
+          setOrganizationId(organizationId);
+          setOrganization(organization);
+
+          let message;
+          switch (organization.status) {
+          case 'Pending':
+            message = '我們已經收到您的申請，請靜待審核結果。';
+            break;
+          case 'WaitingForAdditionalDocuments':
+            message = '您的申請資料需要補充文件，請聯繫系統管理員。';
+            break;
+          case 'Approved':
+            message = organization.isActive === 1 ? '' : '您的機構已被停止使用，請聯繫系統管理員。';
+            break;
+          case 'Rejected':
+            message = '很抱歉您的申請已被拒絕，請聯繫系統管理員。';
+            break;
+          }
+          setMessage(message);
+        } else {
+          const cache = localStorage.getItem(cacheKey);
+          if (cache) {
+            setOrganization(JSON.parse(cache));
+          }
+
+          const user = await Auth.currentAuthenticatedUser();
+          const newOrganizationId = uuidv1();
+          await Auth.updateUserAttributes(user, {
+            'custom:organizationId': newOrganizationId,
+            'custom:organizationName': 'N/A',
+          });
+          setOrganizationId(organizationId);
+        }
+      }
+    })();
   }, []);
+
+  if (!organizationId) {
+    return null;
+  }
 
   if (!username) {
     return (
@@ -85,11 +180,11 @@ export default function OrgApplication() {
   }
 
   // 使用者已經有 custom:organizationId
-  if (organizationId) {
+  if (message) {
     return (
       <Container maxWidth="sm" className={classes.content}>
         <Typography component="h1" variant="h5" align="center">
-          我們已經收到您的申請，請靜待審核。
+          {message}
         </Typography>
       </Container>);
   }
@@ -101,7 +196,7 @@ export default function OrgApplication() {
         metadata={filteredFormMetadata}
         usePristine={false}
         submitButtonText={'申請'}
-        data={defaultData}
+        data={organization}
         submitButtonProps={{
           variant: 'contained',
           color: 'primary',
@@ -110,7 +205,32 @@ export default function OrgApplication() {
         }}
         isLoading={isLoading}
         onSubmit={onCompleteForm}
-      />
+      >
+
+        <p>立案字號 / 法人立案字號 / 證明文件 *</p>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <div className={classes.dropZone}>點擊選取 或 拖曳檔案至此</div>
+        </div>
+        <List className={classes.root}>
+          {toUploadFiles.map((file, index)=>(
+            <ListItem key={index}>
+              <ListItemAvatar>
+                {index+1}
+              </ListItemAvatar>
+              <ListItemText primary={file.name} secondary={prettyBytes(file.size)} />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="delete" onClick={()=>{
+                  toUploadFiles.splice(index, 1);
+                  setToUploadFiles([...toUploadFiles]);
+                }}>
+                  <ClearIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      </DetailForm>
     </Container>
   );
 }

@@ -13,7 +13,7 @@ import { Switch, Redirect } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import DocumentTitle from 'react-document-title';
 import querystring from 'query-string';
-import { Hub } from 'aws-amplify';
+import { Hub, Storage } from 'aws-amplify';
 import { toastr } from 'react-redux-toastr';
 import { useHistory } from 'react-router-dom';
 
@@ -22,8 +22,9 @@ import APP from 'constants/app.js';
 import authErrorCodes from 'constants/authErrorCodes';
 
 import './i18n/Amplify';
-import { appRoutes } from './routes';
 import './Amplify.css';
+
+Storage.configure({ level: 'public' });
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,13 +49,12 @@ const authListener = ({ payload: { event, data } }) => {
   }
 };
 
-function App({ location }) {
+function App({ location, routes: filteredRoutes }) {
   const classes = useStyles();
   const history = useHistory();
 
   const [authState, setAuthState] = React.useState(null);
   const [user, setUser] = React.useState(null);
-  const [filteredRoutes, setFilteredRoutes] = React.useState(appRoutes);
   const [initialAuthState, setInitialAuthState] = React.useState(AuthState.SignIn);
   const [redirect, setRedirect] = React.useState();
 
@@ -75,16 +75,6 @@ function App({ location }) {
 
   React.useEffect(() => {
     if (!user || !user.signInUserSession || !user.attributes) return;
-
-    const organizationId = user.attributes['custom:organizationId'] || '';
-    const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    const filteredRoutes = appRoutes
-      .filter(({ roles }) => roles ? (organizationId ? true : false) : true)
-      .filter(({ roles }) => {
-        return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
-      });
-
-    setFilteredRoutes(filteredRoutes);
 
     if (redirect) {
       history.push(redirect);
@@ -116,7 +106,7 @@ function App({ location }) {
               </DocumentTitle>)
             }/>
         ))}
-        <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : user.attributes['custom:organizationId'] ? '/' : '/application'} />
+        <Redirect to={filteredRoutes[0] ? filteredRoutes[0].path : '/'} />
       </Switch>
     </div>
   ) : <div className="amplify-authenticator" >
@@ -167,4 +157,5 @@ App.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string,
   }),
+  routes: PropTypes.array,
 };

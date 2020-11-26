@@ -21,7 +21,7 @@ amplify-gradle-config.json
 amplifyxc.config
 
 # sensitive data
-amplify/team-provider-info.json
+amplify/team-provider-info*
 references
 
 src/graphql

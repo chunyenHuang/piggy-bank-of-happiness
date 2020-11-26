@@ -84,6 +84,7 @@ export const getOrganization = /* GraphQL */ `
       }
       status
       isActive
+      note
       user {
         organizationId
         username
@@ -111,6 +112,7 @@ export const getOrganization = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -155,6 +157,7 @@ export const listOrganizations = /* GraphQL */ `
         }
         status
         isActive
+        note
         user {
           organizationId
           username
@@ -471,6 +474,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -579,6 +583,7 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -725,6 +730,7 @@ export const getOrganizationUser = /* GraphQL */ `
         }
         status
         isActive
+        note
         user {
           organizationId
           username
@@ -793,6 +799,7 @@ export const listOrganizationUsers = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -846,6 +853,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1521,6 +1529,7 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1575,6 +1584,7 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
           email
           status
           isActive
+          note
           createdAt
           createdBy
           updatedAt

@@ -30,6 +30,8 @@ type Organization
       {allow: groups, groups: ["AppAdmins"]},
     ])
 
+  note: String
+
   # S3 立案字號
   # S3 法人立案字號
 
@@ -44,7 +46,7 @@ type Organization
 
 enum ApplicationOrganizationStatus {
   Pending
-  Waiting For Additional Documents
+  WaitingForAdditionalDocuments
   Approved
   Rejected
 }
