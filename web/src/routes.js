@@ -9,7 +9,7 @@ import MyTransactions from 'views/User/MyTransactions/MyTransactions';
 // AppAdmin
 // import AdminDashboard from 'views/Admin/Dashboard/Dashboard';
 import Organizations from 'views/Admin/Organizations/Organizations';
-// import Organization from 'views/Admin/Organization/Organization';
+import Organization from 'views/Admin/Organization/Organization';
 import AppUsers from 'views/Admin/AppUsers/AppUsers';
 
 // OrgAdmin
@@ -217,14 +217,14 @@ export const admin = [
     ],
     component: Organizations,
   },
-  // {
-  //   title: '機構',
-  //   paths: [
-  //     { path: '/organization/:id', exact: true },
-  //   ],
-  //   component: Organization,
-  //   hideFromMenu: true,
-  // },
+  {
+    title: '機構',
+    paths: [
+      { path: '/organization/:id', exact: true },
+    ],
+    component: Organization,
+    hideFromMenu: true,
+  },
   {
     title: '軟體用戶',
     icon: LockIcon,

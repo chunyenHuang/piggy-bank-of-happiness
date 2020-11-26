@@ -1,67 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getApplicationOrganization = /* GraphQL */ `
-  query GetApplicationOrganization($id: ID!) {
-    getApplicationOrganization(id: $id) {
-      id
-      username
-      name
-      registeredName
-      description
-      taxIdNumber
-      phoneNumber
-      faxNumber
-      email
-      address
-      contact {
-        name
-        title
-        phoneNumber
-        email
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listApplicationOrganizations = /* GraphQL */ `
-  query ListApplicationOrganizations(
-    $filter: ModelApplicationOrganizationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listApplicationOrganizations(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        name
-        registeredName
-        description
-        taxIdNumber
-        phoneNumber
-        faxNumber
-        email
-        address
-        contact {
-          name
-          title
-          phoneNumber
-          email
-        }
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getEvent = /* GraphQL */ `
   query GetEvent($key: String!, $timestamp: AWSDateTime!) {
     getEvent(key: $key, timestamp: $timestamp) {
@@ -123,11 +62,13 @@ export const getOrganization = /* GraphQL */ `
   query GetOrganization($id: ID!) {
     getOrganization(id: $id) {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -135,7 +76,49 @@ export const getOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      note
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -152,11 +135,13 @@ export const listOrganizations = /* GraphQL */ `
     listOrganizations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -164,7 +149,31 @@ export const listOrganizations = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -455,13 +464,17 @@ export const getOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -560,13 +573,17 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -691,11 +708,13 @@ export const getOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -703,7 +722,31 @@ export const getOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -746,13 +789,17 @@ export const listOrganizationUsers = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -796,13 +843,17 @@ export const getOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -973,48 +1024,6 @@ export const listTests = /* GraphQL */ `
       items {
         id
         name
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getApplicationByStatusByUpdate = /* GraphQL */ `
-  query GetApplicationByStatusByUpdate(
-    $status: ApplicationOrganizationStatus
-    $updatedAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelApplicationOrganizationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    getApplicationByStatusByUpdate(
-      status: $status
-      updatedAt: $updatedAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        name
-        registeredName
-        description
-        taxIdNumber
-        phoneNumber
-        faxNumber
-        email
-        address
-        contact {
-          name
-          title
-          phoneNumber
-          email
-        }
-        status
         createdAt
         updatedAt
       }
@@ -1510,13 +1519,17 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1561,13 +1574,17 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt

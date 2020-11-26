@@ -13,16 +13,18 @@ import { Switch, Redirect } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import DocumentTitle from 'react-document-title';
 import querystring from 'query-string';
-import { Hub } from 'aws-amplify';
+import { Hub, Storage } from 'aws-amplify';
 import { toastr } from 'react-redux-toastr';
+import { useHistory } from 'react-router-dom';
 
 // import CustomAppBar from 'components/CustomAppBar';
 import APP from 'constants/app.js';
 import authErrorCodes from 'constants/authErrorCodes';
 
 import './i18n/Amplify';
-import { appRoutes } from './routes';
 import './Amplify.css';
+
+Storage.configure({ level: 'public' });
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,16 +49,21 @@ const authListener = ({ payload: { event, data } }) => {
   }
 };
 
-function App({ location }) {
+function App({ location, routes: filteredRoutes }) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [authState, setAuthState] = React.useState(null);
   const [user, setUser] = React.useState(null);
-  const [filteredRoutes, setFilteredRoutes] = React.useState(appRoutes);
   const [initialAuthState, setInitialAuthState] = React.useState(AuthState.SignIn);
+  const [redirect, setRedirect] = React.useState();
 
   React.useEffect(() => {
-    const { state } = querystring.parse(location.search);
+    const { state, redirect } = querystring.parse(location.search);
+    if (redirect) {
+      setRedirect(redirect);
+    }
+
     if (state) {
       console.log('change state?', state);
       setInitialAuthState(null);
@@ -69,13 +76,10 @@ function App({ location }) {
   React.useEffect(() => {
     if (!user || !user.signInUserSession || !user.attributes) return;
 
-    const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
-    const filteredRoutes = appRoutes.filter(({ roles }) => {
-      return (roles) ? userGroups && userGroups.some((group) => roles.includes(group)) : true;
-    });
-
-    setFilteredRoutes(filteredRoutes);
-  }, [user]);
+    if (redirect) {
+      history.push(redirect);
+    }
+  }, [user, redirect, history]);
 
   React.useEffect(() => {
     Hub.listen('auth', authListener);
@@ -153,4 +157,5 @@ App.propTypes = {
   location: PropTypes.shape({
     search: PropTypes.string,
   }),
+  routes: PropTypes.array,
 };
