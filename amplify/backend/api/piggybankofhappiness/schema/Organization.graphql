@@ -46,6 +46,7 @@ type Organization
 
 enum ApplicationOrganizationStatus {
   Pending
+  InReview
   WaitingForAdditionalDocuments
   Approved
   Rejected

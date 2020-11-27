@@ -1,7 +1,11 @@
 export default [
   {
-    label: '審核中',
+    label: '新申請',
     value: 'Pending',
+  },
+  {
+    label: '審核中',
+    value: 'InReview',
   },
   {
     label: '需補齊文件',
