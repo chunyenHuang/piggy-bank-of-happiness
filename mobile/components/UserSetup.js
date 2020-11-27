@@ -55,7 +55,7 @@ export default function UserSetup({ onComplete }) {
       }
 
       const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
-      if (organization && organization.isActive === 0) {
+      if (!organization || (organization && organization.isActive === 0)) {
         setShowInactiveMsg(true);
       } else {
         setIsCompleted(true);
