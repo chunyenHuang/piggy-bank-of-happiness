@@ -47,7 +47,7 @@
     },
     "useDefault": "manual",
     "hostedUI": true,
-    "triggers": "{\"PostConfirmation\":[\"add-to-group\"]}",
+    "triggers": "{\n  \"PostConfirmation\": [\n    \"add-to-group\"\n  ]\n}",
     "userPoolGroupList": [
         "AppAdmins",
         "OrgAdmins",
@@ -58,7 +58,7 @@
         "Ref": "AWS::StackId"
     },
     "permissions": [
-        "{\"policyName\":\"AddToGroupCognito\",\"trigger\":\"PostConfirmation\",\"effect\":\"Allow\",\"actions\":[\"cognito-idp:AdminAddUserToGroup\",\"cognito-idp:GetGroup\",\"cognito-idp:CreateGroup\"],\"resource\":{\"paramType\":\"!GetAtt\",\"keys\":[\"UserPool\",\"Arn\"]}}"
+        "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
     ],
     "dependsOn": [
         {
@@ -79,10 +79,8 @@
     "userPoolGroups": true,
     "adminQueries": false,
     "hostedUIDomainName": "piggybankofhappinesscf2e2c90-cf2e2c90",
-    "authProvidersUserPool": [
-        "Facebook",
-        "Google"
-    ],
+    "authProvidersUserPool": [],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"],\"LogoutURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"],\"LogoutURLs\":[\"exp://127.0.0.1:19000/--/\",\"exp://exp.host/@community/with-webbrowser-redirect/\",\"exp://192.168.1.101:19000/--/\",\"piggybankofhappiness://\"]}",
+    "serviceName": "Cognito"
 }
