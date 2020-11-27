@@ -4,7 +4,7 @@ backend:
     build:
       commands:
         - npm i
-        - node scripts/fetch-team-provider-info.js
+        # - node scripts/fetch-team-provider-info.js
         - cat amplify/team-provider-info.json
         - '# Execute Amplify CLI with the helper script'
         # - node scripts/updateTags.js

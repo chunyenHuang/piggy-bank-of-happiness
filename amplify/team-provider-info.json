@@ -1,0 +1,92 @@
+{
+  "develop": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-piggybankofhappiness-develop-101303-authRole",
+      "UnauthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-develop-101303-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-develop-101303-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
+      "UnauthRoleName": "amplify-piggybankofhappiness-develop-101303-unauthRole",
+      "StackName": "amplify-piggybankofhappiness-develop-101303",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:122161274622:stack/amplify-piggybankofhappiness-develop-101303/fc7aed30-b186-11ea-a801-06a52c6ee8f8",
+      "AmplifyAppId": "d1n6fuwn9twpnf"
+    },
+    "categories": {
+      "auth": {
+        "piggybankofhappinesscf2e2c90": {
+          "facebookAppId": "680058772842660",
+          "googleClientId": "518521488280-a6kmdpnuotmbhao6i93dgf9qp1bs83pc.apps.googleusercontent.com"
+        },
+        "userPoolGroups": {}
+      },
+      "function": {
+        "piggybankofhappinesscf2e2c90PostConfirmation": {
+          "GROUP": "Users"
+        },
+        "AdminQueries71325e9b": {},
+        "userOperation": {},
+        "eventTracking": {}
+      }
+    }
+  },
+  "ccfang": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-piggybankofhappiness-ccfang-232234-authRole",
+      "UnauthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-ccfang-232234-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-ccfang-232234-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-piggybankofhappiness-ccfang-232234-deployment",
+      "UnauthRoleName": "amplify-piggybankofhappiness-ccfang-232234-unauthRole",
+      "StackName": "amplify-piggybankofhappiness-ccfang-232234",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:122161274622:stack/amplify-piggybankofhappiness-ccfang-232234/6b1d1a40-c0e3-11ea-b608-02e842d24598",
+      "AmplifyAppId": "d1n6fuwn9twpnf"
+    },
+    "categories": {
+      "auth": {
+        "piggybankofhappinesscf2e2c90": {
+          "facebookAppId": "n",
+          "googleClientId": "n"
+        },
+        "userPoolGroups": {}
+      },
+      "function": {
+        "AdminQueries71325e9b": {},
+        "piggybankofhappinesscf2e2c90PostConfirmation": {
+          "GROUP": "Users"
+        },
+        "piggybankofhappinesscf2e2c90": {}
+      }
+    }
+  },
+  "prd": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-piggybankofhappiness-prd-170807-authRole",
+      "UnauthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-prd-170807-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::122161274622:role/amplify-piggybankofhappiness-prd-170807-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-piggybankofhappiness-prd-170807-deployment",
+      "UnauthRoleName": "amplify-piggybankofhappiness-prd-170807-unauthRole",
+      "StackName": "amplify-piggybankofhappiness-prd-170807",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:122161274622:stack/amplify-piggybankofhappiness-prd-170807/18d9ca10-ca1d-11ea-9723-02da6099db56",
+      "AmplifyAppId": "d1n6fuwn9twpnf"
+    },
+    "categories": {
+      "auth": {
+        "piggybankofhappinesscf2e2c90": {
+          "facebookAppId": "571183853549100",
+          "googleClientId": "139171940465-7hjf494utki5rdangmi160f9e5bkh6t3.apps.googleusercontent.com"
+        },
+        "userPoolGroups": {}
+      },
+      "function": {
+        "AdminQueries71325e9b": {},
+        "piggybankofhappinesscf2e2c90PostConfirmation": {
+          "GROUP": "Users"
+        },
+        "userOperation": {},
+        "eventTracking": {},
+        "pointOperation": {}
+      }
+    }
+  }
+}
