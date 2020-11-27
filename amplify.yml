@@ -9,7 +9,8 @@ backend:
         - '# Execute Amplify CLI with the helper script'
         # - node scripts/updateTags.js
         # - node scripts/deploy.js
-        - amplifyPush --simple
+        # - amplifyPush --simple
+        - amplifyPush -e $AWS_BRANCH --simple
         - amplify status
         
 # frontend:

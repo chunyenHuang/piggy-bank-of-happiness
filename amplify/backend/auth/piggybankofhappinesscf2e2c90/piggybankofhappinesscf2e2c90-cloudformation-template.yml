@@ -146,14 +146,6 @@ Parameters:
     Type: CommaDelimitedList
       
   
-  thirdPartyAuth:
-    Type: String
-            
-        
-  authProviders:
-    Type: CommaDelimitedList
-      
-  
   userPoolGroups:
     Type: String
             
@@ -173,15 +165,11 @@ Parameters:
     Type: String
   
             
+  serviceName:
+    Type: String
+  
+            
   hostedUIProviderCreds:
-    Type: String
-  
-            
-  facebookAppId:
-    Type: String
-  
-            
-  googleClientId:
     Type: String
   
             
@@ -189,10 +177,6 @@ Parameters:
     Type: String
   
             
-            
-  serviceName:
-    Type: String
-  
             
 Conditions:
   ShouldNotCreateEnvResources: !Equals [ !Ref env, NONE ]
@@ -839,15 +823,6 @@ Resources:
             - cognito-idp.${region}.amazonaws.com/${client}
             - { region: !Ref "AWS::Region",  client: !Ref UserPool}
             
-      SupportedLoginProviders: 
-        
-        graph.facebook.com: !Ref facebookAppId
-        
-        
-        accounts.google.com: !Ref googleClientId
-        
-        
-      
       AllowUnauthenticatedIdentities: !Ref allowUnauthenticatedIdentities
        
        
@@ -895,15 +870,9 @@ Outputs :
     Value: !Ref 'UserPoolClient'
     Description: The user pool app client id
   
-  
-  GoogleWebClient:
-    Value: !Ref googleClientId
    
    
   
-  
-  FacebookWebClient:
-    Value: !Ref facebookAppId
    
    
   
