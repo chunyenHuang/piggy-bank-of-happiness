@@ -40,8 +40,8 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
   };
 
   const load = async () => {
-    mode === 'edit' && setIsLoading(true);
-    mode === 'select' && Hub.dispatch('app', { event: 'loading' });
+    if (mode === 'edit') setIsLoading(true);
+    if (mode === 'select') Hub.dispatch('app', { event: 'loading' });
 
     const programParams = {
       organizationId: await AsyncStorage.getItem('app:organizationId'),
@@ -66,13 +66,13 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
 
     setPrograms(programs);
 
-    mode === 'edit' && setIsLoading(false);
-    mode === 'select' && Hub.dispatch('app', { event: 'loading-complete' });
+    if (mode === 'edit') setIsLoading(false);
+    if (mode === 'select') Hub.dispatch('app', { event: 'loading-complete' });
   };
 
   useEffect(() => {
     (async () => {
-      load();
+      await load();
     })();
   }, []);
 
@@ -127,8 +127,8 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
     })();
 
     return () => {
-      subscriptionCreate && subscriptionCreate.unsubscribe();
-      subscriptionUpdate && subscriptionUpdate.unsubscribe();
+      if (subscriptionCreate) subscriptionCreate.unsubscribe();
+      if (subscriptionUpdate) subscriptionUpdate.unsubscribe();
     };
   }, [programs]);
 
@@ -206,7 +206,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         ))}
       </List.Section>
       <Modal
-        isVisible={ mode ==='select' && task?true:false }
+        isVisible={ mode ==='select' && task ? true:false }
         hardwareAccelerated
         onBackdropPress={() => {}}
         style={styles.modal}

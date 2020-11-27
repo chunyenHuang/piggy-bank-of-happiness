@@ -7,18 +7,54 @@ type Organization
   ])
 {
   id: ID!
-  name: String!
-  description: String!
-  # from application
-  registeredName: String
-  taxIdNumber: String
-  phoneNumber: String
-  email: String
-  address: Address
+  username: String! # 申請人帳號
+  name: String! # 機構名稱
+  registeredName: String! # 政府立案名稱
+  description: String! #  描述
+  taxIdNumber: String! # 統一編號
+  phoneNumber: String!
+  faxNumber: String!
+  email: AWSEmail!
+  address: Address!
 
+  principal: OrganizationContact! # 負責人
+
+  status: ApplicationOrganizationStatus!
+    @auth(rules: [ 
+      {allow: private, operations: [read]},
+      {allow: groups, groups: ["AppAdmins"]},
+    ])
   isActive: Int!
+    @auth(rules: [ 
+      {allow: private, operations: [read]},
+      {allow: groups, groups: ["AppAdmins"]},
+    ])
+
+  note: String
+
+  # S3 立案字號
+  # S3 法人立案字號
+
+  # join
+  user: OrganizationUser @connection(fields:["id", "username"])
+
   createdAt: AWSDateTime!
   createdBy: String
   updatedAt: AWSDateTime!
   updatedBy: String
+}
+
+enum ApplicationOrganizationStatus {
+  Pending
+  InReview
+  WaitingForAdditionalDocuments
+  Approved
+  Rejected
+}
+
+type OrganizationContact {
+  name: String!
+  title: String!
+  phoneNumber: String!
+  email: AWSEmail!
 }

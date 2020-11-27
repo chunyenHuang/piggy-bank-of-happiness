@@ -36,7 +36,7 @@ let secondTextInput = null;
 
 // Before amplify fix the apple sign in issue, disable social for ios
 // https://github.com/aws-amplify/amplify-js/issues/4580https://github.com/aws-amplify/amplify-js/issues/4580
-const DISABLE_SOCIAL = Platform.OS === 'ios' ? true : false;
+const DISABLE_SOCIAL = true; // Platform.OS === 'ios' ? true : false;
 
 const socialProviders = [
   {
@@ -111,7 +111,7 @@ export default function CustomSignIn({ authState, onStateChange }) {
   }, []);
 
   const goto = (state) => {
-    onStateChange && onStateChange(state, {});
+    if (onStateChange) onStateChange(state, {});
   };
 
   const submit = async () => {

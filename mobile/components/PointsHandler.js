@@ -2,13 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Input } from 'react-native-elements';
 import { Hub } from 'aws-amplify';
+import { v1 as uuidv1 } from 'uuid';
 
 import Colors from '../constants/Colors';
 import request from '../src/utils/request';
 import CustomModal from './CustomModal';
-import { adminUpdatePoint } from 'src/graphql/mutations';
+import {
+  adminUpdatePoint,
+  createOrganizationTransactionApplication,
+} from 'src/graphql/mutations';
 
-export default function PointsHandler({ mode, user, onUpdate, visible: inVisible, onClose }) {
+export default function PointsHandler({
+  mode,
+  isApplication,
+  user,
+  onUpdate,
+  visible: inVisible,
+  onClose,
+}) {
   const [visible, setVisible] = useState(!!inVisible);
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
@@ -25,21 +36,41 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
 
     const points = parseFloat(amount) * 100;
 
-    const payload = {
-      input: {
-        organizationId,
-        username,
-        actions: [{
+    if (isApplication) {
+      const calculatedPoints = mode === 'withdraw' ? -points : points;
+
+      const payload = {
+        input: {
+          organizationId,
+          username,
+          status: 'Pending',
           type: mode,
-          points,
-          note,
-        }],
-      },
-    };
+          transactionId: uuidv1(),
+          points: calculatedPoints,
+          description: note,
+          createdBy: username,
+          updatedBy: username,
+        },
+      };
 
-    console.log(payload);
+      await request(createOrganizationTransactionApplication, payload);
+    } else {
+      const payload = {
+        input: {
+          organizationId,
+          username,
+          actions: [{
+            type: mode,
+            points,
+            note,
+          }],
+        },
+      };
 
-    await request(adminUpdatePoint, payload);
+      console.log(payload);
+
+      await request(adminUpdatePoint, payload);
+    }
 
     if (onUpdate) {
       onUpdate();
@@ -103,7 +134,7 @@ export default function PointsHandler({ mode, user, onUpdate, visible: inVisible
         bottomButtonProps={{
           title: '確認',
           onPress: ()=> submit(),
-          disabled: isLoading,
+          disabled: isLoading || note === '' || amount === '',
         }}
         bottomButtonStyle={{ backgroundColor: button.color }}
       >

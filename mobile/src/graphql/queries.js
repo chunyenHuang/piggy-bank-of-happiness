@@ -1,73 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getApplicationOrganization = /* GraphQL */ `
-  query GetApplicationOrganization($id: ID!) {
-    getApplicationOrganization(id: $id) {
-      id
-      username
-      name
-      registeredName
-      taxIdNumber
-      description
-      phoneNumber
-      email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listApplicationOrganizations = /* GraphQL */ `
-  query ListApplicationOrganizations(
-    $filter: ModelApplicationOrganizationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listApplicationOrganizations(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        name
-        registeredName
-        taxIdNumber
-        description
-        phoneNumber
-        email
-        address {
-          county
-          district
-          street
-          zipCode
-        }
-        comments {
-          createdAt
-          createdBy
-          comment
-        }
-        status
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getEvent = /* GraphQL */ `
   query GetEvent($key: String!, $timestamp: AWSDateTime!) {
     getEvent(key: $key, timestamp: $timestamp) {
@@ -129,11 +62,13 @@ export const getOrganization = /* GraphQL */ `
   query GetOrganization($id: ID!) {
     getOrganization(id: $id) {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -141,7 +76,49 @@ export const getOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      note
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -158,11 +135,13 @@ export const listOrganizations = /* GraphQL */ `
     listOrganizations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -170,7 +149,31 @@ export const listOrganizations = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -461,13 +464,17 @@ export const getOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -537,11 +544,14 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -563,13 +573,48 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt
@@ -596,11 +641,14 @@ export const listOrganizationTransactionApplications = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -616,6 +664,21 @@ export const listOrganizationTransactionApplications = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
@@ -645,11 +708,13 @@ export const getOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -657,7 +722,31 @@ export const getOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -700,13 +789,17 @@ export const listOrganizationUsers = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -750,13 +843,17 @@ export const getOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -927,51 +1024,6 @@ export const listTests = /* GraphQL */ `
       items {
         id
         name
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getApplicationByStatusByUpdate = /* GraphQL */ `
-  query GetApplicationByStatusByUpdate(
-    $status: ApplicationOrganizationStatus
-    $updatedAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelApplicationOrganizationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    getApplicationByStatusByUpdate(
-      status: $status
-      updatedAt: $updatedAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        username
-        name
-        registeredName
-        taxIdNumber
-        description
-        phoneNumber
-        email
-        address {
-          county
-          district
-          street
-          zipCode
-        }
-        comments {
-          createdAt
-          createdBy
-          comment
-        }
-        status
         createdAt
         updatedAt
       }
@@ -1243,11 +1295,14 @@ export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -1263,6 +1318,21 @@ export const getTransactionApplicationsByOrganizationByStatus = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
@@ -1296,11 +1366,14 @@ export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
         username
         status
         type
+        transactionId
         rewardId
+        rewardAmount
         taskId
+        taskName
         points
-        summary
         description
+        note
         createdAt
         createdBy
         updatedAt
@@ -1316,6 +1389,92 @@ export const getTransactionApplicationsByUserByCreatedAt = /* GraphQL */ `
           isActive
           currentPoints
           earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransactionApplicationsByUserByStatus = /* GraphQL */ `
+  query GetTransactionApplicationsByUserByStatus(
+    $username: String
+    $status: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelOrganizationTransactionApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getTransactionApplicationsByUserByStatus(
+      username: $username
+      status: $status
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        organizationId
+        username
+        status
+        type
+        transactionId
+        rewardId
+        rewardAmount
+        taskId
+        taskName
+        points
+        description
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+        transaction {
+          organizationId
+          id
+          username
+          rewardId
+          refTransactionId
+          isCancelled
+          points
+          type
+          note
           createdAt
           createdBy
           updatedAt
@@ -1360,13 +1519,17 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1411,13 +1574,17 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt

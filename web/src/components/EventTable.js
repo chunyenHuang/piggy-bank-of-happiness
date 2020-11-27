@@ -27,6 +27,7 @@ const tableNames = {
   OrganizationUserTask: '使用者任務',
   OrganizationTransaction: '交易紀錄',
   OrganizationReward: '獎品',
+  OrganizationTransactionApplication: '申請紀錄',
 };
 
 export default function EventTable({ organizationId }) {
@@ -184,12 +185,12 @@ export default function EventTable({ organizationId }) {
 
           if (diffs.length === 0) return null;
 
-          return (<table>
+          return (<table style={{ width: '100%' }}>
             <thead>
               <tr>
-                <th>欄位</th>
-                <th>舊資料</th>
-                <th>新資料</th>
+                <th width="30%">欄位</th>
+                <th width="35%">舊資料</th>
+                <th width="35%">新資料</th>
               </tr>
             </thead>
             <tbody>

@@ -48,6 +48,15 @@ amplify pull --appId XXXXXXXX --envName xxxx
 Skip auth related questions by input arbitrary value
 ```
 
+### Issues
+
+> Resource is not in the state stackUpdateComplete
+> An error occurred during the push operation: Resource is not in the state stackUpdateComplete
+
+```bash
+amplify -y --force
+```
+
 ## Build Test Environment
 
 ```

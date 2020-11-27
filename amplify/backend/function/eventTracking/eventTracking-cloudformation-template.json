@@ -106,7 +106,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "S3Key": "amplify-builds/eventTracking-78635a494e682f446744-build.zip"
+          "S3Key": "amplify-builds/eventTracking-4c724d49584b434e7079-build.zip"
         }
       }
     },
@@ -598,6 +598,62 @@
         "EventSourceArn": {
           "Fn::ImportValue": {
             "Fn::Sub": "${apipiggybankofhappinessGraphQLAPIIdOutput}:GetAtt:OrganizationTransactionTable:StreamArn"
+          }
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST"
+      }
+    },
+    "LambdaTriggerPolicyOrganizationTransactionApplication": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy-OrganizationTransactionApplication",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListStreams"
+              ],
+              "Resource": {
+                "Fn::ImportValue": {
+                  "Fn::Sub": "${apipiggybankofhappinessGraphQLAPIIdOutput}:GetAtt:OrganizationTransactionApplicationTable:StreamArn"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "LambdaEventSourceMappingOrganizationTransactionApplication": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "LambdaTriggerPolicyOrganizationTransactionApplication",
+        "LambdaExecutionRole"
+      ],
+      "Properties": {
+        "BatchSize": 100,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "${apipiggybankofhappinessGraphQLAPIIdOutput}:GetAtt:OrganizationTransactionApplicationTable:StreamArn"
           }
         },
         "FunctionName": {

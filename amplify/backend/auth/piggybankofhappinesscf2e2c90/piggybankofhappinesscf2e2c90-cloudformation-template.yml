@@ -25,127 +25,167 @@ Parameters:
     
   identityPoolName:
     Type: String
-                
+  
+            
+  
   allowUnauthenticatedIdentities:
     Type: String
             
   resourceNameTruncated:
     Type: String
-              
+  
+            
   userPoolName:
     Type: String
-                      
+  
+            
+        
   autoVerifiedAttributes:
     Type: CommaDelimitedList
       
   mfaConfiguration:
     Type: String
-                      
+  
+            
+        
   mfaTypes:
     Type: CommaDelimitedList
       
   smsAuthenticationMessage:
     Type: String
-              
+  
+            
   smsVerificationMessage:
     Type: String
-              
+  
+            
   emailVerificationSubject:
     Type: String
-              
+  
+            
   emailVerificationMessage:
     Type: String
-                
+  
+            
+  
   defaultPasswordPolicy:
     Type: String
-                
+            
+    
   passwordPolicyMinLength:
     Type: Number
-                  
+          
+        
   passwordPolicyCharacters:
     Type: CommaDelimitedList
-              
+      
+        
   requiredAttributes:
     Type: CommaDelimitedList
-        
+      
+  
   userpoolClientGenerateSecret:
     Type: String
-                
+            
+    
   userpoolClientRefreshTokenValidity:
     Type: Number
-                  
+          
+        
   userpoolClientWriteAttributes:
     Type: CommaDelimitedList
-              
+      
+        
   userpoolClientReadAttributes:
     Type: CommaDelimitedList
       
   userpoolClientLambdaRole:
     Type: String
-                
+  
+            
+  
   userpoolClientSetAttributes:
     Type: String
             
   resourceName:
     Type: String
-              
+  
+            
   authSelections:
     Type: String
-                                      
+  
+            
+            
+            
   useDefault:
     Type: String
-                
+  
+            
+  
   hostedUI:
     Type: String
             
   triggers:
     Type: String
-                      
+  
+            
+        
   userPoolGroupList:
     Type: CommaDelimitedList
-            
+      
+      
   parentStack:
     Type: String
-                
+        
+        
   permissions:
     Type: CommaDelimitedList
-              
+      
+        
   dependsOn:
     Type: CommaDelimitedList
-        
-  thirdPartyAuth:
-    Type: String
-                    
-  authProviders:
-    Type: CommaDelimitedList
       
-  facebookAppId:
-    Type: String
-              
-  googleClientId:
-    Type: String
-                
+  
   userPoolGroups:
     Type: String
-              
+            
+  
   adminQueries:
     Type: String
             
   hostedUIDomainName:
     Type: String
-                      
+  
+            
+        
   authProvidersUserPool:
     Type: CommaDelimitedList
       
   hostedUIProviderMeta:
     Type: String
-              
+  
+            
+  serviceName:
+    Type: String
+  
+            
   hostedUIProviderCreds:
     Type: String
-              
+  
+            
+  facebookAppId:
+    Type: String
+  
+            
+  googleClientId:
+    Type: String
+  
+            
   oAuthMetadata:
     Type: String
-                        
+  
+            
+            
 Conditions:
   ShouldNotCreateEnvResources: !Equals [ !Ref env, NONE ]
 
@@ -157,7 +197,7 @@ Resources:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'piggybcf2e2c90_sns-role', !Join ['',[ 'sns', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'piggybcf2e2c90_sns-role', !Join ['',[ 'sns', 'undefined', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -239,30 +279,7 @@ Resources:
         ExternalId: piggybcf2e2c90_role_external_id
     
   
-      AdminCreateUserConfig:
-          AllowAdminCreateUserOnly: false
-          InviteMessageTemplate:
-              EmailMessage: |
-                [幸福存摺] 登入資訊
-                <ul>
-                    <li>帳號 {username}</li>
-                    <li>臨時密碼 {####}</li>
-                </ul>
-                <br/>
-                <ul>
-                    <li>首頁 https://www.happinessbankbook.org/</li>
-                    <li>蘋果版本下載 https://apps.apple.com/app/id1519658020</li>
-                    <li>安卓版本下載 https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness</li>
-                </ul>
-                <br/>
-                測試專用
-                <ul>
-                    <li>開發首頁 https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ</li>
-                    <li>蘋果測試步驟 https://g0v.hackmd.io/92ynyG5gSVSpAGNq0xx1mg</li>
-                    <li>安卓測試步驟 https://g0v.hackmd.io/gzBdF9PbS52uK37WPHBQEA</li>
-                </ul>
-              EmailSubject: "[幸福存摺] 登入資訊"
-              SMSMessage: "[幸福存摺] 您的帳號是 {username} 臨時密碼 {####}"
+    
     
   
     
@@ -341,7 +358,7 @@ Resources:
   # Created to execute Lambda which gets userpool app client config values
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',['upClientLambdaRole', 'undefined', !Select [3, !Split ['-', !Ref 'AWS::StackName']], '-', !Ref env]]]
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -578,6 +595,9 @@ Resources:
             - ' const userPoolId = event.ResourceProperties.userPoolId;'
             - ' let hostedUIProviderMeta = JSON.parse(event.ResourceProperties.hostedUIProviderMeta);'
             - ' let hostedUIProviderCreds = JSON.parse(event.ResourceProperties.hostedUIProviderCreds);'
+            - ' if(hostedUIProviderCreds.length === 0) {'
+            - '  response.send(event, context, response.SUCCESS, {});'
+            - ' }'
             - ' if (event.RequestType == ''Delete'') {'
             - '  response.send(event, context, response.SUCCESS, {});'
             - ' }'
@@ -811,15 +831,6 @@ Resources:
             - cognito-idp.${region}.amazonaws.com/${client}
             - { region: !Ref "AWS::Region",  client: !Ref UserPool}
             
-      SupportedLoginProviders: 
-        
-        graph.facebook.com: !Ref facebookAppId
-        
-        
-        accounts.google.com: !Ref googleClientId
-        
-        
-      
       AllowUnauthenticatedIdentities: !Ref allowUnauthenticatedIdentities
        
        
@@ -866,8 +877,6 @@ Outputs :
   AppClientID:
     Value: !Ref 'UserPoolClient'
     Description: The user pool app client id
-  AppClientSecret:
-    Value: !GetAtt UserPoolClientInputs.appSecret
   
   
   GoogleWebClient:

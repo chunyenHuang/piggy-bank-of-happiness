@@ -1,16 +1,17 @@
 {
-    "trigger": true,
-    "modules": [
-        "add-to-group"
-    ],
-    "parentResource": "piggybankofhappinesscf2e2c90",
-    "functionName": "piggybankofhappinesscf2e2c90PostConfirmation",
-    "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
-    "parentStack": "auth",
-    "triggerEnvs": [],
-    "triggerDir": "/Users/johnhuang/.nvm/versions/node/v10.16.0/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/utils/../triggers/PostConfirmation",
-    "triggerTemplate": "PostConfirmation.json.ejs",
-    "roleName": "piggybankofhappinesscf2e2c90PostConfirmation",
-    "skipEdit": true,
-    "GROUP": "Users"
+  "trigger": true,
+  "modules": [
+    "add-to-group"
+  ],
+  "parentResource": "piggybankofhappinesscf2e2c90",
+  "functionName": "piggybankofhappinesscf2e2c90PostConfirmation",
+  "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/Users/johnhuang/.nvm/versions/node/v10.16.0/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "roleName": "piggybankofhappinesscf2e2c90PostConfirmation",
+  "skipEdit": true,
+  "GROUP": "Users",
+  "triggerEventPath": "PostConfirmation.event.json"
 }

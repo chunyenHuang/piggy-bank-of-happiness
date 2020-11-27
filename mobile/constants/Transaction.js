@@ -48,3 +48,38 @@ export const getPropsByType = (type) => {
   }
   return props;
 };
+
+export const getPropsByStatus = (status) => {
+  let props;
+  switch (status) {
+  case 'Pending':
+    props = {
+      key: status,
+      label: '審核中',
+      color: Colors.accent,
+      icon: 'search',
+      iconType: 'font-awesome-5',
+    };
+    break;
+  case 'Rejected':
+    props = {
+      key: status,
+      label: '已拒絕',
+      color: Colors.error,
+      icon: 'times',
+      iconType: 'font-awesome-5',
+    };
+    break;
+  case 'Approved':
+  default:
+    props = {
+      key: status,
+      label: '已批准',
+      color: Colors.alternative,
+      icon: 'check',
+      iconType: 'font-awesome-5',
+    };
+    break;
+  }
+  return props;
+};

@@ -20,96 +20,13 @@ export const adminUpdatePoint = /* GraphQL */ `
     }
   }
 `;
-export const createApplicationOrganization = /* GraphQL */ `
-  mutation CreateApplicationOrganization(
-    $input: CreateApplicationOrganizationInput!
-    $condition: ModelApplicationOrganizationConditionInput
+export const createOrganizationApplication = /* GraphQL */ `
+  mutation CreateOrganizationApplication(
+    $input: CreateOrganizationApplicationRequest!
   ) {
-    createApplicationOrganization(input: $input, condition: $condition) {
-      id
-      username
-      name
-      registeredName
-      taxIdNumber
-      description
-      phoneNumber
-      email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateApplicationOrganization = /* GraphQL */ `
-  mutation UpdateApplicationOrganization(
-    $input: UpdateApplicationOrganizationInput!
-    $condition: ModelApplicationOrganizationConditionInput
-  ) {
-    updateApplicationOrganization(input: $input, condition: $condition) {
-      id
-      username
-      name
-      registeredName
-      taxIdNumber
-      description
-      phoneNumber
-      email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
-      }
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteApplicationOrganization = /* GraphQL */ `
-  mutation DeleteApplicationOrganization(
-    $input: DeleteApplicationOrganizationInput!
-    $condition: ModelApplicationOrganizationConditionInput
-  ) {
-    deleteApplicationOrganization(input: $input, condition: $condition) {
-      id
-      username
-      name
-      registeredName
-      taxIdNumber
-      description
-      phoneNumber
-      email
-      address {
-        county
-        district
-        street
-        zipCode
-      }
-      comments {
-        createdAt
-        createdBy
-        comment
-      }
-      status
-      createdAt
-      updatedAt
+    createOrganizationApplication(input: $input) {
+      errors
+      message
     }
   }
 `;
@@ -189,11 +106,13 @@ export const createOrganization = /* GraphQL */ `
   ) {
     createOrganization(input: $input, condition: $condition) {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -201,7 +120,49 @@ export const createOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      note
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -216,11 +177,13 @@ export const updateOrganization = /* GraphQL */ `
   ) {
     updateOrganization(input: $input, condition: $condition) {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -228,7 +191,49 @@ export const updateOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      note
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -243,11 +248,13 @@ export const deleteOrganization = /* GraphQL */ `
   ) {
     deleteOrganization(input: $input, condition: $condition) {
       id
+      username
       name
-      description
       registeredName
+      description
       taxIdNumber
       phoneNumber
+      faxNumber
       email
       address {
         county
@@ -255,7 +262,49 @@ export const deleteOrganization = /* GraphQL */ `
         street
         zipCode
       }
+      principal {
+        name
+        title
+        phoneNumber
+        email
+      }
+      status
       isActive
+      note
+      user {
+        organizationId
+        username
+        idNumber
+        name
+        email
+        role
+        groupId
+        isActive
+        currentPoints
+        earnedPoints
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        organization {
+          id
+          username
+          name
+          registeredName
+          description
+          taxIdNumber
+          phoneNumber
+          faxNumber
+          email
+          status
+          isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
       createdAt
       createdBy
       updatedAt
@@ -629,13 +678,17 @@ export const createOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -681,13 +734,17 @@ export const updateOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -733,13 +790,17 @@ export const deleteOrganizationTransaction = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -763,11 +824,14 @@ export const createOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -789,13 +853,48 @@ export const createOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt
@@ -819,11 +918,14 @@ export const updateOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -845,13 +947,48 @@ export const updateOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt
@@ -875,11 +1012,14 @@ export const deleteOrganizationTransactionApplication = /* GraphQL */ `
       username
       status
       type
+      transactionId
       rewardId
+      rewardAmount
       taskId
+      taskName
       points
-      summary
       description
+      note
       createdAt
       createdBy
       updatedAt
@@ -901,13 +1041,48 @@ export const deleteOrganizationTransactionApplication = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
+      }
+      transaction {
+        organizationId
+        id
+        username
+        rewardId
+        refTransactionId
+        isCancelled
+        points
+        type
+        note
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
           createdAt
           createdBy
           updatedAt
@@ -939,11 +1114,13 @@ export const createOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -951,7 +1128,31 @@ export const createOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -982,11 +1183,13 @@ export const updateOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -994,7 +1197,31 @@ export const updateOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -1025,11 +1252,13 @@ export const deleteOrganizationUser = /* GraphQL */ `
       updatedBy
       organization {
         id
+        username
         name
-        description
         registeredName
+        description
         taxIdNumber
         phoneNumber
+        faxNumber
         email
         address {
           county
@@ -1037,7 +1266,31 @@ export const deleteOrganizationUser = /* GraphQL */ `
           street
           zipCode
         }
+        principal {
+          name
+          title
+          phoneNumber
+          email
+        }
+        status
         isActive
+        note
+        user {
+          organizationId
+          username
+          idNumber
+          name
+          email
+          role
+          groupId
+          isActive
+          currentPoints
+          earnedPoints
+          createdAt
+          createdBy
+          updatedAt
+          updatedBy
+        }
         createdAt
         createdBy
         updatedAt
@@ -1082,13 +1335,17 @@ export const createOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1192,13 +1449,17 @@ export const updateOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt
@@ -1302,13 +1563,17 @@ export const deleteOrganizationUserTask = /* GraphQL */ `
         updatedBy
         organization {
           id
+          username
           name
-          description
           registeredName
+          description
           taxIdNumber
           phoneNumber
+          faxNumber
           email
+          status
           isActive
+          note
           createdAt
           createdBy
           updatedAt

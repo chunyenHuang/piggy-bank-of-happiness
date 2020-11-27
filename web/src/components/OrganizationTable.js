@@ -4,13 +4,17 @@ import { v1 as uuidv1 } from 'uuid';
 import SyncIcon from '@material-ui/icons/Sync';
 
 import Table from 'components/Table/Table';
-// import LinkButton from 'components/Table/LinkButton';
+import NestedTableContainer from 'components/Table/NestedTableContainer';
 import { listOrganizations } from 'graphql/queries';
 import { updateOrganization, createOrganization } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { updateUserAttributes } from 'utilities/cognito';
+import orgApplicationStatusMenu from 'constants/orgApplicationStatus';
+import orgIsActiveMenu from 'constants/orgIsActive';
 import DetailFormDialog from 'components/DetailFormDialog';
 import formMetadata from 'forms/Organization';
+import Organization from 'views/Admin/Organization/Organization';
+import { renderFromMenu } from 'utilities/format';
 
 const title = '機構列表';
 const description = '';
@@ -21,7 +25,18 @@ function OrganizationTable() {
   const [open, setOpen] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState();
 
-  const options = {};
+  const options = {
+    expandableRows: true,
+    isRowExpandable: () => true,
+    renderExpandableRow(rowData, rowMeta) {
+      const { id } = data[rowMeta.dataIndex];
+      return (
+        <NestedTableContainer columns={columns}>
+          <Organization id={id} />
+        </NestedTableContainer>
+      );
+    },
+  };
 
   const currentOrgId = localStorage.getItem('app:organizationId');
   const username = localStorage.getItem('app:username');
@@ -38,21 +53,36 @@ function OrganizationTable() {
 
   const columns = [
     {
-      name: 'isActive',
-      label: '狀態',
-      type: 'checkbox',
+      name: 'status',
+      label: '申請狀態',
       edit: {
-        type: 'checkbox',
+        type: 'select',
+        menu: orgApplicationStatusMenu,
       },
       options: {
         filter: true,
         sort: true,
+        customBodyRender: renderFromMenu(orgApplicationStatusMenu),
+      },
+    },
+    {
+      name: 'isActive',
+      label: '使用狀態',
+      edit: {
+        type: 'select',
+        menu: orgIsActiveMenu,
+      },
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: renderFromMenu(orgIsActiveMenu),
       },
     },
     {
       name: 'id',
       label: 'ID',
       options: {
+        display: false,
         filter: false,
         sort: false,
       },
@@ -60,6 +90,17 @@ function OrganizationTable() {
     {
       name: 'name',
       label: '名稱',
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'registeredName',
+      label: '立案名稱',
       edit: {
         type: 'text',
       },
@@ -80,9 +121,40 @@ function OrganizationTable() {
       },
     },
     {
+      name: 'taxIdNumber',
+      label: '統一編號',
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'phoneNumber',
+      label: '電話號碼',
+      edit: {
+        type: 'text',
+      },
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'user.name',
+      label: '申請人',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
       name: 'createdBy',
       label: '創立者',
       options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -91,6 +163,7 @@ function OrganizationTable() {
       name: 'updatedBy',
       label: '更新者',
       options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -100,6 +173,7 @@ function OrganizationTable() {
       label: '創立於',
       type: 'datetime',
       options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -109,6 +183,7 @@ function OrganizationTable() {
       label: '更新於',
       type: 'datetime',
       options: {
+        display: false,
         filter: false,
         sort: true,
       },

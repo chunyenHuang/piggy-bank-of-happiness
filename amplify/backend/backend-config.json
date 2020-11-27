@@ -123,7 +123,14 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput"
           ]
-        },
+        }
+      ]
+    },
+    "pointOperation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
         {
           "category": "api",
           "resourceName": "piggybankofhappiness",
@@ -133,11 +140,18 @@
         }
       ]
     },
-    "pointOperation": {
+    "organizationApplication": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
         {
           "category": "api",
           "resourceName": "piggybankofhappiness",
