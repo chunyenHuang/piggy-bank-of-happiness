@@ -58,6 +58,7 @@ export default function OrgApplication() {
   const [toUploadFiles, setToUploadFiles] = useState([]);
   const [organization, setOrganization] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(Date.now());
 
   const [message, setMessage] = useState();
 
@@ -100,6 +101,7 @@ export default function OrgApplication() {
     ]);
 
     setIsLoading(false);
+    setLastUpdatedAt(Date.now());
   };
 
   useEffect(() => {
@@ -107,7 +109,7 @@ export default function OrgApplication() {
 
     (async () => {
       const organizationId = localStorage.getItem('app:organizationId');
-      if (organizationId) {
+      if (organizationId && organizationId !== '') {
         const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
 
         if (organization) {
@@ -130,27 +132,25 @@ export default function OrgApplication() {
             break;
           }
           setMessage(message);
-        } else {
-          const cache = localStorage.getItem(cacheKey);
-          if (cache) {
-            setOrganization(JSON.parse(cache));
-          }
 
-          const user = await Auth.currentAuthenticatedUser();
-          const newOrganizationId = uuidv1();
-          await Auth.updateUserAttributes(user, {
-            'custom:organizationId': newOrganizationId,
-            'custom:organizationName': 'N/A',
-          });
-          setOrganizationId(organizationId);
+          return;
         }
       }
-    })();
-  }, []);
 
-  if (!organizationId) {
-    return null;
-  }
+      const cache = localStorage.getItem(cacheKey);
+      if (cache) {
+        setOrganization(JSON.parse(cache));
+      }
+
+      const user = await Auth.currentAuthenticatedUser();
+      const newOrganizationId = uuidv1();
+      setOrganizationId(newOrganizationId);
+      await Auth.updateUserAttributes(user, {
+        'custom:organizationId': newOrganizationId,
+        'custom:organizationName': '幸福存摺',
+      });
+    })();
+  }, [lastUpdatedAt]);
 
   if (!username) {
     return (
@@ -165,7 +165,7 @@ export default function OrgApplication() {
           className={classes.titleButton}
           fullWidth
         >
-          還沒有帳號，請先點此註冊
+          還沒有帳號，請點此註冊
         </Button>
         <Button
           color="inherit"
@@ -177,6 +177,10 @@ export default function OrgApplication() {
           已經有帳號，請點此登入
         </Button>
       </Container>);
+  }
+
+  if (!organizationId) {
+    return null;
   }
 
   // 使用者已經有 custom:organizationId

@@ -67,7 +67,7 @@ export default {
     },
     {
       key: 'email',
-      type: 'String',
+      type: 'email',
       label: '電子信箱',
     },
     {
@@ -112,7 +112,7 @@ export default {
         label: '電話',
       }, {
         key: 'email',
-        type: 'String',
+        type: 'email',
         label: '電子信箱',
       }],
     },

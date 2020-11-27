@@ -89,21 +89,25 @@ function ReactApp() {
       return;
     }
     // console.log(user);
-    const organizationId = user.attributes['custom:organizationId'] || '';
+    const organizationId = user.attributes['custom:organizationId'];
     const userGroups = user.signInUserSession.accessToken.payload['cognito:groups'];
 
     localStorage.setItem('app:username', user.username);
     localStorage.setItem('app:name', user.attributes.name);
-    localStorage.setItem('app:organizationId', organizationId);
     localStorage.setItem('app:cognitoGroup', userGroups[0]);
 
     (async () => {
-      const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
+      let isActive = 0;
 
-      const isActive = organization ? organization.isActive : 0;
-      const organizationName = (organization ? organization.name : user.attributes['custom:organizationName']) || '';
+      if (organizationId) {
+        localStorage.setItem('app:organizationId', organizationId);
+        const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
 
-      localStorage.setItem('app:organizationName', organizationName);
+        isActive = organization ? organization.isActive : 0;
+        const organizationName = (organization ? organization.name : user.attributes['custom:organizationName']) || '';
+
+        localStorage.setItem('app:organizationName', organizationName);
+      }
 
       const filteredRoutes = appRoutes
         .filter(({ roles }) => roles ? isActive === 1 : true)

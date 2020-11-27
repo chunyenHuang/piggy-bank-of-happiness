@@ -173,6 +173,14 @@ Parameters:
     Type: String
   
             
+  facebookAppId:
+    Type: String
+  
+            
+  googleClientId:
+    Type: String
+  
+            
   oAuthMetadata:
     Type: String
   
@@ -870,9 +878,15 @@ Outputs :
     Value: !Ref 'UserPoolClient'
     Description: The user pool app client id
   
+  
+  GoogleWebClient:
+    Value: !Ref googleClientId
    
    
   
+  
+  FacebookWebClient:
+    Value: !Ref facebookAppId
    
    
   
