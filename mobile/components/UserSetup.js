@@ -12,7 +12,7 @@ import {
 import Form from './Form';
 import Loading from 'components/Loading';
 import request from 'src/utils/request';
-import { listOrganizations } from 'src/graphql/queries';
+import { listOrganizations, getOrganization } from 'src/graphql/queries';
 import { createOrganizationUser } from 'src/graphql/mutations';
 import Colors from 'constants/Colors';
 import { errorAlert } from 'src/utils/alert';
@@ -21,6 +21,8 @@ import { sortBy } from 'src/utils/sorting';
 
 export default function UserSetup({ onComplete }) {
   const [showApplication, setShowApplication] = useState(false);
+  const [showInactiveMsg, setShowInactiveMsg] = useState(false);
+  const [showWelcomeMsg, setShowWelcomeMsg] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganizationId, setSelectedOrganizationId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,7 +49,14 @@ export default function UserSetup({ onComplete }) {
 
       // user is not assigned to organization yet
       if (!organizationId) {
-        setShowApplication(true);
+        // setShowApplication(true);
+        setShowWelcomeMsg(true);
+        return;
+      }
+
+      const { data: { getOrganization: organization } } = await request(getOrganization, { id: organizationId });
+      if (organization && organization.isActive === 0) {
+        setShowInactiveMsg(true);
       } else {
         setIsCompleted(true);
       }
@@ -83,7 +92,7 @@ export default function UserSetup({ onComplete }) {
 
         await AsyncStorage.multiSet(items);
 
-        onComplete && onComplete();
+        if (onComplete) onComplete();
       })();
     }
   }, [isCompleted]);
@@ -122,11 +131,32 @@ export default function UserSetup({ onComplete }) {
     }
   };
 
-  if (organizations.length === 0) {
+  if (organizations.length === 0 && !showInactiveMsg && !showApplication && !showWelcomeMsg) {
     return (
       <Loading
         active={true}
       />);
+  }
+
+  if (showWelcomeMsg) {
+    return (<View style={styles.container}>
+      <Text style={{ ...styles.hint }}>
+        幸福存摺目前僅開放給政府立案的機構，
+      </Text>
+      <Text style={{ ...styles.hint, marginBottom: 32 }}>
+        如果您是機構負責人，請使用網頁版申請。
+      </Text>
+      <SignOutButton />
+    </View>);
+  }
+
+  if (showInactiveMsg) {
+    return (<View style={styles.container}>
+      <Text style={{ ...styles.hint, marginBottom: 32 }}>
+        您的機構目前停止使用，請聯繫系統管理員。
+      </Text>
+      <SignOutButton />
+    </View>);
   }
 
   return (
