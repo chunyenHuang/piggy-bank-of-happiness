@@ -72,7 +72,7 @@ const columns = [
   },
   {
     name: 'note',
-    label: '拒絕原因',
+    label: '備註',
     options: {
       filter: false,
       sort: false,

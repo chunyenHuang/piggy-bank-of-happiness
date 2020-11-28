@@ -45,6 +45,7 @@ export default function AddTaskToUser({ user, isApplication, onUpdate, visible: 
             type: 'credits',
             transactionId: uuidv1(),
             taskId: id,
+            taskName: name,
             points: point,
             description: `任務 ${name}`,
             createdBy: username,
