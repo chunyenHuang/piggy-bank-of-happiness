@@ -23,17 +23,6 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
 
     const currentUsername = await AsyncStorage.getItem('app:username');
 
-    const payload = {
-      input: {
-        id: transaction.id,
-        status,
-        note,
-        updatedBy: currentUsername,
-      },
-    };
-
-    await request(updateOrganizationTransactionApplication, payload);
-
     // create real transaction
     const {
       organizationId,
@@ -85,6 +74,17 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
     console.log(pointPayload);
 
     await request(adminUpdatePoint, pointPayload);
+
+    const applicationPayload = {
+      input: {
+        id: transaction.id,
+        status,
+        note,
+        updatedBy: currentUsername,
+      },
+    };
+
+    await request(updateOrganizationTransactionApplication, applicationPayload);
 
     if (onUpdate) onUpdate();
 
@@ -189,7 +189,7 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
           disabled={true}
         />
         <Input
-          label="拒絕原因"
+          label="備註"
           placeholder='...'
           multiline={true}
           numberOfLines={5}
