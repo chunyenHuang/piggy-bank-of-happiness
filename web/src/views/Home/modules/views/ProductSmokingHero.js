@@ -9,8 +9,8 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(10),
-    marginBottom: theme.spacing(10),
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
   },
   button: {
     border: '2px solid currentColor',
@@ -21,9 +21,6 @@ const styles = (theme) => ({
   link: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
-  },
-  buoy: {
-    width: 60,
   },
 });
 

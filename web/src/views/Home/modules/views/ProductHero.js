@@ -31,6 +31,10 @@ const styles = (theme) => ({
   more: {
     marginTop: theme.spacing(2),
   },
+  space: {
+    height: 16,
+    width: 16,
+  },
 });
 
 function ProductHero(props) {
@@ -46,27 +50,32 @@ function ProductHero(props) {
       <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
         設計給非營利事業組織兒少陪伴單位的電子系統。
       </Typography>
-      <Grid container justify="center" alignItems="center">
-        <Button
-          variant="contained"
-          color="default"
-          className={classes.button}
-          style={{ marginRight: 16 }}
-          startIcon={<AndroidIcon />}
-          target="_blank"
-          href="https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness"
-        >
-          安卓版本下載
-        </Button>
-        <Button
-          variant="contained"
-          color="default"
-          className={classes.button}
-          startIcon={<AppleIcon />}
-          href="https://apps.apple.com/app/id1519658020" // testflight https://apps.apple.com/nz/app/%E5%B9%B8%E7%A6%8F%E5%AD%98%E6%91%BA/id1519658020s
-        >
-          蘋果版本下載
-        </Button>
+      <Grid container justify="center" alignItems="center" spacing={2}>
+        <Grid item xs={false} md={3} />
+        <Grid item xs={12} md={3} container align="center" justify="center">
+          <Button
+            variant="contained"
+            color="default"
+            className={classes.button}
+            startIcon={<AndroidIcon />}
+            target="_blank"
+            href="https://play.google.com/store/apps/details?id=cloud.goldax.piggy_bank_of_happiness"
+          >
+            安卓版本下載
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={3} container align="center" justify="center">
+          <Button
+            variant="contained"
+            color="default"
+            className={classes.button}
+            startIcon={<AppleIcon />}
+            href="https://apps.apple.com/app/id1519658020" // testflight https://apps.apple.com/nz/app/%E5%B9%B8%E7%A6%8F%E5%AD%98%E6%91%BA/id1519658020s
+          >
+            蘋果版本下載
+          </Button>
+        </Grid>
+        <Grid item xs={false} md={3} />
       </Grid>
     </ProductHeroLayout>
   );
