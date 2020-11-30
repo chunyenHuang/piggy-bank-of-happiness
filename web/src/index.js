@@ -71,6 +71,7 @@ function ReactApp() {
   React.useEffect(() => {
     (async () => {
       const [err, user] = await to(Auth.currentAuthenticatedUser({ bypassCache: true }));
+      console.log({ err, user, initialPath });
       if (err) {
         setIsLoading(false);
         history.push(initialPath);

@@ -103,24 +103,30 @@ function ProductHowItWorks(props) {
             </Grid>
           </Grid>
         </div>
-        <Grid container justify="center" align="center" style={{ marginTop: 32 }} spacing={2}>
-          <Button
-            component="a"
-            color="secondary"
-            variant="contained"
-            href={'/app?state=signup&redirect=/application'}
-            className={classes.titleButton}
-          >
-            還沒有帳號，請點此註冊
-          </Button>
-          <Button
-            color="inherit"
-            component="a"
-            href={'/app?state=signin&redirect=/application'}
-            className={classes.titleButton}
-          >
-            已經有帳號，請點此登入
-          </Button>
+        <Grid container justify="center" alignItems="center" spacing={4}>
+          <Grid item xs={false} md={3} />
+          <Grid item xs={12} md={3} container align="center" justify="center">
+            <Button
+              component="a"
+              color="secondary"
+              variant="contained"
+              href={'/app?state=signup&redirect=/application'}
+              className={classes.titleButton}
+            >
+              還沒有帳號，請點此註冊
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={3} container align="center" justify="center">
+            <Button
+              color="inherit"
+              component="a"
+              href={'/app?state=signin&redirect=/application'}
+              className={classes.titleButton}
+            >
+              已經有帳號，請點此登入
+            </Button>
+          </Grid>
+          <Grid item xs={false} md={3} />
         </Grid>
       </Container>
     </section>
