@@ -7,7 +7,14 @@ import Button from '@material-ui/core/Button';
 import AndroidIcon from '@material-ui/icons/Android';
 import AppleIcon from '@material-ui/icons/Apple';
 
+import Version from 'components/Version';
+import Colors from 'constants/Colors';
+import OrgApplication from 'views/OrgApplication/OrgApplication';
+
 const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+  },
   content: {
     flex: 1,
     padding: theme.spacing(4),
@@ -19,10 +26,10 @@ export default function LandingPage() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={classes.root}>
       <Grid className={classes.content} container alignItems="center" justify="center" direction="column">
         <Box component="div" p={4}>
-          <img src="/images/logo-256.png" alt="Logo" width="256" />
+          <img src="/images/logo-256.png" alt="Logo" width="150" />
         </Box>
 
         <Grid container justify="space-around" alignItems="center">
@@ -45,6 +52,16 @@ export default function LandingPage() {
             蘋果版本下載
           </Button>
         </Grid>
+
+        <hr />
+
+        <OrgApplication />
+
+        <hr />
+
+        <Box component="div" p={4} color={Colors.light}>
+          <Version />
+        </Box>
       </Grid>
     </Container>
   );

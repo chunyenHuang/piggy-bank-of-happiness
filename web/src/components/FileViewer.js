@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { Storage } from 'aws-amplify';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import prettyBytes from 'pretty-bytes';
@@ -18,8 +20,12 @@ import { download } from 'utilities/file';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  listSubHeader: {
+    fontWeight: 700,
+    borderBottom: '1px solid #E5E5E5',
+    cursor: 'pointer',
   },
 }));
 
@@ -40,7 +46,14 @@ export default function FileViewer({ s3Prefix }) {
     })();
   }, [s3Prefix]);
 
-  return (<div className={classes.root}>
+  return (<Card className={classes.root}>
+    <ListSubheader
+      component="li"
+      className={classes.listSubHeader}
+      disableSticky={true}
+    >
+      文件資料
+    </ListSubheader>
     <List className={classes.root}>
       {files.map((file, index)=>(
         <ListItem key={index}>
@@ -67,7 +80,7 @@ export default function FileViewer({ s3Prefix }) {
         </ListItem>
       ))}
     </List>
-  </div>);
+  </Card>);
 }
 
 FileViewer.propTypes = {

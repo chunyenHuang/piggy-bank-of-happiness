@@ -172,7 +172,7 @@ export default function CustomAppBar({ user, routes }) {
                 to={'/application'}
                 className={classes.unstyledHyperlink}
               >
-                機構申請
+                機構申請加入請點此
               </Link>
             </Typography>
             <Button

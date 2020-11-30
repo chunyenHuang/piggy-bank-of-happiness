@@ -1,3 +1,6 @@
+import React from 'react';
+import Box from '@material-ui/core/Box';
+
 export const formatAddress = (inAddressObject = {}) => {
   if (typeof inAddressObject === 'string') return inAddressObject;
   const {
@@ -15,6 +18,12 @@ export const formatAddress = (inAddressObject = {}) => {
 export const renderFromMenu = (inMenu = []) => {
   return (inValue) => {
     const matched = inMenu.find(({ value }) => value === inValue);
-    return matched ? matched.label : inValue;
+    const text = matched ? matched.label : inValue;
+    const color = matched ? matched.color : '#000000';
+
+    return (
+      <Box component="p" color={color} fontWeight={700}>
+        {text}
+      </Box>);
   };
 };

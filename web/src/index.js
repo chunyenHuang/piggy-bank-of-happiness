@@ -18,13 +18,14 @@ import { appRoutes } from './routes';
 import awsconfig from './aws-exports.js';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import LandingPage from 'views/LandingPage/LandingPage';
+// import LandingPage from 'views/LandingPage/LandingPage';
 import OrgApplication from 'views/OrgApplication/OrgApplication';
 import CustomAppBar from 'components/CustomAppBar';
 import Loading from 'components/Loading';
 import { getOrganization } from 'graphql/queries';
 import { request } from 'utilities/graph';
 import ProtectedRoute from 'components/ProtectedRoute';
+import Home from 'views/Home/Home';
 
 import store from './App.reducer';
 import './index.css';
@@ -157,7 +158,8 @@ function ReactApp() {
             </React.Fragment>:
             <React.Fragment>
               <Route path="/application" exact component={OrgApplication} />
-              <Route path="/" exact component={LandingPage} />
+              <Route path="/" exact component={Home} />
+              {/* <Route path="/" exact component={LandingPage} /> */}
               <Redirect to="/" />
             </React.Fragment>}
         </Switch>
