@@ -15,8 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 // import ExpandLess from '@material-ui/icons/ExpandLess';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
-
-import LinkButton from 'components/Table/LinkButton';
+// import LinkButton from 'components/Table/LinkButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +85,7 @@ export default function InfoCard({
         <div className={classes.actions}>
           {editButton && editButton({ item: data, onUpdate: (data) => onUpdate && onUpdate(data) })}
           <div className={classes.actionsSpace} />
-          <LinkButton path={link || ''} label="在新頁面開啟" newTab={true} disabled={!link} />
+          {/* <LinkButton path={link || ''} label="在新頁面開啟" newTab={true} disabled={!link} /> */}
         </div>
 
         <Collapse in={open} timeout="auto" unmountOnExit>

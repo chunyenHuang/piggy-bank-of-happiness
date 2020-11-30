@@ -15,6 +15,7 @@ import DetailFormDialog from 'components/DetailFormDialog';
 import formMetadata from 'forms/Organization';
 import Organization from 'views/Admin/Organization/Organization';
 import { renderFromMenu } from 'utilities/format';
+import LinkButton from 'components/Table/LinkButton';
 
 const title = '機構列表';
 const description = '';
@@ -116,6 +117,7 @@ function OrganizationTable() {
         type: 'text',
       },
       options: {
+        display: false,
         filter: false,
         sort: false,
       },
@@ -127,6 +129,7 @@ function OrganizationTable() {
         type: 'text',
       },
       options: {
+        display: false,
         filter: false,
         sort: true,
       },
@@ -145,6 +148,14 @@ function OrganizationTable() {
     {
       name: 'user.name',
       label: '申請人',
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'principal.name',
+      label: '負責人',
       options: {
         filter: false,
         sort: true,
@@ -204,6 +215,23 @@ function OrganizationTable() {
             >
               切換
             </Button>
+          );
+        },
+      },
+    },
+    {
+      name: 'id',
+      label: ' ',
+      options: {
+        display: true,
+        filter: false,
+        sort: false,
+        customBodyRender(id) {
+          return (
+            <LinkButton
+              path={`/organization/${id}`}
+              label="前往機構頁面"
+            />
           );
         },
       },

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 
-import VerticalTabs from 'components/Tab/VerticalTabs';
 import OrganizationCard from 'components/Card/OrganizationCard';
 import OrganizationPrincipalCard from 'components/Card/OrganizationPrincipalCard';
 import OrganizationApplicantCard from 'components/Card/OrganizationApplicantCard';
@@ -9,10 +10,22 @@ import FileViewer from 'components/FileViewer';
 
 import { request } from 'utilities/graph';
 import { getOrganization } from 'graphql/queries';
+import Loading from 'components/Loading';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+  space: {
+    height: theme.spacing(2),
+  },
+}));
 
 export default function Organization({ id: inId, computedMatch }) {
+  const classes = useStyles();
+
   const [id, setId] = useState();
-  const [tabs, setTabs] = useState([]);
+  const [data, setData] = useState();
 
   useEffect(() => {
     if (inId) {
@@ -29,35 +42,28 @@ export default function Organization({ id: inId, computedMatch }) {
 
     (async () => {
       const { data: { getOrganization: data } } = await request(getOrganization, { id });
-
-      const tabs = [
-        {
-          label: '基本資料',
-          component: <div>
-            <OrganizationCard title="基本資料" data={data} />
-            <br />
-            <OrganizationPrincipalCard title="負責人" data={data.principal} />
-            <br />
-            <OrganizationApplicantCard title="申請人" data={data.user || { username: data.username }} />
-          </div>,
-        },
-        {
-          label: '文件',
-          component: <FileViewer s3Prefix={`organizations/${data.id}/documents/`}/>,
-        },
-      ];
-      setTabs(tabs);
+      setData(data);
     })();
   }, [id]);
 
-  if (!id) {
+  if (!id || !data) {
     return null;
   }
 
   return (
-    <VerticalTabs
-      tabs={tabs}
-    />
+    <Grid container spacing={2} className={classes.root}>
+      <Grid item xs={12} md={4}>
+        <OrganizationCard title="基本資料" data={data} />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <OrganizationPrincipalCard title="負責人" data={data.principal} />
+        <div className={classes.space} />
+        <OrganizationApplicantCard title="申請人" data={data.user || { username: data.username }} />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <FileViewer s3Prefix={`organizations/${data.id}/documents/`}/>
+      </Grid>
+    </Grid>
   );
 }
 

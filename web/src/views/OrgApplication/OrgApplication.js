@@ -12,6 +12,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import { toastr } from 'react-redux-toastr';
+import { useHistory } from 'react-router-dom';
 
 import { Auth } from 'aws-amplify';
 import DetailForm from 'react-material-final-form';
@@ -25,6 +26,7 @@ import { request } from 'utilities/graph';
 
 import formMetadata from 'forms/Organization';
 import { upload } from 'utilities/file';
+import Loading from 'components/Loading';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -53,11 +55,13 @@ const cacheKey = 'app:org_application_form';
 
 export default function OrgApplication() {
   const classes = useStyles();
+  const history = useHistory();
   const [organizationId, setOrganizationId] = useState();
   const [username, setUsername] = useState();
   const [toUploadFiles, setToUploadFiles] = useState([]);
   const [organization, setOrganization] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState(Date.now());
 
   const [message, setMessage] = useState();
@@ -105,7 +109,15 @@ export default function OrgApplication() {
   };
 
   useEffect(() => {
-    setUsername(localStorage.getItem('app:username'));
+    const username = localStorage.getItem('app:username');
+    setUsername(username);
+  }, []);
+
+  useEffect(() => {
+    if (!username) {
+      setIsReady(true);
+      return;
+    }
 
     (async () => {
       const organizationId = localStorage.getItem('app:organizationId');
@@ -125,14 +137,19 @@ export default function OrgApplication() {
             message = '您的申請資料需要補充文件，請聯繫系統管理員。';
             break;
           case 'Approved':
-            message = organization.isActive === 1 ? '' : '您的機構已被停止使用，請聯繫系統管理員。';
+            if (organization.isActive === 1) {
+              history.push('/');
+              return;
+            } else {
+              message = '您的機構已被停止使用，請聯繫系統管理員。';
+            }
             break;
           case 'Rejected':
             message = '很抱歉您的申請已被拒絕，請聯繫系統管理員。';
             break;
           }
           setMessage(message);
-
+          setIsReady(true);
           return;
         }
       }
@@ -144,18 +161,32 @@ export default function OrgApplication() {
 
       const user = await Auth.currentAuthenticatedUser();
       const newOrganizationId = uuidv1();
+      const newOrganizationName = '幸福存摺';
+
       setOrganizationId(newOrganizationId);
+
+      localStorage.setItem('app:organizationId', newOrganizationId);
+      localStorage.setItem('app:organizationName', newOrganizationName);
+
       await Auth.updateUserAttributes(user, {
         'custom:organizationId': newOrganizationId,
-        'custom:organizationName': '幸福存摺',
+        'custom:organizationName': newOrganizationName,
       });
+
+      setIsReady(true);
     })();
-  }, [lastUpdatedAt]);
+  }, [username, lastUpdatedAt, history]);
+
+  if (!isReady) {
+    return <Loading
+      active={true}
+    />;
+  }
 
   if (!username) {
     return (
       <Container maxWidth="sm" className={classes.content}>
-        <Typography component="h1" variant="h4" align="center">
+        <Typography component="h1" variant="h5" align="center">
           申請加入幸福存摺
         </Typography>
         <Button
@@ -177,10 +208,6 @@ export default function OrgApplication() {
           已經有帳號，請點此登入
         </Button>
       </Container>);
-  }
-
-  if (!organizationId) {
-    return null;
   }
 
   // 使用者已經有 custom:organizationId

@@ -10,6 +10,7 @@ import Colors from 'constants/Colors';
 export const useStyles = makeStyles((theme) => ({
   root: {
     flex: 1,
+    height: '100%',
     display: 'flex',
     padding: theme.spacing(2),
     backgroundColor: Colors.background.light,

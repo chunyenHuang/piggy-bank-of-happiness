@@ -16,6 +16,7 @@ export default function OrganizationPrincipalCard({ title, data, ...props }) {
       title={title}
       mappings={mappings}
       data={data}
+      link={false}
       {...props}
     />
   );
