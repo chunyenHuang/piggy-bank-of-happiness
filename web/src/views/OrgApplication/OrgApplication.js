@@ -28,6 +28,8 @@ import formMetadata from 'forms/Organization';
 import { upload } from 'utilities/file';
 import Loading from 'components/Loading';
 
+import ProductHowItWorks from 'views/Home/modules/views/ProductHowItWorks';
+
 const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
@@ -184,30 +186,7 @@ export default function OrgApplication() {
   }
 
   if (!username) {
-    return (
-      <Container maxWidth="sm" className={classes.content}>
-        <Typography component="h1" variant="h5" align="center">
-          申請加入幸福存摺
-        </Typography>
-        <Button
-          color="inherit"
-          component={Link}
-          to={'/app?state=signup&redirect=/application'}
-          className={classes.titleButton}
-          fullWidth
-        >
-          還沒有帳號，請點此註冊
-        </Button>
-        <Button
-          color="inherit"
-          component={Link}
-          to={'/app?state=signin&redirect=/application'}
-          className={classes.titleButton}
-          fullWidth
-        >
-          已經有帳號，請點此登入
-        </Button>
-      </Container>);
+    return (<ProductHowItWorks />);
   }
 
   // 使用者已經有 custom:organizationId
