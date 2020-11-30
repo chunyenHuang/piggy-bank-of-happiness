@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -54,6 +54,8 @@ const hideFields = ['id', 'isActive', 'status', 'username'];
 const filteredFormMetadata = { fields: formMetadata.fields.filter(({ key }) => !hideFields.includes(key)) };
 
 const cacheKey = 'app:org_application_form';
+
+const EMAIL = 'info@happinessbankbook.org';
 
 export default function OrgApplication() {
   const classes = useStyles();
@@ -136,18 +138,18 @@ export default function OrgApplication() {
             message = '我們已經收到您的申請，請靜待審核結果。';
             break;
           case 'WaitingForAdditionalDocuments':
-            message = '您的申請資料需要補充文件，請聯繫系統管理員。';
+            message = `您的申請資料需要補充文件，請聯繫系統管理員 ${EMAIL}。`;
             break;
           case 'Approved':
             if (organization.isActive === 1) {
               history.push('/');
               return;
             } else {
-              message = '您的機構已被停止使用，請聯繫系統管理員。';
+              message = `您的機構已被停止使用，請聯繫系統管理員 ${EMAIL}。`;
             }
             break;
           case 'Rejected':
-            message = '很抱歉您的申請已被拒絕，請聯繫系統管理員。';
+            message = `很抱歉您的申請已被拒絕，請聯繫系統管理員 ${EMAIL}。`;
             break;
           }
           setMessage(message);
