@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "幸福存摺",
+    "slug": "piggy-bank-of-happiness",
+    "scheme": "piggybankofhappiness",
+    "privacy": "public",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.1.12",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "usesAppleSignIn": true,
+      "supportsTablet": true,
+      "buildNumber": "59",
+      "bundleIdentifier": "cloud.goldax.piggy-bank-of-happiness",
+      "infoPlist": {}
+    },
+    "android": {
+      "package": "cloud.goldax.piggy_bank_of_happiness",
+      "versionCode": 41
+    },
+    "androidStatusBarColor": "#68b386",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#68b386",
+      "translucent": false
+    },
+    "description": "設計給非營利事業組織兒少陪伴單位的電子獎勵系統，讓孩子們透過執行任務獲得點數，累積的點數可向機構換取獎品或是客製化的需求（例如：修鞋，修車）。",
+    "githubUrl": "https://github.com/chunyenHuang/piggy-bank-of-happiness"
+  }
+}

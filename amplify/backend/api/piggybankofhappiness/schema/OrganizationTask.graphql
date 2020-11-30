@@ -1,9 +1,9 @@
 type OrganizationTask
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @key(name: "byProgramByActive", fields: ["programId","isActive"], queryField: "getOrgTasksByProgramByActive")
   @auth(rules: [
-    # {allow: owner, ownerField: "createdBy", operations: [create]},
+    {allow: groups, groups: ["Users"], operations: [read]},
     {allow: groups, groups: ["OrgManagers"], operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
@@ -18,9 +18,10 @@ type OrganizationTask
   point: Int!
   pointMin: Int!
   pointMax: Int!
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   program: OrganizationProgram @connection(fields:["organizationId", "programId"])
 }

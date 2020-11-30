@@ -1,0 +1,57 @@
+{
+  "permissions": {
+    "auth": {
+      "piggybankofhappinesscf2e2c90": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "Organization:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationGroup:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationProgram:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationTask:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationTransaction:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationUser:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationUserTask:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

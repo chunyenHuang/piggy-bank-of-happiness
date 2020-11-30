@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "auth": {
+      "piggybankofhappinesscf2e2c90": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "Organization:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "OrganizationUser:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

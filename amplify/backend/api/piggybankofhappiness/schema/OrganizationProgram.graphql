@@ -1,7 +1,8 @@
 type OrganizationProgram
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
+    {allow: groups, groups: ["Users"], operations: [read]},
     {allow: groups, groups: ["OrgManagers"], operations: [read]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
@@ -11,7 +12,8 @@ type OrganizationProgram
   name: String!
   isActive: Int!
   description: String
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
 }

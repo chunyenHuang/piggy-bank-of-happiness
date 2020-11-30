@@ -8,6 +8,13 @@ enum TransactionType {
   reward # use for reward
 }
 
+enum TransactionApplicationStatus {
+  Pending
+  Approved
+  Rejected
+  Cancelled
+}
+
 enum RoleType {
   Admin
   Manager
@@ -20,4 +27,11 @@ enum TaskStatusType {
   In progress
   Completed
   Failed
+}
+
+type Address {
+  county: String! # 台北市
+  district: String! # 信義區
+  street: String! # 市府路45號
+  zipCode: String! # 11060
 }

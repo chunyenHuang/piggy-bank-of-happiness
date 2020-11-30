@@ -1,10 +1,13 @@
 # To avoid querying cognito admin api
 type OrganizationUser
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId","username"])
   @key(name: "byGroupByActive", fields: ["groupId", "isActive"], queryField: "getOrgUsersByGroupByActive")
+  # should be byOrgByRole =_= but it has to re-create the table...
+  @key(name: "byRoleByOrg", fields: ["role", "organizationId"], queryField: "getOrgUsersByRoleByOrg")
   @auth(rules: [
     {allow: owner, ownerField: "username", operations: [read, create]},
+    {allow: groups, groups: ["Users"], operations: [read]},
     {allow: groups, groups: ["OrgManagers"], operations: [read, create, update]},
     {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
   ])
@@ -13,13 +16,16 @@ type OrganizationUser
   username: String!
   idNumber: String! # ex:學號
   name: String!
+  email: AWSEmail
   role: RoleType!
   groupId: ID
   isActive: Int!
   currentPoints: Int!
   earnedPoints: Int!
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   organization: Organization @connection(fields:["organizationId"])
   # group: OrganizationGroup @connection(fields:["organization", "groupId"])

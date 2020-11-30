@@ -1,26 +1,35 @@
-/* eslint-disable-line */ const aws = require('aws-sdk');
+const aws = require('aws-sdk');
+
+const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
+
+const GROUPNAME = process.env.GROUP || 'Users';
 
 exports.handler = async (event, context, callback) => {
-  const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
-  const groupParams = {
-    GroupName: process.env.GROUP,
-    UserPoolId: event.userPoolId,
-  };
+  console.log(event);
+  // const groupParams = {
+  //   GroupName: GROUPNAME,
+  //   UserPoolId: event.userPoolId,
+  // };
 
-  const addUserParams = {
-    GroupName: process.env.GROUP,
-    UserPoolId: event.userPoolId,
-    Username: event.userName,
-  };
-
-  try {
-    await cognitoidentityserviceprovider.getGroup(groupParams).promise();
-  } catch (e) {
-    await cognitoidentityserviceprovider.createGroup(groupParams).promise();
-  }
+  // try {
+  //   await cognitoidentityserviceprovider.getGroup(groupParams).promise();
+  // } catch (e) {
+  //   await cognitoidentityserviceprovider.createGroup(groupParams).promise();
+  // }
 
   try {
-    await cognitoidentityserviceprovider.adminAddUserToGroup(addUserParams).promise();
+    const { userAttributes } = event.request;
+    // first time user
+    if (!userAttributes['custom:organizationId']) {
+      const addUserParams = {
+        GroupName: GROUPNAME,
+        UserPoolId: event.userPoolId,
+        Username: event.userName,
+      };
+
+      await cognitoidentityserviceprovider.adminAddUserToGroup(addUserParams).promise();
+    }
+
     callback(null, event);
   } catch (e) {
     callback(e);

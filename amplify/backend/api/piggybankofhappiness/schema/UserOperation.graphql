@@ -1,0 +1,29 @@
+input UserOperationRequest {
+  force: Boolean
+  users: [UserOperationUser!]
+}
+
+input UserOperationUser {
+  # create
+  password: String
+  # update
+  organizationId: ID!
+  username: String!
+  email: AWSEmail!
+  # org user
+  idNumber: String!
+  name: String!
+  role: String!
+  groupId: ID
+  isActive: Int
+}
+
+type UserOperationResponse {
+  errors: [String] @aws_cognito_user_pools
+  organizationUsers: [UserOperationResponseUser] @aws_cognito_user_pools
+}
+
+type UserOperationResponseUser {
+  organizationId: String @aws_cognito_user_pools
+  username: String @aws_cognito_user_pools
+}

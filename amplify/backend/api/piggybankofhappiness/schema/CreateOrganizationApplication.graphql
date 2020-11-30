@@ -1,0 +1,32 @@
+type OrganizationApplicationResponse {
+  errors: [String] @aws_cognito_user_pools
+  message: String @aws_cognito_user_pools
+}
+
+input CreateOrganizationApplicationRequest {
+  id: ID!
+  username: String! # 申請人帳號
+  name: String! # 機構名稱
+  registeredName: String! # 政府立案名稱
+  description: String! #  描述
+  taxIdNumber: String! # 統一編號
+  phoneNumber: String!
+  faxNumber: String!
+  email: AWSEmail!
+  address: AddressRequest!
+  principal: OrganizationContactRequest! # 負責人
+}
+
+input AddressRequest {
+  county: String! # 台北市
+  district: String! # 信義區
+  street: String! # 市府路45號
+  zipCode: String! # 11060
+}
+
+input OrganizationContactRequest {
+  name: String!
+  title: String!
+  phoneNumber: String!
+  email: AWSEmail!
+}

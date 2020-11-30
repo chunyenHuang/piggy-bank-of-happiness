@@ -1,13 +1,5 @@
+# Node
 node_modules/**/*
-.expo/*
-npm-debug.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
 
 # macOS
 .DS_Store
@@ -29,5 +21,7 @@ amplify-gradle-config.json
 amplifyxc.config
 
 # sensitive data
-amplify/team-provider-info.json
+amplify/team-provider-info backup.json
 references
+
+src/graphql

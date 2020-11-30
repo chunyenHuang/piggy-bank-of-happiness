@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "storage": {
+      "Organization:@model(appsync)": [
+        "read"
+      ],
+      "OrganizationGroup:@model(appsync)": [
+        "read"
+      ],
+      "OrganizationProgram:@model(appsync)": [
+        "read"
+      ],
+      "OrganizationReward:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "OrganizationTask:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "OrganizationTransaction:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "OrganizationUser:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "OrganizationUserTask:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

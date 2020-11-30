@@ -1,5 +1,5 @@
 type OrganizationGroup
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId", "id"])
   @auth(rules: [
     {allow: groups, groups: ["Users", "OrgManagers"], operations: [read]},
@@ -11,9 +11,10 @@ type OrganizationGroup
   name: String!
   isActive: Int!
   description: String
-  createdBy: String
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   users: [OrganizationUser] @connection(keyName: "byGroupByActive", fields:["id"])
 }

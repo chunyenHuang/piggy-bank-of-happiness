@@ -1,0 +1,22 @@
+type Mutation {
+  userOperation(input: UserOperationRequest!): UserOperationResponse
+    @function(name: "userOperation-${env}")
+    @aws_cognito_user_pools
+    @auth(rules: [
+      {allow: groups, groups: ["AppAdmins", "OrgAdmins", "OrgManagers"]},
+  ])
+
+  adminUpdatePoint(input: AdminUpdatePointRequest!): PointOperationResponse
+    @function(name: "pointOperation-${env}")
+    @aws_cognito_user_pools
+    @auth(rules: [
+      {allow: groups, groups: ["AppAdmins", "OrgAdmins"]},
+  ])
+
+  createOrganizationApplication(input: CreateOrganizationApplicationRequest!): OrganizationApplicationResponse
+    @function(name: "organizationApplication-${env}")
+    @aws_cognito_user_pools
+    @auth(rules: [
+      {allow: groups, groups: ["AppAdmins", "OrgAdmins", "Users"]},
+  ])
+}

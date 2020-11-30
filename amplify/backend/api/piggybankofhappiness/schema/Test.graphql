@@ -1,0 +1,9 @@
+type Test
+  @model
+  @auth(rules: [
+    {allow: private, operations: [read]},
+  ])
+{
+  id: ID!
+  name: String!
+}

@@ -1,0 +1,36 @@
+type PointOperationResponse {
+  errors: [String] @aws_cognito_user_pools
+  message: String @aws_cognito_user_pools
+}
+
+#############
+### Admin ###
+#############
+
+# adminUpdatePoint
+input AdminUpdatePointRequest {
+  organizationId: String!
+  username: String!
+  actions: [PointOperationRequestAdminUpdatePointAction!]
+}
+
+input PointOperationRequestAdminUpdatePointAction {
+  transactionId: ID
+
+  # credit
+  taskId: ID # optional: for creating task and complete
+  taskName: String
+  taskPoints: Int
+
+  # reward
+  rewardId: ID # optional
+  rewardAmount: Int
+
+  # withdraw, adjustment
+  type: TransactionType
+  points: Int
+  note: String
+
+  # cancel
+  refTransactionId: String
+}

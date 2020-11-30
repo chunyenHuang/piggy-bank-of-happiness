@@ -1,0 +1,28 @@
+type Event
+  @model
+  @key(fields: ["key", "timestamp"])
+  @key(name: "byOrgByTimestamp", fields: ["organizationId", "timestamp"], queryField: "getEventsByOrgByTimestamp")
+  @auth(rules: [
+    {allow: groups, groups: ["OrgAdmins", "AppAdmins"]},
+  ])
+{
+  key: String! # Combination of {tableName}___{partitionKey}___{sortKey}
+  timestamp: AWSDateTime!
+  
+  organizationId: ID # track org if possible
+  updatedBy: String # track user if possible
+
+  eventId: String!
+  eventName: String!
+  diff: [EventDiffItem]
+
+  note: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type EventDiffItem {
+  key: String!
+  old: String
+  new: String
+}

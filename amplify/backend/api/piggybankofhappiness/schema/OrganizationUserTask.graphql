@@ -1,5 +1,5 @@
 type OrganizationUserTask
-  @model
+  @model (subscriptions: { level: public })
   @key(fields: ["organizationId","id"])
   @key(name: "byUserByCreatedAt", fields: ["username","createdAt"], queryField: "getTasksByUserByCreatedAt")
   @key(name: "byUserByOrganization", fields: ["username","organizationId"], queryField: "getTasksByUserByOrganization")
@@ -20,7 +20,9 @@ type OrganizationUserTask
   points: Int!
   # deadline: AWSDateTime
   createdAt: AWSDateTime!
+  createdBy: String
   updatedAt: AWSDateTime!
+  updatedBy: String
   # relationship
   # organization: Organization @connection(fields:["organizationId"])
   user: OrganizationUser @connection(fields:["organizationId", "username"])
