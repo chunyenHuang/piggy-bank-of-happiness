@@ -5,8 +5,8 @@ import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
-import Typography from '../components/Typography';
 import Version from 'components/Version';
 import Colors from 'constants/Colors';
 // import TextField from '../components/TextField';

@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import AndroidIcon from '@material-ui/icons/Android';
 import AppleIcon from '@material-ui/icons/Apple';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-import Button from '../components/Button';
-import Typography from '../components/Typography';
 import ProductHeroLayout from './ProductHeroLayout';
 import Colors from 'constants/Colors';
 

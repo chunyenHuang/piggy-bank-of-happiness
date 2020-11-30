@@ -6,9 +6,8 @@ import Container from '@material-ui/core/Container';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import DescriptionIcon from '@material-ui/icons/Description';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
-
-import Button from '../components/Button';
-import Typography from '../components/Typography';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 const styles = (theme) => ({
   root: {

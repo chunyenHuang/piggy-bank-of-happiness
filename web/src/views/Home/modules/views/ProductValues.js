@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import FlareIcon from '@material-ui/icons/Flare';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import Typography from '../components/Typography';
+import Typography from '@material-ui/core/Typography';
 
 const styles = (theme) => ({
   root: {

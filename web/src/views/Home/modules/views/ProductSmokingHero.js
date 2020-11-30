@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '../components/Typography';
+import Typography from '@material-ui/core/Typography';
 
 const styles = (theme) => ({
   root: {
@@ -38,10 +37,6 @@ function ProductSmokingHero(props) {
           台灣每年約有4萬3千名高風險家庭的兒少、2萬3千名中離學生及4千名中輟生，因為家庭功能不足，獨自面對學習落後、生存挑戰，甚至提早離開學習現場，繼續陷入惡性循環。
         </Typography>
       </div>
-      {/* <Typography variant="subtitle1" className={classes.link}>
-        We are here to help. Get in touch!
-      </Typography>
-      <img src="/static/themes/onepirate/producBuoy.svg" className={classes.buoy} alt="buoy" /> */}
     </Container>
   );
 }
