@@ -124,6 +124,7 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
               id={reward.id}
               name={reward.name}
               editable={false}
+              size="large"
               // editable={mode === 'edit'}
             />
             <ListItem.Content>
