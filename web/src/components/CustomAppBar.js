@@ -69,11 +69,13 @@ const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1, 0, 2),
+    // padding: theme.spacing(0, 1, 0, 2),
+    padding: theme.spacing(0, 2),
     height: 64,
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   content: {
     flexGrow: 1,
@@ -171,12 +173,12 @@ export default function CustomAppBar({ user, routes, open, onUpdate }) {
           {user ?
             <IconButton
               color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
+              aria-label="toggle drawer"
+              onClick={open ? handleDrawerClose: handleDrawerOpen}
               edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
+              className={clsx(classes.menuButton)}
             >
-              <MenuIcon />
+              {open ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>:
             <Hidden mdUp={true}>
               <IconButton
@@ -269,12 +271,10 @@ export default function CustomAppBar({ user, routes, open, onUpdate }) {
         onClose={() => onUpdate(false)}
       >
         <div className={classes.drawerHeader}>
-          <div className={classes.flexbox} />
-          <img src="/images/logo-256.png" alt="Logo" height="50" />
-          <div className={classes.flexbox} />
-          <IconButton onClick={handleDrawerClose}>
+          <img src="/images/logo-text.png" alt="Logo" width="100%" />
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         {user ?

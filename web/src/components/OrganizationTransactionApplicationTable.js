@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Table from 'components/Table/Table';
 // import NestedTableContainer from 'components/Table/NestedTableContainer';
 
-import { listOrganizationTransactionApplications } from 'graphql/queries';
+import { getTransactionApplicationsByOrganizationByStatus } from 'graphql/queries';
 import { updateOrganizationTransactionApplication } from 'graphql/mutations';
 import { asyncListAll, request } from 'utilities/graph';
 import { sortBy } from 'utilities/sorting';
@@ -110,7 +110,6 @@ export default function OrganizationTransactionApplicationTable({
   title = '點數申請',
   description,
   organizationId,
-  id,
   nested,
   data: inData,
   onRefresh,
@@ -157,10 +156,7 @@ export default function OrganizationTransactionApplicationTable({
       try {
         setIsLoading(true);
         const params = { organizationId };
-        if (id) {
-          params.id = { eq: id };
-        }
-        const records = (await asyncListAll(listOrganizationTransactionApplications, params));
+        const records = (await asyncListAll(getTransactionApplicationsByOrganizationByStatus, params));
         setData(records.sort(sortBy('createdAt', true)));
       } catch (e) {
         console.log(e);
@@ -168,7 +164,7 @@ export default function OrganizationTransactionApplicationTable({
         setIsLoading(false);
       }
     })();
-  }, [organizationId, id, lastUpdatedAt]);
+  }, [organizationId, lastUpdatedAt]);
 
   useEffect(() => {
     if (!inData) return;
@@ -196,7 +192,6 @@ export default function OrganizationTransactionApplicationTable({
 
 OrganizationTransactionApplicationTable.propTypes = {
   organizationId: PropTypes.string.isRequired,
-  id: PropTypes.string,
   nested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
