@@ -26,7 +26,7 @@ const ProtectedRoute = ({ component: Component, render, roles, user: inUser, ...
     (async () => {
       if (!user) {
         try {
-          const user = inUser || await Auth.currentAuthenticatedUser({
+          const user = inUser && inUser.signInUserSession ? inUser : await Auth.currentAuthenticatedUser({
             bypassCache: true,
           });
           if (user) {
