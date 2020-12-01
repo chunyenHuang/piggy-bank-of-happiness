@@ -37,9 +37,9 @@ export default function TransactionApplicationList({ organizationId, username, o
       });
 
       if (inNextToken) {
-        setTransactions([...transactions, ...items.sort(sortBy('createdAt', true))]);
+        setTransactions([...transactions, ...items.sort(sortBy('updatedAt', true))]);
       } else {
-        setTransactions(items.sort(sortBy('createdAt', true)));
+        setTransactions(items.sort(sortBy('updatedAt', true)));
       }
 
       setNextToken(nextToken);
@@ -61,9 +61,9 @@ export default function TransactionApplicationList({ organizationId, username, o
       });
 
       if (inNextToken) {
-        setTransactions([...transactions, ...items.sort(sortBy('createdAt', true))]);
+        setTransactions([...transactions, ...items.sort(sortBy('updatedAt', true))]);
       } else {
-        setTransactions(items.sort(sortBy('createdAt', true)));
+        setTransactions(items.sort(sortBy('updatedAt', true)));
       }
 
       setNextToken(nextToken);

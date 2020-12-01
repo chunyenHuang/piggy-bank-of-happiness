@@ -161,6 +161,7 @@ export default function OrgApplication() {
           case 'Rejected':
             message = `很抱歉您的申請已被拒絕，請聯繫系統管理員 ${EMAIL}。`;
             break;
+          default:
           }
           setMessage(message);
           setIsReady(true);

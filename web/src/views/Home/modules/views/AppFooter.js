@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 const linkBox = (title, link) => {
   return (<Box p={2}>
-    <Link href={link} target="_blank">
+    <Link href={link} target="_blank" rel="noopener noreferrer">
       {title}
     </Link>
   </Box>);
@@ -99,7 +99,7 @@ export default function AppFooter() {
           <Box component="div" p={2} color={Colors.light}>
             <Version />
           </Box>
-          <a href="https://github.com/chunyenHuang/piggy-bank-of-happiness" className={classes.icon} target="_blank" rel="noreferrer">
+          <a href="https://github.com/chunyenHuang/piggy-bank-of-happiness" className={classes.icon} target="_blank" rel="noopener noreferrer">
             <GitHubIcon />
           </a>
         </Grid>
