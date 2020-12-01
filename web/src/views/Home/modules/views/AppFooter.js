@@ -5,7 +5,6 @@ import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 
 import Version from 'components/Version';
 import Colors from 'constants/Colors';
@@ -27,12 +26,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     backgroundColor: Colors.background.light,
+    padding: theme.spacing(4),
     // backgroundColor: theme.palette.secondary.light,
+    // marginTop: theme.spacing(8),
+    // marginBottom: theme.spacing(8),
   },
   container: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
-    display: 'flex',
+    // marginTop: theme.spacing(8),
+    // marginBottom: theme.spacing(8),
+    // display: 'block',
   },
   iconsWrapper: {
     height: 120,
@@ -57,48 +59,43 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
   },
-  language: {
-    marginTop: theme.spacing(1),
-    width: 150,
+  line: {
+    height: theme.spacing(2),
+    width: 100,
+    borderBottom: `1px solid ${Colors.light}`,
+    marginBottom: theme.spacing(2),
   },
 }));
 
-const LANGUAGES = [
-  {
-    code: 'en-US',
-    name: 'English',
-  },
-  {
-    code: 'fr-FR',
-    name: 'Français',
-  },
-];
+const linkBox = (title, link) => {
+  return (<Box p={2}>
+    <Link href={link} target="_blank">
+      {title}
+    </Link>
+  </Box>);
+};
 
 export default function AppFooter() {
   const classes = useStyles();
 
   return (
-    <Typography component="footer" className={classes.root}>
+    <Grid container className={classes.root} direction="column" justify="center" alignItems="center">
+      <Container className={classes.container}>
+        <Grid container spacing={2} justify="center" alignItems="center">
+          {linkBox('小草書屋∞青草職能學苑', 'http://www.grassbookhouse.org.tw/')}
+          {linkBox('g0v sch001 零時小學校', 'https://sch001.g0v.tw/')}
+          {linkBox('Goldax LLC', 'https://goldax.cloud/')}
+        </Grid>
+      </Container>
+      <div className={classes.line} />
       <Container className={classes.container}>
         <Grid container spacing={2} justify="center" alignItems="center">
           <Box p={2}>
             <Copyright />
           </Box>
-          <Box p={2}>
-            <Link href="https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ">
-              討論共筆
-            </Link>
-          </Box>
-          <Box p={2}>
-            <Link href="https://raw.githubusercontent.com/chunyenHuang/piggy-bank-of-happiness/develop/documentation/Terms.md">
-              服務條款
-            </Link>
-          </Box>
-          <Box p={2}>
-            <Link href="https://raw.githubusercontent.com/chunyenHuang/piggy-bank-of-happiness/develop/documentation/Privacy%20Policy.md">
-              隱私權聲明
-            </Link>
-          </Box>
+          {linkBox('討論共筆', 'https://g0v.hackmd.io/hYxXZzK0TW6S6cD2mpSWdQ')}
+          {linkBox('服務條款', 'https://raw.githubusercontent.com/chunyenHuang/piggy-bank-of-happiness/develop/documentation/Terms.md')}
+          {linkBox('隱私權聲明', 'https://raw.githubusercontent.com/chunyenHuang/piggy-bank-of-happiness/develop/documentation/Privacy%20Policy.md')}
           <Box component="div" p={2} color={Colors.light}>
             <Version />
           </Box>
@@ -107,6 +104,6 @@ export default function AppFooter() {
           </a>
         </Grid>
       </Container>
-    </Typography>
+    </Grid>
   );
 }
