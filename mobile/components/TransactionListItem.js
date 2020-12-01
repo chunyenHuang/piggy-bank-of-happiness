@@ -6,7 +6,7 @@ import { Button } from 'react-native-paper';
 import CustomModal from './CustomModal';
 
 import Colors from '../constants/Colors';
-import { currency, shortString } from '../src/utils/format';
+import { currency, shortString, formatDatetime } from '../src/utils/format';
 import request from '../src/utils/request';
 import { adminUpdatePoint, updateOrganizationTransaction } from '../src/graphql/mutations';
 import check from '../src/permission/check';
@@ -88,7 +88,7 @@ export default function TransactionListItem({ transaction: inData, onUpdate }) {
     iconType,
   } = getPropsByType(transaction.type);
   const amount = currency(transaction.points);
-  const date = moment(transaction.createdAt).format('MM/DD/YYYY hh:mm');
+  const date = formatDatetime(transaction.createdAt);
 
   return (
     <View style={styles.container}>

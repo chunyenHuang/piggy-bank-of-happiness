@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import deepcopy from 'deepcopy';
 import csv from 'csv';
 import { CSVLink } from 'react-csv';
@@ -22,6 +22,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Footer from './Footer';
 import EditField from './EditField';
+import { formatDatetime } from 'utilities/format';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -330,11 +331,12 @@ export default function Table({
         case 'datetime':
           options.customBodyRender = (value) => {
             if (!value) return '';
-            return (
-              <div>
-                {moment(value).format('YYYY/MM/DD')} <br/>
-                {moment(value).format('HH:mm')}
-              </div>);
+            return formatDatetime(value);
+            // return (
+            //   <div>
+            //     {moment(value).format('YYYY/MM/DD')} <br/>
+            //     {moment(value).format('HH:mm')}
+            //   </div>);
           };
           break;
         case 'checkbox':
