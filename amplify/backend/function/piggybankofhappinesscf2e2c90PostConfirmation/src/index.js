@@ -1,12 +1,39 @@
-/*
-  this file will loop through all js modules which are uploaded to the lambda resource,
-  provided that the file names (without extension) are included in the "MODULES" env variable.
-  "MODULES" is a comma-delimmited string.
-*/
-exports.handler = (event, context, callback) => {
-  const modules = process.env.MODULES.split(',');
-  for (let i = 0; i < modules.length; i += 1) {
-    const { handler } = require(`./${modules[i]}`);
-    handler(event, context, callback);
+const aws = require('aws-sdk');
+
+const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({ apiVersion: '2016-04-18' });
+
+const GROUPNAME = process.env.GROUP || 'Users';
+
+exports.handler = async (event, context, callback) => {
+  console.log(event);
+  // const groupParams = {
+  //   GroupName: GROUPNAME,
+  //   UserPoolId: event.userPoolId,
+  // };
+
+  // try {
+  //   await cognitoidentityserviceprovider.getGroup(groupParams).promise();
+  // } catch (e) {
+  //   await cognitoidentityserviceprovider.createGroup(groupParams).promise();
+  // }
+
+  try {
+    const { userAttributes } = event.request;
+    // first time user
+    if (!userAttributes['custom:organizationId']) {
+      const startedAt = Date.now();
+      const addUserParams = {
+        GroupName: GROUPNAME,
+        UserPoolId: event.userPoolId,
+        Username: event.userName,
+      };
+
+      await cognitoidentityserviceprovider.adminAddUserToGroup(addUserParams).promise();
+      console.log(Date.now() - startedAt);
+    }
+
+    callback(null, event);
+  } catch (e) {
+    callback(e);
   }
 };
