@@ -1,6 +1,9 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 
+const LOCALE = 'zh-TW';
+const TIME_ZONE = 'Asia/Taipei';
+
 export const formatAddress = (inAddressObject = {}) => {
   if (typeof inAddressObject === 'string') return inAddressObject;
   const {
@@ -26,4 +29,24 @@ export const renderFromMenu = (inMenu = []) => {
         {text}
       </Box>);
   };
+};
+
+
+export const formatDatetime = (inDatetime, options = {}) => {
+  if (!inDatetime) return '';
+
+  const {
+    year = true, day = true, weekday = false,
+  } = options;
+
+  return new Date(inDatetime).toLocaleString(LOCALE, {
+    timeZone: TIME_ZONE,
+    weekday: weekday ? 'long' : undefined,
+    year: year ? 'numeric' : undefined,
+    month: 'short',
+    day: day ? 'numeric' : undefined,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
 };

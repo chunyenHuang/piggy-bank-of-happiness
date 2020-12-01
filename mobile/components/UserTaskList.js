@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ListItem, Text, Badge } from 'react-native-elements';
-import moment from 'moment';
 
 import { sortBy } from '../src/utils/sorting';
 import Colors from '../constants/Colors';
+import { formatDatetime } from 'src/utils/format';
 
 export default function UserTaskList({ tasks = [] }) {
   return (
@@ -18,7 +18,7 @@ export default function UserTaskList({ tasks = [] }) {
         >
           <ListItem.Content>
             <ListItem.Title>{task.taskName}</ListItem.Title>
-            <ListItem.Subtitle style={styles.subtitle}>{`${task.status} ${moment(task.updatedAt).format('MM/DD/YYYY hh:mm ')}`}</ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.subtitle}>{`${task.status} ${formatDatetime(task.updatedAt)}`}</ListItem.Subtitle>
           </ListItem.Content>
           <Badge {...{
             // status: 'success',
