@@ -10,7 +10,6 @@ import FileViewer from 'components/FileViewer';
 
 import { request } from 'utilities/graph';
 import { getOrganization } from 'graphql/queries';
-import Loading from 'components/Loading';
 
 const useStyles = makeStyles((theme) => ({
   root: {

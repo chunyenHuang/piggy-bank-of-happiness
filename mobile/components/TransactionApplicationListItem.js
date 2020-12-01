@@ -110,6 +110,7 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
   } = getPropsByStatus(transaction.status);
   const amount = currency(transaction.points);
   const date = formatDatetime(transaction.createdAt);
+  const isUpdated = transaction.createdBy !== transaction.updatedBy;
 
   return (
     <View style={styles.container}>
@@ -140,9 +141,18 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
             <ListItem.Subtitle style={styles.subtitle}>
               {shortString(transaction.description, 100)}
             </ListItem.Subtitle>
-            <ListItem.Subtitle style={styles.subtitle}>
-              {date}
-            </ListItem.Subtitle>
+            {!isUpdated ?
+              <ListItem.Subtitle style={styles.subtitle}>
+                {date}
+              </ListItem.Subtitle>:
+              <React.Fragment>
+                <ListItem.Subtitle style={styles.subtitle}>
+                  {formatDatetime(transaction.updatedAt)}
+                </ListItem.Subtitle>
+                <ListItem.Subtitle style={styles.subtitle}>
+                  {transaction.updatedBy}
+                </ListItem.Subtitle>
+              </React.Fragment>}
           </React.Fragment>
         </ListItem.Content>
         <ListItem.Title style={{ ...styles.rightTitle, color }}>{amount}</ListItem.Title>
