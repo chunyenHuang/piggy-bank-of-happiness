@@ -34,8 +34,8 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
   };
 
   const load = async () => {
-    mode === 'edit' && setIsLoading(true);
-    mode === 'select' && Hub.dispatch('app', { event: 'loading' });
+    if (mode === 'edit') setIsLoading(true);
+    if (mode === 'select') Hub.dispatch('app', { event: 'loading' });
 
     setRewards([]);
 
@@ -53,8 +53,8 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     // console.log(rewards);
     setRewards(rewards);
 
-    mode === 'edit' && setIsLoading(false);
-    mode === 'select' && Hub.dispatch('app', { event: 'loading-complete' });
+    if (mode === 'edit') setIsLoading(false);
+    if (mode === 'select') Hub.dispatch('app', { event: 'loading-complete' });
   };
 
   useEffect(() => {
@@ -89,8 +89,8 @@ export default function RewardList({ mode = 'edit', onSelect, disabled = false }
     })();
 
     return () => {
-      subscriptionCreate && subscriptionCreate.unsubscribe();
-      subscriptionUpdate && subscriptionUpdate.unsubscribe();
+      if (subscriptionCreate) subscriptionCreate.unsubscribe();
+      if (subscriptionUpdate) subscriptionUpdate.unsubscribe();
     };
   }, []);
 
