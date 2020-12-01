@@ -14,5 +14,8 @@ amplify-authenticator, .amplify-authenticator {
     align-items: center;
     flex: 1;
     height: calc(100vh - 64px);
-    background-color: #68b386;
+    overflow: hidden;
+    background-color: #ebebeb;
+    background-image: url("/static/themes/onepirate/productCurvyLines.png");
+    background-position: center;
 }

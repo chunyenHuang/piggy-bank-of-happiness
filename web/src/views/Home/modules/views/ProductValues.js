@@ -62,7 +62,7 @@ function ProductValues(props) {
                 來自社群，回饋社群
               </Typography>
               <Typography variant="h5">
-                {'g0v零時小學校開源開發專案。'}
+                g0v零時小學校 X 小草書屋 開源開發專案。
               </Typography>
             </div>
           </Grid>
@@ -84,7 +84,7 @@ function ProductValues(props) {
                 設計給非營利事業組織
               </Typography>
               <Typography variant="h5">
-                {'欲參與的社福機構將透過網頁版申請，並上傳相關政府核定的文件與說明，運作會由社團法人台灣城鄉永續關懷協會審核與管理。'}
+                社福機構可申請參與，並由社團法人台灣城鄉永續關懷協會審核與管理。
               </Typography>
             </div>
           </Grid>

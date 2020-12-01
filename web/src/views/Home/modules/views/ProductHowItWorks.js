@@ -69,10 +69,10 @@ function ProductHowItWorks(props) {
           className={classes.curvyLines}
           alt="curvy lines"
         />
-        <Typography variant="h4" marked="center" className={classes.title} component="h2">
+        <Typography variant="h4" marked="center" className={classes.title} component="h4">
           如何申請加入幸福存摺？
         </Typography>
-        <div>
+        <div style={{ marginBottom: 48 }}>
           <Grid container spacing={5}>
             <Grid item xs={12} md={4}>
               <div className={classes.item}>
@@ -88,7 +88,7 @@ function ProductHowItWorks(props) {
                 <div className={classes.number}>2.</div>
                 <DescriptionIcon className={classes.icon} />
                 <Typography variant="h5" align="center">
-                  填寫機構資訊
+                  填寫機構資訊與上傳證明文件
                 </Typography>
               </div>
             </Grid>
@@ -97,7 +97,7 @@ function ProductHowItWorks(props) {
                 <div className={classes.number}>3.</div>
                 <DoneOutlineIcon className={classes.icon} />
                 <Typography variant="h5" align="center">
-                  審核通過後即可使用
+                  審核通過後，即可新增其他機構人員(老師/學生)
                 </Typography>
               </div>
             </Grid>
@@ -120,6 +120,7 @@ function ProductHowItWorks(props) {
             <Button
               color="inherit"
               component="a"
+              variant="outlined"
               href={'/app?state=signin&redirect=/application'}
               className={classes.titleButton}
             >
