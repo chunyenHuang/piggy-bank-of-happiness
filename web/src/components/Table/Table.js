@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MUIDataTable from 'mui-datatables';
-import moment from 'moment-timezone';
 import deepcopy from 'deepcopy';
 import csv from 'csv';
 import { CSVLink } from 'react-csv';
