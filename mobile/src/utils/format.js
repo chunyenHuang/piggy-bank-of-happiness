@@ -1,5 +1,7 @@
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import 'intl/locale-data/jsonp/zh';
+import 'date-time-format-timezone';
 
 const LOCALE = 'zh-TW';
 const TIME_ZONE = 'Asia/Taipei';
