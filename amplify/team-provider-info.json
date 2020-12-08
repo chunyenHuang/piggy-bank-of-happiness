@@ -54,7 +54,11 @@
         "piggybankofhappinesscf2e2c90PostConfirmation": {
           "GROUP": "Users"
         },
-        "piggybankofhappinesscf2e2c90": {}
+        "piggybankofhappinesscf2e2c90": {},
+        "pointOperation": {},
+        "organizationApplication": {},
+        "userOperation": {},
+        "eventTracking": {}
       }
     }
   },
