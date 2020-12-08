@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { ListItem, Input, Icon } from 'react-native-elements';
-import moment from 'moment';
 import { Button } from 'react-native-paper';
 import CustomModal from './CustomModal';
 
 import Colors from '../constants/Colors';
-import { currency, shortString } from '../src/utils/format';
+import { currency, shortString, formatDatetime } from '../src/utils/format';
 import request from '../src/utils/request';
 import { adminUpdatePoint, updateOrganizationTransactionApplication } from '../src/graphql/mutations';
 import { getPropsByStatus, getPropsByType } from 'constants/Transaction';
@@ -110,7 +109,8 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
     label: statusLabel,
   } = getPropsByStatus(transaction.status);
   const amount = currency(transaction.points);
-  const date = moment(transaction.createdAt).format('MM/DD/YYYY hh:mm');
+  const date = formatDatetime(transaction.createdAt);
+  const isUpdated = transaction.createdBy !== transaction.updatedBy;
 
   return (
     <View style={styles.container}>
@@ -141,9 +141,18 @@ export default function TransactionApplicationListItem({ transaction: inData, mo
             <ListItem.Subtitle style={styles.subtitle}>
               {shortString(transaction.description, 100)}
             </ListItem.Subtitle>
-            <ListItem.Subtitle style={styles.subtitle}>
-              {date}
-            </ListItem.Subtitle>
+            {!isUpdated ?
+              <ListItem.Subtitle style={styles.subtitle}>
+                {date}
+              </ListItem.Subtitle>:
+              <React.Fragment>
+                <ListItem.Subtitle style={styles.subtitle}>
+                  {formatDatetime(transaction.updatedAt)}
+                </ListItem.Subtitle>
+                <ListItem.Subtitle style={styles.subtitle}>
+                  {transaction.updatedBy}
+                </ListItem.Subtitle>
+              </React.Fragment>}
           </React.Fragment>
         </ListItem.Content>
         <ListItem.Title style={{ ...styles.rightTitle, color }}>{amount}</ListItem.Title>

@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 // import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 // import { Link } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,14 +28,23 @@ import { request } from 'utilities/graph';
 import formMetadata from 'forms/Organization';
 import { upload } from 'utilities/file';
 import Loading from 'components/Loading';
+import Colors from 'constants/Colors';
 
 import ProductHowItWorks from 'views/Home/modules/views/ProductHowItWorks';
 
 const useStyles = makeStyles((theme) => ({
-  content: {
+  root: {
     flex: 1,
-    padding: theme.spacing(4),
+    padding: theme.spacing(2),
+    backgroundColor: Colors.background.light,
     // height: `calc(100vh - 64px)`,
+  },
+  container: {
+    flex: 1,
+    padding: theme.spacing(2),
+  },
+  content: {
+    padding: theme.spacing(2),
   },
   titleButton: {
     fontSize: 16,
@@ -151,6 +161,7 @@ export default function OrgApplication() {
           case 'Rejected':
             message = `很抱歉您的申請已被拒絕，請聯繫系統管理員 ${EMAIL}。`;
             break;
+          default:
           }
           setMessage(message);
           setIsReady(true);
@@ -194,7 +205,7 @@ export default function OrgApplication() {
   // 使用者已經有 custom:organizationId
   if (message) {
     return (
-      <Container maxWidth="sm" className={classes.content}>
+      <Container maxWidth="sm" className={classes.container}>
         <Typography component="h1" variant="h5" align="center">
           {message}
         </Typography>
@@ -202,47 +213,51 @@ export default function OrgApplication() {
   }
 
   return (
-    <Container maxWidth="sm" className={classes.content}>
-      <DetailForm
-        title="申請加入幸福存摺"
-        metadata={filteredFormMetadata}
-        usePristine={false}
-        submitButtonText={'申請'}
-        data={organization}
-        submitButtonProps={{
-          variant: 'contained',
-          color: 'primary',
-          type: 'submit',
-          fullWidth: false,
-        }}
-        isLoading={isLoading}
-        onSubmit={onCompleteForm}
-      >
+    <Container maxWidth="xl" className={classes.root}>
+      <Container maxWidth="sm" className={classes.container}>
+        <Card className={classes.content}>
+          <DetailForm
+            title="申請加入幸福存摺"
+            metadata={filteredFormMetadata}
+            usePristine={false}
+            submitButtonText={'申請'}
+            data={organization}
+            submitButtonProps={{
+              variant: 'contained',
+              color: 'primary',
+              type: 'submit',
+              fullWidth: false,
+            }}
+            isLoading={isLoading}
+            onSubmit={onCompleteForm}
+          >
 
-        <p>立案字號 / 法人立案字號 / 證明文件 *</p>
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <div className={classes.dropZone}>點擊選取 或 拖曳檔案至此</div>
-        </div>
-        <List className={classes.root}>
-          {toUploadFiles.map((file, index)=>(
-            <ListItem key={index}>
-              <ListItemAvatar>
-                {index+1}
-              </ListItemAvatar>
-              <ListItemText primary={file.name} secondary={prettyBytes(file.size)} />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" onClick={()=>{
-                  toUploadFiles.splice(index, 1);
-                  setToUploadFiles([...toUploadFiles]);
-                }}>
-                  <ClearIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </DetailForm>
+            <p>立案字號 / 法人立案字號 / 證明文件 *</p>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              <div className={classes.dropZone}>點擊選取 或 拖曳檔案至此</div>
+            </div>
+            <List>
+              {toUploadFiles.map((file, index)=>(
+                <ListItem key={index}>
+                  <ListItemAvatar>
+                    {index+1}
+                  </ListItemAvatar>
+                  <ListItemText primary={file.name} secondary={prettyBytes(file.size)} />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete" onClick={()=>{
+                      toUploadFiles.splice(index, 1);
+                      setToUploadFiles([...toUploadFiles]);
+                    }}>
+                      <ClearIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </DetailForm>
+        </Card>
+      </Container>
     </Container>
   );
 }

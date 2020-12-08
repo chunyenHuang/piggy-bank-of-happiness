@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import clsx from 'clsx';
 import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
 import { Router, Route, Switch, Redirect } from 'react-router';
@@ -38,6 +39,8 @@ Analytics.disable();
 
 const history = createBrowserHistory();
 
+const drawerWidth = 180;
+
 // https://material-ui.com/customization/default-theme/
 const theme = createMuiTheme({
   palette: {
@@ -52,9 +55,22 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    flexGrow: 1,
     marginTop: 64,
     overflow: 'auto',
+    flexGrow: 1,
+    // padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
   },
 }));
 
@@ -64,6 +80,7 @@ console.log(`initialPath`, initialPath);
 function ReactApp() {
   const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [user, setUser] = React.useState();
   const [filteredRoutes, setFilteredRoutes] = React.useState([]);
@@ -144,8 +161,14 @@ function ReactApp() {
       <CustomAppBar
         user={user}
         routes={filteredRoutes}
+        open={open}
+        onUpdate={setOpen}
       />
-      <div className={classes.content}>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: !open,
+        })}
+      >
         <Switch>
           <Route path="/app" render={(props) => (
             <App routes={filteredRoutes} {...props} />
@@ -164,7 +187,7 @@ function ReactApp() {
               <Redirect to="/" />
             </React.Fragment>}
         </Switch>
-      </div>
+      </main>
     </Router>
   );
 }

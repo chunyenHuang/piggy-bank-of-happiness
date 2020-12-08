@@ -1,5 +1,6 @@
 import { Auth, API } from 'aws-amplify';
-import moment from 'moment';
+
+import { formatDatetime } from 'src/utils/format';
 
 const LIMIT = 60;
 const apiName = 'AdminQueries';
@@ -19,8 +20,8 @@ const normalizeCognitoUserData = (inCognitoUser) => {
     username: Username,
     status: UserStatus,
     isEnabled: Enabled,
-    createdAt: moment(UserCreateDate).format('YYYY-MM-DD'),
-    updatedAt: moment(UserLastModifiedDate).format('YYYY-MM-DD'),
+    createdAt: formatDatetime(UserCreateDate),
+    updatedAt: formatDatetime(UserLastModifiedDate),
   };
 
   Attributes.forEach(({ Name, Value }) => {
