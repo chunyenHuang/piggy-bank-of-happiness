@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Vibration, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Dimensions, Vibration, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { Camera } from 'expo-camera';
 import { Icon } from 'react-native-elements';
@@ -67,7 +67,18 @@ export default function ImageHandler({
       if (visible) {
         const { status } = await Camera.requestPermissionsAsync();
         if (status !== 'granted') {
-          return onClose();
+          Alert.alert(
+            '幸福存摺需要相機使用權限',
+            '請至設定裡開啟相機權限',
+            [
+              {
+                text: 'OK', onPress: () => {
+                  onClose();
+                },
+              },
+            ], { cancelable: false },
+          );
+          return;
         }
       }
 
