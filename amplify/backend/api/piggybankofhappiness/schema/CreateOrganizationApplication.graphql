@@ -11,7 +11,7 @@ input CreateOrganizationApplicationRequest {
   description: String! #  描述
   taxIdNumber: String! # 統一編號
   phoneNumber: String!
-  faxNumber: String!
+  faxNumber: String
   email: AWSEmail!
   address: AddressRequest!
   principal: OrganizationContactRequest! # 負責人

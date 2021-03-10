@@ -88,6 +88,7 @@ export const onCreateOrganization = /* GraphQL */ `
       status
       isActive
       note
+      notes
       user {
         organizationId
         username
@@ -116,6 +117,7 @@ export const onCreateOrganization = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -156,6 +158,7 @@ export const onUpdateOrganization = /* GraphQL */ `
       status
       isActive
       note
+      notes
       user {
         organizationId
         username
@@ -184,6 +187,7 @@ export const onUpdateOrganization = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -224,6 +228,7 @@ export const onDeleteOrganization = /* GraphQL */ `
       status
       isActive
       note
+      notes
       user {
         organizationId
         username
@@ -252,6 +257,7 @@ export const onDeleteOrganization = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -603,6 +609,7 @@ export const onCreateOrganizationTransaction = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -656,6 +663,7 @@ export const onUpdateOrganizationTransaction = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -709,6 +717,7 @@ export const onDeleteOrganizationTransaction = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -766,6 +775,7 @@ export const onCreateOrganizationTransactionApplication = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -854,6 +864,7 @@ export const onUpdateOrganizationTransactionApplication = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -942,6 +953,7 @@ export const onDeleteOrganizationTransactionApplication = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -1024,6 +1036,7 @@ export const onCreateOrganizationUser = /* GraphQL */ `
         status
         isActive
         note
+        notes
         user {
           organizationId
           username
@@ -1090,6 +1103,7 @@ export const onUpdateOrganizationUser = /* GraphQL */ `
         status
         isActive
         note
+        notes
         user {
           organizationId
           username
@@ -1156,6 +1170,7 @@ export const onDeleteOrganizationUser = /* GraphQL */ `
         status
         isActive
         note
+        notes
         user {
           organizationId
           username
@@ -1224,6 +1239,7 @@ export const onCreateOrganizationUserTask = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -1335,6 +1351,7 @@ export const onUpdateOrganizationUserTask = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -1446,6 +1463,7 @@ export const onDeleteOrganizationUserTask = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt

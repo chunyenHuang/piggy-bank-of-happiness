@@ -85,6 +85,7 @@ export const getOrganization = /* GraphQL */ `
       status
       isActive
       note
+      notes
       user {
         organizationId
         username
@@ -113,6 +114,7 @@ export const getOrganization = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -158,6 +160,7 @@ export const listOrganizations = /* GraphQL */ `
         status
         isActive
         note
+        notes
         user {
           organizationId
           username
@@ -475,6 +478,7 @@ export const getOrganizationTransaction = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -584,6 +588,7 @@ export const getOrganizationTransactionApplication = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -731,6 +736,7 @@ export const getOrganizationUser = /* GraphQL */ `
         status
         isActive
         note
+        notes
         user {
           organizationId
           username
@@ -800,6 +806,7 @@ export const listOrganizationUsers = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -854,6 +861,7 @@ export const getOrganizationUserTask = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -1530,6 +1538,7 @@ export const getOrgUsersByGroupByActive = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt
@@ -1585,6 +1594,7 @@ export const getOrgUsersByRoleByOrg = /* GraphQL */ `
           status
           isActive
           note
+          notes
           createdAt
           createdBy
           updatedAt

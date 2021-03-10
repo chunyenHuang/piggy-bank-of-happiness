@@ -13,7 +13,7 @@ type Organization
   description: String! #  描述
   taxIdNumber: String! # 統一編號
   phoneNumber: String!
-  faxNumber: String!
+  faxNumber: String
   email: AWSEmail!
   address: Address!
 
@@ -31,6 +31,7 @@ type Organization
     ])
 
   note: String
+  notes: String
 
   # S3 立案字號
   # S3 法人立案字號
