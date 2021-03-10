@@ -34,7 +34,7 @@ amplify configure
 ? Profile Name:  piggybankofhappiness
 ```
 Login Amplify Console, select YOUR backend environment, the command below will be found in 'Edit Backend'. Make updates by running the command from the root of your project folder.
-```
+```bash
 amplify pull --appId XXXXXXXX --envName xxxx
 ? Do you want to use an AWS profile? Yes
 ? Please choose the profile you want to use piggybankofhappiness
@@ -46,6 +46,24 @@ amplify pull --appId XXXXXXXX --envName xxxx
 ? Build Command:  npm run-script build
 ? Start Command: npm run-script start
 Skip auth related questions by input arbitrary value
+```
+
+```bash
+amplify env checkout ${ENV}
+? Do you want to use an AWS profile? Yes
+? Please choose the profile you want to use piggybankofhappiness-XXX
+✔ Initialized provider successfully.
+
+# You've opted to allow users to authenticate via Facebook.  If you haven't already, you'll need to go to https://developers.facebook.com and create an App ID.
+
+Enter your Facebook App ID for your OAuth flow:  n/a
+Enter your Facebook App Secret for your OAuth flow:  n/a
+
+# You've opted to allow users to authenticate via Google.  If you haven't already, you'll need to go to https://developers.google.com/identity and create an App ID.
+Enter your Google Web Client ID for your OAuth flow:  n/a
+Enter your Google Web Client Secret for your OAuth flow:  n/a
+
+Initialized your environment successfully.
 ```
 
 ### Issues

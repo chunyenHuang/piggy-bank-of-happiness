@@ -17,6 +17,12 @@
     "authpiggybankofhappinesscf2e2c90UserPoolId": {
       "Type": "String",
       "Default": "authpiggybankofhappinesscf2e2c90UserPoolId"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -134,8 +140,12 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "S3Key": "amplify-builds/organizationApplication-656850587942432b5a7a-build.zip"
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
         }
       }
     },

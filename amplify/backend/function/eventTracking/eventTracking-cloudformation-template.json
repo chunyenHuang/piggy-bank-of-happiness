@@ -17,6 +17,12 @@
     "apipiggybankofhappinessGraphQLAPIEndpointOutput": {
       "Type": "String",
       "Default": "apipiggybankofhappinessGraphQLAPIEndpointOutput"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -105,8 +111,12 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "S3Key": "amplify-builds/eventTracking-4c724d49584b434e7079-build.zip"
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
         }
       }
     },
