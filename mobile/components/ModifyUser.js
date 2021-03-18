@@ -31,9 +31,13 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
     if (isEditMode && !await check('ORG_USER__UPDATE', true)) return;
     if (!isEditMode && !await check('ORG_USER__CREATE', true)) return;
 
-    const errors = fields.map(({ key, required }) => {
+    const errors = fields.map(({ key, required, minLength }) => {
       if (required && !user[key]) {
         return '必填';
+      } if (minLength) {
+        if (!user[key] || (user[key] && user[key].length < minLength)) {
+          return `必須不少於 ${minLength} 個字`;
+        }
       } else {
         return;
       }
@@ -179,6 +183,7 @@ export default function ModifyUser({ user: inUser, button, visible: inVisible, o
     {
       key: 'password',
       required: !isEditMode,
+      minLength: isEditMode ? undefined : 8,
       props: {
         label: '密碼',
         autoCorrect: false,
