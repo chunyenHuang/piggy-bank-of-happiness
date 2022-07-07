@@ -48,7 +48,7 @@
     "intl": "^1.2.5",
     "lodash.debounce": "^4.0.8",
     "logkitty": "^0.7.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "native-base": "2.13.8",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
