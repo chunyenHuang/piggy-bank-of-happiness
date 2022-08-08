@@ -157,9 +157,9 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
               setPrograms([...programs]);
             }}
           >
-            {program.tasks.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((task)=>(
+            {program.tasks.sort(sortBy('name', true)).sort(sortBy('isActive', true)).map((task, taskIndex)=>(
               <ListItem
-                key={task.name}
+                key={taskIndex}
                 containerStyle={{ backgroundColor: task.isSelected? Colors.highlight : '#fff' }}
                 bottomDivider
                 disabled={disabled}
@@ -178,7 +178,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                   }
                 }}
               >
-                {mode==='select' &&
+                {mode === 'select' &&
                   <Icon
                     name={task.isSelected ? 'md-checkbox-outline': 'md-square-outline'}
                     // size={15}
@@ -187,7 +187,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
                   />}
                 <ListItem.Content>
                   <ListItem.Title>{task.name}</ListItem.Title>
-                  {task.description &&
+                  {(task.description ? true : false) &&
                     <ListItem.Subtitle style={styles.subtitle}>{task.description}</ListItem.Subtitle>}
                 </ListItem.Content>
                 {!task.isActive && <BadgeInactive />}
@@ -211,7 +211,7 @@ export default function TaskList({ mode = 'edit', onSelect, disabled = false }) 
         onBackdropPress={() => {}}
         style={styles.modal}
       >
-        {task && <View style={styles.modalContainer}>
+        {(task ? true : false) && <View style={styles.modalContainer}>
           <Text h4 h4Style={{ textAlign: 'center', marginBottom: 10 }}>
             {task.name}
           </Text>

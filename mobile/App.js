@@ -128,8 +128,9 @@ function App({ authState, onStateChange }) {
         <MenuProvider customStyles={{ backdrop: styles.popupMenuBackdrop }}>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+            {/* <NavigationContainer linking={LinkingConfiguration}> */}
             {isReady &&
-              <NavigationContainer linking={LinkingConfiguration}>
+              <NavigationContainer>
                 <Stack.Navigator>
                   <Stack.Screen name="Root" component={BottomTabNavigator} />
                   <Stack.Screen name="Stacks" component={StackNavigator} hea/>
