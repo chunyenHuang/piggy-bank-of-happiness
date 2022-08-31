@@ -15,7 +15,7 @@
     "deepcopy": "^2.1.0",
     "history": "4.10.1",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.32",
+    "moment-timezone": "^0.5.35",
     "mui-datatables": "^3.7.1",
     "pretty-bytes": "^5.4.1",
     "prop-types": "15.7.2",
