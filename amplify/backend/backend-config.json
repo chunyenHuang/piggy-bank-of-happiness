@@ -1,41 +1,27 @@
 {
-  "auth": {
-    "piggybankofhappinesscf2e2c90": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
+  "api": {
+    "AdminQueries": {
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
-          "triggerProvider": "Cognito",
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
+        },
+        {
           "attributes": [
             "Arn",
             "Name"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries71325e9b"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     },
-    "userPoolGroups": {
-      "service": "Cognito-UserPool-Groups",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ]
-    }
-  },
-  "api": {
     "piggybankofhappiness": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [],
@@ -46,163 +32,203 @@
             }
           }
         }
-      }
-    },
-    "AdminQueries": {
-      "service": "API Gateway",
+      },
       "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "piggybankofhappinesscf2e2c90": {
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "AdminQueries71325e9b",
           "attributes": [
             "Arn",
             "Name"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation",
+          "triggerProvider": "Cognito"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
     "AdminQueries71325e9b": {
-      "service": "Lambda",
-      "providerPlugin": "awscloudformation",
       "build": true,
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
           "attributes": [
             "UserPoolId"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "eventTracking": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "piggybankofhappiness"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "organizationApplication": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "piggybankofhappiness"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     },
     "piggybankofhappinesscf2e2c90PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "userOperation": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "piggybankofhappiness",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
-        }
-      ]
-    },
-    "eventTracking": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "piggybankofhappiness",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ]
-        }
-      ]
-    },
     "pointOperation": {
       "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
       "dependsOn": [
         {
-          "category": "api",
-          "resourceName": "piggybankofhappiness",
           "attributes": [
             "GraphQLAPIIdOutput"
-          ]
+          ],
+          "category": "api",
+          "resourceName": "piggybankofhappiness"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "userOperation": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "piggybankofhappiness"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_piggybankofhappinesscf2e2c90_facebookAppId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
         }
       ]
     },
-    "organizationApplication": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
+    "AMPLIFY_auth_piggybankofhappinesscf2e2c90_googleClientId": {
+      "usedBy": [
         {
           "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
+          "resourceName": "piggybankofhappinesscf2e2c90"
+        }
+      ]
+    },
+    "AMPLIFY_function_piggybankofhappinesscf2e2c90PostConfirmation_GROUP": {
+      "usedBy": [
         {
-          "category": "api",
-          "resourceName": "piggybankofhappiness",
-          "attributes": [
-            "GraphQLAPIIdOutput"
-          ]
+          "category": "function",
+          "resourceName": "piggybankofhappinesscf2e2c90PostConfirmation"
         }
       ]
     }
   },
   "storage": {
     "avatars": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "piggybankofhappinesscf2e2c90",
           "attributes": [
             "UserPoolId"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "piggybankofhappinesscf2e2c90"
         },
         {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
           "attributes": [
             "AppAdminsGroupRole"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         },
         {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
           "attributes": [
             "OrgAdminsGroupRole"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         },
         {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
           "attributes": [
             "OrgManagersGroupRole"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         },
         {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
           "attributes": [
             "UsersGroupRole"
-          ]
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }

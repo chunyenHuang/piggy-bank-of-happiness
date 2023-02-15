@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Table from 'components/Table/Table';
+import DataTable from 'components/Table/DataTable';
+// import Table from 'components/Table/Table';
 // import NestedTableContainer from 'components/Table/NestedTableContainer';
 
 import { listOrganizationTransactions } from 'graphql/queries';
@@ -111,82 +112,117 @@ export default function OrganizationTransactionTable({
   data: inData,
   onRefresh,
 }) {
-  const [lastUpdatedAt, setLastUpdatedAt] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [indexes, setIndexes] = useState();
+  const [queryParams, setQueryParams] = useState();
 
   const options = {
     expandableRows: true,
     isRowExpandable: () => false,
-    // renderExpandableRow(rowData, rowMeta) {
-    //   const { id } = data[rowMeta.dataIndex];
-    //   console.log(id);
-    //   return (
-    //     <NestedTableContainer columns={columns}>
-    //     </NestedTableContainer>
-    //   );
-    // },
   };
 
-  const onUpate = async (item, dataIndex) => {
-    const input = {
-      organizationId: item.organizationId,
-      username: item.username,
-      updatedBy: localStorage.getItem('app:username'),
-    };
-    columns.forEach(({ name, edit }) => {
-      if (edit) {
-        input[name] = item[name];
-      }
-    });
-    await request(updateOrganizationTransaction, { input });
+  // const onUpate = async (item, dataIndex) => {
+  //   const input = {
+  //     organizationId: item.organizationId,
+  //     username: item.username,
+  //     updatedBy: localStorage.getItem('app:username'),
+  //   };
+  //   columns.forEach(({ name, edit }) => {
+  //     if (edit) {
+  //       input[name] = item[name];
+  //     }
+  //   });
+  //   await request(updateOrganizationTransaction, { input });
 
-    Object.assign(data[dataIndex], input);
-    setData([...data]);
-  };
+  //   Object.assign(data[dataIndex], input);
+  //   setData([...data]);
+  // };
 
+
+  // useEffect(() => {
+  //   if (!organizationId) return;
+
+  //   (async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const params = { organizationId };
+  //       if (id) {
+  //         params.id = { eq: id };
+  //       }
+  //       const records = (await asyncListAll(listOrganizationTransactions, params));
+  //       setData(records.sort(sortBy('createdAt', true)));
+  //     } catch (e) {
+  //       console.log(e);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   })();
+  // }, [organizationId, id, lastUpdatedAt]);
+
+  // useEffect(() => {
+  //   if (!inData) return;
+
+  //   setData(inData);
+  // }, [inData]);
 
   useEffect(() => {
     if (!organizationId) return;
 
-    (async () => {
-      try {
-        setIsLoading(true);
-        const params = { organizationId };
-        if (id) {
-          params.id = { eq: id };
-        }
-        const records = (await asyncListAll(listOrganizationTransactions, params));
-        setData(records.sort(sortBy('createdAt', true)));
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [organizationId, id, lastUpdatedAt]);
-
-  useEffect(() => {
-    if (!inData) return;
-
-    setData(inData);
-  }, [inData]);
+    setIndexes([
+      {
+        name: 'listOrganizationTransactions',
+        label: '交易紀錄查詢',
+        partitionKey: 'organizationId',
+        sortKey: 'expiredAt',
+        fields: [{
+          label: '機構ID',
+          key: 'organizationId',
+          // type: 'select',
+          // options: [
+          //   { value: organizationId, label: '機構ID' },
+          // ],
+        }, {
+          label: '交易紀錄編號',
+          key: 'id',
+          // type: 'select',
+          // options: id ? [
+          //   { value: id, label: 'ID' },
+          // ] : [],
+        }],
+        operation: listOrganizationTransactions,
+      },
+    ]);
+    setQueryParams({
+      organizationId: 'organizationId',
+      id,
+    });
+  }, [organizationId, id]);
 
   return (
-    <Table
+    <DataTable
+      data={inData}
       title={title}
       description={description}
-      isLoading={isLoading}
-      data={data}
-      nested={nested}
       columns={columns}
       options={options}
-      onUpdateItem={onUpate}
-      onRefresh={() => {
-        if (onRefresh) onRefresh();
-        setLastUpdatedAt(Date.now());
-      }}
+      indexes={indexes}
+      queryDefaultParams={queryParams}
+      // editButton={EditButton}
+      dataSortFunc={sortBy('createdAt', true)}
     />
+    // <Table
+    //   title={title}
+    //   description={description}
+    //   isLoading={isLoading}
+    //   data={data}
+    //   nested={nested}
+    //   columns={columns}
+    //   options={options}
+    //   onUpdateItem={onUpate}
+    //   onRefresh={() => {
+    //     if (onRefresh) onRefresh();
+    //     setLastUpdatedAt(Date.now());
+    //   }}
+    // />
   );
 }
 

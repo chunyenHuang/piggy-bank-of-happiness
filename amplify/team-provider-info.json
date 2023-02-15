@@ -27,24 +27,27 @@
         },
         "AdminQueries71325e9b": {
           "deploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "s3Key": "amplify-builds/AdminQueries71325e9b-616a47546f4a4e456442-build.zip"
+          "s3Key": "amplify-builds/AdminQueries71325e9b-43745843734b4e44344d-build.zip"
         },
         "userOperation": {
           "deploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "s3Key": "amplify-builds/userOperation-5464685765576b696673-build.zip"
+          "s3Key": "amplify-builds/userOperation-644f314d4776734f387a-build.zip"
         },
         "eventTracking": {
           "deploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "s3Key": "amplify-builds/eventTracking-37577a44544578595a73-build.zip"
+          "s3Key": "amplify-builds/eventTracking-4c724d49584b434e7079-build.zip"
         },
         "pointOperation": {
           "deploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "s3Key": "amplify-builds/pointOperation-326d6e726779412b434a-build.zip"
+          "s3Key": "amplify-builds/pointOperation-526c7146346130415451-build.zip"
         },
         "organizationApplication": {
           "deploymentBucketName": "amplify-piggybankofhappiness-develop-101303-deployment",
-          "s3Key": "amplify-builds/organizationApplication-304856587537664d5359-build.zip"
+          "s3Key": "amplify-builds/organizationApplication-656850587942432b5a7a-build.zip"
         }
+      },
+      "storage": {
+        "avatars": {}
       }
     }
   },
