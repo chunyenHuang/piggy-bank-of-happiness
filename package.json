@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/chunyenHuang/piggy-bank-of-happiness#readme",
   "devDependencies": {
-    "aws-sdk": "^2.720.0",
+    "aws-sdk": "^2.1354.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.2.0",
     "eslint-config-google": "^0.14.0",
