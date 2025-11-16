@@ -30,11 +30,11 @@
     "react-redux": "^7.2.2",
     "react-redux-toastr": "^7.6.5",
     "react-router-dom": "5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
+    "eslint": "^9.39.1",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react": "^7.21.5",
