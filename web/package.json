@@ -34,7 +34,7 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
+    "eslint": "^9.26.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react": "^7.21.5",
