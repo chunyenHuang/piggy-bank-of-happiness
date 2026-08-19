@@ -100,16 +100,18 @@ module.exports = {
     const matched = Groups.find(({ GroupName }) => GroupName === inGroupName);
     if (matched) return;
 
-    // remove all groups
-    const promises = Groups.map(({ GroupName }) => {
-      const params = {
-        GroupName,
+    // only remove from the default Users group if present, to avoid
+    // demoting existing OrgManagers/OrgAdmins when this function is
+    // invoked with the current user's username while adding a student
+    const hasDefaultGroup = Groups.some(({ GroupName }) => GroupName === 'Users');
+    if (hasDefaultGroup) {
+      const removeParams = {
+        GroupName: 'Users',
         UserPoolId: AUTH_PIGGYBANKOFHAPPINESSCF2E2C90_USERPOOLID,
         Username: username,
       };
-      return cognitoidentityserviceprovider.adminRemoveUserFromGroup(params).promise();
-    });
-    await Promise.all(promises);
+      await cognitoidentityserviceprovider.adminRemoveUserFromGroup(removeParams).promise();
+    }
 
     // add to group
     const addUserParams = {
